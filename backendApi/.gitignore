@@ -1,0 +1,6 @@
+node_modules
+dist
+dist/public/video
+dist/public/bill
+dist/public/slip
+*.mp4
