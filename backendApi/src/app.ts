@@ -12,6 +12,8 @@ import { websiteRouter } from './routes/websiteRouter'
 import { adminRouter } from './routes/adminRouter'
 import { storeRouter } from './routes/storeRouter'
 import { memberRouter } from './routes/memberRouter'
+import { backOfficeRoute } from './routes/backOfficeRoute';
+
 import cron = require('node-cron')
 import moment from 'moment'
 import momentTimeZone from'moment-timezone'
@@ -44,6 +46,7 @@ app.use(adminRouter)
 app.use(storeRouter)
 app.use(websiteRouter)
 app.use(videoRouter)
+app.use(backOfficeRoute)
 
 app.use("/test", (req:any, res:any) => { 
     res.status(200).json({message: "ok"}) 

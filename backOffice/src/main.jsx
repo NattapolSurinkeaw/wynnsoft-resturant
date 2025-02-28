@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import axios from 'axios'
 
 axios.interceptors.request.use((request) => {
-  request.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+  request.headers.Authorization = `Bearer ${localStorage.getItem("accessToken")}`;
   request.url = `${import.meta.env.VITE_API_PATH}${request.url}`;
   return request;
 });

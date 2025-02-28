@@ -9,6 +9,7 @@ import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import Home from './Home'
 import Control from './pages/control/Control'
+import CategoryFood from './pages/categoryfood/CategoryFood'
 
 
 
@@ -22,6 +23,7 @@ function App() {
           <Route element={<LayoutMain />}>
             <Route path="/" element={<Home />} />
             <Route path="/control" element={<Control />} />
+            <Route path="/catefood" element={<CategoryFood />} />
           </Route>
         </Route>
 

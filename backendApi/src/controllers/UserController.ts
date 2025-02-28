@@ -133,7 +133,6 @@ export class UserController {
         })
     }
     OnSignin = async(req: any, res: any) => {
-        console.log(req)
         const errors = validationResult(req)
         if(!errors.isEmpty()){
             return res.status(400).json({
