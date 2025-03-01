@@ -5,3 +5,9 @@ export const getCategoryFoods = () => {
     return { status: res.data.status, cateFood: res.data.data}
   })
 }
+
+export const getCreateCategoryFood = (formData) => {
+  return axios.post('/api/backoffice/catefood', formData).then((res) => {
+    return { res: res}
+  })
+}

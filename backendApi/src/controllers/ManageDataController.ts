@@ -1,3 +1,4 @@
+import { validationResult } from "express-validator";
 import { CategoryFood } from "../models/categoryFood"
 
 export class ManageDataController {
@@ -8,7 +9,17 @@ export class ManageDataController {
       message: "ok",
       data: cateFood
     });
-    
-  
+  }
+  OnCreateCategoryFood = async (req: any, res: any) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        status: false,
+        message: "error",
+        errorMessage: errors.array(),
+      });
+    }
+
+    console.log(req);
   }
 }

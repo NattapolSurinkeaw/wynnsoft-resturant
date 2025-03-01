@@ -17,10 +17,10 @@ function CategoryFood() {
 
   return (
     <div>
-      <div>
+      <div className='flex'>
         <h1>หมวดหมู่เมนู</h1>
         <button 
-          className=''
+          className='bg-[#013D59] text-white p-1'
           onClick={() => setHandleCreate(!handleCreate)}
         >+ เพิ่มหมวดหมู่</button>
       </div>

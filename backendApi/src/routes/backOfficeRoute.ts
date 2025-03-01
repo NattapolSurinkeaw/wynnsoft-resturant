@@ -10,6 +10,7 @@ const router = Router()
 const manageDataController = new ManageDataController();
 
 router.get('/api/backoffice/catefood', AuthenticateAdmin, manageDataController.OngetCategoryFood);
+router.post('/api/backoffice/catefood', manageDataController.OnCreateCategoryFood);
 
 
 export const backOfficeRoute = router
