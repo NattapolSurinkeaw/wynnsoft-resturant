@@ -2,8 +2,8 @@ import React from 'react'
 
 function Control() {
   return (
-    <div>
-      <h1>Control</h1>
+    <div className='h-full overflow-y-auto bg-green-100 '>
+      awdawd
     </div>
   )
 }

@@ -6,7 +6,7 @@ import Navbar from './Navbar'
 function LayoutMain() {
   return (
     <div>
-      <div className="bg-[#FFEFC6] flex">
+      <div className="flex h-screen bg-[#FFEFC6]">
         <Sidebar />
         <div className="flex-1">
           <Navbar />
