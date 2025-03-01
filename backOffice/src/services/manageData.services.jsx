@@ -11,3 +11,15 @@ export const getCreateCategoryFood = (formData) => {
     return { res: res}
   })
 }
+
+export const getUpdateCategoryFood = (id, formData) => {
+  return axios.post(`/api/backoffice/catefood/${id}`, formData).then((res) => {
+    return { res: res}
+  });
+}
+
+export const getDeleteCategoryFood = (id) => {
+  return axios.delete(`/api/backoffice/catefood/${id}`).then((res) => {
+    return { res: res }
+  })
+}

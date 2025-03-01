@@ -32,6 +32,7 @@ export const uploadImage = () => {
       var ext = path.extname(file.originalname);
       if (
         ext !== ".png" &&
+        ext !== ".PNG" &&
         ext !== ".jpg" &&
         ext !== ".webp" &&
         ext !== ".jpeg" &&

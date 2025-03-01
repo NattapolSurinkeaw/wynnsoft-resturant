@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { getCategoryFoods } from '../../services/manageData.services';
+import { getCategoryFoods, getDeleteCategoryFood } from '../../services/manageData.services';
 import AddCategoryFood from './components/AddCategoryFood';
 import EditCategoryFood from './components/EditCategoryFood';
+import { Switch } from '@mui/material';
 
 function CategoryFood() {
   const [categFood, setCateFood] = useState([]);
   const [handleCreate, setHandleCreate] = useState(false);
   const [handleEdit, setHandleEdit] = useState(false);
+  const api_path = "http://localhost:8003";
+  const [slcEdit, setSlcEdit] = useState([]);
 
   useEffect(( ) => {
     getCategoryFoods().then((res) => {
@@ -15,13 +18,30 @@ function CategoryFood() {
     })
   }, [])
 
+  const functionHandleCreate = () => {
+    setHandleCreate(true);
+    setHandleEdit(false);
+  }
+
+  const functionHandleEdit = (cate) => {
+    setSlcEdit(cate);
+    setHandleCreate(false);
+    setHandleEdit(true);
+  }
+
+  const functionHandleDelete = (id) => {
+    getDeleteCategoryFood(id).then((res) => {
+      console.log(res);
+    })
+  }
+
   return (
     <div>
       <div className='flex'>
         <h1>หมวดหมู่เมนู</h1>
         <button 
           className='bg-[#013D59] text-white p-1'
-          onClick={() => setHandleCreate(!handleCreate)}
+          onClick={functionHandleCreate}
         >+ เพิ่มหมวดหมู่</button>
       </div>
 
@@ -50,12 +70,22 @@ function CategoryFood() {
                       </th>
                       <td className="px-6 py-4">
                         <div className='flex gap-2'>
-                          <img className='w-[70px] h-[70px]' src={cate.thumbnail} alt="" />
+                          <img className='w-[70px] h-[70px]' src={api_path+cate.thumbnail} alt="" />
                           <p>{cate.title}</p>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <button>สถานะ</button>
+                        <Switch 
+                          checked={cate.status_display} 
+                        />
+                        <button
+                          className='border w-10 mr-2'
+                          onClick={() => functionHandleEdit(cate)}
+                        >แก้ไข</button>
+                        <button
+                          className='border w-10 '
+                          onClick={() => functionHandleDelete(cate.id)}
+                        >ลบ</button>
                       </td>
                     </tr>
                   ))
@@ -64,13 +94,10 @@ function CategoryFood() {
           </table>
         </div>
 
-        {
-          handleCreate && <AddCategoryFood />
-        }
+        {/* call component Add and Edit  */}
+        { handleCreate && <AddCategoryFood /> }
+        { handleEdit && <EditCategoryFood slcEdit={slcEdit} /> }
 
-        {
-          handleEdit && <EditCategoryFood />
-        }
       </div>
     </div>
   )
