@@ -17,7 +17,8 @@ function EditCategoryFood({ slcEdit }) {
     if (slcEdit) {
       setInpTitle(slcEdit.title || ""); // ถ้าไม่มี title ให้ใช้ค่าว่าง
       setPriority(slcEdit.priority || 1); // ถ้าไม่มี priority ให้ใช้ค่า 1
-      setCheckedStatus(slcEdit.status_display === true); // แปลงเป็น boolean
+      setCheckedStatus(parseInt(slcEdit.status_display)); // แปลงเป็น boolean
+      setImageObj("http://localhost:8003"+slcEdit.thumbnail)
     }
   }, [slcEdit]);
 

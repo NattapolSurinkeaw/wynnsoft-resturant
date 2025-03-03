@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getCategoryFoods, getDeleteCategoryFood } from '../../services/manageData.services';
+import { getCategoryFoods, getDeleteCategoryFood, getUpdateDisplayCatefood } from '../../services/manageData.services';
 import AddCategoryFood from './components/AddCategoryFood';
 import EditCategoryFood from './components/EditCategoryFood';
 import { Switch } from '@mui/material';
@@ -34,6 +34,29 @@ function CategoryFood() {
       console.log(res);
     })
   }
+
+  const handleUpdateDisplay = (id, checked) => {
+    setCateFood((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, status_display: checked ? 1 : 0 } : item
+      )
+    );
+  
+    const param = { status: checked ? 1 : 0 };
+  
+    getUpdateDisplayCatefood(id, param)
+      .then((res) => {
+        console.log("Updated successfully", res);
+      })
+      .catch((err) => {
+        console.error("Error updating:", err);
+        setCateFood((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, status_display: !checked ? 1 : 0 } : item
+          )
+        );
+      });
+  };
 
   return (
     <div>
@@ -76,7 +99,8 @@ function CategoryFood() {
                       </td>
                       <td className="px-6 py-4">
                         <Switch 
-                          checked={cate.status_display} 
+                          checked={cate.status_display === 1} 
+                          onChange={(e) => handleUpdateDisplay(cate.id, e.target.checked)} 
                         />
                         <button
                           className='border w-10 mr-2'
