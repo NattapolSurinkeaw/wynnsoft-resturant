@@ -1,13 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GridViewIcon from "@mui/icons-material/GridView";
-import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import FastfoodOutlinedIcon from '@mui/icons-material/FastfoodOutlined';
-import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
-import WidgetsOutlinedIcon from '@mui/icons-material/WidgetsOutlined';
+import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
+import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
+import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
+import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
+import WidgetsOutlinedIcon from "@mui/icons-material/WidgetsOutlined";
+import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumberedOutlined";
+import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
+import NoFoodOutlinedIcon from "@mui/icons-material/NoFoodOutlined";
+import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
+import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
+import ChecklistOutlinedIcon from "@mui/icons-material/ChecklistOutlined";
+import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 
 function Sidebar() {
+  const location = useLocation();
+
   return (
     <div className="min-w-[275px] h-full overflow-y-auto bg-[#00537B] p-5">
       <figure className="flex justify-center w-full mt-4">
@@ -20,15 +32,30 @@ function Sidebar() {
       <div className="ml-3 mr-3 mt-3 ">
         <p className="text-[16px] text-[#FFEA00]">แดชบอร์ด</p>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="/control"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+          ${
+            location.pathname === "/control"
+              ? "bg-white"
+              : "hover:bg-white group"
+          }`}
         >
           <div className="flex items-center gap-3">
             <GridViewIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/control"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/control"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               ศูนย์ควบคุม
             </p>
           </div>
@@ -39,80 +66,173 @@ function Sidebar() {
       <div className="ml-3 mr-3 mt-3 ">
         <p className="text-[16px] text-[#FFEA00]">จัดการออเดอร์</p>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="ordersDay"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 "
+          ${
+            location.pathname === "/ordersDay"
+              ? "bg-white"
+              : "hover:bg-white group"
+          }`}
         >
           <div className="flex items-center gap-3">
             <AssignmentIndOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/ordersDay"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/ordersDay"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               ออเดอร์วันนี้
             </p>
           </div>
-          <div className="flex justify-center items-center w-6 h-6 rounded-md text-[#013D59] group-hover:text-white bg-white group-hover:bg-[#00537B] ">
+          <div
+            className={`flex justify-center items-center w-6 h-6 rounded-md ${
+              location.pathname === "/ordersDay"
+                ? "text-white bg-[#00537B]"
+                : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
+            }`}
+          >
             10
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="payment"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 "
+            ${
+              location.pathname === "/payment"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
             <ReceiptLongOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/payment"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/payment"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               ชำระเงิน
             </p>
           </div>
-          <div className="flex justify-center items-center w-6 h-6 rounded-md text-[#013D59] group-hover:text-white bg-white group-hover:bg-[#00537B] ">
+          <div
+            className={`flex justify-center items-center w-6 h-6 rounded-md ${
+              location.pathname === "/payment"
+                ? "text-white bg-[#00537B]"
+                : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
+            }`}
+          >
             10
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="served"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 "
+            ${
+              location.pathname === "/served"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
             <FastfoodOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/served"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/served"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               รอเสริฟ
             </p>
           </div>
-          <div className="flex justify-center items-center w-6 h-6 rounded-md text-[#013D59] group-hover:text-white bg-white group-hover:bg-[#00537B] ">
+          <div
+            className={`flex justify-center items-center w-6 h-6 rounded-md ${
+              location.pathname === "/served"
+                ? "text-white bg-[#00537B]"
+                : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
+            }`}
+          >
             10
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="orders"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/orders"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
             <RequestQuoteOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/orders"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/orders"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               ออเดอร์ทั้งหมด
             </p>
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="editTable"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/editTable"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
             <WidgetsOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/editTable"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/editTable"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               จัดการโต๊ะ
             </p>
           </div>
@@ -123,43 +243,88 @@ function Sidebar() {
       <div className="ml-3 mr-3 mt-3 ">
         <p className="text-[16px] text-[#FFEA00]">ห้องครัว</p>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="newLatest"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/newLatest"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <ChecklistOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/newLatest"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/newLatest"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               รายการล่าสุด
             </p>
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="menuStatus"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/menuStatus"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <EventAvailableOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/menuStatus"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/menuStatus"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               สถานะเมนู
             </p>
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="outStock"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/outStock"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <NoFoodOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/outStock"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/outStock"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               สินค้าหมด
             </p>
           </div>
@@ -171,56 +336,116 @@ function Sidebar() {
         <p className="text-[16px] text-[#FFEA00]">จัดการข้อมูล</p>
         <Link
           to="catefood"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/catefood"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <LayersOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/catefood"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/catefood"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               หมวดหมู่เมนู
             </p>
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="foodMenu"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/foodMenu"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <MenuBookOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/foodMenu"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/foodMenu"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               เมนูอาหาร
             </p>
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="orderHistory"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/orderHistory"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <EventNoteOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/orderHistory"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/orderHistory"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               ประวัติการสั่ง
             </p>
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="settings"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/settings"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <SettingsOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/settings"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/settings"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               การตั้งค่า
             </p>
           </div>
@@ -231,43 +456,88 @@ function Sidebar() {
       <div className="ml-3 mr-3 mt-3 ">
         <p className="text-[16px] text-[#FFEA00]">รายงาน</p>
         <Link
-          to="catefood"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="dailyincome"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/dailyincome"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <LeaderboardOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/dailyincome"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/dailyincome"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               รายได้รายวัน
             </p>
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="monthlyincome"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/monthlyincome"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <PaymentsOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/monthlyincome"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/monthlyincome"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               รายได้รายเดือน
             </p>
           </div>
         </Link>
         <Link
-          to="control"
-          className="flex items-center justify-between transition duration-300 rounded-md px-4 pt-1.5 pb-1.5 mt-2 hover:bg-white group"
+          to="topMenu"
+          className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
+            ${
+              location.pathname === "/topMenu"
+                ? "bg-white"
+                : "hover:bg-white group"
+            }`}
         >
           <div className="flex items-center gap-3">
-            <GridViewIcon
+            <FormatListNumberedOutlinedIcon
               sx={{ fontSize: 25 }}
-              className="text-white group-hover:text-[#00537B]"
+              className={`${
+                location.pathname === "/topMenu"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
             />
-            <p className="text-[16px] text-white group-hover:text-[#00537B]">
+            <p
+              className={`text-[16px] ${
+                location.pathname === "/topMenu"
+                  ? "text-[#00537B]"
+                  : "text-white group-hover:text-[#00537B]"
+              }`}
+            >
               เมนูติดอันดับ
             </p>
           </div>

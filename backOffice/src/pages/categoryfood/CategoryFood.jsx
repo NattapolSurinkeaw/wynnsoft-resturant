@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { getCategoryFoods, getDeleteCategoryFood, getUpdateDisplayCatefood } from '../../services/manageData.services';
-import AddCategoryFood from './components/AddCategoryFood';
-import EditCategoryFood from './components/EditCategoryFood';
-import { Switch } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import {
+  getCategoryFoods,
+  getDeleteCategoryFood,
+} from "../../services/manageData.services";
+import AddCategoryFood from "./components/AddCategoryFood";
+import EditCategoryFood from "./components/EditCategoryFood";
+import { Switch } from "@mui/material";
 
 function CategoryFood() {
   const [categFood, setCateFood] = useState([]);
@@ -11,29 +14,29 @@ function CategoryFood() {
   const api_path = "http://localhost:8003";
   const [slcEdit, setSlcEdit] = useState([]);
 
-  useEffect(( ) => {
+  useEffect(() => {
     getCategoryFoods().then((res) => {
       console.log(res);
       setCateFood(res.cateFood);
-    })
-  }, [])
+    });
+  }, []);
 
   const functionHandleCreate = () => {
     setHandleCreate(true);
     setHandleEdit(false);
-  }
+  };
 
   const functionHandleEdit = (cate) => {
     setSlcEdit(cate);
     setHandleCreate(false);
     setHandleEdit(true);
-  }
+  };
 
   const functionHandleDelete = (id) => {
     getDeleteCategoryFood(id).then((res) => {
       console.log(res);
-    })
-  }
+    });
+  };
 
   const handleUpdateDisplay = (id, checked) => {
     setCateFood((prev) =>
@@ -60,15 +63,17 @@ function CategoryFood() {
 
   return (
     <div>
-      <div className='flex'>
+      <div className="flex">
         <h1>หมวดหมู่เมนู</h1>
-        <button 
-          className='bg-[#013D59] text-white p-1'
+        <button
+          className="bg-[#013D59] text-white p-1"
           onClick={functionHandleCreate}
-        >+ เพิ่มหมวดหมู่</button>
+        >
+          + เพิ่มหมวดหมู่
+        </button>
       </div>
 
-      <div className='w-full flex gap-5'>
+      <div className="w-full flex gap-5">
         <div className="w-full relative overflow-x-auto">
           <table className="w-[600px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -119,12 +124,11 @@ function CategoryFood() {
         </div>
 
         {/* call component Add and Edit  */}
-        { handleCreate && <AddCategoryFood /> }
-        { handleEdit && <EditCategoryFood slcEdit={slcEdit} /> }
-
+        {handleCreate && <AddCategoryFood />}
+        {handleEdit && <EditCategoryFood slcEdit={slcEdit} />}
       </div>
     </div>
-  )
+  );
 }
 
-export default CategoryFood
+export default CategoryFood;
