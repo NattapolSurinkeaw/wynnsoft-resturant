@@ -32,20 +32,20 @@ function EditCategoryFood({ slcEdit }) {
   // ✅ ฟังก์ชันบันทึกข้อมูล
   const handleSave = () => {
     const formData = new FormData();
-    formData.append('title', inpTitle);
-    formData.append('priority', priority);
-    formData.append('status', checkedStatus);
+    formData.append("title", inpTitle);
+    formData.append("priority", priority);
+    formData.append("status", checkedStatus);
     formData.append("image", inputProfileImage.current.files[0]);
     // console.log(slcEdit.id)
     getUpdateCategoryFood(slcEdit.id, formData).then((res) => {
       console.log(res);
-    })
+    });
   };
 
   return (
     <div className="w-1/2 bg-white p-4">
       <p>แก้ไขหมวดหมู่อาหาร</p>
-      
+
       {/* ✅ อัปโหลดรูปภาพ */}
       <div className="flex justify-center">
         <label htmlFor="inputImage">

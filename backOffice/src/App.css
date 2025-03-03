@@ -26,4 +26,9 @@ body {
   ::-webkit-scrollbar-track {
     background-color: #00537B; /* สีพื้นหลังของแถบเลื่อน */
   }
+
+
+  .button-1 {
+     @apply w-[100px] text-white text-[16px] font-[500] py-1.5 rounded-lg bg-gradient-to-r from-[#00537B] to-[#008793] hover:from-[#008793] hover:to-[#4b7791] hover:scale-105 transition duration-300 shadow-md hover:shadow-xl cursor-pointer;
+  }
   
