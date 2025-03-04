@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   getCategoryFoods,
   getDeleteCategoryFood,
+  getUpdateDisplayCatefood
 } from "../../services/manageData.services";
 import AddCategoryFood from "./components/AddCategoryFood";
 import EditCategoryFood from "./components/EditCategoryFood";

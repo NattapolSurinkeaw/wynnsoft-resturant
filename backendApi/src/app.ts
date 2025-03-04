@@ -13,6 +13,7 @@ import { adminRouter } from './routes/adminRouter'
 import { storeRouter } from './routes/storeRouter'
 import { memberRouter } from './routes/memberRouter'
 import { backOfficeRoute } from './routes/backOfficeRoute';
+import { frontOfficeRoute } from './routes/frontOfficeRoute';
 
 import cron = require('node-cron')
 import moment from 'moment'
@@ -43,10 +44,11 @@ app.use((req: any, res: any, next: any) => {
   
 app.use(memberRouter) 
 app.use(adminRouter) 
-app.use(storeRouter)
-app.use(websiteRouter)
+// app.use(storeRouter)
+// app.use(websiteRouter)
 app.use(videoRouter)
 app.use(backOfficeRoute)
+app.use(frontOfficeRoute)
 
 app.use("/test", (req:any, res:any) => { 
     res.status(200).json({message: "ok"}) 
