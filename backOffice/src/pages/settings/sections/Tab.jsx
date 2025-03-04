@@ -4,13 +4,13 @@ function Tab({ activeTab, setActiveTab }) {
   const tabs = [
     { id: "profile", label: "โปรไฟล์ร้านค้า" },
     { id: "shop", label: "ข้อมูลร้านค้า" },
-    { id: "account", label: "ข้อมูลบัญชี" },
+    { id: "account", label: "ข้อมูลบัญชีธนาคาร" },
     { id: "taxes", label: "ตั้งค่าภาษีและบริการ" },
     { id: "user", label: "ผู้ใช้งาน" },
   ];
 
   return (
-    <ul className="w-[341px] h-[227px] space-y-2 bg-[#FFD25B] rounded-lg p-4 list-disc list-inside">
+    <ul className="w-[341px] h-[227px] space-y-2 bg-[#FFD25B] shadow-1 rounded-lg p-4 list-disc list-inside">
       {tabs.map((tab) => (
         <li
           key={tab.id}

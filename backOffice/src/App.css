@@ -1,34 +1,62 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap");
 @import "tailwindcss";
 @theme {
-    --breakpoint-xxs: 391px;
-    --breakpoint-xxx: 361px;
+  --breakpoint-xxs: 391px;
+  --breakpoint-xxx: 361px;
 }
 
 body {
-    font-family: "Noto Sans Thai", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Noto Sans Thai", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
-
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 3px; /* ขนาดแถบเลื่อน */
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: #00537B; /* สีของตัวเลื่อน */
-    border-radius: 5px; /* ทำให้มีขอบโค้ง */
-  }
-  
-  ::-webkit-scrollbar-track {
-    background-color: #00537B; /* สีพื้นหลังของแถบเลื่อน */
-  }
+  width: 3px; /* ขนาดแถบเลื่อน */
+}
 
+::-webkit-scrollbar-thumb {
+  background-color: #00537b; /* สีของตัวเลื่อน */
+  border-radius: 5px; /* ทำให้มีขอบโค้ง */
+}
 
-  .button-1 {
-     @apply w-[100px] text-white text-[16px] font-[500] py-1.5 rounded-lg bg-gradient-to-r from-[#00537B] to-[#008793] hover:from-[#008793] hover:to-[#4b7791] hover:scale-105 transition duration-300 shadow-md hover:shadow-xl cursor-pointer;
-  }
-  
+::-webkit-scrollbar-track {
+  background-color: #00537b; /* สีพื้นหลังของแถบเลื่อน */
+}
+
+.button-1 {
+  @apply w-[100px] text-white text-[16px] font-[500] py-1.5 rounded-lg bg-gradient-to-r from-[#00537B] to-[#008793] hover:from-[#008793] hover:to-[#4b7791] hover:scale-105 transition duration-300 shadow-md hover:shadow-xl cursor-pointer;
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.button-mini-edit {
+  @apply w-[70px] text-white text-[14px] font-[500] py-0.5 rounded-sm 
+    bg-[#1d70cf] hover:bg-gradient-to-r hover:from-[#1d70cf] hover:to-[#3a8eed] 
+    hover:scale-105 transition duration-300 shadow-md hover:shadow-xl cursor-pointer;
+}
+
+.button-mini-delete {
+  @apply w-[70px] text-white text-[14px] font-[500] py-0.5 rounded-sm 
+    bg-[#d42ea3] hover:bg-gradient-to-r hover:from-[#d42ea3] hover:to-[#f542b9] 
+    hover:scale-105 transition duration-300 shadow-md hover:shadow-xl cursor-pointer;
+}
+
+.shadow-1 {
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+.shadow-2 {
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+.shadow-3 {
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
