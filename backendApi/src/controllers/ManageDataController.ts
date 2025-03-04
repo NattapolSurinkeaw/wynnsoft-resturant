@@ -213,8 +213,19 @@ export class ManageDataController {
           });
       }
 
+      const status_display = req.body.display === "true" ? 1 : 0;
+      const best_seller = req.body.best_seller === "true" ? 1 : 0;
+
       const food = await Foods.create({
-        
+        cate_id : req.body.cate_id,
+        name: req.body.name,
+        price: req.body.price,
+        special_price: req.body.special_price,
+        best_seller: best_seller,
+        details: req.body.details,
+        thumbnail_link: image,
+        thumbnail_title: req.body.thumbnail_title,
+        display : status_display,
       })
       return res.status(200).json({
         status: true,
@@ -229,8 +240,97 @@ export class ManageDataController {
           description: 'something went wrong.'
       })
     }
-    
+  }
+  OnUpdateFood = async (req: any, res: any) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        status: false,
+        message: "error",
+        errorMessage: errors.array(),
+      });
+    }
 
+    try {
+      const food = await Foods.findOne({where: {id: req.params.id}});
+
+      if (req.file) {
+        let upload = "/uploads" + req.file.destination.split("uploads").pop();
+        let dest = req.file.destination;
+        var ext = path.extname(req.file.originalname);
+        let originalname = path.basename(req.file.originalname, ext);
+
+        for (let i = 1; fs.existsSync(dest + originalname + ext); i++) {
+            originalname = originalname.split("(")[0];
+            originalname += "(" + i + ")";
+        }
+
+        let image = await sharp(req.file.path)
+          .withMetadata()
+          .jpeg({ quality: 95 })
+          .toFile(path.resolve(req.file.destination, originalname + ext))
+          .then(() => {
+              fs.unlink(req.file.path, (err) => {
+                  if (err) {
+                      console.log(err);
+                  }
+              });
+              return upload + originalname + ext;
+          });
+
+        food.thumbnail_link = image;
+      }
+
+      const status_display = req.body.display === "true" ? 1 : 0;
+      const best_seller = req.body.best_seller === "true" ? 1 : 0;
+
+      food.cate_id = req.body.cate_id;
+      food.name= req.body.name;
+      food.price= req.body.price;
+      food.special_price= req.body.special_price;
+      food.best_seller= best_seller;
+      food.details= req.body.details;
+      food.thumbnail_title= req.body.thumbnail_title;
+      food.display = status_display;
+      food.save();
+
+      return res.status(200).json({
+        status: true,
+        message: 'get data foods',
+        data : food
+      });
+    } catch(error) {
+      return res.status(500).json({
+          status: false,
+          message: error,
+          description: 'something went wrong.'
+      })
+    }
+  }
+  OnDeleteFood = async(req: any, res: any) => {
+    try {
+      const food = await Foods.findOne({ where: {id: req.params.id}});
+
+      if (!food) {
+        return res.status(404).json({
+          status: false,
+          message: "error",
+          description: "content was not found.",
+        });
+      }
+      food.destroy();
+      return res.status(200).json({
+        status: true,
+        message: 'delete food successfully',
+      });
+
+    } catch(error) {
+      return res.status(500).json({
+          status: false,
+          message: error,
+          description: 'something went wrong.'
+      })
+    }
   }
   // end เมนูอาหาร
 }
