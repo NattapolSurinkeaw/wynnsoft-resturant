@@ -25,6 +25,12 @@ router.post('/api/backoffice/catefood/:id', AuthenticateAdmin, upload.single("im
 ], manageDataController.OnUpdateCategoryFood);
 router.delete('/api/backoffice/catefood/:id', AuthenticateAdmin, manageDataController.OnDeleteCategoryFood);
 router.put('/api/backoffice/catefood-status/:id', AuthenticateAdmin, manageDataController.OnUpdateDisplay);
+router.get('/api/backoffice/foods', AuthenticateAdmin, manageDataController.OnGetfoodAll);
+router.post('/api/backoffice/food', AuthenticateAdmin, upload.single("thumbnail_link"),[
+  check('cate_id').isString().notEmpty(),
+  check('name').isString().notEmpty(),
+  check('price').isNumeric().notEmpty(),
+], manageDataController.OnCreateFood);
 
 //ตั้งค่า user 
 // router.get('/api/backoffice/users', AuthenticateAdmin, websettingController.OnsettingUser);
