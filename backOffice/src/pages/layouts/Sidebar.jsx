@@ -17,11 +17,18 @@ import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import ChecklistOutlinedIcon from "@mui/icons-material/ChecklistOutlined";
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 
-function Sidebar() {
+function Sidebar({ isSidebarOpen }) {
   const location = useLocation();
 
   return (
-    <div className="min-w-[275px] h-full overflow-y-auto bg-[#00537B] p-5">
+    <div
+      className={`h-full overflow-y-auto bg-[#00537B]  
+    ${
+      isSidebarOpen
+        ? "min-w-[275px] p-5 transform translate-x-0 "
+        : "w-0 transform -translate-x-full transition-all duration-500 ease-in-out "
+    }`}
+    >
       <figure className="flex justify-center w-full mt-4">
         <Link to="/">
           <img className="w-[100px] h-auto" src="/icons/LOGO.png" alt="" />

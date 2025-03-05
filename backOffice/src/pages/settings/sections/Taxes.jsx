@@ -25,7 +25,7 @@ const mockData = [
 function Taxes() {
   return (
     <>
-      <div className="w-[800px] p-5 rounded-lg shadow-1 bg-white">
+      <div className="2xl:w-[800px] w-full p-5 rounded-lg shadow-1 bg-white">
         <p className="text-[22px] text-[#00537B] font-[600] ">
           ตั้งค่าภาษีและบริการ
         </p>

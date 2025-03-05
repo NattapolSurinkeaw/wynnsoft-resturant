@@ -33,7 +33,7 @@ function Account() {
 
   return (
     <>
-      <div className="w-[1207px] p-5 rounded-lg shadow-1 bg-white">
+      <div className="2xl:w-[1207px] w-full p-5 rounded-lg shadow-1 bg-white">
         <p className="text-[22px] text-[#00537B] font-[600]">
           ข้อมูลบัญชีธนาคาร
         </p>
@@ -83,7 +83,7 @@ function Account() {
         </div>
       </div>
 
-      <div className="w-[1207px] p-5 rounded-lg shadow-1 bg-white mt-5">
+      <div className="2xl:w-[1207px] w-full p-5 rounded-lg shadow-1 bg-white mt-5">
         <p className="text-[22px] text-[#00537B] font-[600]">ธนาคาร</p>
         <div className="flex justify-between gap-6 w-full">
           <div className="w-1/2 space-y-6 mt-4 ml-12">

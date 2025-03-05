@@ -30,7 +30,7 @@ const ProtectRoute = () => {
     if (access_token && isLogin) {
       if (!isFetching) {
         const checkAccess = setInterval(async () => {
-          console.log(checkAccess)
+          // console.log(checkAccess)
           if (access_token && refresh_token) {
             const acc = jwtDecode(access_token);
             const expiredTime = acc.exp - moment(Math.floor(Date.now() / 1000));

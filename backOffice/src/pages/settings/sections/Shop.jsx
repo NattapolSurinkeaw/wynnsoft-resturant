@@ -3,7 +3,7 @@ import React from "react";
 function Shop() {
   return (
     <>
-      <div className="w-[680px] p-5 rounded-lg shadow-1 bg-white">
+      <div className="xl:w-[680px] w-full p-5 rounded-lg shadow-1 bg-white">
         <p className="text-[22px] text-[#00537B] font-[600] ">ข้อมูลร้านค้า</p>
         <div className="w-full space-y-6 mt-4">
           <div className="flex items-center ">
