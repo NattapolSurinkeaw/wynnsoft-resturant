@@ -8,16 +8,24 @@ export const Language = sequelize.define('Language',
         primaryKey: true,
         type: DataTypes.INTEGER,
     },
-    type_title: {
-        type: DataTypes.STRING(255),
+    language: {
+        type: DataTypes.STRING(100),
         allowNull: false,
     },
-    display: {
-        type: DataTypes.STRING(10),
+    title: {
+        type: DataTypes.STRING(100),
         allowNull: false,
-    }
+    },
+    flag: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+    },
+    defaults: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
 }, {
     sequelize,
     tableName: 'language',
-    timestamp: false
+    timestamp: true
 })

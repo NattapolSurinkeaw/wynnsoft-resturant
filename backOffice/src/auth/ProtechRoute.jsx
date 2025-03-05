@@ -26,6 +26,7 @@ const ProtectRoute = () => {
   const access_token = localStorage.getItem("accessToken");
   const refresh_token = localStorage.getItem("refreshToken");
   const [isFetching, setIsFetching] = useState(false);
+  
   useEffect(() => {
     if (access_token && isLogin) {
       if (!isFetching) {

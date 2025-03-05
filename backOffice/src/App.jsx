@@ -1,7 +1,7 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectRoute from "./auth/ProtechRoute";
 import LayoutMain from "./pages/layouts/LayoutMain";
 import Login from "./components/auth/Login";
@@ -58,6 +58,8 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </>
   );
