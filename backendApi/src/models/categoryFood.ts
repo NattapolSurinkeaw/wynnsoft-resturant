@@ -23,7 +23,7 @@ export const CategoryFood = sequelize.define(
       allowNull: true,
     },
     status_display: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     priority : {

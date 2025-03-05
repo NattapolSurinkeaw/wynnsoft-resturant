@@ -4,6 +4,7 @@ const sharp = require("sharp");
 import { validationResult } from "express-validator";
 import { CategoryFood } from "../models/categoryFood"
 import { Foods } from "../models/food";
+import { Language } from "../models/language";
 
 export class ManageDataController {
   // start หมวดหมู่เมนู
@@ -333,4 +334,170 @@ export class ManageDataController {
     }
   }
   // end เมนูอาหาร
+
+  // start ตั้งค่าภาษา
+  OngetAllLanguage = async(req: any, res: any) => {
+    try {
+      const language = await Language.findAll();
+
+      return res.status(200).json({
+        status: true,
+        message: 'get all languages successfully',
+        data: language
+      });
+    } catch(error) {
+      return res.status(500).json({
+          status: false,
+          message: error,
+          description: 'something went wrong.'
+      })
+    }
+  }
+  OnCreateLanguage = async(req: any, res: any) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        status: false,
+        message: "error",
+        errorMessage: errors.array(),
+      });
+    }
+
+    try {
+      let imageFlag = null;
+      if (req.file) {
+        let upload = "/uploads" + req.file.destination.split("uploads").pop();
+        let dest = req.file.destination;
+        var ext = path.extname(req.file.originalname);
+        let originalname = path.basename(req.file.originalname, ext);
+
+        for (let i = 1; fs.existsSync(dest + originalname + ext); i++) {
+            originalname = originalname.split("(")[0];
+            originalname += "(" + i + ")";
+        }
+
+        imageFlag = await sharp(req.file.path)
+          .withMetadata()
+          .jpeg({ quality: 95 })
+          .toFile(path.resolve(req.file.destination, originalname + ext))
+          .then(() => {
+              fs.unlink(req.file.path, (err) => {
+                  if (err) {
+                      console.log(err);
+                  }
+              });
+              return upload + originalname + ext;
+          });
+      }
+
+      const language = await Language.create({
+        language: req.body.language,
+        title: req.body.title,
+        flag: imageFlag,
+        defaults: req.body.defaults
+      });
+
+      return res.status(201).json({
+        status: true,
+        message: 'get all languages successfully',
+        data: language
+      });
+
+    } catch(error) {
+      return res.status(500).json({
+          status: false,
+          message: error,
+          description: 'something went wrong.'
+      })
+    }
+  }
+  OnUpdateLanguage = async (req: any, res: any) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        status: false,
+        message: "error",
+        errorMessage: errors.array(),
+      });
+    }
+
+    try {
+      const language = await Language.findOne({where: {id: req.params.id}});
+      if (!language) {
+        return res.status(404).json({
+          status: false,
+          message: "error",
+          description: "content was not found.",
+        });
+      }
+
+      if (req.file) {
+        let upload = "/uploads" + req.file.destination.split("uploads").pop();
+        let dest = req.file.destination;
+        var ext = path.extname(req.file.originalname);
+        let originalname = path.basename(req.file.originalname, ext);
+
+        for (let i = 1; fs.existsSync(dest + originalname + ext); i++) {
+            originalname = originalname.split("(")[0];
+            originalname += "(" + i + ")";
+        }
+
+        let image = await sharp(req.file.path)
+          .withMetadata()
+          .jpeg({ quality: 95 })
+          .toFile(path.resolve(req.file.destination, originalname + ext))
+          .then(() => {
+              fs.unlink(req.file.path, (err) => {
+                  if (err) {
+                      console.log(err);
+                  }
+              });
+              return upload + originalname + ext;
+          });
+
+          language.flag = image;
+      }
+      language.language = req.body.language;
+      language.title = req.body.title;
+      language.defaults = req.body.defaults;
+      language.save();
+
+      return res.status(200).json({
+        status: true,
+        message: 'get all languages successfully',
+        data: language
+      });
+    } catch(error) {
+      return res.status(500).json({
+          status: false,
+          message: error,
+          description: 'something went wrong.'
+      })
+    }
+  }
+  OnDeleteLanguage = async (req: any, res: any) => {
+    try {
+      const language = await Language.findOne({where: {id: req.params.id}});
+      if (!language) {
+        return res.status(404).json({
+          status: false,
+          message: "error",
+          description: "content was not found.",
+        });
+      }
+
+      language.destroy();
+      return res.status(200).json({
+        status: true,
+        message: 'delete language successfully',
+      });
+    } catch(error) {
+      return res.status(500).json({
+          status: false,
+          message: error,
+          description: 'something went wrong.'
+      })
+    }
+  }
+  // end ตั้งค่าภาษา
 }

@@ -41,7 +41,16 @@ router.post('/api/backoffice/food/:id', AuthenticateAdmin, upload.single("thumbn
 router.delete('/api/backoffice/food/:id', AuthenticateAdmin, manageDataController.OnDeleteFood);
 
 // ภาษา
-
+router.get('/api/backoffice/language', AuthenticateAdmin, manageDataController.OngetAllLanguage);
+router.post('/api/backoffice/language', AuthenticateAdmin, upload.single("flag"), [
+  check('language').isString().notEmpty(),
+  check('title').isString().notEmpty(),
+], manageDataController.OnCreateLanguage)
+router.post('/api/backoffice/language/:id', AuthenticateAdmin, upload.single("flag"), [
+  check('language').isString().notEmpty(),
+  check('title').isString().notEmpty(),
+], manageDataController.OnUpdateLanguage)
+router.delete('/api/backoffice/language/:id', AuthenticateAdmin, manageDataController.OnDeleteLanguage);
 
 //ตั้งค่า user 
 // router.get('/api/backoffice/users', AuthenticateAdmin, websettingController.OnsettingUser);
