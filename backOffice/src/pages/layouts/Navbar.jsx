@@ -31,9 +31,9 @@ function Navbar() {
           <img className="w-[24px] h-auto cursor-pointer" src="/icons/Vector (1).png" alt="" />
         </div>
 
-        {/* <button onClick={logOut} className="cursor-pointer border">
+        <button onClick={logOut} className="cursor-pointer border">
           Logout
-        </button> */}
+        </button>
       </div>
     </div>
   );
