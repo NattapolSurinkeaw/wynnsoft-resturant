@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.6",
     "@mui/material": "^6.4.6",
+    "@mui/x-data-grid": "^7.27.2",
     "@tailwindcss/vite": "^4.0.9",
     "axios": "^1.8.1",
     "jwt-decode": "^4.0.0",
