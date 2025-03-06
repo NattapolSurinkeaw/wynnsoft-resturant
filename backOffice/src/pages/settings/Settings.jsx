@@ -78,7 +78,7 @@ function Settings() {
 
             <button
               onClick={() => handleAdd()}
-              className="flex items-center justify-center xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer text-white text-[16px] duration-200 transition bg-[#005179] hover:bg-[#ffd468]"
+              className="flex items-center justify-center xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer text-white text-[16px] duration-200 transition bg-[#005179] hover:bg-[#F5A100]"
             >
               <AddIcon className="text-white" />
               เพิ่มผู้ใช้งาน
