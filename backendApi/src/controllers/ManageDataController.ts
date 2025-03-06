@@ -125,7 +125,7 @@ export class ManageDataController {
 
     categoryFood.title = req.body.title;
     categoryFood.priority = req.body.priority;
-    categoryFood.status_display = req.body.status === "true" ? 1 : 0;
+    categoryFood.status_display = req.body.status == 1 ? 1 : 0;
     categoryFood.save();
     return res.status(200).json({
       status: true,

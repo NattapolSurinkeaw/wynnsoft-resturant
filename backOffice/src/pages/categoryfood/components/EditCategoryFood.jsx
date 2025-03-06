@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import Switch from "@mui/material/Switch";
 import { getUpdateCategoryFood } from "../../../services/manageData.services";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
-function EditCategoryFood({ slcEdit }) {
-  console.log(slcEdit);
-
+function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
   // ✅ ใช้ useState และตั้งค่าเริ่มต้นจาก slcEdit
   const [inpTitle, setInpTitle] = useState("");
   const [priority, setPriority] = useState(1);
   const [checkedStatus, setCheckedStatus] = useState(false);
   const inputProfileImage = useRef(null);
   const [imageObj, setImageObj] = useState(null);
+  const MySwal = withReactContent(Swal);
 
   // ✅ ใช้ useEffect เพื่ออัปเดตค่าเมื่อ slcEdit เปลี่ยน
   useEffect(() => {
@@ -18,7 +19,7 @@ function EditCategoryFood({ slcEdit }) {
       setInpTitle(slcEdit.title || ""); // ถ้าไม่มี title ให้ใช้ค่าว่าง
       setPriority(slcEdit.priority || 1); // ถ้าไม่มี priority ให้ใช้ค่า 1
       setCheckedStatus(parseInt(slcEdit.status_display)); // แปลงเป็น boolean
-      setImageObj("http://localhost:8003"+slcEdit.thumbnail)
+      setImageObj("http://localhost:8003" + slcEdit.thumbnail);
     }
   }, [slcEdit]);
 
@@ -35,12 +36,32 @@ function EditCategoryFood({ slcEdit }) {
     const formData = new FormData();
     formData.append("title", inpTitle);
     formData.append("priority", priority);
-    formData.append("status", checkedStatus);
+    formData.append("status", checkedStatus ? 1 : 0);
     formData.append("image", inputProfileImage.current.files[0]);
-    // console.log(slcEdit.id)
-    getUpdateCategoryFood(slcEdit.id, formData).then((res) => {
-      console.log(res);
-    });
+
+    getUpdateCategoryFood(slcEdit.id, formData)
+      .then((res) => {
+        MySwal.fire({
+          title: "สำเร็จ!",
+          text: "ข้อมูลหมวดหมู่อาหารถูกอัปเดตแล้ว",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        setHandleEdit(false);
+        setRefreshData((prev) => prev + 1); // รีเฟรชข้อมูล
+      })
+      .catch((err) => {
+        // console.error("API Error:", err);
+        MySwal.fire({
+          title: "เกิดข้อผิดพลาด!",
+          text: "ไม่สามารถอัปเดตข้อมูลได้ กรุณาลองอีกครั้ง",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
   };
 
   return (
@@ -95,7 +116,14 @@ function EditCategoryFood({ slcEdit }) {
 
       {/* ✅ ปุ่ม ยกเลิก & บันทึก */}
       <div className="flex justify-center gap-4">
-        <button className="bg-[#F44D4D] p-1 text-white">ยกเลิก</button>
+        <button
+          className="bg-[#F44D4D] p-1 text-white"
+          onClick={() => {
+            setHandleEdit(false);
+          }}
+        >
+          ยกเลิก
+        </button>
         <button className="bg-[#013D59] p-1 text-white" onClick={handleSave}>
           บันทึก
         </button>

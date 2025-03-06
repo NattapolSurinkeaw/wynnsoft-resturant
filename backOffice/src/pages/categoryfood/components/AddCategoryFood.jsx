@@ -1,13 +1,16 @@
 import React, { useState, useRef } from "react";
 import Switch from "@mui/material/Switch";
 import { getCreateCategoryFood } from "../../../services/manageData.services";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
-function AddCategoryFood() {
+function AddCategoryFood({ setRefreshData, setHandleCreate }) {
   const [inpTitle, setInpTitle] = useState("");
   const [priority, setPriority] = useState(1);
   const [checkedStatus, setCheckedStatus] = useState(true);
   const inputProfileImage = useRef([]);
   const [imageObj, setImageobj] = useState();
+  const MySwal = withReactContent(Swal);
 
   function inputImageOnChange(e) {
     if (!e.target.files.length) {
@@ -38,9 +41,27 @@ function AddCategoryFood() {
     formData.append("status", checkedStatus);
     formData.append("image", inputProfileImage.current.files[0]);
 
-    getCreateCategoryFood(formData).then((res) => {
-      console.log(res);
-    });
+    getCreateCategoryFood(formData)
+      .then((res) => {
+        MySwal.fire({
+          title: "สำเร็จ!",
+          text: "ข้อมูลหมวดหมู่อาหารถูกเพิ่มแล้ว",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setHandleCreate(false);
+        setRefreshData((prev) => prev + 1);
+      })
+      .catch((err) => {
+        MySwal.fire({
+          title: "เกิดข้อผิดพลาด!",
+          text: "ไม่สามารถเพิ่มข้อมูลได้ กรุณาลองอีกครั้ง",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
   };
   return (
     <div className="w-1/2 bg-white p-4">
@@ -84,7 +105,14 @@ function AddCategoryFood() {
         />
       </div>
       <div className="flex justify-center gap-4">
-        <button className="bg-[#F44D4D] p-1 text-white">ยกเลิก</button>
+        <button
+          className="bg-[#F44D4D] p-1 text-white"
+          onClick={() => {
+            setHandleCreate(false);
+          }}
+        >
+          ยกเลิก
+        </button>
         <button
           onClick={submitCreateCatefood}
           className="bg-[#013D59] p-1 text-white"
