@@ -73,22 +73,19 @@ body {
 
 .button-1 {
   @apply w-[100px] text-white text-[16px] font-[500] py-1.5 rounded-lg bg-gradient-to-r from-[#00537B] to-[#008793] hover:from-[#008793] hover:to-[#4b7791] hover:scale-105 transition duration-300 shadow-md hover:shadow-xl cursor-pointer;
-  box-shadow:
-    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
 .button-cancel-1 {
   @apply cursor-pointer hover:scale-105 bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600 text-white text-[14px] px-4 py-2 rounded-md hover:bg-gradient-to-r hover:from-gray-500 hover:to-gray-700 transition duration-300;
-  box-shadow:
-    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
 .button-save-1 {
   @apply cursor-pointer hover:scale-105 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 text-white text-[14px] px-4 py-2 rounded-md hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-700 transition duration-300;
-  box-shadow:
-    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
@@ -105,17 +102,48 @@ body {
 }
 
 .shadow-1 {
-  box-shadow:
-    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 .shadow-2 {
-  box-shadow:
-    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 .shadow-3 {
-  box-shadow:
-    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
+
+.my-confirm-button {
+  background-color: #00537b !important; /* เปลี่ยนเป็นสีฟ้า */
+  color: white !important; /* เปลี่ยนสีตัวอักษรเป็นสีขาว */
+  border-radius: 5px !important; /* ทำให้ปุ่มมีขอบมน */
+  font-weight: bold !important;
+  padding: 8px 16px !important;
+}
+
+.my-confirm-button:hover {
+  background-color: #003f5e !important; /* สีเมื่อ hover */
+}
+
+
+
+/* DataGrid */
+.css-1r7svyj-MuiDataGrid-root {
+  --unstable_DataGrid-radius: 10px !important;
+  --DataGrid-containerBackground: #00537b !important;
+}
+
+.css-1gqmilo-MuiDataGrid-columnHeaderTitle {
+  color: #fff;
+  font-family: "Noto Sans Thai", sans-serif;
+  font-size: 16px;
+}
+.css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone{
+  font-family: "Noto Sans Thai", sans-serif;
+  font-size: 16px;
+}
+.css-1r7svyj-MuiDataGrid-root .MuiDataGrid-columnSeparator{
+  color: #00537b !important;
+}
+/* DataGrid */
