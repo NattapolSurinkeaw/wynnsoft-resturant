@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-
 import Register from "./Register";
 import ForgetPassword from "./forgetPassword";
 import LoginPage from "./LoginPage";
+
+
 function Login() {
   const location = useLocation();
 
@@ -20,45 +21,8 @@ function Login() {
   }, [location.search]);
 
   return (
-    // <div
-    //   style={{ backgroundImage: "url('/images/background/bg-login.png')" }}
-    //   className="w-screen h-screen flex justify-center items-center"
-    // >
-    //   <div className="bg-white rounded-lg flex gap-4 py-12 px-8 max-w-[1320px] m-auto">
-    //     <figure className=" rouded-2xl" >
-    //       <img src="/images/background/mockLogo.png" alt="" />
-    //     </figure>
-
-    //     <div>
-    //       <div>
-    //         <label htmlFor="">Username</label>
-    //         <input
-    //           type="text"
-    //           className="border"
-    //           onChange={(e) => setUsername(e.target.value)}
-    //         />
-    //       </div>
-    //       <div>
-    //         <label htmlFor="">Password</label>
-    //         <input
-    //           type="text"
-    //           className="border"
-    //           onChange={(e) => setPassword(e.target.value)}
-    //         />
-    //       </div>
-
-    //       <div className="flex gap-4">
-    //         <button className="border bg-green-500" onClick={submitLogin}>
-    //           Login
-    //         </button>
-    //         <Link to="/register">register</Link>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-
     <>
-      <div className="w-screen h-screen relative z-50">
+      <div className="w-screen h-screen relative z-50 overflow-hidden">
         <div className="absolute w-full h-full">
           <img
             src="/images/background/bg-login.png"
@@ -69,8 +33,8 @@ function Login() {
         </div>
 
         <div className="absolute inset-0 z-50 max-w-[1320px] h-fit m-auto px-4 flex justify-center">
-          <div className="grid grid-cols-2 gap-12 bg-white px-12 py-16 place-items-center rounded-4xl">
-            <figure className="max-w-[500px] h-[500px] rounded-sm">
+          <div className="grid lg:grid-cols-2 gap-12 bg-white md:px-12 px-6 md:py-16 py-8 place-items-center rounded-4xl">
+            <figure className="max-w-[500px] lg:h-[500px] h-[200px] rounded-sm lg:block ">
               <img
                 src="/images/background/mockLogo.png"
                 alt=""
@@ -88,8 +52,8 @@ function Login() {
               <div className="flex flex-row justify-center items-center gap-4">
                 {!(location.pathname === "/login" && !location.search) && (
                   <>
-                    <Link to="/login" className="text-[#8F8F8F] text-3xl">
-                      ล็อกอิน
+                    <Link to="/login" className="text-[#8F8F8F] lg:text-3xl text-lg">
+                      เข้าสู่ระบบ
                     </Link>
                     <div className="border-l border-[#8F8F8F] h-[40px] rounded-full"></div>
                   </>
@@ -102,7 +66,7 @@ function Login() {
                   <>
                     <Link
                       to="/login?tab=register"
-                      className="text-[#8F8F8F] text-3xl"
+                      className="text-[#8F8F8F] lg:text-3xl text-lg"
                     >
                       สมัครสมาชิก
                     </Link>
@@ -122,7 +86,7 @@ function Login() {
                     )}
                     <Link
                       to="/login?tab=forgetPassword"
-                      className="text-[#8F8F8F] text-3xl"
+                      className="text-[#8F8F8F] lg:text-3xl text-lg"
                     >
                       ลืมรหัสผ่าน ?
                     </Link>
