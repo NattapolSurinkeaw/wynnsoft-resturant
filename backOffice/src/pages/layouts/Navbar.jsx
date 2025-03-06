@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import Sidebar from "./Sidebar";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
 function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
   console.log("isSidebarOpen", isSidebarOpen);
@@ -13,12 +15,22 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
 
   return (
     <>
-      <div className="flex items-center justify-between w-full h-[60px] bg-white shadow-2 py-4 px-6 ">
-        <ArrowCircleLeftOutlinedIcon
-          sx={{ fontSize: 35 }}
-          className="text-[#00537B] cursor-pointer z-10"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        />
+      <div className="flex items-center justify-between xl:justify-end w-full h-[60px] bg-white shadow-2 py-4 xl:px-6 px-4 ">
+        <div className="xl:hidden z-10">
+          {isSidebarOpen ? (
+            <MenuOpenIcon
+              sx={{ fontSize: 35 }}
+              className="text-[#00537B] cursor-pointer"
+              onClick={() => setIsSidebarOpen(false)}
+            />
+          ) : (
+            <MenuIcon
+              sx={{ fontSize: 35 }}
+              className="text-[#00537B] cursor-pointer"
+              onClick={() => setIsSidebarOpen(true)}
+            />
+          )}
+        </div>
 
         <div className="flex gap-5 items-center z-10">
           <figure className=" shadow-1 p-1 rounded-full cursor-pointer">
@@ -45,9 +57,9 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
           />
         </div>
 
-        <button onClick={logOut} className="cursor-pointer border">
+        {/* <button onClick={logOut} className="cursor-pointer border">
           Logout
-        </button>
+        </button> */}
       </div>
     </>
   );

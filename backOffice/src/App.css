@@ -3,6 +3,7 @@
 @theme {
   --breakpoint-xxs: 391px;
   --breakpoint-xxx: 361px;
+  --breakpoint-3xl: 1850px;
 }
 
 body {
@@ -26,6 +27,16 @@ body {
   background-color: #00537b; /* สีพื้นหลังของแถบเลื่อน */
 }
 
+/* สร้างคลาสสำหรับซ่อน scrollbar */
+.hide-scrollbar {
+  scrollbar-width: none; /* สำหรับ Firefox */
+  -ms-overflow-style: none; /* สำหรับ IE และ Edge */
+}
+
+/* สำหรับ Chrome, Safari และ Edge */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 
 /* Sidebar.css */
 @keyframes slide-in {
@@ -59,7 +70,6 @@ body {
 .slide-out {
   animation: slide-out 0.8s ease-in-out forwards;
 }
-
 
 .button-1 {
   @apply w-[100px] text-white text-[16px] font-[500] py-1.5 rounded-lg bg-gradient-to-r from-[#00537B] to-[#008793] hover:from-[#008793] hover:to-[#4b7791] hover:scale-105 transition duration-300 shadow-md hover:shadow-xl cursor-pointer;

@@ -21,7 +21,7 @@ function Profile() {
 
   return (
     <>
-      <div className="2xl:w-[1000px] w-full p-5 rounded-lg shadow-1 bg-white">
+      <div className="3xl:w-[1000px] w-full p-5 rounded-lg shadow-1 bg-white">
         <p className="text-[22px] text-[#00537B] font-[600] ">โปรไฟล์ร้านค้า</p>
         <div className="flex gap-5 mt-4">
           <div className="relative min-w-[219px] max-w-[219px] h-[219px] bg-[#616161] rounded-lg shadow-1 flex items-center justify-center shadow-md overflow-hidden">
@@ -94,8 +94,8 @@ function Profile() {
         </div>
       </div>
 
-      <div className="2xl:w-[1000px] w-full p-5 rounded-lg shadow-1 mt-5 bg-white">
-        <div className="2xl:w-[650px] w-full space-y-6">
+      <div className="3xl:w-[1000px] w-full p-5 rounded-lg shadow-1 mt-5 bg-white">
+        <div className="3xl:w-[650px] w-full space-y-6">
           <div className="flex items-center ">
             <p className="min-w-[70px] text-[#313131] font-[400]">เปิดร้าน</p>
             <input

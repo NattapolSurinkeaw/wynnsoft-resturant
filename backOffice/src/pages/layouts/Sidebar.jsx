@@ -22,11 +22,11 @@ function Sidebar({ isSidebarOpen }) {
 
   return (
     <div
-      className={`h-full overflow-y-auto bg-[#00537B]  
+      className={`h-full overflow-y-auto bg-[#00537B] transition-all duration-600 ease-in-out
     ${
       isSidebarOpen
-        ? "min-w-[275px] p-5 transform translate-x-0 "
-        : "w-0 transform -translate-x-full transition-all duration-500 ease-in-out "
+        ? "min-w-[275px] max-w-[275px] p-5 transform translate-x-0 opacity-100"
+        : "min-w-0 max-w-0 transform -translate-x-full opacity-0"
     }`}
     >
       <figure className="flex justify-center w-full mt-4">
