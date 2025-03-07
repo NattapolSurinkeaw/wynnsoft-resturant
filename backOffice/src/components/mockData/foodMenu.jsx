@@ -83,7 +83,7 @@ export const foodDetail = [
     detail: "",
     images: "/images/img/pad-thai.jpg",
     status: "รายการครบ",
-    bestSeller: 1,
+    bestSeller: 0,
   },
   {
     id: 8,
@@ -122,7 +122,7 @@ export const foodDetail = [
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1136.png",
     status: "ยกเลิก",
-    bestSeller: 1,
+    bestSeller: 0,
   },
   {
     id: 11,
@@ -147,11 +147,9 @@ export const foodDetail = [
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Pad-Kra-Pao.jpg",
     status: "พร้อมเสริฟ",
-    bestSeller: 1,
+    bestSeller: 0,
   },
 ].map((item, index) => ({ ...item, count: index + 1 }));
-
-
 
 
 export const cate = [ 
