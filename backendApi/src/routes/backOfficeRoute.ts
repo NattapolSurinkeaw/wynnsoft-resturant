@@ -52,7 +52,8 @@ router.post('/api/backoffice/language/:id', AuthenticateAdmin, upload.single("fl
 ], manageDataController.OnUpdateLanguage)
 router.delete('/api/backoffice/language/:id', AuthenticateAdmin, manageDataController.OnDeleteLanguage);
 
-//ตั้งค่า user 
+// การตั้งค่า
+router.get('/api/backoffice/webinfo', AuthenticateAdmin, websettingController.OngetWebinfos)
 // router.get('/api/backoffice/users', AuthenticateAdmin, websettingController.OnsettingUser);
 
 
