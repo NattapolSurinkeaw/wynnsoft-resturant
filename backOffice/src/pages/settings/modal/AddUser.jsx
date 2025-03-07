@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 
 function AddUser({ isOpen, closeModal }) {

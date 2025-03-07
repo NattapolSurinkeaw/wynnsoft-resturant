@@ -12,7 +12,7 @@ import OrdersDay from "./pages/ordersDay/OrdersDay";
 import Payment from "./pages/payment/Payment";
 import Served from "./pages/served/Served";
 import Orders from "./pages/orders/Orders";
-import EditTable from "./pages/editTable/EditTable";
+import CustomTable from "./pages/customTable/CustomTable";
 import NewLatest from "./pages/newLatest/newLatest";
 import MenuStatus from "./pages/menuStatus/MenuStatus";
 import OutStock from "./pages/outStock/OutStock";
@@ -40,7 +40,7 @@ function App() {
             <Route path="/payment" element={<Payment />} />
             <Route path="/served" element={<Served />} />
             <Route path="/orders" element={<Orders />} />
-            <Route path="/editTable" element={<EditTable />} />
+            <Route path="/customTable" element={<CustomTable />} />
             <Route path="/newLatest" element={<NewLatest />} />
             <Route path="/menuStatus" element={<MenuStatus />} />
             <Route path="/outStock" element={<OutStock />} />

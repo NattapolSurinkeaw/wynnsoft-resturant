@@ -315,7 +315,7 @@ function FoodMenu() {
                 สินค้าขายดี
               </p>
               <div
-                className="bg-white flex justify-between items-center gap-2 py-1.5 px-2 rounded-lg shadow w-[160px] max-w-full "
+                className="bg-white flex justify-between items-center gap-2 py-1.5 px-2 rounded-lg shadow w-[180px] max-w-full "
                 onClick={() => setShowBestSellerMenu(!showBestSellerMenu)}
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
