@@ -92,12 +92,12 @@ function User() {
         selectedUser={selectedUser}
         closeModal={closeModal}
       />
-      <div className="2xl:w-[1207px] w-full">
-        <div className="grid grid-cols-6 gap-4 ">
+      <div className="3xl:w-[1207px] w-full">
+        <div className="grid 2xl:grid-cols-6 lg:grid-cols-3 md:grid-cols-4 sm:grid-cols-3 grid-cols-3 gap-4 ">
           {users.map((user) => (
             <div
               key={user.id}
-              className="relative flex flex-col items-center w-full h-[230px] bg-white shadow-1 rounded-lg overflow-hidden group"
+              className="relative flex flex-col items-center w-full h-[230px] bg-white shadow-1 rounded-lg overflow-hidden group "
             >
               <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                 <div className="absolute -top-[3.7rem] -right-[3.7rem] w-[100px] h-[100px] shadow-2xl rotate-45 bg-white"></div>

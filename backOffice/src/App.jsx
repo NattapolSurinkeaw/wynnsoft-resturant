@@ -22,9 +22,9 @@ import Dailyincome from "./pages/dailyincome/Dailyincome";
 import Monthlyincome from "./pages/monthlyincome/Monthlyincome";
 import TopMenu from "./pages/topMenu/TopMenu";
 
-
 import CategoryFood from "./pages/categoryfood/CategoryFood";
 import Settings from "./pages/settings/Settings";
+import ConfirmPassword from "./components/auth/ConfirmPassword";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -50,7 +50,6 @@ function App() {
             <Route path="/monthlyincome" element={<Monthlyincome />} />
             <Route path="/topMenu" element={<TopMenu />} />
 
-
             <Route path="/catefood" element={<CategoryFood />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
@@ -58,6 +57,8 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/ConfirmPassword" element={<ConfirmPassword />} />
 
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

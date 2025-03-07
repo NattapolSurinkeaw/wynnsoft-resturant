@@ -31,7 +31,7 @@ function Settings() {
   return (
     <>
       <AddUser isOpen={isOpen} closeModal={closeModal} />
-      <div className="flex 2xl:w-[1565px] w-full items-center justify-between">
+      <div className="flex lg:flex-row flex-col 3xl:w-[1565px] w-full max-lg:gap-4 lg:items-center items-end max-lg:justify-between ">
         <div className="flex w-full items-center gap-2">
           <SettingsOutlinedIcon
             sx={{ fontSize: 25 }}
@@ -40,7 +40,7 @@ function Settings() {
           <p className="text-[25px] font-[600] text-[#00537B]">การตั้งค่า</p>
         </div>
         {activeTab === "user" && (
-          <div className="flex items-center gap-6">
+          <div className="flex items-center xl:gap-6 gap-2">
             <div className="flex items-center gap-2">
               <p className="w-[70px] text-[16px] font-[500] text-[#313131]">
                 หน้าที่ผู้ใช้
@@ -78,7 +78,7 @@ function Settings() {
 
             <button
               onClick={() => handleAdd()}
-              className="flex items-center justify-center w-[130px] shadow-1 py-1.5 rounded-lg cursor-pointer text-white text-[16px] duration-200 transition bg-[#005179] hover:bg-[#ffd468]"
+              className="flex items-center justify-center xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer text-white text-[16px] duration-200 transition bg-[#005179] hover:bg-[#F5A100]"
             >
               <AddIcon className="text-white" />
               เพิ่มผู้ใช้งาน
@@ -87,10 +87,10 @@ function Settings() {
         )}
       </div>
 
-      <div className="flex gap-4 mt-6 bg-red-300">
+      <div className="flex lg:flex-row flex-col gap-4 mt-6 ">
         <Tab activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <main className="w-full bg-blue-400">
+        <main className="w-full ">
           {activeTab === "profile" && <Profile />}
           {activeTab === "shop" && <Shop />}
           {activeTab === "account" && <Account />}
