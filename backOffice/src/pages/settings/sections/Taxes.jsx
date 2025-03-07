@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import CreateIcon from "@mui/icons-material/Create";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 

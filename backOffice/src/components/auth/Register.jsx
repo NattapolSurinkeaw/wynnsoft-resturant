@@ -12,33 +12,66 @@ function Register() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
 
-  const submitRegister = () => {
-    if (!username || !password || !email || !name) {
-      console.log("Please enter all data");
+  const submitRegister = async () => {
+    if (!username.trim() || !password.trim() || !email.trim() || !name.trim()) {
       Swal.fire({
-        // title: "ข้อมูลไม่ครบ!",
-        text: "ข้อมูลไม่ครบ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วน",
         icon: "warning",
         confirmButtonText: "ตกลง",
         customClass: {
-          confirmButton: "my-confirm-button", 
+          confirmButton: "my-confirm-button",
         },
-        buttonsStyling: false, 
+        buttonsStyling: false,
       });
-      return false;
+      return;
     }
-
+  
+    // Validate email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      Swal.fire({
+        text: "รูปแบบอีเมลไม่ถูกต้อง",
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      });
+      return;
+    }
+  
+    if (password.length < 6) {
+      Swal.fire({
+        text: "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      });
+      return;
+    }
+  
     const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-    formData.append("email", email);
-    formData.append("name", name);
-
-    getRegister(formData).then((res) => {
+    formData.append("username", username.trim());
+    formData.append("password", password.trim());
+    formData.append("email", email.trim());
+    formData.append("name", name.trim());
+  
+    try {
+      const res = await getRegister(formData);
       console.log(res);
-
-    });
+      Swal.fire({
+        text: "ลงทะเบียนสำเร็จ!",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      }).then(() => {
+        navigate("/login");
+      });
+    } catch (error) {
+      console.error("Registration Error:", error);
+      Swal.fire({
+        text: "เกิดข้อผิดพลาด กรุณาลองใหม่",
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      });
+    }
   };
+  
   return (
     <>
       <div className="flex flex-col justify-center items-center lg:gap-8 gap-4 h-full w-full">
