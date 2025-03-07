@@ -5,8 +5,8 @@ import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Table from "./Table";
 
-function Header() {
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
+function Header({ isSettingOpen, setIsSettingOpen }) {
+  // const [isSettingOpen, setIsSettingOpen] = useState(false);
   console.log("isSettingOpen", isSettingOpen);
 
   return (
