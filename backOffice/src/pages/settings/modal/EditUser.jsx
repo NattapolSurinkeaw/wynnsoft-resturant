@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 
 function EditUser({ isOpen, closeModal }) {
   return (
