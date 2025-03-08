@@ -3,7 +3,7 @@ export const foodDetail = [
     id: 1,
     name: "ไก่ทอด",
     price: 150, //ราคาอาหาร
-    discount: 50, //ส่วนลด
+    specialPrice: 100, //ส่วนลด
     cateID: 1, //หมวดหมู่
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
@@ -15,7 +15,7 @@ export const foodDetail = [
     id: 2,
     name: "สเต็กเนื้อสันไหล่วากิวแองกัส",
     price: 1500,
-    discount: 100,
+    specialPrice: 1200,
     cateID: 2,
     count: 2,
     detail:
@@ -28,7 +28,7 @@ export const foodDetail = [
     id: 3,
     name: "สลัดผัก",
     price: 1150,
-    discount: 570,
+    specialPrice: 1100,
     cateID: 3,
     count: 1,
     detail: "",
@@ -40,7 +40,7 @@ export const foodDetail = [
     id: 4,
     name: "ผัดกระเทียมพริกไทย",
     price: 250,
-    discount: 10,
+    specialPrice: 200,
     cateID: 4,
     count: 2,
     detail:
@@ -53,7 +53,7 @@ export const foodDetail = [
     id: 5,
     name: "ข้าวหมูแดง",
     price: 150, //ราคาอาหาร
-    discount: 50, //ส่วนลด
+    specialPrice: 100, //ส่วนลด
     cateID: 1, //หมวดหมู่
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
@@ -65,7 +65,7 @@ export const foodDetail = [
     id: 6,
     name: "ผัดกะเพรา",
     price: 1000,
-    discount: 100,
+    specialPrice: 800,
     cateID: 2,
     count: 2,
     detail: "",
@@ -77,7 +77,7 @@ export const foodDetail = [
     id: 7,
     name: "ผัดไทย",
     price: 1150,
-    discount: 570,
+    specialPrice: 950,
     cateID: 2,
     count: 1,
     detail: "",
@@ -89,7 +89,7 @@ export const foodDetail = [
     id: 8,
     name: "ต้มยำกุ้ง",
     price: 250,
-    discount: 10,
+    specialPrice: 150,
     cateID: 3,
     count: 2,
     detail:
@@ -102,7 +102,7 @@ export const foodDetail = [
     id: 9,
     name: "น้ำแข็งใส",
     price: 50,
-    discount: "",
+    specialPrice: "",
     cateID: 5,
     count: 2,
     detail:
@@ -115,7 +115,7 @@ export const foodDetail = [
     id: 10,
     name: "ผัดกระเทียมพริกไทย",
     price: 250,
-    discount: 10,
+    specialPrice: 200,
     cateID: 4,
     count: 2,
     detail:
@@ -128,7 +128,7 @@ export const foodDetail = [
     id: 11,
     name: "ข้าวหมูแดง",
     price: 150, //ราคาอาหาร
-    discount: 50, //ส่วนลด
+    specialPrice: 120, //ส่วนลด
     cateID: 1, //หมวดหมู่
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
@@ -140,7 +140,7 @@ export const foodDetail = [
     id: 12,
     name: "ผัดกะเพรา",
     price: 1000,
-    discount: 100,
+    specialPrice: 700,
     cateID: 2,
     count: 2,
     detail:

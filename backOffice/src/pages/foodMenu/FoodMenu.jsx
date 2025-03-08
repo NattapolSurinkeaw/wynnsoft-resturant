@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cate, foodDetail } from "../../components/mockData/foodMenu";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Modal } from "@mui/material";
@@ -7,6 +7,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import AddFood from "./AddFood";
+import EditFood from "./EditFood";
 
 function FoodMenu() {
   const [searchTerm, setSearchTerm] = useState(""); // ค้นหาเมนู
@@ -17,6 +19,9 @@ function FoodMenu() {
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
+  const categoryMenuRef = useRef(null);
+  const bestSellerMenuRef = useRef(null);
+  const [refreshData, setRefreshData] = useState(0);
 
   const filteredFood = foodDetail
     .filter((item) => {
@@ -29,13 +34,38 @@ function FoodMenu() {
     })
     .filter((item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ); 
+    );
 
   useEffect(() => {
-    setSelectedCategory(null);
-    setSelectedBestSeller(null);
-  }, [searchTerm]);
+    const handleClickOutside = (event) => {
+      if (
+        categoryMenuRef.current &&
+        !categoryMenuRef.current.contains(event.target) &&
+        bestSellerMenuRef.current &&
+        !bestSellerMenuRef.current.contains(event.target)
+      ) {
+        setShowCategoryMenu(false);
+        setShowBestSellerMenu(false);
+      }
+    };
 
+    if (showCategoryMenu || showBestSellerMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showCategoryMenu, showBestSellerMenu]);
+
+  useEffect(() => {
+    if (selectedBestSeller === null) {
+      setShowBestSellerMenu(false);
+    }
+    if (selectedCategory === null) {
+      setShowCategoryMenu(false);
+    }
+  }, [selectedBestSeller, selectedCategory]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -51,11 +81,14 @@ function FoodMenu() {
   const handleOpenAdd = (row) => {
     setOpenAdd(true);
   };
+
   const handleOpenEdit = (row) => {
     console.log(row);
     setSelectedRow(row);
     setOpenEdit(true);
   };
+
+  console.log("selectedRow", selectedRow);
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
@@ -120,12 +153,14 @@ function FoodMenu() {
       width: 150,
       editable: false,
       renderCell: (params) => (
-        <div className="flex flex-col justify-center items-end ">
-          <p className="text-[#8F8F8F] text-[16px] line-through h-[16px] mb-2">
-            {formatNumber(params.row.price)} ฿
-          </p>
+        <div className="flex flex-col justify-center items-end h-full">
+          {params.row.specialPrice && (
+            <p className="text-[#8F8F8F] text-[16px] line-through h-[18px] mb-2">
+              {formatNumber(params.row.price)} ฿
+            </p>
+          )}
           <p className="text-black text-[20px]">
-            {formatNumber(params.row.price - params.row.discount)}
+            {formatNumber(params.row.specialPrice || params.row.price)} ฿
           </p>
         </div>
       ),
@@ -253,7 +288,7 @@ function FoodMenu() {
 
         <div className="flex gap-4 justify-ennd items-center ">
           {/* cate */}
-          <div className="relative">
+          <div className="relative" ref={categoryMenuRef}>
             <div className="flex flex-shrink-0 gap-2 items-center">
               <p className="text-[#313131] xl:text-xl text-base font-[600] flex-shrink-0">
                 หมวดเมนู
@@ -284,17 +319,27 @@ function FoodMenu() {
             {/* เมนูหมวดหมู่ */}
             <div className="absolute w-full h-full z-99">
               {showCategoryMenu && (
-                <div className="bg-white flex flex-col p-2 mt-2 rounded-lg shadow">
+                <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow">
                   <div
-                    className="py-2 px-4 cursor-pointer hover:bg-gray-200"
-                    onClick={clearFiltersCate}
+                    className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                      selectedCategory === null ? "bg-[#F5A100] text-white" : ""
+                    }`}
+                    onClick={() => {
+                      clearFiltersCate();
+                      setTimeout(() => setShowCategoryMenu(false), 0);
+                    }}
                   >
                     ทั้งหมด
                   </div>
+                  <div className="border-t border-[#e6e6e6] rounded-full w-full"></div>
                   {cate.map((category) => (
                     <div
                       key={category.id}
-                      className="py-2 px-4 cursor-pointer hover:bg-gray-200"
+                      className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                        selectedCategory === category.id
+                          ? "bg-[#F5A100] text-white"
+                          : ""
+                      }`}
                       onClick={() => {
                         setSelectedCategory(category.id);
                         setShowCategoryMenu(false);
@@ -309,7 +354,7 @@ function FoodMenu() {
           </div>
 
           {/* cate best seller*/}
-          <div className=" relative">
+          <div className="relative" ref={bestSellerMenuRef}>
             <div className="flex flex-shrink-0 gap-2 items-center">
               <p className="text-[#313131] xl:text-xl text-base font-[600] flex-shrink-0">
                 สินค้าขายดี
@@ -342,15 +387,26 @@ function FoodMenu() {
             {/* สินค้าขายดี */}
             <div className="absolute w-full h-full z-99">
               {showBestSellerMenu && (
-                <div className="bg-white flex flex-col p-2 mt-2 rounded-lg shadow">
+                <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow">
                   <div
-                    className="py-2 px-4 cursor-pointer hover:bg-gray-200"
-                    onClick={clearFiltersBestSeller}
+                    className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                      selectedBestSeller === null
+                        ? "bg-[#F5A100] text-white"
+                        : ""
+                    }`}
+                    onClick={() => {
+                      clearFiltersBestSeller();
+                      setTimeout(() => setShowBestSellerMenu(false), 0);
+                    }}
                   >
                     ทั้งหมด
                   </div>
+                  <div className="border-t border-[#e6e6e6] rounded-full w-full"></div>
+
                   <div
-                    className="py-2 px-4 cursor-pointer hover:bg-gray-200"
+                    className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                      selectedBestSeller === 1 ? "bg-[#F5A100] text-white" : ""
+                    }`}
                     onClick={() => {
                       setSelectedBestSeller(1);
                       setShowBestSellerMenu(false);
@@ -359,9 +415,11 @@ function FoodMenu() {
                     สินค้าขายดี
                   </div>
                   <div
-                    className="py-2 px-4 cursor-pointer hover:bg-gray-200"
+                    className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                      selectedBestSeller === 0 ? "bg-[#F5A100] text-white" : ""
+                    }`}
                     onClick={() => {
-                      setSelectedBestSeller(0); // เลือกสินค้าทั่วไป
+                      setSelectedBestSeller(0);
                       setShowBestSellerMenu(false);
                     }}
                   >
@@ -420,7 +478,7 @@ function FoodMenu() {
         }}
       >
         <Box
-          className="width-modal2"
+          className="flex flex-col gap-4 xl:max-w-[60%] max-w-[90%] w-full px-8"
           sx={{
             position: "absolute",
             top: "50%",
@@ -432,30 +490,27 @@ function FoodMenu() {
             p: 4,
           }}
         >
-          <h1
-            style={{
-              fontSize: "1.4rem",
-              fontWeight: "500",
-              marginBottom: "0rem",
-            }}
-          >
-            เพิ่มข้อมูล เมนูอาหาร
-          </h1>
-          <button
-            onClick={() => {
-              setOpenAdd(false);
-            }}
-          >
-            <CancelIcon className="CancelIcon" />
-          </button>
+          <div className="flex justify-between">
+            <div className="flex gap-2 items-center">
+              <FastfoodIcon sx={{ color: "#00537B", fontSize: 35 }} />
+              <p className="text-[#00537B] text-2xl font-[600]">
+                เพิ่มข้อมูล เมนูอาหาร
+              </p>
+            </div>
 
-          {/* <UpdateFrom
-              selectedRow={selectedRow}
-              setOpenEdit={setOpenEdit}
-              setRefreshData={setRefreshData}
-            /> */}
+            <button
+              onClick={() => {
+                setOpenAdd(false);
+              }}
+            >
+              <CancelIcon className="hover:text-[#00537B]" />
+            </button>
+          </div>
+
+          <AddFood onClickClose={setOpenAdd} />
         </Box>
       </Modal>
+
       <Modal
         open={openEdit}
         onClose={() => {
@@ -463,7 +518,7 @@ function FoodMenu() {
         }}
       >
         <Box
-          className="width-modal2"
+          className="flex flex-col gap-4 xl:max-w-[60%] max-w-[90%] w-full px-8"
           sx={{
             position: "absolute",
             top: "50%",
@@ -475,28 +530,30 @@ function FoodMenu() {
             p: 4,
           }}
         >
-          <h1
-            style={{
-              fontSize: "1.4rem",
-              fontWeight: "500",
-              marginBottom: "0rem",
-            }}
-          >
-            อัปเดตข้อมูล เมนูอาหาร
-          </h1>
-          <button
-            onClick={() => {
-              setOpenEdit(false);
-            }}
-          >
-            <CancelIcon className="CancelIcon" />
-          </button>
+          <div className="flex justify-between">
+            <div className="flex gap-2 items-center">
+              <FastfoodIcon sx={{ color: "#00537B", fontSize: 35 }} />
+              <p className="text-[#00537B] text-2xl font-[600]">
+                แก้ไขข้อมูล เมนูอาหาร
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                setOpenAdd(false);
+              }}
+            >
+              <CancelIcon className="hover:text-[#00537B]" />
+            </button>
+          </div>
 
           {/* <UpdateFrom
               selectedRow={selectedRow}
               setOpenEdit={setOpenEdit}
               setRefreshData={setRefreshData}
             /> */}
+
+          <EditFood selectedRow={selectedRow} onClickClose={setOpenEdit} />
         </Box>
       </Modal>
     </div>
