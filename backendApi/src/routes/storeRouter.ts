@@ -1,4 +1,4 @@
-import { OrderController } from './../controllers/OrderController';
+// import { OrderController } from './../controllers/OrderController';
 import { ProductController } from './../controllers/ProductController';
 import { StoreController } from './../controllers/StoreController';
 import { PostController } from './../controllers/PostController'
@@ -14,7 +14,7 @@ const storeController = new StoreController()
 const postController = new PostController()
 const productController = new ProductController()
 const productFashionController = new ProductFashionController()
-const orderController = new OrderController()
+// const orderController = new OrderController()
 
 router.get('/api/store/getDataAll', AuthenticateStore, storeController.OnGetDataAll)
 router.post('/api/store/signin', [
@@ -57,10 +57,10 @@ router.get('/api/store/product/delete/:code', AuthenticateStore, productControll
 router.post('/api/store/updateConcept', AuthenticateStore, [
     check('concept').isString()
 ], storeController.OnUpdateConcept)
-router.get('/api/store/orders/get', AuthenticateStore, orderController.OnGetOrderStore)
-router.post('/api/store/orders/updatehasimage', upload.single('image'), [
-    check('order_number').isString().notEmpty(),
-], AuthenticateStore, orderController.OnUpdateHasImageOrder)
+// router.get('/api/store/orders/get', AuthenticateStore, orderController.OnGetOrderStore)
+// router.post('/api/store/orders/updatehasimage', upload.single('image'), [
+//     check('order_number').isString().notEmpty(),
+// ], AuthenticateStore, orderController.OnUpdateHasImageOrder)
 router.get('/api/store/orders/amount', AuthenticateStore, storeController.OnCheckTotalOrder)
 
 /** For fashion product */

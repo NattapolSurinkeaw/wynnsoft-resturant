@@ -1,11 +1,11 @@
 import { BannerController } from './../controllers/BannerController';
 import { AdsController } from './../controllers/AdsController';
 import { ContentController } from './../controllers/ContentController';
-import { ReportController } from './../controllers/ReportController';
+// import { ReportController } from './../controllers/ReportController';
 import { ProductController } from './../controllers/ProductController';
 import { PostController } from './../controllers/PostController';
 import { AdminStoreController } from './../controllers/AdminStoreController';
-import { StoreController } from './../controllers/StoreController';
+// import { StoreController } from './../controllers/StoreController';
 import { PackageController } from './../controllers/PackageController' 
 import { AuthenticateAdmin } from './../middleware/AuthAdmin' 
 import { Router } from 'express'
@@ -13,28 +13,28 @@ import { check } from 'express-validator'
 import { UserController } from '../controllers/UserController'
 import { BankController } from '../controllers/BankController'
 import { MembersController } from '../controllers/MembersController' 
-import { OrderController } from '../controllers/OrderController' 
+// import { OrderController } from '../controllers/OrderController' 
 import { ReviewController } from '../controllers/ReviewController'
 import { AdminManageController } from '../controllers/AdminManageController'
 import { ChatController } from '../controllers/ChatController';
 import * as multerUpload from '../util/multerUpload'
-import { OrderFashionController } from '../controllers/OrderFashionController';
+// import { OrderFashionController } from '../controllers/OrderFashionController';
 
 const upload = multerUpload.uploadImage()
 const uploadFileManual = multerUpload.uploadFileManual();
 const router = Router()
 const userController = new UserController()
-const storeController = new StoreController()
+// const storeController = new StoreController()
 const bankController = new BankController()
 const membersController = new MembersController()
-const orderController = new OrderController()
-const orderFashionController = new OrderFashionController()
+// const orderController = new OrderController()
+// const orderFashionController = new OrderFashionController()
 const packageController = new PackageController()
 const reviewController = new ReviewController()
 const adminStoreController = new AdminStoreController()
 const postController = new PostController()
 const productController = new ProductController()
-const reportController = new ReportController()
+// const reportController = new ReportController()
 const adminManageController = new AdminManageController()
 const chatController = new ChatController()
 const contentController = new ContentController()
@@ -163,21 +163,21 @@ router.post('/api/admin/changeStatusContent', [
     check('display').isString().notEmpty()
 ], AuthenticateAdmin, contentController.OnChangeStatusContent)
 /** for manage store */
-router.get('/api/admin/store/get', AuthenticateAdmin, storeController.OnGetStoreAll)
+// router.get('/api/admin/store/get', AuthenticateAdmin, storeController.OnGetStoreAll)
 router.get('/api/admin/store/getDetails/:code', AuthenticateAdmin, adminStoreController.OnGetStoreDetails)
-router.post('/api/admin/store/changeStatusStore', [
-    check('storeCode').isString(),
-    check('status').isString(),
-], AuthenticateAdmin, storeController.OnChangeStatusStore)
-router.post('/api/admin/store/updateProfile', AuthenticateAdmin, upload.single('image'), [
-    check('storeCode').isString(),
-    check('name').isString(),
-    check('age').isString(),
-    check('weight').isString(),
-    check('height').isString(),
-    check('bwh').isString(),
-    check('note').isString(),
-], storeController.OnUpdateProfile)
+// router.post('/api/admin/store/changeStatusStore', [
+//     check('storeCode').isString(),
+//     check('status').isString(),
+// ], AuthenticateAdmin, storeController.OnChangeStatusStore)
+// router.post('/api/admin/store/updateProfile', AuthenticateAdmin, upload.single('image'), [
+//     check('storeCode').isString(),
+//     check('name').isString(),
+//     check('age').isString(),
+//     check('weight').isString(),
+//     check('height').isString(),
+//     check('bwh').isString(),
+//     check('note').isString(),
+// ], storeController.OnUpdateProfile)
 router.get('/api/admin/productRecommend/:sex', AuthenticateAdmin, adminStoreController.OnGetProductRecommend)
 router.get('/api/admin/productcate', AuthenticateAdmin, adminStoreController.OnGetProductCate)
 router.post('/api/admin/updateproductcate', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'banner_image', maxCount: 1 }]), [
@@ -208,18 +208,18 @@ router.post('/api/admin/storePost/create', AuthenticateAdmin, upload.array('imag
 ], postController.OnCreatePostAdmin)
 router.get('/api/admin/storePost/delete/:code', AuthenticateAdmin, postController.OnDeletePost)
 router.get('/api/admin/storeProduct/delete/:code', AuthenticateAdmin, productController.OnDeleteProduct)
-router.post('/api/admin/store/updateConcept', AuthenticateAdmin, [
-    check('storeCode').isString(),
-    check('concept').isString()
-], storeController.OnUpdateConcept)
-router.post('/api/admin/storeProduct/updateStatus', AuthenticateAdmin, [
-    check('productCode').isString(),
-    check('status').isString()
-], storeController.OnChangeStatusProduct)
-router.post('/api/admin/storePost/updateStatus', AuthenticateAdmin, [
-    check('postCode').isString(),
-    check('status').isString()
-], storeController.OnChangeStatusPost)
+// router.post('/api/admin/store/updateConcept', AuthenticateAdmin, [
+//     check('storeCode').isString(),
+//     check('concept').isString()
+// ], storeController.OnUpdateConcept)
+// router.post('/api/admin/storeProduct/updateStatus', AuthenticateAdmin, [
+//     check('productCode').isString(),
+//     check('status').isString()
+// ], storeController.OnChangeStatusProduct)
+// router.post('/api/admin/storePost/updateStatus', AuthenticateAdmin, [
+//     check('postCode').isString(),
+//     check('status').isString()
+// ], storeController.OnChangeStatusPost)
 router.post('/api/admin/storeProduct/setRecommend', [
     check('productCode').isString().notEmpty(),
     check('recommend').isString().notEmpty(),
@@ -238,55 +238,55 @@ router.post('/api/admin/store/changePassword', [
     check('newPassword').isString()
 ], AuthenticateAdmin, adminManageController.OnChangePasswordStore)
 /** for order */
-router.get('/api/admin/order/downloadimage/:orderNumber', AuthenticateAdmin, orderController.OnDownloadImage)
-router.get('/api/admin/orders/read/:number', AuthenticateAdmin, orderController.OnReadOrder)
-router.get('/api/admin/orders/get', AuthenticateAdmin, orderController.OnGetOrderAdmin)
-router.post('/api/admin/orders/updatePaymentStatus', [
-    check('orderNumber').isString(),
-    check('status').isString()
-], AuthenticateAdmin, orderController.OnUpdatePaymentStatus)
-router.post('/api/admin/orders/updateStatus', [
-    check('orderNumber').isString(),
-    check('status').isString(),
-    check('message').isString(),
-], AuthenticateAdmin, orderController.OnUpdateStatus)
-router.post('/api/admin/orders/updateProductStatus', [
-    check('orderNumber').isString(),
-    check('productId').isNumeric(),
-    check('status').isString(),
-], AuthenticateAdmin, orderController.OnUpdateProductStatus)
-router.post('/api/admin/orders/updateGpProduct', [
-    check('orderNumber').isString(),
-    check('productId').isNumeric(),
-    check('gp').isNumeric(),
-], AuthenticateAdmin, orderController.OnUpdateGPInOrder)
-router.post('/api/admin/orders/cancelProductInOrder', [
-    check('orderNumber').isString(),
-    check('productId').isNumeric(),
-    check('note').isString(),
-], AuthenticateAdmin, orderController.OnCancelProductInOrder)
+// router.get('/api/admin/order/downloadimage/:orderNumber', AuthenticateAdmin, orderController.OnDownloadImage)
+// router.get('/api/admin/orders/read/:number', AuthenticateAdmin, orderController.OnReadOrder)
+// router.get('/api/admin/orders/get', AuthenticateAdmin, orderController.OnGetOrderAdmin)
+// router.post('/api/admin/orders/updatePaymentStatus', [
+//     check('orderNumber').isString(),
+//     check('status').isString()
+// ], AuthenticateAdmin, orderController.OnUpdatePaymentStatus)
+// router.post('/api/admin/orders/updateStatus', [
+//     check('orderNumber').isString(),
+//     check('status').isString(),
+//     check('message').isString(),
+// ], AuthenticateAdmin, orderController.OnUpdateStatus)
+// router.post('/api/admin/orders/updateProductStatus', [
+//     check('orderNumber').isString(),
+//     check('productId').isNumeric(),
+//     check('status').isString(),
+// ], AuthenticateAdmin, orderController.OnUpdateProductStatus)
+// router.post('/api/admin/orders/updateGpProduct', [
+//     check('orderNumber').isString(),
+//     check('productId').isNumeric(),
+//     check('gp').isNumeric(),
+// ], AuthenticateAdmin, orderController.OnUpdateGPInOrder)
+// router.post('/api/admin/orders/cancelProductInOrder', [
+//     check('orderNumber').isString(),
+//     check('productId').isNumeric(),
+//     check('note').isString(),
+// ], AuthenticateAdmin, orderController.OnCancelProductInOrder)
 /** for order fashion */
-router.get('/api/admin/orderfashion/get', AuthenticateAdmin, orderFashionController.OnGetOrderFashionAdmin)
-router.get('/api/admin/orderfashion/read/:number', AuthenticateAdmin, orderFashionController.OnReadOrder)
-router.post('/api/admin/orderfashion/updatePaymentStatus', [
-    check('orderNumber').isString(),
-    check('status').isString()
-], AuthenticateAdmin, orderFashionController.OnUpdatePaymentStatus)
-router.post('/api/admin/orderfashion/updateProductStatus', [
-    check('orderNumber').isString(),
-    check('productId').isNumeric(),
-    check('status').isString(),
-], AuthenticateAdmin, orderFashionController.OnUpdateProductStatus)
-router.post('/api/admin/orderfashion/updateStatus', [
-    check('orderNumber').isString(),
-    check('status').isString(),
-    check('message').isString(),
-], AuthenticateAdmin, orderFashionController.OnUpdateStatus)
-router.post('/api/admin/orders/cancelProductInOrderFashion', [
-    check('orderNumber').isString(),
-    check('productId').isNumeric(),
-    check('note').isString(),
-], AuthenticateAdmin, orderFashionController.OnCancelProductInOrder)
+// router.get('/api/admin/orderfashion/get', AuthenticateAdmin, orderFashionController.OnGetOrderFashionAdmin)
+// router.get('/api/admin/orderfashion/read/:number', AuthenticateAdmin, orderFashionController.OnReadOrder)
+// router.post('/api/admin/orderfashion/updatePaymentStatus', [
+//     check('orderNumber').isString(),
+//     check('status').isString()
+// ], AuthenticateAdmin, orderFashionController.OnUpdatePaymentStatus)
+// router.post('/api/admin/orderfashion/updateProductStatus', [
+//     check('orderNumber').isString(),
+//     check('productId').isNumeric(),
+//     check('status').isString(),
+// ], AuthenticateAdmin, orderFashionController.OnUpdateProductStatus)
+// router.post('/api/admin/orderfashion/updateStatus', [
+//     check('orderNumber').isString(),
+//     check('status').isString(),
+//     check('message').isString(),
+// ], AuthenticateAdmin, orderFashionController.OnUpdateStatus)
+// router.post('/api/admin/orders/cancelProductInOrderFashion', [
+//     check('orderNumber').isString(),
+//     check('productId').isNumeric(),
+//     check('note').isString(),
+// ], AuthenticateAdmin, orderFashionController.OnCancelProductInOrder)
 
 /** for product fashion */
 router.post('/api/admin/storeProductFashion/setRecommend', [
@@ -305,38 +305,38 @@ router.post('/api/admin/storeProductFashion/edit/:code', [
 ], AuthenticateAdmin, adminStoreController.OnEditProductFashion)
 
 /** for report */
-router.post('/api/admin/storeReport/export', AuthenticateAdmin, [
-    check('start'),
-    check('end')
-], reportController.OnExportStoreReport)
-router.post('/api/admin/storeReport/get', AuthenticateAdmin, [
-    check('start'),
-    check('end')
-], reportController.OnGetStoreReport)
-router.post('/api/admin/customerReport/export', AuthenticateAdmin, [
-    check('start'),
-    check('end')
-], reportController.OnExportCustomerReport)
-router.post('/api/admin/customerReport/get', AuthenticateAdmin, [
-    check('start'),
-    check('end')
-], reportController.OnGetCustomerReport)
-router.post('/api/admin/orderReport/export', AuthenticateAdmin, [
-    check('start'),
-    check('end')
-], reportController.OnExportOrderReport)
-router.post('/api/admin/orderReport/get', AuthenticateAdmin, [
-    check('start'),
-    check('end')
-], reportController.OnGetOrderReport)
-router.post('/api/admin/orderFashionReport/get', AuthenticateAdmin, [
-    check('start'),
-    check('end')
-], reportController.OnGetOrderFashionReport)
-router.post('/api/admin/orderFashionReport/export', AuthenticateAdmin, [
-    check('start'),
-    check('end')
-], reportController.OnExportOrderFashionReport)
+// router.post('/api/admin/storeReport/export', AuthenticateAdmin, [
+//     check('start'),
+//     check('end')
+// ], reportController.OnExportStoreReport)
+// router.post('/api/admin/storeReport/get', AuthenticateAdmin, [
+//     check('start'),
+//     check('end')
+// ], reportController.OnGetStoreReport)
+// router.post('/api/admin/customerReport/export', AuthenticateAdmin, [
+//     check('start'),
+//     check('end')
+// ], reportController.OnExportCustomerReport)
+// router.post('/api/admin/customerReport/get', AuthenticateAdmin, [
+//     check('start'),
+//     check('end')
+// ], reportController.OnGetCustomerReport)
+// router.post('/api/admin/orderReport/export', AuthenticateAdmin, [
+//     check('start'),
+//     check('end')
+// ], reportController.OnExportOrderReport)
+// router.post('/api/admin/orderReport/get', AuthenticateAdmin, [
+//     check('start'),
+//     check('end')
+// ], reportController.OnGetOrderReport)
+// router.post('/api/admin/orderFashionReport/get', AuthenticateAdmin, [
+//     check('start'),
+//     check('end')
+// ], reportController.OnGetOrderFashionReport)
+// router.post('/api/admin/orderFashionReport/export', AuthenticateAdmin, [
+//     check('start'),
+//     check('end')
+// ], reportController.OnExportOrderFashionReport)
 /** for settings */
 router.post('/api/admin/setGrossProfit', [
     check('gp').notEmpty().isString()
@@ -366,7 +366,7 @@ router.post('/api/admin/changeStatusLog', [
     check('status').isString(),
 ], AuthenticateAdmin, adminManageController.OnChangeStatusLog)
 /** for dashboard */
-router.get('/api/admin/getDashboard', AuthenticateAdmin, reportController.OnGetDashboardData)
+// router.get('/api/admin/getDashboard', AuthenticateAdmin, reportController.OnGetDashboardData)
 /** for banner and ads */
 router.post('/api/admin/updateSlide', upload.single('image'), [
     check('id').isString(),
@@ -403,7 +403,7 @@ router.post('/api/admin/updatePassword', [
 ], userController.OnUpdateNewPassword)
 
 router.delete('/api/admin/member/:code', AuthenticateAdmin, membersController.OnDeleteMember)
-router.delete('/api/admin/store/:code', AuthenticateAdmin, storeController.OnDeleteStore)
+// router.delete('/api/admin/store/:code', AuthenticateAdmin, storeController.OnDeleteStore)
 
 /** for recommend gp setting */
 router.post('/api/admin/createRecommendGp', AuthenticateAdmin, adminManageController.OnCreateRecommendGp)

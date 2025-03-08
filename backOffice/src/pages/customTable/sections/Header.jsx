@@ -5,10 +5,14 @@ import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Table from "./Table";
 
-function Header({ isSettingOpen, setIsSettingOpen }) {
-  // const [isSettingOpen, setIsSettingOpen] = useState(false);
-  console.log("isSettingOpen", isSettingOpen);
-
+function Header({
+  isSettingOpen,
+  setIsSettingOpen,
+  isAddTable,
+  setIsAddTable,
+  handleReservationClick,
+  handleRetrospectiveClick,
+}) {
   return (
     <>
       <div className="flex justify-between w-full">
@@ -32,8 +36,10 @@ function Header({ isSettingOpen, setIsSettingOpen }) {
               </button>
 
               <button
-                // onClick={() => handleAdd()}
-                className="flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer text-white text-[16px] duration-200 transition bg-[#005179] hover:bg-[#F5A100]"
+                onClick={handleReservationClick}
+                className={`flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer text-white text-[16px] duration-200 transition ${
+                  isAddTable ? "bg-[#F5A100]" : "bg-[#005179]"
+                }`}
               >
                 <AddBoxOutlinedIcon
                   sx={{ fontSize: 20 }}

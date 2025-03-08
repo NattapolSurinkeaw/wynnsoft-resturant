@@ -216,10 +216,10 @@ function Sidebar({ isSidebarOpen }) {
           </div>
         </Link>
         <Link
-          to="editTable"
+          to="customTable"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
             ${
-              location.pathname === "/editTable"
+              location.pathname === "/customTable"
                 ? "bg-white"
                 : "hover:bg-white group"
             }`}
@@ -228,14 +228,14 @@ function Sidebar({ isSidebarOpen }) {
             <WidgetsOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-                location.pathname === "/editTable"
+                location.pathname === "/customTable"
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-                location.pathname === "/editTable"
+                location.pathname === "/customTable"
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}

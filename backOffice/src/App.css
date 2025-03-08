@@ -114,6 +114,7 @@ body {
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
+/* btn swal */
 .my-confirm-button {
   background-color: #00537b !important; /* เปลี่ยนเป็นสีฟ้า */
   color: white !important; /* เปลี่ยนสีตัวอักษรเป็นสีขาว */
@@ -125,11 +126,11 @@ body {
 .my-confirm-button:hover {
   background-color: #003f5e !important; /* สีเมื่อ hover */
 }
-
-
+/* btn swal */
 
 /* DataGrid */
-.css-1r7svyj-MuiDataGrid-root {
+.css-1r7svyj-MuiDataGrid-root,
+.css-1kzd55-MuiDataGrid-root {
   --unstable_DataGrid-radius: 10px !important;
   --DataGrid-containerBackground: #00537b !important;
 }
@@ -139,11 +140,12 @@ body {
   font-family: "Noto Sans Thai", sans-serif;
   font-size: 16px;
 }
-.css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone{
+.css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone {
   font-family: "Noto Sans Thai", sans-serif;
   font-size: 16px;
 }
-.css-1r7svyj-MuiDataGrid-root .MuiDataGrid-columnSeparator{
+.css-1r7svyj-MuiDataGrid-root .MuiDataGrid-columnSeparator,
+.css-1kzd55-MuiDataGrid-root .MuiDataGrid-columnSeparator {
   color: #00537b !important;
 }
 /* DataGrid */
