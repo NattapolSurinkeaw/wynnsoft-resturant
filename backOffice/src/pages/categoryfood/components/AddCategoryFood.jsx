@@ -3,6 +3,7 @@ import Switch from "@mui/material/Switch";
 import { getCreateCategoryFood } from "../../../services/manageData.services";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import SwalUI from "../../../components/swal-ui/swal-ui";
 
 function AddCategoryFood({ setRefreshData, setHandleCreate }) {
   const [inpTitle, setInpTitle] = useState("");
@@ -10,27 +11,27 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
   const [checkedStatus, setCheckedStatus] = useState(true);
   const inputProfileImage = useRef([]);
   const [imageObj, setImageobj] = useState();
-  const MySwal = withReactContent(Swal);
 
   function inputImageOnChange(e) {
     if (!e.target.files.length) {
       return false;
     }
     if (
-      ["image/jpeg", "iamge/jpg", "image/png", "image/webp"].includes(
+      ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
         e.target.files[0].type
       )
     ) {
       const URLs = URL.createObjectURL(e.target.files[0]);
       setImageobj(URLs);
     } else {
-      // Swal.fire({
-      //   title: "กรุณาอัปโหลดเฉพาะไฟล์รูปภาพ",
-      //   icon: "warning",
-      //   position: "center",
-      //   timer: 1000,
-      //   showConfirmButton: false,
-      // });
+      Swal.fire({
+        title: "กรุณาอัปโหลดเฉพาะไฟล์รูปภาพ",
+        icon: "warning",
+        position: "center",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      e.target.value = "";
     }
   }
 
@@ -40,29 +41,25 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
     formData.append("priority", priority);
     formData.append("status", checkedStatus);
     formData.append("image", inputProfileImage.current.files[0]);
-
     getCreateCategoryFood(formData)
       .then((res) => {
-        MySwal.fire({
-          title: "สำเร็จ!",
-          text: "ข้อมูลหมวดหมู่อาหารถูกเพิ่มแล้ว",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
+        SwalUI({
+          status: res.status,
+          description: res.description,
+          title: res.title,
         });
         setHandleCreate(false);
         setRefreshData((prev) => prev + 1);
       })
       .catch((err) => {
-        MySwal.fire({
-          title: "เกิดข้อผิดพลาด!",
-          text: "ไม่สามารถเพิ่มข้อมูลได้ กรุณาลองอีกครั้ง",
-          icon: "error",
-          showConfirmButton: false,
-          timer: 1500,
+        SwalUI({
+          status: err.status,
+          description: err.description,
+          title: err.title,
         });
       });
   };
+
   return (
     <div className="w-1/2 bg-white p-4">
       <p>เพิ่มเมนู</p>
@@ -92,7 +89,7 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
       <div>
         <label htmlFor="">ลำดับแสดง</label>
         <input
-          type="text"
+          type="number"
           className="border"
           onChange={(e) => setPriority(e.target.value)}
         />

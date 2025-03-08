@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CreateIcon from "@mui/icons-material/Create";
 
-function Profile() {
+function Profile({webinfo}) {
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
 

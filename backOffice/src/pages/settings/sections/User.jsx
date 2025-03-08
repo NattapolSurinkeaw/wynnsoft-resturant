@@ -4,7 +4,7 @@ import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import EditUser from "../modal/EditUser";
 
-function User() {
+function User({userAll}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -18,73 +18,6 @@ function User() {
     setSelectedUser(null);
   };
 
-  const users = [
-    {
-      id: 1,
-      name: "Tagi",
-      email: "tagi@gmail.com",
-      role: "Admin",
-      status: true,
-    },
-    {
-      id: 2,
-      name: "Alice",
-      email: "alice@gmail.com",
-      role: "Superadmin",
-      status: true,
-    },
-    { id: 3, name: "Bob", email: "bob@gmail.com", role: "Staff", status: true },
-    {
-      id: 4,
-      name: "Charlie",
-      email: "charlie@gmail.com",
-      role: "Chef",
-      status: true,
-    },
-    {
-      id: 5,
-      name: "David",
-      email: "david@gmail.com",
-      role: "Staff",
-      status: true,
-    },
-    {
-      id: 6,
-      name: "Emma",
-      email: "emma@gmail.com",
-      role: "Admin",
-      status: true,
-    },
-    {
-      id: 7,
-      name: "Frank",
-      email: "frank@gmail.com",
-      role: "Staff",
-      status: false,
-    },
-    {
-      id: 8,
-      name: "Grace",
-      email: "grace@gmail.com",
-      role: "Admin",
-      status: false,
-    },
-    {
-      id: 9,
-      name: "Henry",
-      email: "henry@gmail.com",
-      role: "Chef",
-      status: false,
-    },
-    {
-      id: 10,
-      name: "Ivy",
-      email: "ivy@gmail.com",
-      role: "Staff",
-      status: false,
-    },
-  ];
-
   return (
     <>
       <EditUser
@@ -94,7 +27,7 @@ function User() {
       />
       <div className="3xl:w-[1207px] w-full">
         <div className="grid 2xl:grid-cols-6 lg:grid-cols-3 md:grid-cols-4 sm:grid-cols-3 grid-cols-3 gap-4 ">
-          {users.map((user) => (
+          {userAll.map((user) => (
             <div
               key={user.id}
               className="relative flex flex-col items-center w-full h-[230px] bg-white shadow-1 rounded-lg overflow-hidden group "
@@ -121,7 +54,7 @@ function User() {
                 className="text-gray-400/70 mt-2"
               />
               <div className="flex items-center gap-1">
-                {user.role === "Chef" ? (
+                {user.permissionName === "Chef" ? (
                   <SupervisorAccountIcon
                     sx={{ fontSize: 25 }}
                     className="text-[#313131]"
@@ -133,14 +66,14 @@ function User() {
                   />
                 )}
                 <p className="text-[#313131] text-[16px] font-[700]">
-                  {user.name}
+                  {user.displayName}
                 </p>
               </div>
               <p className="text-[#313131] text-[14px] font-[400] mt-2">
                 {user.email}
               </p>
               <p className="text-[#313131]/80 text-[13px] font-[400] mt-1">
-                ({user.role})
+                ({user.permissionName})
               </p>
             </div>
           ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, use } from "react";
 import Profile from "./sections/Profile";
 import Shop from "./sections/Shop";
 import Account from "./sections/Account";
@@ -10,11 +10,16 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import User from "./sections/User";
 import AddUser from "./modal/AddUser";
+import { getWebinfoSetting, getUserAll } from "../../services/setting.service";
 
 function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
   const [age, setAge] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [infoType, setinfoType] = useState([]);
+  const [webinfo, setWebinfo] = useState([]);
+  const [userAll, setUserAll] = useState([]);
+  const [permission, setPermission] = useState([]);
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -27,6 +32,24 @@ function Settings() {
   const closeModal = () => {
     setIsOpen(false);
   };
+
+  // ฟิลเตอร์ webInfo 
+  const filterWebinfo = (info_id) => {
+    return webinfo.filter(info => info.info_type == info_id)
+  }
+
+  useEffect(() => {
+    getWebinfoSetting().then((res) => {
+      // console.log(res);
+      setinfoType(res.webinfotype);
+      setWebinfo(res.webinfo);
+    })
+    getUserAll().then((res) => {
+      console.log(res)
+      setUserAll(res.user);
+      setPermission(res.permission);
+    })
+  }, [])
 
   return (
     <>
@@ -52,10 +75,11 @@ function Settings() {
                 onChange={handleChange}
                 className="w-[140px] h-[37px] bg-white shadow-3 "
               >
-                <MenuItem value={0}>ทั้งหมด</MenuItem>
-                <MenuItem value={10}>test 1</MenuItem>
-                <MenuItem value={20}>test 2</MenuItem>
-                <MenuItem value={30}>test 3</MenuItem>
+                {
+                  permission.map((permiss) => (
+                    <MenuItem key={permiss.id} value={0}>{permiss.user_type_th}</MenuItem>
+                  ))
+                }
               </Select>
             </div>
             <div className="flex items-center gap-2">
@@ -88,14 +112,18 @@ function Settings() {
       </div>
 
       <div className="flex lg:flex-row flex-col gap-4 mt-6 ">
-        <Tab activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Tab 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          infoType={infoType}
+        />
 
         <main className="w-full ">
-          {activeTab === "profile" && <Profile />}
-          {activeTab === "shop" && <Shop />}
-          {activeTab === "account" && <Account />}
-          {activeTab === "taxes" && <Taxes />}
-          {activeTab === "user" && <User />}
+          {activeTab === "profile" && <Profile webinfo={filterWebinfo(1)} />}
+          {activeTab === "shop" && <Shop webinfo={filterWebinfo(2)} />}
+          {activeTab === "bankaccount" && <Account webinfo={filterWebinfo(3)} />}
+          {activeTab === "taxes" && <Taxes webinfo={filterWebinfo(4)} />}
+          {activeTab === "user" && <User userAll={userAll}  />}
         </main>
       </div>
     </>

@@ -56,9 +56,9 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
           />
         </div>
 
-        {/* <button onClick={logOut} className="cursor-pointer border z-10">
+         <button onClick={logOut} className="cursor-pointer border z-10">
           Logout
-        </button> */}
+        </button>
       </div>
     </>
   );

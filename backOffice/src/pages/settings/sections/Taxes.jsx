@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, use } from "react";
+import { Tune } from "@mui/icons-material";
+import Tab from "./Tab";
+import Button from "@mui/material/Button";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import CreateIcon from "@mui/icons-material/Create";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -16,7 +21,21 @@ const mockData = [
   },
 ];
 
-function Taxes() {
+function Taxes({webinfo}) {
+  const [dataTax, setDataTax] = useState([]);
+
+  useEffect(() => {
+    setDataTax(webinfo);
+  }, [webinfo])
+
+  const handleToggleSwitch = (id) => {
+    setDataTax((prevData) =>
+      prevData.map((tax) =>
+        tax.info_id === id ? { ...tax, info_display: !tax.info_display } : tax
+      )
+    );
+  };
+
   return (
     <>
       <div className="3xl:w-[800px] w-full p-5 rounded-lg shadow-1 bg-white">
@@ -38,18 +57,19 @@ function Taxes() {
               </tr>
             </thead>
             <tbody>
-              {mockData.map((data, index) => (
+              {dataTax.map((tax) => (
                 <tr
-                  key={index}
-                  className={index % 2 === 0 ? "bg-[#F9FAFB]" : "bg-[#F3F4F6]"}
+                  key={tax.info_id}
+                  className={tax.info_id % 2 === 0 ? "bg-[#F9FAFB]" : "bg-[#F3F4F6]"}
                 >
-                  <td className="px-2 py-3">{data.Name}</td>
-                  <td className="px-2 py-3">{data.percent}%</td>
+                  <td className="px-2 py-3">{tax.info_title}</td>
+                  <td className="px-2 py-3">{tax.info_value}%</td>
                   <FormControlLabel
                     className="px-2 py-3"
                     control={
                       <Switch
-                        defaultChecked
+                        checked={tax.info_display} // ใช้ค่าจาก tax.info_display
+                        onChange={() => handleToggleSwitch(tax.info_id)} // เรียกใช้ฟังก์ชันเมื่อเปลี่ยนค่า
                         sx={{
                           "& .MuiSwitch-switchBase.Mui-checked": {
                             color: "#39C526",

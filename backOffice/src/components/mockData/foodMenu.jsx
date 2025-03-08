@@ -3,155 +3,153 @@ export const foodDetail = [
     id: 1,
     name: "ไก่ทอด",
     price: 150, //ราคาอาหาร
-    discount: 50, //ส่วนลด
+    specialPrice: 100, //ส่วนลด
     cateID: 1, //หมวดหมู่
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
     images: "/images/img/Rectangle 912.png", //รูป
-    status: "อยู่ระหว่างปรุง", //สถานะ
+    status: " ", //สถานะ
     bestSeller: 0, //สินค้าขายดี
   },
   {
     id: 2,
     name: "สเต็กเนื้อสันไหล่วากิวแองกัส",
     price: 1500,
-    discount: 100,
+    specialPrice: 1200,
     cateID: 2,
     count: 2,
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1131.png",
-    status: "พร้อมเสริฟ",
+    status: 1,
     bestSeller: 0,
   },
   {
     id: 3,
     name: "สลัดผัก",
     price: 1150,
-    discount: 570,
+    specialPrice: 1100,
     cateID: 3,
     count: 1,
     detail: "",
     images: "/images/img/Rectangle 1141.png",
-    status: "รายการครบ",
+    status: 1,
     bestSeller: 1,
   },
   {
     id: 4,
     name: "ผัดกระเทียมพริกไทย",
     price: 250,
-    discount: 10,
+    specialPrice: 200,
     cateID: 4,
     count: 2,
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1136.png",
-    status: "ยกเลิก",
+    status:0,
     bestSeller: 1,
   },
   {
     id: 5,
     name: "ข้าวหมูแดง",
     price: 150, //ราคาอาหาร
-    discount: 50, //ส่วนลด
+    specialPrice: 100, //ส่วนลด
     cateID: 1, //หมวดหมู่
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
     images: "/images/img/moo-deng.jpg", //รูป
-    status: "อยู่ระหว่างปรุง", //สถานะ
+    status: 1, //สถานะ
     bestSeller: 1, //สินค้าขายดี
   },
   {
     id: 6,
     name: "ผัดกะเพรา",
     price: 1000,
-    discount: 100,
+    specialPrice: 800,
     cateID: 2,
     count: 2,
     detail: "",
     images: "/images/img/Pad-Kra-Pao.jpg",
-    status: "พร้อมเสริฟ",
+    status: 0,
     bestSeller: 1,
   },
   {
     id: 7,
     name: "ผัดไทย",
     price: 1150,
-    discount: 570,
+    specialPrice: 950,
     cateID: 2,
     count: 1,
     detail: "",
     images: "/images/img/pad-thai.jpg",
-    status: "รายการครบ",
-    bestSeller: 1,
+    status:0,
+    bestSeller: 0,
   },
   {
     id: 8,
     name: "ต้มยำกุ้ง",
     price: 250,
-    discount: 10,
+    specialPrice: 150,
     cateID: 3,
     count: 2,
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/tomyum.jpg",
-    status: "ยกเลิก",
+    status: 1,
     bestSeller: 1,
   },
   {
     id: 9,
     name: "น้ำแข็งใส",
     price: 50,
-    discount: "",
+    specialPrice: "",
     cateID: 5,
     count: 2,
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/ice-sweet.jpg",
-    status: "รายการครบ",
+    status: 0,
     bestSeller: 1,
   },
   {
     id: 10,
     name: "ผัดกระเทียมพริกไทย",
     price: 250,
-    discount: 10,
+    specialPrice: 200,
     cateID: 4,
     count: 2,
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1136.png",
-    status: "ยกเลิก",
-    bestSeller: 1,
+    status: 1,
+    bestSeller: 0,
   },
   {
     id: 11,
     name: "ข้าวหมูแดง",
     price: 150, //ราคาอาหาร
-    discount: 50, //ส่วนลด
+    specialPrice: 120, //ส่วนลด
     cateID: 1, //หมวดหมู่
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
     images: "/images/img/moo-deng.jpg", //รูป
-    status: "อยู่ระหว่างปรุง", //สถานะ
+    status: 1, //สถานะ
     bestSeller: 1, //สินค้าขายดี
   },
   {
     id: 12,
     name: "ผัดกะเพรา",
     price: 1000,
-    discount: 100,
+    specialPrice: 700,
     cateID: 2,
     count: 2,
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Pad-Kra-Pao.jpg",
-    status: "พร้อมเสริฟ",
-    bestSeller: 1,
+    status: 1,
+    bestSeller: 0,
   },
 ].map((item, index) => ({ ...item, count: index + 1 }));
-
-
 
 
 export const cate = [ 
