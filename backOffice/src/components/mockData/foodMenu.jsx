@@ -8,7 +8,7 @@ export const foodDetail = [
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
     images: "/images/img/Rectangle 912.png", //รูป
-    status: "อยู่ระหว่างปรุง", //สถานะ
+    status: " ", //สถานะ
     bestSeller: 0, //สินค้าขายดี
   },
   {
@@ -21,7 +21,7 @@ export const foodDetail = [
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1131.png",
-    status: "พร้อมเสริฟ",
+    status: 1,
     bestSeller: 0,
   },
   {
@@ -33,7 +33,7 @@ export const foodDetail = [
     count: 1,
     detail: "",
     images: "/images/img/Rectangle 1141.png",
-    status: "รายการครบ",
+    status: 1,
     bestSeller: 1,
   },
   {
@@ -46,7 +46,7 @@ export const foodDetail = [
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1136.png",
-    status: "ยกเลิก",
+    status:0,
     bestSeller: 1,
   },
   {
@@ -58,7 +58,7 @@ export const foodDetail = [
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
     images: "/images/img/moo-deng.jpg", //รูป
-    status: "อยู่ระหว่างปรุง", //สถานะ
+    status: 1, //สถานะ
     bestSeller: 1, //สินค้าขายดี
   },
   {
@@ -70,7 +70,7 @@ export const foodDetail = [
     count: 2,
     detail: "",
     images: "/images/img/Pad-Kra-Pao.jpg",
-    status: "พร้อมเสริฟ",
+    status: 0,
     bestSeller: 1,
   },
   {
@@ -82,7 +82,7 @@ export const foodDetail = [
     count: 1,
     detail: "",
     images: "/images/img/pad-thai.jpg",
-    status: "รายการครบ",
+    status:0,
     bestSeller: 0,
   },
   {
@@ -95,7 +95,7 @@ export const foodDetail = [
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/tomyum.jpg",
-    status: "ยกเลิก",
+    status: 1,
     bestSeller: 1,
   },
   {
@@ -108,7 +108,7 @@ export const foodDetail = [
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/ice-sweet.jpg",
-    status: "รายการครบ",
+    status: 0,
     bestSeller: 1,
   },
   {
@@ -121,7 +121,7 @@ export const foodDetail = [
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1136.png",
-    status: "ยกเลิก",
+    status: 1,
     bestSeller: 0,
   },
   {
@@ -133,7 +133,7 @@ export const foodDetail = [
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
     images: "/images/img/moo-deng.jpg", //รูป
-    status: "อยู่ระหว่างปรุง", //สถานะ
+    status: 1, //สถานะ
     bestSeller: 1, //สินค้าขายดี
   },
   {
@@ -146,7 +146,7 @@ export const foodDetail = [
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Pad-Kra-Pao.jpg",
-    status: "พร้อมเสริฟ",
+    status: 1,
     bestSeller: 0,
   },
 ].map((item, index) => ({ ...item, count: index + 1 }));

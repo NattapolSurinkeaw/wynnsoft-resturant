@@ -6,7 +6,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
 function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
-  console.log("isSidebarOpen", isSidebarOpen);
 
   const logOut = () => {
     localStorage.clear();

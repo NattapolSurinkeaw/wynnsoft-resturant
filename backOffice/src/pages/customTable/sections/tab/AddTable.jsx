@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import SaveIcon from "@mui/icons-material/Save";
 
-
 function AddTable() {
+  const [imageSrc, setImageSrc] = useState("");
+
   return (
     <>
-      <div className="w-full p-6 bg-green-50 shadow-1 rounded-lg">
+      <div className="w-full h-[683px] p-6 bg-white shadow-1 rounded-lg">
         <div className="flex justify-center items-center gap-6">
           <p className="text-[20px] text-[#313131] font-[500]">ชื่อ</p>
           <input
@@ -22,7 +23,11 @@ function AddTable() {
           /> */}
         </div>
         <figure className="w-[360px] h-[360px] mx-auto mt-6 border-6 border-[#D9D9D9]">
-          <img className="w-full h-full" src="/images/" alt="" />
+          <img
+            className="w-full h-full"
+            src={imageSrc || "/images/not_qrcode.jpg"}
+            alt="QRCode"
+          />
         </figure>
         <button className="mt-4 mx-auto flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-gray-700 text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#FFD468] to-[#FFC107] hover:from-[#F5A100] hover:to-[#FF8C00] hover:shadow-xl hover:scale-105">
           <AutorenewIcon sx={{ fontSize: 23 }} className="text-gray-700" />
