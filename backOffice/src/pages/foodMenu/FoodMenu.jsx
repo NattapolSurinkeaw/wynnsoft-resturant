@@ -25,7 +25,6 @@ function FoodMenu() {
             src={params.value}
             alt=""
             style={{
-              width: 100,
               borderRadius: "5px",
               width: "60px",
               height: "60px",
