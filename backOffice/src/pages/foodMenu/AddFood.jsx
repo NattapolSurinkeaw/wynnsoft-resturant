@@ -10,13 +10,13 @@ const AddFood = ({ onClickClose }) => {
   const [text, setText] = useState(""); //รายละเอียด
   const [price, setPrice] = useState(""); //ราคา
   const [specialPrice, setSpecialPrice] = useState(""); //ราคาพิเศษ
-  const [inputPrice, setInputPrice] = useState("");
-  const [inputSpecialPrice, setInputSpecialPrice] = useState("");
   const [showStatusMenu, setShowStatusMenu] = useState("false");
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
+  console.log(price);
+  
   const handleCategoryChange = (id) => {
     setSelectedCategories((prev) =>
       prev.includes(id) ? prev.filter((catId) => catId !== id) : [...prev, id]
@@ -55,31 +55,23 @@ const AddFood = ({ onClickClose }) => {
     }
   }, [selectedStatus]);
 
-  const formatNumber = (num) => {
-    if (!num || isNaN(num)) return "";
-    return Number(num).toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+  
+  const formatNumber = (value) => {
+    const number = value.replace(/[^\d.-]/g, '');
+    // const formatted = parseFloat(number).toFixed(2);
+    return isNaN(number) ? '' : parseFloat(number).toLocaleString();
   };
 
-  const handleInputChange = (e, setInputState, setState) => {
-    let rawValue = e.target.value.replace(/,/g, "");
-    if (rawValue === "") {
-      setInputState("");
-      setState("");
-      return;
-    }
-
-    if (!isNaN(rawValue)) {
-      setInputState(rawValue);
-      setState(rawValue);
-    }
+  const handlePriceChange = (e) => {
+    const formattedValue = formatNumber(e.target.value);
+    setPrice(formattedValue);
   };
 
-  const handleBlur = (setInputState, state) => {
-    setInputState(formatNumber(state));
+  const handleSpecialPriceChange = (e) => {
+    const formattedValue = formatNumber(e.target.value);
+    setSpecialPrice(formattedValue);
   };
+
   return (
     <div className="flex lg:flex-row flex-col lg:gap-2 gap-6 w-full h-full">
       <div className="flex lg:flex-col flex-row gap-3 w-full lg:max-w-[300px] ">
@@ -187,7 +179,7 @@ const AddFood = ({ onClickClose }) => {
 
               <div className="absolute w-full h-full z-99">
                 {showStatusMenu && (
-                  <div className="bg-white flex flex-col p-2 mt-1 rounded-b-lg border border-[#D9D9D9]">
+                  <div className="bg-white flex flex-col gap-1 p-2 mt-1 rounded-b-lg border border-[#D9D9D9]">
                     <div
                       className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
                         selectedStatus === 1 ? "bg-[#F5A100] text-white" : ""
@@ -223,9 +215,8 @@ const AddFood = ({ onClickClose }) => {
             <input
               type="text"
               className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
-              value={inputPrice}
-              onChange={(e) => handleInputChange(e, setInputPrice, setPrice)}
-              onBlur={() => handleBlur(setInputPrice, price)}
+              value={price}
+              onChange={handlePriceChange}
             />
             <span className="w-[140px] flex-shrink-0 text-left text-[#00537B] text-2xl">
               บาท
@@ -239,11 +230,8 @@ const AddFood = ({ onClickClose }) => {
             <input
               type="text"
               className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
-              value={inputSpecialPrice}
-              onChange={(e) =>
-                handleInputChange(e, setInputSpecialPrice, setSpecialPrice)
-              }
-              onBlur={() => handleBlur(setInputSpecialPrice, specialPrice)}
+              value={specialPrice}
+              onChange={handleSpecialPriceChange} 
             />
             <span className="w-[140px] flex-shrink-0 text-left text-[#00537B] text-2xl">
               บาท

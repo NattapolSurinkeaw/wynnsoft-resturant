@@ -88,8 +88,6 @@ function FoodMenu() {
     setOpenEdit(true);
   };
 
-  console.log("selectedRow", selectedRow);
-
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -172,6 +170,16 @@ function FoodMenu() {
       align: "center",
       sortable: false,
       width: 170,
+      renderCell: (params) => (
+        <div className="flex justify-center items-center h-full">
+        <p className="text-[#313131] xl:text-lg text-base font-[400] text-center">
+          {params.value === 1
+            ? "พร้อมบริการ"
+            : params.value === 0
+            ? "สินค้าหมด"
+            : "-"}
+        </p></div>
+      ),
     },
     {
       field: "bestSeller",
@@ -279,7 +287,7 @@ function FoodMenu() {
   ];
 
   return (
-    <div className="flex flex-col justify-center gap-8 w-full flex-1">
+    <div className="flex flex-col justify-center gap-6 w-full flex-1">
       <div className="flex 2xl:flex-row flex-col gap-4 w-full justify-between items-center">
         <div className="flex flex-shrink-0 gap-2 justify-start items-center">
           <FastfoodIcon sx={{ color: "#00537B", fontSize: 35 }} />
@@ -540,7 +548,7 @@ function FoodMenu() {
 
             <button
               onClick={() => {
-                setOpenAdd(false);
+                setOpenEdit(false);
               }}
             >
               <CancelIcon className="hover:text-[#00537B]" />

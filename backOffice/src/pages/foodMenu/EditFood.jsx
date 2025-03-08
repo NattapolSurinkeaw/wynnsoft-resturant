@@ -3,19 +3,23 @@ import { cate } from "../../components/mockData/foodMenu";
 import { Checkbox } from "@mui/material";
 import Switch, { switchClasses } from "@mui/joy/Switch";
 
-const EditFood = ({ onClickClose }) => {
+const EditFood = ({ onClickClose, selectedRow }) => {
+  const [editData, setEditData] = useState(selectedRow);
   const [image, setImage] = useState(null);
   const [checked, setChecked] = useState(1); //สินค้าขายดี
-  const [nameFood, setNameFood] = useState(""); //ชื่อสินค้า
-  const [text, setText] = useState(""); //รายละเอียด
-  const [price, setPrice] = useState(""); //ราคา
-  const [specialPrice, setSpecialPrice] = useState(""); //ราคาพิเศษ
+  const [nameFood, setNameFood] = useState(editData.name || ""); //ชื่อสินค้า
+  const [text, setText] = useState(editData.detail || ""); //รายละเอียด
+  const [price, setPrice] = useState(editData.price || ""); //ราคา
+  const [specialPrice, setSpecialPrice] = useState(editData.specialPrice || ""); //ราคาพิเศษ
   const [inputPrice, setInputPrice] = useState("");
   const [inputSpecialPrice, setInputSpecialPrice] = useState("");
+
   const [showStatusMenu, setShowStatusMenu] = useState("false");
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
+
+  console.log("selectedRow", editData);
 
   const handleCategoryChange = (id) => {
     setSelectedCategories((prev) =>
@@ -23,7 +27,7 @@ const EditFood = ({ onClickClose }) => {
     );
   };
 
-  const handleImageChange = (e, setImage) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -80,14 +84,20 @@ const EditFood = ({ onClickClose }) => {
   const handleBlur = (setInputState, state) => {
     setInputState(formatNumber(state));
   };
+
+  useEffect(() => {
+    setSelectedStatus(editData.status);
+  }, [editData.status]);
+  console.log("selectedStatus", selectedStatus);
+
   return (
     <div className="flex lg:flex-row flex-col lg:gap-2 gap-6 w-full h-full">
       <div className="flex lg:flex-col flex-row gap-3 w-full lg:max-w-[300px] ">
         <div className="relative w-full h-[300px] bg-[#616161] rounded-lg shadow-1 flex items-center justify-center shadow-md overflow-hidden">
-          {image ? (
+          {image || editData.images ? (
             <img
-              src={image}
-              alt="Uploaded"
+              src={image || editData.images} // ใช้ค่าจาก state หรือ editData
+              alt="Uploaded or Existing"
               className="w-full h-full object-cover rounded-lg "
             />
           ) : (
@@ -126,7 +136,10 @@ const EditFood = ({ onClickClose }) => {
               <div key={category.id} className="flex flex-col gap-2">
                 <div className="flex flex-row items-center justify-start gap-x-3">
                   <Checkbox
-                    checked={selectedCategories.includes(category.id)}
+                    checked={
+                      selectedCategories.includes(category.id) ||
+                      editData.cateID === category.id
+                    }
                     onChange={() => handleCategoryChange(category.id)}
                     sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                     color="default"
@@ -150,7 +163,7 @@ const EditFood = ({ onClickClose }) => {
             <input
               type="text"
               className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
-              value={nameFood}
+              value={nameFood} 
               onChange={(e) => setNameFood(e.target.value)}
             />
           </div>
@@ -179,7 +192,7 @@ const EditFood = ({ onClickClose }) => {
                 >
                   <img
                     src="/icons/Group 949.png"
-                    alt=""
+                    alt="Dropdown Icon"
                     className="w-full h-full"
                   />
                 </figure>
@@ -187,28 +200,30 @@ const EditFood = ({ onClickClose }) => {
 
               <div className="absolute w-full h-full z-99">
                 {showStatusMenu && (
-                  <div className="bg-white flex flex-col p-2 mt-1 rounded-b-lg border border-[#D9D9D9]">
-                    <div
-                      className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                        selectedStatus === 1 ? "bg-[#F5A100] text-white" : ""
-                      }`}
-                      onClick={() => {
-                        setSelectedStatus(1);
-                        setShowStatusMenu(false);
-                      }}
-                    >
-                      พร้อมบริการ
-                    </div>
-                    <div
-                      className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                        selectedStatus === 0 ? "bg-[#F5A100] text-white" : ""
-                      }`}
-                      onClick={() => {
-                        setSelectedStatus(0);
-                        setShowStatusMenu(false);
-                      }}
-                    >
-                      สินค้าหมด
+                  <div className="absolute w-full z-99 mt-1">
+                    <div className="bg-white flex flex-col gap-1 p-2 rounded-b-lg border border-[#D9D9D9]">
+                      <div
+                        className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                          selectedStatus === 1 ? "bg-[#F5A100] text-white" : ""
+                        }`}
+                        onClick={() => {
+                          setSelectedStatus(1);
+                          setShowStatusMenu(false);
+                        }}
+                      >
+                        พร้อมบริการ
+                      </div>
+                      <div
+                        className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                          selectedStatus === 0 ? "bg-[#F5A100] text-white" : ""
+                        }`}
+                        onClick={() => {
+                          setSelectedStatus(0);
+                          setShowStatusMenu(false);
+                        }}
+                      >
+                        สินค้าหมด
+                      </div>
                     </div>
                   </div>
                 )}
@@ -223,7 +238,7 @@ const EditFood = ({ onClickClose }) => {
             <input
               type="text"
               className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
-              value={inputPrice}
+              value={editData.price || price}
               onChange={(e) => handleInputChange(e, setInputPrice, setPrice)}
               onBlur={() => handleBlur(setInputPrice, price)}
             />
@@ -239,7 +254,7 @@ const EditFood = ({ onClickClose }) => {
             <input
               type="text"
               className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
-              value={inputSpecialPrice}
+              value={editData.specialPrice || specialPrice}
               onChange={(e) =>
                 handleInputChange(e, setInputSpecialPrice, setSpecialPrice)
               }
@@ -255,7 +270,7 @@ const EditFood = ({ onClickClose }) => {
               สินค้าขายดี
             </span>
             <Switch
-              checked={checked === 1} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
+              checked={editData.bestSeller} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
               onChange={(event) => setChecked(event.target.checked ? 1 : 0)} // อัปเดตค่า 1 หรือ 0
               sx={(theme) => ({
                 "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
