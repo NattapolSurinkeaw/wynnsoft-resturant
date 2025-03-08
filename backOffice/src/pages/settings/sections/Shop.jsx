@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { getEditShopData } from "../../../services/setting.service";
+import Swal from "sweetalert2";
 
 function Shop({webinfo}) {
   const [shopName, setShopName] = useState("");
@@ -21,15 +23,25 @@ function Shop({webinfo}) {
 
   const submitChangeData = () => {
     const params = {
-      shopName: shopName,
-      shopOwner: shopOwner,
+      shop_name: shopName,
+      shop_owner: shopOwner,
       address: address,
       phone: phone,
       email: email,
-      taxNumber: taxNumber
+      tax_number: taxNumber
     }
 
-    console.log(params)
+    getEditShopData(params).then((res) => {
+      if(res.status) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "บันทึกข้อมูลเสร็จ",
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      }
+    })
   }
 
   return (

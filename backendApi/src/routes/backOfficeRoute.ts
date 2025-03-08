@@ -54,6 +54,10 @@ router.delete('/api/backoffice/language/:id', AuthenticateAdmin, manageDataContr
 
 // การตั้งค่า
 router.get('/api/backoffice/webinfo', AuthenticateAdmin, websettingController.OngetWebinfos)
+router.post('/api/backoffice/editshopdata', AuthenticateAdmin, websettingController.OnEditDataShop)
+router.post('/api/backoffice/edittaxservice', AuthenticateAdmin, websettingController.OnUpdateTaxService)
+router.get('/abi/backoffice/getbank', AuthenticateAdmin, websettingController.OngetAllBankAccount)
+router.post('/api/backoffice/updatebank/:id', AuthenticateAdmin, upload.single("qrcode"), websettingController.OnUpdateBank)
 // router.get('/api/backoffice/users', AuthenticateAdmin, websettingController.OnsettingUser);
 
 

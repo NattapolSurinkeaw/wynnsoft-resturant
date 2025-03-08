@@ -7,22 +7,17 @@ import CreateIcon from "@mui/icons-material/Create";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-
-const mockData = [
-  {
-    Name: "ภาษี",
-    percent: 7,
-    status: 1,
-  },
-  {
-    Name: "Service charge",
-    percent: 5,
-    status: 2,
-  },
-];
+import EditTax from "../modal/EditTax";
 
 function Taxes({webinfo}) {
   const [dataTax, setDataTax] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [slcTax, setSlcTax] = useState([]);
+
+  const closeModal = () => {
+    setIsOpen(false);
+    setSelectedUser(null);
+  };
 
   useEffect(() => {
     setDataTax(webinfo);
@@ -35,6 +30,11 @@ function Taxes({webinfo}) {
       )
     );
   };
+
+  const handleEditTax = (tax) => {
+    setIsOpen(true);
+    setSlcTax(tax);
+  }
 
   return (
     <>
@@ -81,12 +81,25 @@ function Taxes({webinfo}) {
                     }
                   />
                   <td className="px-2 py-3">
-                    <div className="flex justify-center items-center w-[35px] h-[35px] rounded-lg bg-[#F5A100] group hover:bg-[#013D59] transition duration-100 shadow-1 cursor-pointer">
+                    <div 
+                      className="flex justify-center items-center w-[35px] h-[35px] rounded-lg bg-[#F5A100] group hover:bg-[#013D59] transition duration-100 shadow-1 cursor-pointer"
+                      onClick={() => handleEditTax(tax)}
+                    >
                       <BorderColorIcon
                         fontSize="small"
                         className="text-white group-hover:text-white"
                       />
                     </div>
+
+                    {
+                      isOpen && (
+                        <EditTax 
+                          isOpen={isOpen} 
+                          closeModal={closeModal} 
+                          slcTax={slcTax} 
+                        />
+                      )
+                    }
                   </td>
                 </tr>
               ))}
