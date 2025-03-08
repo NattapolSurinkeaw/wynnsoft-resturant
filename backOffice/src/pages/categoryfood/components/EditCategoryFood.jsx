@@ -3,6 +3,7 @@ import Switch from "@mui/material/Switch";
 import { getUpdateCategoryFood } from "../../../services/manageData.services";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import SwalUI from "../../../components/swal-ui/swal-ui";
 
 function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
   // ✅ ใช้ useState และตั้งค่าเริ่มต้นจาก slcEdit
@@ -11,14 +12,13 @@ function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
   const [checkedStatus, setCheckedStatus] = useState(false);
   const inputProfileImage = useRef(null);
   const [imageObj, setImageObj] = useState(null);
-  const MySwal = withReactContent(Swal);
 
   // ✅ ใช้ useEffect เพื่ออัปเดตค่าเมื่อ slcEdit เปลี่ยน
   useEffect(() => {
     if (slcEdit) {
       setInpTitle(slcEdit.title || ""); // ถ้าไม่มี title ให้ใช้ค่าว่าง
       setPriority(slcEdit.priority || 1); // ถ้าไม่มี priority ให้ใช้ค่า 1
-      setCheckedStatus(parseInt(slcEdit.status_display)); // แปลงเป็น boolean
+      setCheckedStatus(slcEdit.status_display); // แปลงเป็น boolean
       setImageObj("http://localhost:8003" + slcEdit.thumbnail);
     }
   }, [slcEdit]);
@@ -26,8 +26,22 @@ function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
   // ✅ ฟังก์ชันอัปโหลดรูปภาพ
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (
+      file &&
+      ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+        e.target.files[0].type
+      )
+    ) {
       setImageObj(URL.createObjectURL(file)); // แสดงรูปที่อัปโหลด
+    } else {
+      Swal.fire({
+        title: "กรุณาอัปโหลดเฉพาะไฟล์รูปภาพ",
+        icon: "warning",
+        position: "center",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      e.target.value = "";
     }
   };
 
@@ -41,25 +55,19 @@ function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
 
     getUpdateCategoryFood(slcEdit.id, formData)
       .then((res) => {
-        MySwal.fire({
-          title: "สำเร็จ!",
-          text: "ข้อมูลหมวดหมู่อาหารถูกอัปเดตแล้ว",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
+        SwalUI({
+          status: res.status,
+          description: res.description,
+          title: res.title,
         });
-
         setHandleEdit(false);
         setRefreshData((prev) => prev + 1); // รีเฟรชข้อมูล
       })
       .catch((err) => {
-        // console.error("API Error:", err);
-        MySwal.fire({
-          title: "เกิดข้อผิดพลาด!",
-          text: "ไม่สามารถอัปเดตข้อมูลได้ กรุณาลองอีกครั้ง",
-          icon: "error",
-          showConfirmButton: false,
-          timer: 1500,
+        SwalUI({
+          status: err.status,
+          description: err.description,
+          title: err.title,
         });
       });
   };
