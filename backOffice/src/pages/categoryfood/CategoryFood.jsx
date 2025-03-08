@@ -9,6 +9,7 @@ import EditCategoryFood from "./components/EditCategoryFood";
 import { Switch } from "@mui/material";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import SwalUI from "../../components/swal-ui/swal-ui";
 
 function CategoryFood() {
   const [categFood, setCateFood] = useState([]);
@@ -49,25 +50,18 @@ function CategoryFood() {
       if (result.isConfirmed) {
         getDeleteCategoryFood(id)
           .then((res) => {
-            console.log(res);
-            MySwal.fire({
-              title: "ลบสำเร็จ!",
-              text: "หมวดหมู่อาหารถูกลบแล้ว",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500,
+            SwalUI({
+              status: res.status,
+              description: res.description,
+              title: res.title,
             });
             setRefreshData((prev) => prev + 1);
           })
           .catch((err) => {
-            // console.error("ลบไม่สำเร็จ:", err);
-
-            MySwal.fire({
-              title: "เกิดข้อผิดพลาด!",
-              text: "ไม่สามารถลบหมวดหมู่อาหารนี้ได้ กรุณาลองใหม่อีกครั้ง",
-              icon: "error",
-              showConfirmButton: false,
-              timer: 1500,
+            SwalUI({
+              status: err.status,
+              description: err.description,
+              title: err.title,
             });
           });
       }
@@ -152,7 +146,7 @@ function CategoryFood() {
                   </td>
                   <td className="px-6 py-4">
                     <Switch
-                      checked={cate.status_display === 1}
+                      checked={cate.status_display === true}
                       onChange={(e) =>
                         handleUpdateDisplay(cate.id, e.target.checked)
                       }
