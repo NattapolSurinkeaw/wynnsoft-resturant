@@ -18,18 +18,26 @@ const BankAccount = sequelize.define(
       type: DataTypes.STRING(40),
       allowNull: false,
     },
-    branch: {
+    bank_provider: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    bank_provider_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    bank_img: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
     },
-    bank_type_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    qrcode: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
     },
+    // bank_provider_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    // },
+    // bank_type_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    // },
     status: {
       type: DataTypes.STRING(10),
       allowNull: false,
@@ -42,9 +50,9 @@ const BankAccount = sequelize.define(
   }
 );
 
-BankAccount.hasOne(BankProvider, {
-  foreignKey: "id",
-  sourceKey: "bank_provider_id",
-});
+// BankAccount.hasOne(BankProvider, {
+//   foreignKey: "id",
+//   sourceKey: "bank_provider_id",
+// });
 
 export { BankAccount };

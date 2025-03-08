@@ -1,36 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CreateIcon from "@mui/icons-material/Create";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-
-const mockData = [
-  {
-    bank: "ธนาคารกรุงไทย",
-    accountName: "จิราภรณ์ ชุมภู",
-    accountNumber: "098-765-4321",
-    qrCode: "/images/QR.jpg",
-  },
-  {
-    bank: "ธนาคารกรุงเทพ",
-    accountName: "สมชาย ชุมภู",
-    accountNumber: "123-456-7890",
-    qrCode: "/images/QR.jpg",
-  },
-];
+import { getBankAccount } from "../../../services/setting.service";
+import { api_path } from "../../../store/setting";
+import { getUpdateBank } from "../../../services/setting.service";
 
 function Account() {
-  const [image1, setImage1] = useState(null);
+  const [bankAccount, setBankAccount] = useState([]);
+  const [imageFile, setImageFile] = useState(null); // เก็บไฟล์จริง
+  const [previewUrl, setPreviewUrl] = useState(null); // เก็บ URL สำหรับพรีวิว
+  const [provider, setProvider] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [bankNumber, setBankNumber] = useState("");
+  const [bankId, setBankId] = useState(null);
 
-  const handleImageChange = (e, setImage) => {
+  useEffect(() => {
+    const fetchBankAccounts = async () => {
+      try {
+        const res = await getBankAccount();
+        setBankAccount(res.bank);
+      } catch (error) {
+        console.error("Error fetching bank accounts:", error);
+      }
+    };
+
+    fetchBankAccounts();
+  }, []);
+
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setImageFile(file); // เก็บไฟล์ไว้ใช้งานใน FormData
+
+      // สร้าง URL สำหรับพรีวิว
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewUrl(imageUrl);
     }
   };
 
+  const handleEdit = (bank) => {
+    setBankId(bank.id)
+    setProvider(bank.bank_provider)
+    setBankName(bank.name)
+    setBankNumber(bank.bank_number)
+    setPreviewUrl(api_path + bank.qrcode)
+  }
+
+  const onSubmit = () => {
+    const formData = new FormData();
+    formData.append('bank_provider', provider);
+    formData.append('name', bankName);
+    formData.append('bank_number', bankNumber);
+    formData.append('qrcode', imageFile);
+    
+    getUpdateBank(bankId, formData).then((res) => {
+      console.log(res);
+    })
+  }
   return (
     <>
       <div className="3xl:w-[1207px] w-full p-5 rounded-lg shadow-1 bg-white">
@@ -53,23 +79,25 @@ function Account() {
               </tr>
             </thead>
             <tbody>
-              {mockData.map((data, index) => (
+              {bankAccount.map((bank, index) => (
                 <tr
                   key={index}
                   className={index % 2 === 0 ? "bg-[#F9FAFB]" : "bg-[#F3F4F6]"}
                 >
-                  <td className="px-2 py-3">{data.bank}</td>
-                  <td className="px-2 py-3">{data.accountName}</td>
-                  <td className="px-2 py-3">{data.accountNumber}</td>
+                  <td className="px-2 py-3">{bank.bank_provider}</td>
+                  <td className="px-2 py-3">{bank.name}</td>
+                  <td className="px-2 py-3">{bank.bank_number}</td>
                   <td className="px-2 py-3">
                     <img
-                      src={data.qrCode}
+                      src={api_path + bank.qrcode}
                       alt="QR Code"
                       className="w-[90px] h-[90px] rounded-md"
                     />
                   </td>
                   <td className="px-2 py-3">
-                    <div className="flex justify-center items-center w-[35px] h-[35px] rounded-lg bg-[#F5A100] group hover:bg-[#013D59] transition duration-100 shadow-1 cursor-pointer">
+                    <div className="flex justify-center items-center w-[35px] h-[35px] rounded-lg bg-[#F5A100] group hover:bg-[#013D59] transition duration-100 shadow-1 cursor-pointer"
+                      onClick={() => handleEdit(bank)}
+                    >
                       <BorderColorIcon
                         fontSize="small"
                         className="text-white group-hover:text-white"
@@ -93,6 +121,8 @@ function Account() {
                 type="text"
                 className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
                 placeholder="กรอกชื่อธนาคาร..."
+                value={provider}
+                onChange={(e) => setProvider(e.target.value)}
               />
             </div>
             <div className="flex items-center ">
@@ -103,6 +133,8 @@ function Account() {
                 type="text"
                 className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
                 placeholder="กรอกชื่อบัญชี..."
+                value={bankName}
+                onChange={(e) => setBankName(e.target.value)}
               />
             </div>
             <div className="flex items-center ">
@@ -111,15 +143,17 @@ function Account() {
                 type="text"
                 className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
                 placeholder="กรอกเลขบัญชี..."
+                value={bankNumber}
+                onChange={(e) => setBankNumber(e.target.value)}
               />
             </div>
           </div>
 
           <div className="flex justify-center w-1/2 ">
             <div className="relative min-w-[190px] max-w-[190px] h-[190px] bg-[#616161] rounded-lg shadow-1 flex items-center justify-center shadow-md overflow-hidden">
-              {image1 ? (
+              {previewUrl  ? (
                 <img
-                  src={image1}
+                  src={previewUrl}
                   alt="Uploaded"
                   className="w-full h-full object-cover rounded-lg "
                 />
@@ -147,13 +181,15 @@ function Account() {
                 accept="image/*"
                 className="hidden"
                 id="fileInput1"
-                onChange={(e) => handleImageChange(e, setImage1)}
+                onChange={handleImageChange}
               />
             </div>
           </div>
         </div>
         <div className="flex justify-center">
-          <button className="button-1 mt-10 mb-2">บันทึก</button>
+          <button className="button-1 mt-10 mb-2"
+            onClick={onSubmit}
+          >บันทึก</button>
         </div>
       </div>
     </>
