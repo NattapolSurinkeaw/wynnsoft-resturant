@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getRegister } from "../../services/auth.service";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import EmailIcon from "@mui/icons-material/Email";
@@ -11,6 +11,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
   const submitRegister = async () => {
     if (!username.trim() || !password.trim() || !email.trim() || !name.trim()) {
@@ -56,9 +57,11 @@ function Register() {
       const res = await getRegister(formData);
       console.log(res);
       Swal.fire({
+        position: "center",
         text: "ลงทะเบียนสำเร็จ!",
         icon: "success",
-        confirmButtonText: "ตกลง",
+        showConfirmButton: false,
+        timer: 1500,
       }).then(() => {
         navigate("/login");
       });

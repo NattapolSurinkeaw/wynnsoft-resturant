@@ -2,24 +2,23 @@ import React, { useEffect, useRef, useState } from "react";
 import { cate } from "../../components/mockData/foodMenu";
 import { Checkbox } from "@mui/material";
 import Switch, { switchClasses } from "@mui/joy/Switch";
+import { NumericFormat } from "react-number-format";
 
 const EditFood = ({ onClickClose, selectedRow }) => {
   const [editData, setEditData] = useState(selectedRow);
   const [image, setImage] = useState(null);
-  const [checked, setChecked] = useState(1); //สินค้าขายดี
+  const [checked, setChecked] = useState(editData.bestSeller || false); //สินค้าขายดี
   const [nameFood, setNameFood] = useState(editData.name || ""); //ชื่อสินค้า
   const [text, setText] = useState(editData.detail || ""); //รายละเอียด
   const [price, setPrice] = useState(editData.price || ""); //ราคา
   const [specialPrice, setSpecialPrice] = useState(editData.specialPrice || ""); //ราคาพิเศษ
-  const [inputPrice, setInputPrice] = useState("");
-  const [inputSpecialPrice, setInputSpecialPrice] = useState("");
 
   const [showStatusMenu, setShowStatusMenu] = useState("false");
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  console.log("selectedRow", editData);
+  // console.log("selectedRow", editData);
 
   const handleCategoryChange = (id) => {
     setSelectedCategories((prev) =>
@@ -58,32 +57,6 @@ const EditFood = ({ onClickClose, selectedRow }) => {
       setShowStatusMenu(false);
     }
   }, [selectedStatus]);
-
-  const formatNumber = (num) => {
-    if (!num || isNaN(num)) return "";
-    return Number(num).toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  };
-
-  const handleInputChange = (e, setInputState, setState) => {
-    let rawValue = e.target.value.replace(/,/g, "");
-    if (rawValue === "") {
-      setInputState("");
-      setState("");
-      return;
-    }
-
-    if (!isNaN(rawValue)) {
-      setInputState(rawValue);
-      setState(rawValue);
-    }
-  };
-
-  const handleBlur = (setInputState, state) => {
-    setInputState(formatNumber(state));
-  };
 
   useEffect(() => {
     setSelectedStatus(editData.status);
@@ -163,7 +136,7 @@ const EditFood = ({ onClickClose, selectedRow }) => {
             <input
               type="text"
               className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
-              value={nameFood} 
+              value={nameFood}
               onChange={(e) => setNameFood(e.target.value)}
             />
           </div>
@@ -235,13 +208,20 @@ const EditFood = ({ onClickClose, selectedRow }) => {
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               ราคา
             </span>
-            <input
-              type="text"
-              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
-              value={editData.price || price}
-              onChange={(e) => handleInputChange(e, setInputPrice, setPrice)}
-              onBlur={() => handleBlur(setInputPrice, price)}
+
+            <NumericFormat
+              className="z-50 w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
+              value={price}
+              thousandSeparator=","
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={false}
+              allowLeadingZeros={false}
+              onValueChange={(values) => {
+                setPrice(values.value);
+              }}
             />
+
             <span className="w-[140px] flex-shrink-0 text-left text-[#00537B] text-2xl">
               บาท
             </span>
@@ -251,27 +231,29 @@ const EditFood = ({ onClickClose, selectedRow }) => {
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               ราคาพิเศษ
             </span>
-            <input
-              type="text"
-              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
-              value={editData.specialPrice || specialPrice}
-              onChange={(e) =>
-                handleInputChange(e, setInputSpecialPrice, setSpecialPrice)
-              }
-              onBlur={() => handleBlur(setInputSpecialPrice, specialPrice)}
+            <NumericFormat
+              className="z-50 w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
+              value={specialPrice}
+              thousandSeparator=","
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={false}
+              allowLeadingZeros={false}
+              onValueChange={(values) => {
+                setSpecialPrice(values.value);
+              }}
             />
             <span className="w-[140px] flex-shrink-0 text-left text-[#00537B] text-2xl">
               บาท
             </span>
           </div>
-
           <div className="flex flex-row items-center gap-3">
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               สินค้าขายดี
             </span>
             <Switch
-              checked={editData.bestSeller} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
-              onChange={(event) => setChecked(event.target.checked ? 1 : 0)} // อัปเดตค่า 1 หรือ 0
+              checked={checked}
+              onChange={(event) => setChecked(event.target.checked)} // ตรงนี้เก็บค่าเป็น Boolean
               sx={(theme) => ({
                 "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
                 "--Switch-thumbSize": "27px",
@@ -280,7 +262,7 @@ const EditFood = ({ onClickClose, selectedRow }) => {
                 "--Switch-trackBackground":
                   theme.vars.palette.background.level3,
                 [`& .${switchClasses.thumb}`]: {
-                  transition: "width 0.2s, left 0.2s",
+                  transition: "width 0.05s, left 0.05s",
                 },
                 "&:hover": {
                   "--Switch-trackBackground":

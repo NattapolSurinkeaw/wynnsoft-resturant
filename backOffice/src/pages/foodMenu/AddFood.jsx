@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { cate } from "../../components/mockData/foodMenu";
 import { Checkbox } from "@mui/material";
 import Switch, { switchClasses } from "@mui/joy/Switch";
+import { NumericFormat } from "react-number-format";
 
 const AddFood = ({ onClickClose }) => {
   const [image, setImage] = useState(null);
@@ -15,8 +16,6 @@ const AddFood = ({ onClickClose }) => {
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  console.log(price);
-  
   const handleCategoryChange = (id) => {
     setSelectedCategories((prev) =>
       prev.includes(id) ? prev.filter((catId) => catId !== id) : [...prev, id]
@@ -55,22 +54,7 @@ const AddFood = ({ onClickClose }) => {
     }
   }, [selectedStatus]);
 
-  
-  const formatNumber = (value) => {
-    const number = value.replace(/[^\d.-]/g, '');
-    // const formatted = parseFloat(number).toFixed(2);
-    return isNaN(number) ? '' : parseFloat(number).toLocaleString();
-  };
-
-  const handlePriceChange = (e) => {
-    const formattedValue = formatNumber(e.target.value);
-    setPrice(formattedValue);
-  };
-
-  const handleSpecialPriceChange = (e) => {
-    const formattedValue = formatNumber(e.target.value);
-    setSpecialPrice(formattedValue);
-  };
+  // console.log("price", price);
 
   return (
     <div className="flex lg:flex-row flex-col lg:gap-2 gap-6 w-full h-full">
@@ -113,7 +97,7 @@ const AddFood = ({ onClickClose }) => {
           <span className="text-[#00537B] lg:text-2xl text-xl font-medium">
             หมวดเมนู
           </span>
-          <div className="border border-[#D9D9D9] lg:p-3 rounded-lg shadow h-[300px] overflow-y-auto">
+          <div className="border border-[#D9D9D9] lg:p-3 rounded-lg shadow h-[300px] overflow-y-auto grid lg:grid-cols-1 grid-cols-2">
             {cate.map((category) => (
               <div key={category.id} className="flex flex-col gap-2">
                 <div className="flex flex-row items-center justify-start gap-x-3">
@@ -146,7 +130,6 @@ const AddFood = ({ onClickClose }) => {
               onChange={(e) => setNameFood(e.target.value)}
             />
           </div>
-
           <div className="flex flex-row items-center  gap-3">
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               สถานะ
@@ -177,7 +160,11 @@ const AddFood = ({ onClickClose }) => {
                 </figure>
               </div>
 
-              <div className="absolute w-full h-full z-99">
+              <div
+                className={`absolute w-full h-full ${
+                  showStatusMenu ? "z-99" : ""
+                }`}
+              >
                 {showStatusMenu && (
                   <div className="bg-white flex flex-col gap-1 p-2 mt-1 rounded-b-lg border border-[#D9D9D9]">
                     <div
@@ -207,37 +194,48 @@ const AddFood = ({ onClickClose }) => {
               </div>
             </div>
           </div>
-
           <div className="flex flex-row justify-start items-center gap-3">
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               ราคา
             </span>
-            <input
-              type="text"
-              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
+
+            <NumericFormat
+              className="z-50 w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
               value={price}
-              onChange={handlePriceChange}
+              thousandSeparator=","
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={false}
+              allowLeadingZeros={false}
+              onValueChange={(values) => {
+                setPrice(values.value);
+              }}
             />
+
             <span className="w-[140px] flex-shrink-0 text-left text-[#00537B] text-2xl">
               บาท
             </span>
           </div>
-
           <div className="flex flex-row items-center gap-3">
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               ราคาพิเศษ
             </span>
-            <input
-              type="text"
-              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
+            <NumericFormat
+              className="z-50 w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
               value={specialPrice}
-              onChange={handleSpecialPriceChange} 
+              thousandSeparator=","
+              decimalScale={2}
+              fixedDecimalScale
+              allowNegative={false}
+              allowLeadingZeros={false}
+              onValueChange={(values) => {
+                setSpecialPrice(values.value);
+              }}
             />
             <span className="w-[140px] flex-shrink-0 text-left text-[#00537B] text-2xl">
               บาท
             </span>
           </div>
-
           <div className="flex flex-row items-center gap-3">
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               สินค้าขายดี
@@ -271,7 +269,6 @@ const AddFood = ({ onClickClose }) => {
               })}
             />
           </div>
-
           <div className="flex flex-row gap-3">
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               รายละเอียด
@@ -287,14 +284,14 @@ const AddFood = ({ onClickClose }) => {
         </div>
 
         <div className="flex flex-row justify-center gap-4">
-          <button className="bg-[#FFBA41] text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl">
+          <button className="bg-[#FFBA41] cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl">
             บันทึก
           </button>
           <button
             onClick={() => {
               onClickClose(false);
             }}
-            className="bg-[#00537B] text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
+            className="bg-[#00537B] cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
           >
             ยกเลิก
           </button>

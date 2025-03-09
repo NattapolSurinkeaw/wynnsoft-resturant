@@ -16,7 +16,7 @@ function LoginPage() {
         text: "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน",
         icon: "warning",
         confirmButtonText: "ตกลง",
-        confirmButton:"#00537B"
+        confirmButton: "#00537B",
       });
       return;
     }
@@ -43,19 +43,25 @@ function LoginPage() {
       } else {
         Swal.fire({
           title: "ล็อกอินไม่สำเร็จ!",
-          text: "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง",
+          text: res.description || "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง",
           icon: "error",
           confirmButtonText: "ลองใหม่อีกครั้ง",
           customClass: {
-            confirmButton: "my-confirm-button", 
+            confirmButton: "my-confirm-button",
           },
-          buttonsStyling: false, 
+          buttonsStyling: false,
         });
       }
     } catch (error) {
+      let errorMessage = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง";
+  
+      if (error.response && error.response.data) {
+        errorMessage = error.response.data.description || error.response.data.message || errorMessage;
+      }
+  
       Swal.fire({
         title: "ล็อกอินไม่สำเร็จ!",
-        text: "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง",
+        text: errorMessage,
         icon: "error",
         confirmButtonText: "ตกลง",
         customClass: {
@@ -63,9 +69,11 @@ function LoginPage() {
         },
         buttonsStyling: false,
       });
+  
       console.error("Login error:", error);
     }
   };
+  
   
   return (
     <div className="flex flex-col justify-center items-center lg:gap-8 gap-4 h-full w-full">

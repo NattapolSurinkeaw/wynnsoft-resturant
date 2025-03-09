@@ -78,7 +78,7 @@ function FoodMenu() {
     setSelectedBestSeller(null);
   };
 
-  const handleOpenAdd = (row) => {
+  const handleOpenAdd = () => {
     setOpenAdd(true);
   };
 
@@ -171,13 +171,14 @@ function FoodMenu() {
       width: 170,
       renderCell: (params) => (
         <div className="flex justify-center items-center h-full">
-        <p className="text-[#313131] xl:text-lg text-base font-[400] text-center">
-          {params.value === 1
-            ? "พร้อมบริการ"
-            : params.value === 0
-            ? "สินค้าหมด"
-            : "-"}
-        </p></div>
+          <p className="text-[#313131] xl:text-lg text-base font-[400] text-center">
+            {params.value === 1
+              ? "พร้อมบริการ"
+              : params.value === 0
+              ? "สินค้าหมด"
+              : "-"}
+          </p>
+        </div>
       ),
     },
     {
@@ -190,9 +191,16 @@ function FoodMenu() {
       editable: false,
       renderCell: (params) => {
         return (
-          <div className="flex justify-center items-center m-auto h-full">
+          <div
+            className="relative flex justify-center items-center m-auto h-full w-full cursor-pointer"
+            onClick={() => {
+              const newValue = !params.value ? 1 : 0;
+              params.api.updateRows([{ id: params.id, bestSeller: newValue }]);
+            }}
+          >
             <Switch
               sx={(theme) => ({
+                pointerEvents: "none",
                 "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
                 "--Switch-thumbSize": "27px",
                 "--Switch-trackWidth": "51px",
@@ -200,7 +208,7 @@ function FoodMenu() {
                 "--Switch-trackBackground":
                   theme.vars.palette.background.level3,
                 [`& .${switchClasses.thumb}`]: {
-                  transition: "width 0.2s, left 0.2s",
+                  transition: "width 0.05s, left 0.05s",
                 },
                 "&:hover": {
                   "--Switch-trackBackground":
@@ -217,12 +225,6 @@ function FoodMenu() {
                 },
               })}
               checked={Boolean(params.value)}
-              onChange={(event) => {
-                const newValue = event.target.checked ? 1 : 0;
-                params.api.updateRows([
-                  { id: params.id, bestSeller: newValue },
-                ]);
-              }}
             />
           </div>
         );
@@ -250,7 +252,7 @@ function FoodMenu() {
       renderCell: (params) => (
         <div className="h-full flex justify-center items-center">
           <button
-            className="p-1 bg-[#F5A100] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
+            className="cursor-pointer p-1 bg-[#F5A100] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="แก่ไข"
           >
             <img
@@ -275,7 +277,7 @@ function FoodMenu() {
       renderCell: (params) => (
         <div className="h-full flex justify-center items-center">
           <button
-            className="p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
+            className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="ลบ"
           >
             <img src={"/icons/trash.png"} alt="" className="w-full h-full " />
@@ -450,7 +452,7 @@ function FoodMenu() {
           </div>
 
           <button
-            className="bg-[#00537B] max-w-[110px] w-full flex flex-shrink-0 justify-center items-center gap-2 p-1 px-2 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+            className="bg-[#00537B] cursor-pointer max-w-[110px] w-full flex flex-shrink-0 justify-center items-center gap-2 p-1 px-2 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             onClick={handleOpenAdd}
           >
             <AddIcon sx={{ color: "#fff", fontSize: 30 }} />
