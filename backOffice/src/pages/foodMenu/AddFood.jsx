@@ -162,7 +162,7 @@ const AddFood = ({ onClickClose }) => {
 
               <div
                 className={`absolute w-full h-full ${
-                  showStatusMenu ? "z-99" : ""
+                  showStatusMenu ? "z-99" : "z-0"
                 }`}
               >
                 {showStatusMenu && (

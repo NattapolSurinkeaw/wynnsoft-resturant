@@ -171,7 +171,11 @@ const EditFood = ({ onClickClose, selectedRow }) => {
                 </figure>
               </div>
 
-              <div className="absolute w-full h-full z-99">
+              <div
+                className={`absolute w-full h-full ${
+                  showStatusMenu ? "z-99" : "z-0"
+                } `}
+              >
                 {showStatusMenu && (
                   <div className="absolute w-full z-99 mt-1">
                     <div className="bg-white flex flex-col gap-1 p-2 rounded-b-lg border border-[#D9D9D9]">
