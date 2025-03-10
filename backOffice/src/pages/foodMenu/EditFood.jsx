@@ -13,7 +13,7 @@ const EditFood = ({ onClickClose, selectedRow }) => {
   const [price, setPrice] = useState(editData.price || ""); //ราคา
   const [specialPrice, setSpecialPrice] = useState(editData.specialPrice || ""); //ราคาพิเศษ
 
-  const [showStatusMenu, setShowStatusMenu] = useState("false");
+  const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -82,7 +82,7 @@ const EditFood = ({ onClickClose, selectedRow }) => {
 
           <label
             htmlFor="fileInput1"
-            className="absolute bottom-0 bg-[#00537B]/70 backdrop-blur-sm transition duration-100 flex justify-center items-center gap-2 w-full h-[30px] shadow-1 cursor-pointer"
+            className="absolute bottom-0 bg-[#00537B]/70  transition duration-100 flex justify-center items-center gap-2 w-full h-[40px] shadow-1 cursor-pointer"
           >
             <figure className="w-[25px] h-[25px]">
               <img src="/icons/edit.png" alt="" className="w-full h-full" />
@@ -171,7 +171,11 @@ const EditFood = ({ onClickClose, selectedRow }) => {
                 </figure>
               </div>
 
-              <div className="absolute w-full h-full z-99">
+              <div
+                className={`absolute w-full h-full ${
+                  showStatusMenu ? "z-99" : "z-0"
+                } `}
+              >
                 {showStatusMenu && (
                   <div className="absolute w-full z-99 mt-1">
                     <div className="bg-white flex flex-col gap-1 p-2 rounded-b-lg border border-[#D9D9D9]">
