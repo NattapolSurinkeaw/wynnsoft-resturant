@@ -134,7 +134,7 @@ const AddFood = ({ onClickClose }) => {
 
             <div className="relative" ref={menuStatus}>
               <div
-                className="bg-white flex justify-between items-center border border-[#D9D9D9] gap-2 py-1.5 px-2 rounded-lg w-[245px] lg:h-[45px] max-w-full"
+                className="bg-white cursor-pointer flex justify-between items-center border border-[#D9D9D9] gap-2 py-1.5 px-2 rounded-lg w-[245px] lg:h-[45px] max-w-full"
                 onClick={() => setShowStatusMenu((prevState) => !prevState)}
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
@@ -281,14 +281,14 @@ const AddFood = ({ onClickClose }) => {
         </div>
 
         <div className="flex flex-row justify-center gap-4">
-          <button className="bg-[#FFBA41] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl">
+          <button className="bg-[#FFBA41] hover:bg-[#00537B]  transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl">
             บันทึก
           </button>
           <button
             onClick={() => {
               onClickClose(false);
             }}
-            className="bg-[#F44D4D] hover:bg-[#00537B] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
+            className="bg-[#F44D4D] hover:bg-[#00537B]  transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
           >
             ยกเลิก
           </button>

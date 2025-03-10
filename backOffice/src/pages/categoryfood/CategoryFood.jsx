@@ -280,7 +280,7 @@ function CategoryFood() {
 
             <div className="relative" ref={menuStatus}>
               <div
-                className="bg-white flex justify-between items-center border border-[#D9D9D9] gap-2 py-1.5 px-2 rounded-lg w-[245px] lg:h-[45px] max-w-full"
+                className="bg-white cursor-pointer flex justify-between items-center border border-[#D9D9D9] gap-2 py-1.5 px-2 rounded-lg w-[245px] lg:h-[45px] max-w-full"
                 onClick={() => setShowStatusMenu((prevState) => !prevState)}
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
