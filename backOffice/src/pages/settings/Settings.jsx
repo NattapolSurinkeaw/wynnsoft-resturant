@@ -20,6 +20,9 @@ function Settings() {
   const [webinfo, setWebinfo] = useState([]);
   const [userAll, setUserAll] = useState([]);
   const [permission, setPermission] = useState([]);
+  const [slcPermission, setSlcPermission] = useState(0);
+  const [slcStatus, setStatus] = useState("all");
+  const [filteredUsers, setFilteredUsers] = useState(userAll);
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -40,20 +43,43 @@ function Settings() {
 
   useEffect(() => {
     getWebinfoSetting().then((res) => {
-      // console.log(res);
       setinfoType(res.webinfotype);
       setWebinfo(res.webinfo);
     })
     getUserAll().then((res) => {
-      console.log(res)
       setUserAll(res.user);
       setPermission(res.permission);
     })
   }, [])
 
+  useEffect(() => {
+    const filterUsers = () => {
+      let filtered = userAll;
+
+      // กรองตาม permission
+      if (slcPermission !== 0) {
+        filtered = filtered.filter(user => user.permission === String(slcPermission));
+      }
+
+      // กรองตาม status
+      if (slcStatus !== "all") { 
+        filtered = filtered.filter(user => user.status === slcStatus);
+      }
+
+      setFilteredUsers(filtered);
+    };
+
+    filterUsers();
+  }, [slcPermission, slcStatus, userAll]); // อัปเดตเมื่อค่าพวกนี้เปลี่ยน
+
+
   return (
     <>
-      <AddUser isOpen={isOpen} closeModal={closeModal} />
+      <AddUser 
+        isOpen={isOpen} 
+        closeModal={closeModal} 
+        permissionAll={permission}
+      />
       <div className="flex lg:flex-row flex-col 3xl:w-[1565px] w-full max-lg:gap-4 lg:items-center items-end max-lg:justify-between ">
         <div className="flex w-full items-center gap-2">
           <SettingsOutlinedIcon
@@ -71,13 +97,14 @@ function Settings() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={age || 0}
-                onChange={handleChange}
+                value={slcPermission}
+                onChange={(e) => setSlcPermission(e.target.value)}
                 className="w-[140px] h-[37px] bg-white shadow-3 "
               >
+                <MenuItem value={0}>ทั้งหมด</MenuItem>
                 {
                   permission.map((permiss) => (
-                    <MenuItem key={permiss.id} value={0}>{permiss.user_type_th}</MenuItem>
+                    <MenuItem key={permiss.id} value={permiss.id}>{permiss.user_type_th}</MenuItem>
                   ))
                 }
               </Select>
@@ -89,14 +116,15 @@ function Settings() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={age || 0}
-                onChange={handleChange}
+                value={slcStatus} // ✅ ใช้ state ที่เก็บค่า
+                onChange={(e) => setStatus(e.target.value)}
                 className="w-[140px] h-[37px] bg-white shadow-3"
               >
-                <MenuItem value={0}>ทั้งหมด</MenuItem>
-                <MenuItem value={10}>test 1</MenuItem>
-                <MenuItem value={20}>test 2</MenuItem>
-                <MenuItem value={30}>test 3</MenuItem>
+                <MenuItem value="all">ทั้งหมด</MenuItem>  {/* เปลี่ยนจาก "" เป็น "all" */}
+                <MenuItem value={"active"}>เปิดใช้งาน</MenuItem>
+                <MenuItem value={"pending"}>รออนุมัติ</MenuItem>
+                <MenuItem value={"inactive"}>ปิดใช้งาน</MenuItem>
+                <MenuItem value={"banned"}>ปิดกั้น</MenuItem>
               </Select>
             </div>
 
@@ -123,7 +151,7 @@ function Settings() {
           {activeTab === "shop" && <Shop webinfo={filterWebinfo(2)} />}
           {activeTab === "bankaccount" && <Account webinfo={filterWebinfo(3)} />}
           {activeTab === "taxes" && <Taxes webinfo={filterWebinfo(4)} />}
-          {activeTab === "user" && <User userAll={userAll}  />}
+          {activeTab === "user" && <User userAll={filteredUsers} permission={permission} />}
         </main>
       </div>
     </>

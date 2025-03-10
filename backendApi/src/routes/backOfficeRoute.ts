@@ -11,6 +11,9 @@ const router = Router()
 const manageDataController = new ManageDataController();
 const websettingController = new WebSettingController();
 
+// จัดการโต๊ะ
+
+
 // หมวดหมู่เมนู
 router.get('/api/backoffice/catefood', AuthenticateAdmin, manageDataController.OngetCategoryFood);
 router.post('/api/backoffice/catefood', AuthenticateAdmin, upload.single("image"), [
@@ -58,6 +61,14 @@ router.post('/api/backoffice/editshopdata', AuthenticateAdmin, websettingControl
 router.post('/api/backoffice/edittaxservice', AuthenticateAdmin, websettingController.OnUpdateTaxService)
 router.get('/abi/backoffice/getbank', AuthenticateAdmin, websettingController.OngetAllBankAccount)
 router.post('/api/backoffice/updatebank/:id', AuthenticateAdmin, upload.single("qrcode"), websettingController.OnUpdateBank)
+router.post('/api/backoffice/createUser', AuthenticateAdmin, [
+  check('username').isString(),
+  check('password').isString(),
+  check('email').isString(),
+  check('displayName').isString(),
+], websettingController.OnCreateNewUser);
+router.post('/api/backoffice/updateUser', AuthenticateAdmin, websettingController.OnUpdateDataUser);
+router.delete('/api/backoffice/deleteUser/:code', AuthenticateAdmin, websettingController.OnDeleteUser);
 // router.get('/api/backoffice/users', AuthenticateAdmin, websettingController.OnsettingUser);
 
 

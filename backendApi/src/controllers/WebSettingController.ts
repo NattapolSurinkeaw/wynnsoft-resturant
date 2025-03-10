@@ -1,5 +1,11 @@
 import fs from "fs";
 import path from "path";
+import moment from 'moment'
+import bcrypt from "bcrypt";
+import * as jwt from 'jsonwebtoken'
+import { validationResult } from "express-validator";
+import * as Config from '../util/config'
+
 const sharp = require("sharp");
 import { User } from "../models/users";
 import { UsersPermission } from "../models/usersPermission";
@@ -142,6 +148,128 @@ export class WebSettingController {
       return res.status(500).json({
         status: false,
         message: 'error',
+        description: 'something went wrong.'
+      })
+    }
+  }
+  // ตั้งค่าผู้ใช้งาน
+  OnCreateNewUser = async(req: any, res:any) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({
+            status: false,
+            message: 'error',
+            errorMessage: errors.array()
+        })
+    }
+    /** finding user */
+    const finding = await User.findOne({where:{username: req.body.username}})
+    if(finding){
+        return res.status(400).json({
+            status: false,
+            message: 'error',
+            description: 'username has already used.'
+        })
+    }
+    /* generate access_token for user */
+    const access_token = jwt.sign({
+        username: req.body.username,
+        at: new Date().getTime()
+    }, `${Config.secretKey}`, { expiresIn: '30d' })
+    /* generate refresh_token when register and no expire */
+    const refresh_token = jwt.sign({
+        username: req.body.username,
+        at: new Date().getTime(),
+        token: access_token
+    }, `${Config.secretKey}`)
+    /** generate user_code */
+    const users_str = req.body.username+Math.random().toString().substr(2, 8)+moment().unix()
+    const users_code = await bcrypt.hash(users_str, 10)
+    /** hash password */
+    const hashPass = await bcrypt.hash(req.body.password, 10)
+    try {
+        /** create user */
+        const users = await User.create({
+            users_code: users_code.replace(/\W/g, ""),
+            access_token: access_token,
+            refresh_token: refresh_token,
+            username: req.body.username,
+            password: hashPass,
+            email: req.body.email,
+            profile_img: "",
+            permission: parseInt(req.body.permission),
+            status_confirm: 'confirm',
+            display_name: req.body.displayName,
+            status: req.body.status
+        })
+        return res.status(201).json({
+            status: true,
+            message: 'ok',
+            description: 'data was created.'
+        })
+    } catch(error){
+        return res.status(500).json({
+            status: false,
+            message: 'error',
+            error: error,
+            description: 'something went wrong.'
+        })
+    }
+  }
+  OnUpdateDataUser = async(req: any, res: any) => {
+    try {
+      const user = await User.findOne({where: {users_code: req.body.adminCode}});
+      if(!user) {
+        return res.status(404).json({
+          status: false,
+          message: "error",
+          title: "เกิดข้อผิดพลาด!",
+          description: "ไม่พบข้อมูล",
+        });
+      }
+
+      user.display_name = req.body.displayName;
+      user.email = req.body.email;
+      user.permission = req.body.permission;
+      user.status_confirm = "confirm";
+      user.status = req.body.status;
+      user.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "ok"
+      });
+    } catch(error){
+      return res.status(500).json({
+        status: false,
+        message: 'error',
+        error: error,
+        description: 'something went wrong.'
+      })
+    }
+  }
+  OnDeleteUser = async(req: any, res: any) => {
+    try {
+      const user = await User.findOne({where: {users_code: req.params.code}});
+      if(!user) {
+        return res.status(404).json({
+          status: false,
+          message: "error",
+          title: "เกิดข้อผิดพลาด!",
+          description: "ไม่พบข้อมูล",
+        });
+      }
+
+      user.destroy();
+      return res.status(200).json({
+        status: true,
+        message: "ok"
+      });
+    } catch(error){
+      return res.status(500).json({
+        status: false,
+        message: 'error',
+        error: error,
         description: 'something went wrong.'
       })
     }

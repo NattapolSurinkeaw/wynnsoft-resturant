@@ -4,6 +4,7 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { getBankAccount } from "../../../services/setting.service";
 import { api_path } from "../../../store/setting";
 import { getUpdateBank } from "../../../services/setting.service";
+import Swal from "sweetalert2";
 
 function Account() {
   const [bankAccount, setBankAccount] = useState([]);
@@ -54,7 +55,15 @@ function Account() {
     formData.append('qrcode', imageFile);
     
     getUpdateBank(bankId, formData).then((res) => {
-      console.log(res);
+      if(res.status) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "บันทึกข้อมูลเสร็จ",
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      }
     })
   }
   return (

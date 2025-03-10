@@ -1,7 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import { getUpdateDataUser } from "../../../services/setting.service";
+import Swal from "sweetalert2";
 
-function EditUser({ isOpen, closeModal }) {
+function EditUser({ isOpen, closeModal, selectedUser, permissionAll }) {
+  const [adminCode, setAdminCode] = useState("");
+  const [nameUser, setNameUser] = useState("");
+  const [emailUser, setEmailUser] = useState("");
+  const [permission, setPermission] = useState("");
+  const [statusUser, setStatusUser] = useState("");
+
+  useEffect(() => {
+    setAdminCode(selectedUser.adminCode);
+    setNameUser(selectedUser.displayName);
+    setEmailUser(selectedUser.email);
+    setPermission(selectedUser.permission);
+    setStatusUser(selectedUser.status);
+  }, [selectedUser])
+
+  const onSubmit = () => {
+    const params = {
+      adminCode: adminCode,
+      displayName: nameUser,
+      email: emailUser,
+      permission: permission,
+      status: statusUser
+    }
+
+    getUpdateDataUser(params).then((res) => {
+      if(res.status) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "บันทึกข้อมูลเสร็จ",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => closeModal())
+      }
+    })
+  }
   return (
     isOpen && (
       <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
@@ -31,6 +68,8 @@ function EditUser({ isOpen, closeModal }) {
                 type="text"
                 className="border border-gray-300 text-gray-600 text-[14px] font-[300] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
                 placeholder="กรอกชื่อ..."
+                value={nameUser}
+                onChange={(e) => setNameUser(e.target.value)}
               />
             </div>
             <div className="flex items-center ">
@@ -39,24 +78,34 @@ function EditUser({ isOpen, closeModal }) {
                 type="text"
                 className="border border-gray-300 text-gray-600 text-[14px] font-[300] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
                 placeholder="กรอกอีเมล..."
+                value={emailUser}
+                onChange={(e) => setEmailUser(e.target.value)}
               />
             </div>
             <div className="flex items-center">
               <p className="min-w-[90px] text-[#313131] font-[400]">หน้าที่</p>
-              <select className="border rounded border-gray-300 text-[14px] text-gray-600 font-[300] pl-1 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] cursor-pointer w-full h-[37px]">
-                <option value="admin">ผู้ดูแลสูงสุด (Superadmin)</option>
-                <option value="user">ผู้ใช้งาน</option>
-                <option value="guest">ผู้เยี่ยมชม</option>
+              <select className="border rounded border-gray-300 text-[14px] text-gray-600 font-[300] pl-1 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] cursor-pointer w-full h-[37px]"
+                value={permission}
+                onChange={(e) => setPermission(e.target.value)}
+              >
+                {
+                  permissionAll.map((permiss) => (
+                    <option key={permiss.id} value={permiss.id}>{permiss.user_type_th} ({permiss.user_type})</option>
+                  ))
+                }
               </select>
             </div>
 
             <div className="flex items-center ">
               <p className="min-w-[90px] text-[#313131] font-[400]">สถานะ</p>
-              <select className="border text-[14px] rounded border-gray-300 text-gray-600 font-[300] pl-1 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] cursor-pointer w-full h-[37px]">
-                <option value="admin">เปิดใช้งาน</option>
-                <option value="user">รออนุมัติ</option>
-                <option value="guest">ปิดกั้น</option>
-                <option value="guest">ปิดใช้งาน</option>
+              <select className="border text-[14px] rounded border-gray-300 text-gray-600 font-[300] pl-1 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] cursor-pointer w-full h-[37px]"
+                value={statusUser}
+                onChange={(e) => setStatusUser(e.target.value)}
+              >
+                <option value="activate">เปิดใช้งาน</option>
+                <option value="pending">รออนุมัติ</option>
+                <option value="inactivate">ปิดใช้งาน</option>
+                <option value="banned">ปิดกั้น</option>
               </select>
             </div>
           </div>
@@ -65,7 +114,7 @@ function EditUser({ isOpen, closeModal }) {
             <button onClick={closeModal} className="button-cancel-1">
               ยกเลิก
             </button>
-            <button className="button-save-1">บันทึก</button>
+            <button className="button-save-1" onClick={onSubmit}>บันทึก</button>
           </div>
         </div>
       </div>

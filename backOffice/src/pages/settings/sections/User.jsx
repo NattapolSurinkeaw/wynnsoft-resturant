@@ -3,8 +3,10 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import EditUser from "../modal/EditUser";
+import Swal from "sweetalert2";
+import { getDeleteUser } from "../../../services/setting.service";
 
-function User({userAll}) {
+function User({userAll, permission}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -18,13 +20,42 @@ function User({userAll}) {
     setSelectedUser(null);
   };
 
+  const onDelete = (adminCode) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        getDeleteUser(adminCode).then((res) => {
+          if(res.status) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success"
+            });
+          }
+        })
+      }
+    });
+  }
+
   return (
     <>
-      <EditUser
-        isOpen={isOpen}
-        selectedUser={selectedUser}
-        closeModal={closeModal}
-      />
+      {
+        isOpen && (
+          <EditUser
+            isOpen={isOpen}
+            closeModal={closeModal}
+            selectedUser={selectedUser}
+            permissionAll={permission}
+          />
+        )
+      }
       <div className="3xl:w-[1207px] w-full">
         <div className="grid 2xl:grid-cols-6 lg:grid-cols-3 md:grid-cols-4 sm:grid-cols-3 grid-cols-3 gap-4 ">
           {userAll.map((user) => (
@@ -41,12 +72,14 @@ function User({userAll}) {
                   แก้ไข
                 </button>
 
-                <button className="button-mini-delete shadow-2 mb-8">ลบ</button>
+                <button className="button-mini-delete shadow-2 mb-8"
+                 onClick={(e) => onDelete(user.adminCode)}
+                >ลบ</button>
               </div>
 
               <div
                 className={`absolute top-2 right-2 w-3 h-3 rounded-full ${
-                  user.status ? "bg-[#10D024]" : "bg-[#FFBA41]"
+                  user.status == "active" ? "bg-[#10D024]" : "bg-[#FFBA41]"
                 }`}
               ></div>
               <AccountCircleIcon

@@ -54,3 +54,28 @@ export const getUpdateBank = (id, formData) => {
     }
   })
 }
+
+export const getCreateNewUser = (params) => {
+  return axios.post('/api/backoffice/createUser', params).then((res) => {
+    return {
+      status: res.data.status
+    }
+  })
+}
+
+export const getUpdateDataUser = (params) => {
+  return axios.post('/api/backoffice/updateUser', params).then((res) => {
+    return {
+      status: res.data.status
+    }
+  })
+}
+
+export const getDeleteUser = (code) => {
+  return axios.delete(`/api/backoffice/deleteUser/${code}`).then((res) => {
+    return {
+      status: res.data.status,
+      message: res.data.message
+    }
+  })
+}
