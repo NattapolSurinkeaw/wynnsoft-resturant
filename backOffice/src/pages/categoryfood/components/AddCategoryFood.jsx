@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import Switch from "@mui/material/Switch";
+import Switch, { switchClasses } from "@mui/joy/Switch";
 import { getCreateCategoryFood } from "../../../services/manageData.services";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -11,6 +11,8 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
   const [checkedStatus, setCheckedStatus] = useState(true);
   const inputProfileImage = useRef([]);
   const [imageObj, setImageobj] = useState();
+
+  console.log("checkedStatus", checkedStatus);
 
   function inputImageOnChange(e) {
     if (!e.target.files.length) {
@@ -61,49 +63,110 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
   };
 
   return (
-    <div className="w-1/2 bg-white p-4">
-      <p>เพิ่มเมนู</p>
-      <div>
-        <div className="flex justify-center">
-          <label htmlFor="inputImage">
-            <img className="w-20 h-20" src={imageObj} alt="" />
-          </label>
+    <div className="w-full bg-white p-4 flex flex-col gap-6 rounded-[10px]">
+
+      <div className="relative mx-auto w-[244px] h-[244px] bg-[#616161] rounded-lg shadow-1 flex items-center justify-center shadow-md overflow-hidden">
+        {imageObj ? (
+          <img
+            src={imageObj}
+            alt="Uploaded"
+            className="w-full h-full object-cover rounded-lg "
+          />
+        ) : (
+          <div className="text-white text-lg text-center">
+            เลือกรูปภาพ <br />
+            <span className="text-[12px] text-center">(ขนาด 200*200 px)</span>
+          </div>
+        )}
+
+        <label
+          htmlFor="fileInput1"
+          className="absolute bottom-0 bg-[#00537B]/70 transition duration-100 flex justify-center items-center gap-2 w-full h-[40px] shadow-1 cursor-pointer"
+        >
+          <figure className="w-[25px] h-[25px] ">
+            <img src="/icons/edit.png" alt="" className="w-full h-full" />
+          </figure>
+
+          <span className="text-white">อัปรูปปก</span>
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          id="fileInput1"
+          ref={inputProfileImage}
+          onChange={(e) => inputImageOnChange(e)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-4">
+         {/* ✅ ชื่อหมวดหมู่ */}
+        <div className="flex flex-row items-center  gap-3">
+          <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
+            ชื่อหมวดหมู่
+          </span>
           <input
-            className="hidden"
-            type="file"
-            id="inputImage"
-            name="inputImage"
-            ref={inputProfileImage}
-            onChange={(e) => inputImageOnChange(e)}
+            type="text"
+            className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4"
+            value={inpTitle}
+            onChange={(e) => setInpTitle(e.target.value)}
           />
         </div>
+        {/* ✅ ลำดับแสดง */}
+        <div className="flex gap-6">
+          <div className="flex flex-row items-center  gap-3">
+            <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
+              ลำดับแสดง
+            </span>
+            <input
+              type="number"
+              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4"
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+            />
+          </div>
+
+          <div className="flex flex-row items-center gap-3">
+            <span className="flex-shrink-0 text-right text-[#00537B] text-2xl">
+              สถานะ
+            </span>
+            <Switch
+              checked={checkedStatus === true} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
+              onChange={(event) =>
+                setCheckedStatus(event.target.checked ? true : false)
+              } // อัปเดตค่า 1 หรือ 0
+              sx={(theme) => ({
+                "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
+                "--Switch-thumbSize": "27px",
+                "--Switch-trackWidth": "51px",
+                "--Switch-trackHeight": "31px",
+                "--Switch-trackBackground":
+                  theme.vars.palette.background.level3,
+                [`& .${switchClasses.thumb}`]: {
+                  transition: "width 0.2s, left 0.2s",
+                },
+                "&:hover": {
+                  "--Switch-trackBackground":
+                    theme.vars.palette.background.level3,
+                },
+                "&:active": {
+                  "--Switch-thumbWidth": "32px",
+                },
+                [`&.${switchClasses.checked}`]: {
+                  "--Switch-trackBackground": "rgb(48 209 88)",
+                  "&:hover": {
+                    "--Switch-trackBackground": "rgb(48 209 88)",
+                  },
+                },
+              })}
+            />
+          </div>
+        </div>
       </div>
-      <div>
-        <label htmlFor="">ชื่อหมวดหมู่</label>
-        <input
-          type="text"
-          className="border"
-          onChange={(e) => setInpTitle(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="">ลำดับแสดง</label>
-        <input
-          type="number"
-          className="border"
-          onChange={(e) => setPriority(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="">สถานะ</label>
-        <Switch
-          checked={checkedStatus}
-          onChange={(e) => setCheckedStatus(e.target.checked)}
-        />
-      </div>
-      <div className="flex justify-center gap-4">
+
+      <div className="flex justify-center gap-4 mt-6">
         <button
-          className="bg-[#F44D4D] p-1 text-white"
+          className="bg-[#F44D4D] hover:bg-[#00537B] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[180px] text-center py-1.5 font-bold text-xl"
           onClick={() => {
             setHandleCreate(false);
           }}
@@ -112,7 +175,7 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
         </button>
         <button
           onClick={submitCreateCatefood}
-          className="bg-[#013D59] p-1 text-white"
+          className="bg-[#FFBA41] hover:bg-[#00537B] transition-all ease-in-out duration-200 cursor-pointer text-white rounded-lg w-[180px] text-center py-1.5 font-bold text-xl"
         >
           บันทึก
         </button>

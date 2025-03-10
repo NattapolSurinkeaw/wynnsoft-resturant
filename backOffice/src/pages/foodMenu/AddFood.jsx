@@ -11,7 +11,7 @@ const AddFood = ({ onClickClose }) => {
   const [text, setText] = useState(""); //รายละเอียด
   const [price, setPrice] = useState(""); //ราคา
   const [specialPrice, setSpecialPrice] = useState(""); //ราคาพิเศษ
-  const [showStatusMenu, setShowStatusMenu] = useState("false");
+  const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -54,8 +54,6 @@ const AddFood = ({ onClickClose }) => {
     }
   }, [selectedStatus]);
 
-  // console.log("price", price);
-
   return (
     <div className="flex lg:flex-row flex-col lg:gap-2 gap-6 w-full h-full">
       <div className="flex lg:flex-col flex-row gap-3 w-full lg:max-w-[300px] ">
@@ -75,15 +73,14 @@ const AddFood = ({ onClickClose }) => {
 
           <label
             htmlFor="fileInput1"
-            className="absolute bottom-0 bg-[#00537B]/70 backdrop-blur-sm transition duration-100 flex justify-center items-center gap-2 w-full h-[30px] shadow-1 cursor-pointer"
+            className="absolute bottom-0 bg-[#00537B]/70 transition duration-100 flex justify-center items-center gap-2 w-full h-[40px] shadow-1 cursor-pointer"
           >
-            <figure className="w-[25px] h-[25px]">
+            <figure className="w-[25px] h-[25px] ">
               <img src="/icons/edit.png" alt="" className="w-full h-full" />
             </figure>
 
             <span className="text-white">อัปรูปอาหาร</span>
           </label>
-
           <input
             type="file"
             accept="image/*"
@@ -284,14 +281,14 @@ const AddFood = ({ onClickClose }) => {
         </div>
 
         <div className="flex flex-row justify-center gap-4">
-          <button className="bg-[#FFBA41] cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl">
+          <button className="bg-[#FFBA41] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl">
             บันทึก
           </button>
           <button
             onClick={() => {
               onClickClose(false);
             }}
-            className="bg-[#00537B] cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
+            className="bg-[#F44D4D] hover:bg-[#00537B] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
           >
             ยกเลิก
           </button>

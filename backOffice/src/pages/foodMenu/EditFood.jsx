@@ -13,7 +13,7 @@ const EditFood = ({ onClickClose, selectedRow }) => {
   const [price, setPrice] = useState(editData.price || ""); //ราคา
   const [specialPrice, setSpecialPrice] = useState(editData.specialPrice || ""); //ราคาพิเศษ
 
-  const [showStatusMenu, setShowStatusMenu] = useState("false");
+  const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -82,7 +82,7 @@ const EditFood = ({ onClickClose, selectedRow }) => {
 
           <label
             htmlFor="fileInput1"
-            className="absolute bottom-0 bg-[#00537B]/70 backdrop-blur-sm transition duration-100 flex justify-center items-center gap-2 w-full h-[30px] shadow-1 cursor-pointer"
+            className="absolute bottom-0 bg-[#00537B]/70  transition duration-100 flex justify-center items-center gap-2 w-full h-[40px] shadow-1 cursor-pointer"
           >
             <figure className="w-[25px] h-[25px]">
               <img src="/icons/edit.png" alt="" className="w-full h-full" />
