@@ -17,10 +17,6 @@ function AddTable() {
             className="w-[310px] border border-gray-300 text-gray-600 text-[16px] font-[500] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] "
             placeholder="ชื่อโต๊ะ..."
           />
-          {/* <BorderColorIcon
-            sx={{ fontSize: 25 }}
-            className="text-[#313131] hover:text-[#F5A100] cursor-pointer"
-          /> */}
         </div>
         <figure className="w-[360px] h-[360px] mx-auto mt-6 border-6 border-[#D9D9D9]">
           <img

@@ -22,7 +22,7 @@ function Sidebar({ isSidebarOpen }) {
 
   return (
     <div
-      className={`h-full overflow-y-auto bg-[#00537B] transition-all duration-600 ease-in-out
+      className={`h-full overflow-y-auto bg-[#00537B] transition-all duration-600 ease-in-out hide-scrollbar
     ${
       isSidebarOpen
         ? "min-w-[275px] max-w-[275px] p-5 transform translate-x-0 opacity-100"

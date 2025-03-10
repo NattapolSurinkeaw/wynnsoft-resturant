@@ -15,28 +15,37 @@ body {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 3px; /* ขนาดแถบเลื่อน */
+  width: 5px; /* ความกว้างของ scrollbar แนวตั้ง */
+  height: 5px; /* ความสูงของ scrollbar แนวนอน */
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #00537b; /* สีของตัวเลื่อน */
-  border-radius: 5px; /* ทำให้มีขอบโค้ง */
+  border-radius: 10px; /* ทำให้มีขอบโค้ง */
+  min-height: 20px; /* กำหนดขนาดขั้นต่ำให้ลากง่ายขึ้น */
+  min-width: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #0082b3; /* สีของตัวเลื่อนเมื่อ hover */
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #00537b; /* สีพื้นหลังของแถบเลื่อน */
+  background-color: #e0f2f7; /* สีพื้นหลังของแถบเลื่อน */
+  border-radius: 10px;
 }
 
-/* สร้างคลาสสำหรับซ่อน scrollbar */
+/* ซ่อน Scrollbar */
 .hide-scrollbar {
-  scrollbar-width: none; /* สำหรับ Firefox */
-  -ms-overflow-style: none; /* สำหรับ IE และ Edge */
+  scrollbar-width: none !important; /* ซ่อน scrollbar สำหรับ Firefox */
+  -ms-overflow-style: none !important; /* ซ่อน scrollbar สำหรับ IE และ Edge */
 }
 
-/* สำหรับ Chrome, Safari และ Edge */
+/* ซ่อน scrollbar สำหรับ Chrome, Safari และ Edge */
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
+
 
 /* Sidebar.css */
 @keyframes slide-in {

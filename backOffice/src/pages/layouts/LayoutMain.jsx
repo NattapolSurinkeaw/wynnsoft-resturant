@@ -36,7 +36,7 @@ function LayoutMain() {
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
           />
-          <div className="w-full max-h-screen h-full overflow-y-auto xl:p-6 p-4 mt-2">
+          <div className="w-full max-h-screen h-full overflow-y-auto xl:p-6 p-4 ">
             <Outlet />
           </div>
         </div>

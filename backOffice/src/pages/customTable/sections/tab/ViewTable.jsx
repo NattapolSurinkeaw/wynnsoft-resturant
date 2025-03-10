@@ -28,10 +28,6 @@ function ViewTable({ handleEditClick }) {
             alt="QRCode"
           />
         </figure>
-        {/* <button className="mt-4 mx-auto flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-gray-700 text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#FFD468] to-[#FFC107] hover:from-[#F5A100] hover:to-[#FF8C00] hover:shadow-xl hover:scale-105">
-          <AutorenewIcon sx={{ fontSize: 23 }} className="text-gray-700" />
-          สร้าง QR ใหม่
-        </button> */}
         <div className="border-t-2 border-gray-500 mt-8"></div>
         <div className="flex items-center justify-center mt-4">
           <p className="mr-2 text-[18px] text-[#313131] font-[500]">ลำดับ</p>
@@ -66,11 +62,6 @@ function ViewTable({ handleEditClick }) {
             <LocalPrintshopIcon sx={{ fontSize: 23 }} className="text-white" />
             ปริ้น QR
           </button>
-
-          {/* <button className="mt-4 flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#00537B] to-[#0072A0] hover:from-[#004669] hover:to-[#005F85] hover:shadow-xl hover:scale-105">
-            <SaveIcon sx={{ fontSize: 23 }} className="text-white" />
-            บันทึก
-          </button> */}
 
           <button className="mt-4 flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#F44D4D] to-[#FF5E5E] hover:from-[#FF0A0A] hover:to-[#FF5252] hover:shadow-xl hover:scale-105">
             <DeleteForeverIcon sx={{ fontSize: 23 }} className="text-white" />

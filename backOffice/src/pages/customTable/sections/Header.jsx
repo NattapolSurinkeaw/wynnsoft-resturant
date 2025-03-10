@@ -3,15 +3,12 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import WidgetsOutlinedIcon from "@mui/icons-material/WidgetsOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import ReplyIcon from "@mui/icons-material/Reply";
-import Table from "./Table";
 
 function Header({
   isSettingOpen,
   setIsSettingOpen,
   isAddTable,
-  setIsAddTable,
   handleReservationClick,
-  handleRetrospectiveClick,
 }) {
   return (
     <>
@@ -59,7 +56,6 @@ function Header({
           )}
         </div>
       </div>
-      {/* <Table isSettingOpen={isSettingOpen} /> */}
     </>
   );
 }

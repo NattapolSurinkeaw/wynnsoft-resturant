@@ -5,6 +5,7 @@ import EditTable from "./sections/tab/EditTable";
 import ViewTable from "./sections/tab/ViewTable";
 import FoodList from "./sections/tab/FoodList";
 import Table from "./sections/Table";
+import TotalBill from "./sections/tab/TotalBill";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { CustomTable as CustomTableData } from "../../components/mockData/CustomTable/CustomTable";
@@ -15,14 +16,18 @@ function CustomTable() {
   const [isAddTable, setIsAddTable] = useState(false);
   const [isEditTable, setIsEditTable] = useState(false);
   const [isFoodList, setIsFoodList] = useState(false);
+  const [isTotalBill, setIsTotalBill] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 20;
+  const rowsPerPage = 24;
+
+  // console.log("isTotalBill", isTotalBill);
 
   useEffect(() => {
     if (!isSettingOpen) {
       setIsAddTable(false);
       setIsEditTable(false);
       setIsFoodList(false);
+      setIsTotalBill(false);
     }
   }, [isSettingOpen]);
 
@@ -44,6 +49,13 @@ function CustomTable() {
     setIsEditTable(false);
   };
 
+  const handleTotalBillClick = () => {
+    setIsFoodList(false);
+    setIsAddTable(false);
+    setIsEditTable(false);
+    setIsTotalBill(true);
+  };
+
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
@@ -62,6 +74,8 @@ function CustomTable() {
           isSettingOpen={isSettingOpen}
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}
+          handleTotalBillClick={handleTotalBillClick}
+          isTotalBill={isTotalBill}
         />
         {isAddTable ? (
           <AddTable />
@@ -69,6 +83,8 @@ function CustomTable() {
           <EditTable setIsSettingOpen={setIsSettingOpen} />
         ) : isFoodList ? (
           <FoodList handleFoodListClick={handleFoodListClick} />
+        ) : isTotalBill ? (
+          <TotalBill />
         ) : (
           <ViewTable handleEditClick={handleEditClick} />
         )}
@@ -104,12 +120,11 @@ function CustomTable() {
       </div>
 
       <button onClick={handleFoodListClick}>
-            <BorderColorIcon
-              sx={{ fontSize: 25 }}
-              className="text-[#313131] hover:text-[#F5A100] cursor-pointer"
-            />
-          </button>
-
+        <BorderColorIcon
+          sx={{ fontSize: 25 }}
+          className="text-[#313131] hover:text-[#F5A100] cursor-pointer"
+        />
+      </button>
     </div>
   );
 }
