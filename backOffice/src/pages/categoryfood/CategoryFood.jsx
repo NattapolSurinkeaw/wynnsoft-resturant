@@ -6,7 +6,7 @@ import {
 } from "../../services/manageData.services";
 import AddCategoryFood from "./components/AddCategoryFood";
 import EditCategoryFood from "./components/EditCategoryFood";
-import { Box } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import Switch, { switchClasses } from "@mui/joy/Switch";
 
 import Swal from "sweetalert2";
@@ -15,6 +15,7 @@ import SwalUI from "../../components/swal-ui/swal-ui";
 import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 function CategoryFood() {
   const [categFood, setCateFood] = useState([]);
@@ -27,6 +28,7 @@ function CategoryFood() {
   const MySwal = withReactContent(Swal);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
+
   const menuStatus = useRef(null);
 
   const FiltercategFood = categFood
@@ -148,7 +150,9 @@ function CategoryFood() {
       headerAlign: "center",
       align: "center",
       sortable: false,
-      width: 150,
+      flex: 0.2, 
+      minWidth: 120, 
+      maxWidth: 200, 
       renderCell: (params) => (
         <div className="p-1 flex justify-center items-center">
           <img
@@ -167,7 +171,9 @@ function CategoryFood() {
     {
       field: "title",
       headerName: "",
-      width: 300,
+      width: 400,
+      flex: 1,
+      minWidth: 200,
       editable: false,
     },
     {
@@ -176,7 +182,9 @@ function CategoryFood() {
       headerAlign: "center",
       align: "center",
       type: "number",
-      width: 180,
+      flex: 0.2, 
+      minWidth: 130, 
+      maxWidth: 250, 
       editable: false,
       renderCell: (params) => {
         console.log("params.value", params.id, params.value);
@@ -226,12 +234,14 @@ function CategoryFood() {
       headerAlign: "center",
       align: "center",
       sortable: false,
-      width: 100,
+      flex: 0.2, 
+      minWidth: 80, 
+      maxWidth: 150, 
       headerName: "",
       renderCell: (params) => (
         <div className="h-full flex justify-center items-center">
           <button
-            className="cursor-pointer p-1 bg-[#F5A100] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
+            className="cursor-pointer p-1 bg-[#F5A100] hover:bg-[#00537B] w-[40px] h-[40px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="แก่ไข"
           >
             <img
@@ -249,13 +259,15 @@ function CategoryFood() {
       headerAlign: "center",
       align: "center",
       sortable: false,
-      width: 100,
+      flex: 0.2, 
+      minWidth: 80, 
+      maxWidth: 150, 
       headerName: "",
       renderCell: (params) => (
         <div className="h-full flex justify-center items-center">
           <button
             onClick={() => functionHandleDelete(params.id)}
-            className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
+            className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[40px] h-[40px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="ลบ"
           >
             <img src={"/icons/trash.png"} alt="" className="w-full h-full " />
@@ -266,13 +278,13 @@ function CategoryFood() {
   ];
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex justify-between md:w-[70%] w-[40%]">
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between w-full">
         <div className="flex flex-shrink-0 gap-2 justify-start items-center">
           <LayersOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
           <p className="text-[#00537B] text-2xl font-[600]">หมวดหมู่เมนู</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           <div className="flex flex-row items-center  gap-3">
             <span className="flex-shrink-0 text-right text-[#313131] text-xl font-bold">
               สถานะ
@@ -365,7 +377,7 @@ function CategoryFood() {
       </div>
 
       <div className="w-full h-full flex gap-5">
-        <Box className="md:w-[70%] w-[40%] h-full">
+        <Box className="w-full h-full">
           <DataGrid
             className="bg-white"
             rows={FiltercategFood}
@@ -383,20 +395,92 @@ function CategoryFood() {
           />
         </Box>
 
-        {/* call component Add and Edit  */}
-        {handleCreate && (
-          <AddCategoryFood
-            setRefreshData={setRefreshData}
-            setHandleCreate={setHandleCreate}
-          />
-        )}
-        {handleEdit && (
-          <EditCategoryFood
-            slcEdit={slcEdit}
-            setRefreshData={setRefreshData}
-            setHandleEdit={setHandleEdit}
-          />
-        )}
+        <Modal
+          open={handleCreate}
+          onClose={() => {
+            setHandleCreate(false);
+          }}
+        >
+          <Box
+            className="flex flex-col lg:w-[50%] w-[80%] px-8"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "white",
+              borderRadius: "10px",
+              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+              p: 4,
+            }}
+          >
+            <div className="flex justify-between">
+              <div className="flex gap-2 items-center">
+                {/* <FastfoodIcon sx={{ color: "#00537B", fontSize: 35 }} /> */}
+                <p className="text-[#00537B] text-2xl font-[600]">
+                  เพิ่มข้อมูล
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setHandleCreate(false);
+                }}
+              >
+                <CancelIcon className="hover:text-[#00537B]" />
+              </button>
+            </div>
+
+            <AddCategoryFood
+              setRefreshData={setRefreshData}
+              setHandleCreate={setHandleCreate}
+            />
+          </Box>
+        </Modal>
+
+        <Modal
+          open={handleEdit}
+          onClose={() => {
+            setHandleEdit(false);
+          }}
+        >
+          <Box
+            className="flex flex-col lg:w-[50%] w-[80%] px-8"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "white",
+              borderRadius: "10px",
+              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+              p: 4,
+            }}
+          >
+            <div className="flex justify-between">
+              <div className="flex gap-2 items-center">
+                {/* <FastfoodIcon sx={{ color: "#00537B", fontSize: 35 }} /> */}
+                <p className="text-[#00537B] text-2xl font-[600]">
+                  แก้ไขข้อมูล
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setHandleEdit(false);
+                }}
+              >
+                <CancelIcon className="hover:text-[#00537B]" />
+              </button>
+            </div>
+
+            <EditCategoryFood
+              slcEdit={slcEdit}
+              setRefreshData={setRefreshData}
+              setHandleEdit={setHandleEdit}
+            />
+          </Box>
+        </Modal>
       </div>
     </div>
   );

@@ -64,8 +64,7 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
 
   return (
     <div className="w-full bg-white p-4 flex flex-col gap-6 rounded-[10px]">
-
-      <div className="relative mx-auto w-[244px] h-[244px] bg-[#616161] rounded-lg shadow-1 flex items-center justify-center shadow-md overflow-hidden">
+      <div className="relative mx-auto w-[300px] h-[300px] bg-[#616161] rounded-lg shadow-1 flex items-center justify-center shadow-md overflow-hidden">
         {imageObj ? (
           <img
             src={imageObj}
@@ -99,86 +98,88 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
         />
       </div>
 
-      <div className="flex flex-col gap-4">
-         {/* ✅ ชื่อหมวดหมู่ */}
-        <div className="flex flex-row items-center  gap-3">
-          <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
-            ชื่อหมวดหมู่
-          </span>
-          <input
-            type="text"
-            className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4"
-            value={inpTitle}
-            onChange={(e) => setInpTitle(e.target.value)}
-          />
-        </div>
-        {/* ✅ ลำดับแสดง */}
-        <div className="flex gap-6">
+      <div className="flex flex-col gap-6 justify-between">
+        <div className="flex flex-col gap-4">
+          {/* ✅ ชื่อหมวดหมู่ */}
           <div className="flex flex-row items-center  gap-3">
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
-              ลำดับแสดง
+              ชื่อหมวดหมู่
             </span>
             <input
-              type="number"
+              type="text"
               className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
+              value={inpTitle}
+              onChange={(e) => setInpTitle(e.target.value)}
             />
           </div>
+          {/* ✅ ลำดับแสดง */}
+          <div className="flex gap-6">
+            <div className="flex flex-row items-center  gap-3">
+              <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
+                ลำดับแสดง
+              </span>
+              <input
+                type="number"
+                className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4"
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+              />
+            </div>
 
-          <div className="flex flex-row items-center gap-3">
-            <span className="flex-shrink-0 text-right text-[#00537B] text-2xl">
-              สถานะ
-            </span>
-            <Switch
-              checked={checkedStatus === true} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
-              onChange={(event) =>
-                setCheckedStatus(event.target.checked ? true : false)
-              } // อัปเดตค่า 1 หรือ 0
-              sx={(theme) => ({
-                "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
-                "--Switch-thumbSize": "27px",
-                "--Switch-trackWidth": "51px",
-                "--Switch-trackHeight": "31px",
-                "--Switch-trackBackground":
-                  theme.vars.palette.background.level3,
-                [`& .${switchClasses.thumb}`]: {
-                  transition: "width 0.2s, left 0.2s",
-                },
-                "&:hover": {
+            <div className="flex flex-row items-center gap-3">
+              <span className="flex-shrink-0 text-right text-[#00537B] text-2xl">
+                สถานะ
+              </span>
+              <Switch
+                checked={checkedStatus === true} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
+                onChange={(event) =>
+                  setCheckedStatus(event.target.checked ? true : false)
+                } // อัปเดตค่า 1 หรือ 0
+                sx={(theme) => ({
+                  "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
+                  "--Switch-thumbSize": "27px",
+                  "--Switch-trackWidth": "51px",
+                  "--Switch-trackHeight": "31px",
                   "--Switch-trackBackground":
                     theme.vars.palette.background.level3,
-                },
-                "&:active": {
-                  "--Switch-thumbWidth": "32px",
-                },
-                [`&.${switchClasses.checked}`]: {
-                  "--Switch-trackBackground": "rgb(48 209 88)",
-                  "&:hover": {
-                    "--Switch-trackBackground": "rgb(48 209 88)",
+                  [`& .${switchClasses.thumb}`]: {
+                    transition: "width 0.2s, left 0.2s",
                   },
-                },
-              })}
-            />
+                  "&:hover": {
+                    "--Switch-trackBackground":
+                      theme.vars.palette.background.level3,
+                  },
+                  "&:active": {
+                    "--Switch-thumbWidth": "32px",
+                  },
+                  [`&.${switchClasses.checked}`]: {
+                    "--Switch-trackBackground": "rgb(48 209 88)",
+                    "&:hover": {
+                      "--Switch-trackBackground": "rgb(48 209 88)",
+                    },
+                  },
+                })}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex justify-center gap-4 mt-6">
-        <button
-          className="bg-[#F44D4D] hover:bg-[#00537B] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[180px] text-center py-1.5 font-bold text-xl"
-          onClick={() => {
-            setHandleCreate(false);
-          }}
-        >
-          ยกเลิก
-        </button>
-        <button
-          onClick={submitCreateCatefood}
-          className="bg-[#FFBA41] hover:bg-[#00537B] transition-all ease-in-out duration-200 cursor-pointer text-white rounded-lg w-[180px] text-center py-1.5 font-bold text-xl"
-        >
-          บันทึก
-        </button>
+        <div className="flex justify-center gap-4 mt-6">
+          <button
+            className="bg-[#F44D4D] hover:bg-[#00537B] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[180px] text-center py-1.5 font-bold text-xl"
+            onClick={() => {
+              setHandleCreate(false);
+            }}
+          >
+            ยกเลิก
+          </button>
+          <button
+            onClick={submitCreateCatefood}
+            className="bg-[#FFBA41] hover:bg-[#00537B] transition-all ease-in-out duration-200 cursor-pointer text-white rounded-lg w-[180px] text-center py-1.5 font-bold text-xl"
+          >
+            บันทึก
+          </button>
+        </div>
       </div>
     </div>
   );
