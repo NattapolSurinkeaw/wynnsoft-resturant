@@ -21,6 +21,7 @@ import OrderHistory from "./pages/orderHistory/OrderHistory";
 import Dailyincome from "./pages/dailyincome/Dailyincome";
 import Monthlyincome from "./pages/monthlyincome/Monthlyincome";
 import TopMenu from "./pages/topMenu/TopMenu";
+import TestPage from "./pages/testPage/TestPage";
 
 import CategoryFood from "./pages/categoryfood/CategoryFood";
 import Settings from "./pages/settings/Settings";
@@ -49,6 +50,7 @@ function App() {
             <Route path="/dailyincome" element={<Dailyincome />} />
             <Route path="/monthlyincome" element={<Monthlyincome />} />
             <Route path="/topMenu" element={<TopMenu />} />
+            <Route path="/testpage" element={<TestPage />} />
 
             <Route path="/catefood" element={<CategoryFood />} />
             <Route path="/settings" element={<Settings />} />
