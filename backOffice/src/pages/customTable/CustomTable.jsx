@@ -17,10 +17,11 @@ function CustomTable() {
   const [isEditTable, setIsEditTable] = useState(false);
   const [isFoodList, setIsFoodList] = useState(false);
   const [isTotalBill, setIsTotalBill] = useState(false);
+  const [selectedTableId, setSelectedTableId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 24;
 
-  // console.log("isTotalBill", isTotalBill);
+  console.log("selectedTableId", selectedTableId);
 
   useEffect(() => {
     if (!isSettingOpen) {
@@ -35,25 +36,28 @@ function CustomTable() {
     setIsAddTable(true);
     setIsEditTable(false);
     setIsFoodList(false);
+    setIsTotalBill(false);
   };
 
   const handleEditClick = () => {
     setIsEditTable(true);
     setIsAddTable(false);
     setIsFoodList(false);
+    setIsTotalBill(false);
   };
 
   const handleFoodListClick = () => {
     setIsFoodList(true);
     setIsAddTable(false);
     setIsEditTable(false);
+    setIsTotalBill(false);
   };
 
   const handleTotalBillClick = () => {
+    setIsTotalBill(true);
     setIsFoodList(false);
     setIsAddTable(false);
     setIsEditTable(false);
-    setIsTotalBill(true);
   };
 
   const handlePageChange = (event, value) => {
@@ -76,17 +80,27 @@ function CustomTable() {
           rowsPerPage={rowsPerPage}
           handleTotalBillClick={handleTotalBillClick}
           isTotalBill={isTotalBill}
+          selectedTableId={selectedTableId}
+          setSelectedTableId={setSelectedTableId}
+          setIsTotalBill={setIsTotalBill}
+          setIsFoodList={setIsFoodList}
+          setIsAddTable={setIsAddTable}
+          setIsEditTable={setIsEditTable}
         />
         {isAddTable ? (
           <AddTable />
         ) : isEditTable ? (
           <EditTable setIsSettingOpen={setIsSettingOpen} />
         ) : isFoodList ? (
-          <FoodList handleFoodListClick={handleFoodListClick} />
+          <FoodList handleFoodListClick={handleFoodListClick} selectedTableId={selectedTableId} />
         ) : isTotalBill ? (
           <TotalBill />
         ) : (
-          <ViewTable handleEditClick={handleEditClick} />
+          <ViewTable
+            handleEditClick={handleEditClick}
+            selectedTableId={selectedTableId}
+            setSelectedTableId={setSelectedTableId}
+          />
         )}
       </div>
 
@@ -119,12 +133,12 @@ function CustomTable() {
         </Stack>
       </div>
 
-      <button onClick={handleFoodListClick}>
+      {/* <button onClick={handleFoodListClick}>
         <BorderColorIcon
           sx={{ fontSize: 25 }}
           className="text-[#313131] hover:text-[#F5A100] cursor-pointer"
         />
-      </button>
+      </button> */}
     </div>
   );
 }

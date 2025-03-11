@@ -6,6 +6,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ReservationModal from "../modal/ReservationModal";
 import OpenTable from "../modal/OpenTable";
 import { CustomTable as CustomTableData } from "../../../components/mockData/CustomTable/CustomTable";
+import { ViewTableData } from "../../../components/mockData/CustomTable/ViewTableData";
 
 function Table({
   isSettingOpen,
@@ -13,15 +14,20 @@ function Table({
   rowsPerPage,
   handleTotalBillClick,
   isTotalBill,
+  selectedTableId,
+  setIsTotalBill,
+  setIsFoodList,
+  setIsAddTable,
+  setIsEditTable,
+  setSelectedTableId,
 }) {
   const [isReservation, setIsReservation] = useState(false);
-  const [isCombineBill, setIsCombineBill] = useState();
   const [isOpenTable, setIsOpenTable] = useState(false);
   const [activeTable, setActiveTable] = useState(null);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentTables = CustomTableData.slice(indexOfFirstRow, indexOfLastRow);
+  const currentTables = ViewTableData.slice(indexOfFirstRow, indexOfLastRow);
 
   const handleTableClick = (tableId) => {
     setActiveTable(activeTable === tableId ? null : tableId);
@@ -90,7 +96,17 @@ function Table({
             return (
               <figure
                 key={table.id}
-                onClick={() => handleTableClick(table.id)}
+                onClick={() => {
+                  setSelectedTableId(table.id);
+                  handleTableClick(table.id);
+                
+                  // เช็คว่า table.status เป็น 2 หรือไม่
+                  if (table.status === 2) {
+                    setIsFoodList(true);
+                  } else {
+                    setIsFoodList(false);
+                  }
+                }}
                 className="relative w-full h-[106px] cursor-pointer rounded-lg "
                 style={{ backgroundColor: bgColor }}
               >
