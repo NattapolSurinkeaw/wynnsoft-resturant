@@ -74,6 +74,7 @@ function FoodMenu() {
   const clearFiltersCate = () => {
     setSelectedCategory(null);
   };
+
   const clearFiltersBestSeller = () => {
     setSelectedBestSeller(null);
   };
@@ -252,7 +253,7 @@ function FoodMenu() {
       renderCell: (params) => (
         <div className="h-full flex justify-center items-center">
           <button
-            className="cursor-pointer p-1 bg-[#F5A100] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
+            className="cursor-pointer p-1 bg-[#F5A100] hover:bg-[#00537B]  w-[40px] h-[40px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="แก่ไข"
           >
             <img
@@ -277,7 +278,7 @@ function FoodMenu() {
       renderCell: (params) => (
         <div className="h-full flex justify-center items-center">
           <button
-            className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
+            className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B]  w-[40px] h-[40px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="ลบ"
           >
             <img src={"/icons/trash.png"} alt="" className="w-full h-full " />
