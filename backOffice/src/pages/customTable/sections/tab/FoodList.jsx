@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import MoveTable from "../../modal/MoveTable";
+import QrCodeModal from "../../modal/QrCodeModal";
 import { FoodListData } from "../../../../components/mockData/CustomTable/FoodListData";
 
 function FoodList({ selectedTableId }) {
   const [isMoveTable, setIsMoveTable] = useState(false);
   const [currentFoodData, setCurrentFoodData] = useState(null);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
 
   useEffect(() => {
     const filteredData = FoodListData.find(
@@ -26,7 +29,12 @@ function FoodList({ selectedTableId }) {
       {currentFoodData && (
         <>
           <MoveTable isMoveTable={isMoveTable} closeModal={closeModal} />
-          <div className="flex flex-col w-full min-h-[730px]">
+          <QrCodeModal
+            isOpen={isQrModalOpen}
+            closeModal={() => setIsQrModalOpen(false)}
+            qrCode={currentFoodData.qrcode}
+          />
+          <div className="flex flex-col 2xl:w-full md:w-[500px] w-full mx-auto min-h-[730px]">
             <div className="w-full h-full bg-white shadow-1 rounded-lg">
               <div className="flex items-center justify-between w-full h-[115px] rounded-t-lg bg-[#013D59] px-6 py-4">
                 <div className="w-[85px] h-[85px] bg-white rounded-lg">
@@ -39,6 +47,15 @@ function FoodList({ selectedTableId }) {
                     </p>
                   </p>
                 </div>
+                <figure
+                  className="cursor-pointer"
+                  onClick={() => setIsQrModalOpen(true)}
+                >
+                  <QrCodeScannerOutlinedIcon
+                    sx={{ fontSize: 35 }}
+                    className="text-white hover:text-[#F5A100] mr-[8rem]"
+                  />
+                </figure>
                 <div className="flex flex-col items-end ">
                   <p className="text-[23px] font-[600] text-white">
                     {currentFoodData.order_number}
@@ -123,7 +140,7 @@ function FoodList({ selectedTableId }) {
                 </p>
               </div>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center 2xl:justify-between justify-center gap-4">
               <button
                 onClick={handleMoveTableOnClick}
                 className="mt-4 flex items-center justify-center gap-1 xl:w-[145px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#F44D4D] to-[#FF5E5E] hover:from-[#FF0A0A] hover:to-[#FF5252] hover:shadow-xl hover:scale-105"

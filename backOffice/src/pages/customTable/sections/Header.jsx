@@ -6,10 +6,11 @@ import ReplyIcon from "@mui/icons-material/Reply";
 
 function Header({
   isSettingOpen,
-  setIsSettingOpen,
+  setIsSettingOpen, 
   isAddTable,
   handleReservationClick,
 }) {
+
   return (
     <>
       <div className="flex justify-between w-full">
