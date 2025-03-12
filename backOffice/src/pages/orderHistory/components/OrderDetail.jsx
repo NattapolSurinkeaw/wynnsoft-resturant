@@ -108,7 +108,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
           </div>
           {/* header */}
 
-          <div  className={` "xl:h-[350px] h-[280px] overflow-y-auto" `}
+          <div  className={`xl:h-[350px] h-[280px] overflow-y-auto`}
           >
             {groupedMenuDetails.length > 0 ? (
               groupedMenuDetails.map((item) => (
