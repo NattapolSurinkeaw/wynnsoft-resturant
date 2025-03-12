@@ -1,18 +1,21 @@
 import { Router } from 'express'
 import { check } from 'express-validator'
 import * as multerUpload from '../util/multerUpload'
+import { AuthenticateAdmin } from './../middleware/AuthAdmin' 
 import { ManageDataController } from '../controllers/ManageDataController'
 import { WebSettingController } from '../controllers/WebSettingController'
-import { AuthenticateAdmin } from './../middleware/AuthAdmin' 
+import { TableManageController } from '../controllers/TableManageController'
 
 const upload = multerUpload.uploadImage()
 const uploadFileManual = multerUpload.uploadFileManual();
 const router = Router()
 const manageDataController = new ManageDataController();
 const websettingController = new WebSettingController();
+const tableManageController = new TableManageController();
 
 // จัดการโต๊ะ
-
+router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController.OngetAllTable);
+router.get('/api/backoffice/generate-qrcode/:id', AuthenticateAdmin, tableManageController.OngetGenerateQrcode);
 
 // หมวดหมู่เมนู
 router.get('/api/backoffice/catefood', AuthenticateAdmin, manageDataController.OngetCategoryFood);
@@ -71,7 +74,6 @@ router.post('/api/backoffice/createUser', AuthenticateAdmin, [
 router.post('/api/backoffice/updateUser', AuthenticateAdmin, websettingController.OnUpdateDataUser);
 router.delete('/api/backoffice/deleteUser/:code', AuthenticateAdmin, websettingController.OnDeleteUser);
 // router.get('/api/backoffice/users', AuthenticateAdmin, websettingController.OnsettingUser);
-
 
 
 

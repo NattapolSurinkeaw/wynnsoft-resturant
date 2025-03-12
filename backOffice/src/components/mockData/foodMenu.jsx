@@ -46,7 +46,7 @@ export const foodDetail = [
     detail:
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1136.png",
-    status:0,
+    status: 0,
     bestSeller: 1,
   },
   {
@@ -82,7 +82,7 @@ export const foodDetail = [
     count: 1,
     detail: "",
     images: "/images/img/pad-thai.jpg",
-    status:0,
+    status: 0,
     bestSeller: 0,
   },
   {
@@ -109,7 +109,7 @@ export const foodDetail = [
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/ice-sweet.jpg",
     status: 0,
-    bestSeller: 1,
+    bestSeller: 0,
   },
   {
     id: 10,
@@ -151,16 +151,50 @@ export const foodDetail = [
   },
 ].map((item, index) => ({ ...item, count: index + 1 }));
 
-
-export const cate = [ 
-    { id: 1, name: "ของทอด", status: "1", images: "/images/icon/cate/cooking-pot 2.png" },
-    { id: 2, name: "ของผัด", status: "1", images: "/images/icon/cate/cooking-pot 2 (1).png" },
-    { id: 3, name: "ต้ม/แกง", status: "1", images: "/images/icon/cate/cooking-pot 1.png" },
-    { id: 4, name: "สลัด", status: "1", images: "/images/icon/cate/cooking-pot 2 (2).png" },
-    { id: 5, name: "ของหวาน", status: "1", images: "/images/icon/cate/cooking-pot 2 (3).png" },
-    { id: 6, name: "เครื่องดื่ม", status: "1", images: "/images/icon/cate/coke.png" },
-    { id: 7, name: "แอลกอฮอล์", status: "1", images: "/images/icon/cate/alcohol.png" },
-    { id: 8, name: "ส้มตำ", status: "1", images: "/images/icon/cate/salad.png" },
-    { id: 9, name: "a1", status: "1", images: "/images/icon/cate/alcohol.png" },
-    { id: 10, name: "a2", status: "1", images: "/images/icon/cate/salad.png" },
-  ];
+export const cate = [
+  {
+    id: 1,
+    name: "ของทอด",
+    status: "1",
+    images: "/images/icon/cate/cooking-pot 2.png",
+  },
+  {
+    id: 2,
+    name: "ของผัด",
+    status: "1",
+    images: "/images/icon/cate/cooking-pot 2 (1).png",
+  },
+  {
+    id: 3,
+    name: "ต้ม/แกง",
+    status: "1",
+    images: "/images/icon/cate/cooking-pot 1.png",
+  },
+  {
+    id: 4,
+    name: "สลัด",
+    status: "1",
+    images: "/images/icon/cate/cooking-pot 2 (2).png",
+  },
+  {
+    id: 5,
+    name: "ของหวาน",
+    status: "1",
+    images: "/images/icon/cate/cooking-pot 2 (3).png",
+  },
+  {
+    id: 6,
+    name: "เครื่องดื่ม",
+    status: "1",
+    images: "/images/icon/cate/coke.png",
+  },
+  {
+    id: 7,
+    name: "แอลกอฮอล์",
+    status: "1",
+    images: "/images/icon/cate/alcohol.png",
+  },
+  { id: 8, name: "ส้มตำ", status: "1", images: "/images/icon/cate/salad.png" },
+  { id: 9, name: "a1", status: "1", images: "/images/icon/cate/alcohol.png" },
+  { id: 10, name: "a2", status: "1", images: "/images/icon/cate/salad.png" },
+];

@@ -46,7 +46,6 @@ body {
   display: none !important;
 }
 
-
 /* Sidebar.css */
 @keyframes slide-in {
   0% {
@@ -158,3 +157,20 @@ body {
   color: #00537b !important;
 }
 /* DataGrid */
+
+/* DatePicker */
+.css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 4px !important;
+  
+}
+.css-1jfsev7-MuiFormControl-root-MuiTextField-root {
+  border-radius: 10px !important;
+ 
+}
+.css-jupps9-MuiInputBase-root-MuiOutlinedInput-root {
+  height: 100%;
+  border-radius: 10px !important;
+  padding-left: 4px;
+  border:#00537b !important
+}
+/* DatePicker */
