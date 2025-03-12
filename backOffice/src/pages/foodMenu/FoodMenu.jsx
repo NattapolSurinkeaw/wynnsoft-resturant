@@ -386,7 +386,7 @@ function FoodMenu() {
 
   return (
     <div className="flex flex-col justify-center gap-6 w-full flex-1">
-      <div className="flex 2xl:flex-row flex-col gap-4 w-full justify-between items-center">
+      <div className="flex 2xl:flex-row flex-col gap-4 w-full justify-between 2xl:items-center">
         <div className="flex flex-shrink-0 gap-2 justify-start items-center">
           <FastfoodIcon sx={{ color: "#00537B", fontSize: 35 }} />
           <p className="text-[#00537B] text-2xl font-[600]">เมนูอาหาร</p>

@@ -55,7 +55,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
         day: "numeric",
         year: "numeric",
       });
-  
+
       const order_number = detailData.order_number;
   
       setTimeout(() => {
@@ -64,6 +64,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
       }, 500); // รอให้ DOM อัปเดตก่อนจับภาพ
     }
   }, [showPdfContent]);
+
   return (
     <div className="w-full flex xl:flex-row flex-col gap-4 h-full bg-[#FFEFC6]">
       <div
@@ -108,7 +109,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
           </div>
           {/* header */}
 
-          <div  className={`xl:h-[350px] h-[280px] overflow-y-auto`}
+          <div  className={`xl:h-[350px] h-[240px] overflow-y-auto`}
           >
             {groupedMenuDetails.length > 0 ? (
               groupedMenuDetails.map((item) => (
@@ -212,9 +213,9 @@ function OrderDetail({ onClickClose, selectedRow }) {
       <div className="xl:max-w-[20%] w-full flex xl:flex-col gap-4">
         <div
           onClick={handleSavePDF}
-          className="bg-white hover:bg-[#F5A100] w-full xl:h-[200px] h-[120px] p-3 rounded-lg shadow cursor-pointer transition-all duration-200 ease-in-out flex flex-col justify-center items-center gap-2 group"
+          className="bg-white hover:bg-[#F5A100] w-full xl:h-[200px] h-[90px] p-3 rounded-lg shadow cursor-pointer transition-all duration-200 ease-in-out flex flex-col justify-center items-center gap-2 group"
         >
-          <figure className="xl:w-[80px] xl:h-[80px] w-[60px] h-[60px]">
+          <figure className="xl:w-[80px] xl:h-[80px] w-[40px] h-[40px]">
             <img
               src="/icons/downloadO.png"
               alt=""
@@ -230,9 +231,9 @@ function OrderDetail({ onClickClose, selectedRow }) {
           onClick={() => {
             onClickClose(false);
           }}
-          className="bg-white hover:bg-[#F5A100] w-full xl:h-[200px] h-[120px] p-3 rounded-lg shadow cursor-pointer transition-all duration-200 ease-in-out flex flex-col justify-center items-center gap-2 group"
+          className="bg-white hover:bg-[#F5A100] w-full xl:h-[200px] h-[90px] p-3 rounded-lg shadow cursor-pointer transition-all duration-200 ease-in-out flex flex-col justify-center items-center gap-2 group"
         >
-          <figure className="xl:w-[80px] xl:h-[80px] w-[60px] h-[60px]">
+          <figure className="xl:w-[80px] xl:h-[80px] w-[40px] h-[40px]">
             <img
               src="/icons/solid_back.png"
               alt=""
@@ -244,8 +245,8 @@ function OrderDetail({ onClickClose, selectedRow }) {
           </p>
         </div>
 
-        <div className="bg-white hover:bg-[#F5A100] w-full xl:h-[200px] h-[120px] p-3 rounded-lg shadow cursor-pointer transition-all duration-200 ease-in-out flex flex-col justify-center items-center gap-2 group">
-          <figure className="xl:w-[80px] xl:h-[80px] w-[60px] h-[60px]">
+        <div className="bg-white hover:bg-[#F5A100] w-full xl:h-[200px] h-[90px] p-3 rounded-lg shadow cursor-pointer transition-all duration-200 ease-in-out flex flex-col justify-center items-center gap-2 group">
+          <figure className="xl:w-[80px] xl:h-[80px] w-[40px] h-[40px]">
             <img
               src="/icons/delete-32.png"
               alt=""
