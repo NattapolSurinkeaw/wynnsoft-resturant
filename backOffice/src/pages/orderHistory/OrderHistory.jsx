@@ -15,7 +15,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import OrderDetail from "./components/OrderDetail";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Grid, Typography } from "@mui/material";
 
 function OrderHistory() {
   const [openModalDetail, setOpenModalDetail] = useState(false);
@@ -58,8 +57,10 @@ function OrderHistory() {
     const menuDetails = row.menuID.map((menuId) => {
       return foodDetail.find((menu) => menu.id === menuId);
     });
+    const tableDetails = CustomTable.find((table) => table.id === row.tableID);
+    const note = row.note; 
 
-    setSelectedRow({ ...row, menuDetails }); // ส่งข้อมูลทั้งหมดของ row พร้อมกับข้อมูลของเมนู
+    setSelectedRow({ ...row, menuDetails, tableDetails ,note});
     setOpenModalDetail(true);
   };
 
@@ -91,8 +92,10 @@ function OrderHistory() {
       };
     });
   };
+
   const tableData = calculateTotalByTable();
 
+  // **Filter ข้อมูลตามวันที่และสถานะ**
   const filteredTableData = tableData
     .filter((order) => {
       const orderDate = dayjs(order.createdAt, "DD-MM-YYYY");
@@ -118,30 +121,17 @@ function OrderHistory() {
     })
     .map((item, index) => ({ ...item, count: index + 1 }));
 
-  // หาผลรวมของ ส่วนลด
-  const calculateTotalDiscount = () => {
-    const totals = calculateTotalByTable();
-    const totalDiscount = totals.reduce(
-      (sum, order) => sum + order.totalDiscount,
-      0
-    );
-    return totalDiscount;
-  };
-  const totalDiscount = calculateTotalDiscount();
-  // หาผลรวมของ ส่วนลด
+  // คำนวณผลรวมของ ส่วนลดจากเฉพาะ `filteredTableData`
+  const totalDiscount = filteredTableData.reduce(
+    (sum, order) => sum + order.totalDiscount,
+    0
+  );
 
-  // หาผลรวมของ ราคา
-  const calculateTotalSpecialPrice = () => {
-    const totals = calculateTotalByTable();
-    const totalSpecialPrice = totals.reduce(
-      (sum, order) => sum + order.totalSpecialPrice,
-      0
-    );
-    return totalSpecialPrice;
-  };
-
-  const totalSpecialPrice = calculateTotalSpecialPrice();
-  // หาผลรวมของ ราคา
+  // คำนวณผลรวมของ ราคาพิเศษจากเฉพาะ `filteredTableData`
+  const totalSpecialPrice = filteredTableData.reduce(
+    (sum, order) => sum + order.totalSpecialPrice,
+    0
+  );
 
   const columns = [
     {
@@ -500,9 +490,11 @@ function OrderHistory() {
           disableSelectionOnClick
         />
         <div className="absolute bottom-3 left-1/2 flex items-center justify-between gap-3 w-[23%]">
-          <p className="">ยอดรวมทั้งหมด</p>
-          <div className="flex items-center justify-between gap-3 underline underline-offset-8 decoration-pink-500 decoration-double">
-            <p className="text-lg font-bold">{formatNumber(totalDiscount)}</p>
+          <p className="w-[50%]">ยอดรวมทั้งหมด</p>
+          <div className="flex items-center justify-between border-b-2 border-red-600  decoration-double w-full">
+            <p className="text-lg font-bold text-right">
+              {formatNumber(totalDiscount)}
+            </p>
             <p className="text-lg font-bold">
               {formatNumber(totalSpecialPrice)}
             </p>
@@ -555,7 +547,7 @@ function OrderHistory() {
         }}
       >
         <Box
-          className="flex flex-col gap-4 xl:max-w-[60%] max-w-[90%] w-full px-8"
+          className="flex flex-col gap-4 2xl:max-w-[60%] lg:max-w-[80%] max-w-[95%] w-full px-8 "
           sx={{
             position: "absolute",
             top: "50%",
@@ -564,15 +556,14 @@ function OrderHistory() {
             bgcolor: "white",
             borderRadius: "10px",
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#FFEFC6",
             p: 4,
           }}
         >
-          <div className="flex justify-between">
+          <div className="flex justify-between ">
             <div className="flex gap-2 items-center">
-              {/* <FastfoodIcon sx={{ color: "#00537B", fontSize: 35 }} /> */}
-              <p className="text-[#00537B] text-2xl font-[600]">
-                แก้ไขข้อมูล เมนูอาหาร
-              </p>
+              <EventNoteOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
+              <p className="text-[#00537B] text-2xl font-[600] ">รายละเอียด</p>
             </div>
 
             <button

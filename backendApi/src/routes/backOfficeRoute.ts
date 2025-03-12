@@ -45,6 +45,7 @@ router.post('/api/backoffice/food/:id', AuthenticateAdmin, upload.single("thumbn
   check('price').isNumeric().notEmpty(),
 ], manageDataController.OnUpdateFood);
 router.delete('/api/backoffice/food/:id', AuthenticateAdmin, manageDataController.OnDeleteFood);
+router.put('/api/backoffice/food-status/:id', AuthenticateAdmin, manageDataController.OnUpdateBestSeller)
 
 // ภาษา
 router.get('/api/backoffice/language', AuthenticateAdmin, manageDataController.OngetAllLanguage);
