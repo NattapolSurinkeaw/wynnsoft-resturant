@@ -366,27 +366,52 @@ export class ManageDataController {
   };
   OnDeleteFood = async (req: any, res: any) => {
     try {
+      // throw new Error("นี่เป็นข้อผิดพลาดที่จำลองขึ้นมาเพื่อทดสอบ catch!");
       const food = await Foods.findOne({ where: { id: req.params.id } });
 
       if (!food) {
         return res.status(404).json({
           status: false,
           message: "error",
-          description: "content was not found.",
+          title: "เกิดข้อผิดพลาด!",
+          description: "ไม่พบข้อมูล",
         });
       }
       food.destroy();
       return res.status(200).json({
         status: true,
-        message: "delete food successfully",
+        message: "ok",
+        title: "สำเร็จ!",
+        description: "เมนูอาหารถูกลบเรียบร้อยแล้ว",
       });
-    } catch (error) {
+    } catch (error: any) {
       return res.status(500).json({
         status: false,
-        message: error,
-        description: "something went wrong.",
+        message: "error",
+        title: "เกิดข้อผิดพลาด!",
+        description: "ไม่สามารถลบเมนูอาหารนี้ได้ กรุณาลองใหม่อีกครั้ง",
+        errorsMessage: error.message,
       });
     }
+  };
+  OnUpdateBestSeller = async (req: any, res: any) => {
+    const food = await Foods.findOne({
+      where: { id: req.params.id },
+    });
+    if (!food) {
+      return res.status(404).json({
+        status: false,
+        message: "error",
+        description: "content was not found.",
+      });
+    }
+    food.best_seller = req.body.status == "1" ? 1 : 0;
+    food.save();
+    return res.status(200).json({
+      status: true,
+      message: "ok",
+      description: "data was update.",
+    });
   };
   // end เมนูอาหาร
 

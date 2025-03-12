@@ -9,6 +9,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import AddFood from "./AddFood";
 import EditFood from "./EditFood";
+import {
+  getFood,
+  getCategoryFoods,
+  getUpdateBestSellerFood,
+  getDeleteFood,
+} from "../../services/manageData.services";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import SwalUI from "../../components/swal-ui/swal-ui";
 
 function FoodMenu() {
   const [searchTerm, setSearchTerm] = useState(""); // ค้นหาเมนู
@@ -22,19 +31,35 @@ function FoodMenu() {
   const categoryMenuRef = useRef(null);
   const bestSellerMenuRef = useRef(null);
   const [refreshData, setRefreshData] = useState(0);
+  const [foods, setFoods] = useState([]);
+  const [cateFood, setCateFood] = useState([]);
+  const MySwal = withReactContent(Swal);
 
-  const filteredFood = foodDetail
+  const filteredFood = foods
     .filter((item) => {
       return (
-        (selectedCategory ? item.cateID === selectedCategory : true) &&
+        (selectedCategory
+          ? item.cate_id.split(",").includes(selectedCategory.toString())
+          : true) &&
         (selectedBestSeller !== null
-          ? item.bestSeller === selectedBestSeller
+          ? item.best_seller === selectedBestSeller
           : true)
       );
     })
     .filter((item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+  useEffect(() => {
+    getFood().then((res) => {
+      console.log("f", res.foods);
+      setFoods(res.foods);
+    });
+    getCategoryFoods().then((res) => {
+      console.log("c", res.cateFood);
+      setCateFood(res.cateFood);
+    });
+  }, [refreshData]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,7 +108,6 @@ function FoodMenu() {
   };
 
   const handleOpenEdit = (row) => {
-    console.log(row);
     setSelectedRow(row);
     setOpenEdit(true);
   };
@@ -94,16 +118,75 @@ function FoodMenu() {
       maximumFractionDigits: 2,
     });
 
+  const functionHandleDelete = (id) => {
+    MySwal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "หากลบเมนูอาหารนี้แล้ว จะไม่สามารถกู้คืนข้อมูลได้!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      confirmButtonText: "ตกลง",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        getDeleteFood(id)
+          .then((res) => {
+            SwalUI({
+              status: res.status,
+              description: res.description,
+              title: res.title,
+            });
+            setRefreshData((prev) => prev + 1);
+          })
+          .catch((err) => {
+            SwalUI({
+              status: err.status,
+              description: err.description,
+              title: err.title,
+            });
+          });
+      }
+    });
+  };
+
+  const handleUpdateBestSeller = (id, checked) => {
+    setFoods((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, best_seller: checked ? 1 : 0 } : item
+      )
+    );
+
+    const param = { status: checked ? 1 : 0 };
+
+    getUpdateBestSellerFood(id, param)
+      .then((res) => {
+        setRefreshData((prev) => prev + 1);
+      })
+      .catch((err) => {
+        setFoods((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, best_seller: !checked ? 1 : 0 } : item
+          )
+        );
+      });
+  };
+
   const columns = [
     {
-      field: "count",
+      field: "index",
       headerName: "ลำดับ",
       headerAlign: "center",
       align: "center",
       width: 100,
+      renderCell: (params) => {
+        const index = filteredFood.findIndex(
+          (item) => item.id === params.row.id
+        );
+        return index + 1;
+      },
     },
     {
-      field: "images",
+      field: "thumbnail_link",
       headerName: "รูป",
       headerAlign: "center",
       align: "center",
@@ -131,14 +214,22 @@ function FoodMenu() {
       editable: false,
     },
     {
-      field: "cateID",
+      field: "cate_id",
       headerName: "หมวดหมู่",
       headerAlign: "center",
       align: "center",
       width: 150,
       valueGetter: (params) => {
-        const category = cate.find((item) => item.id === params);
-        return category ? category.name : "ไม่ระบุ";
+        const cateIds = params.split(",");
+        const categoryNames = cateIds
+          .map((cateId) => {
+            const category = cateFood.find(
+              (cate) => cate.id === Number(cateId)
+            );
+            return category ? category.title : null;
+          })
+          .filter(Boolean);
+        return categoryNames.join(" , ");
       },
     },
     {
@@ -151,19 +242,20 @@ function FoodMenu() {
       editable: false,
       renderCell: (params) => (
         <div className="flex flex-col justify-center items-end h-full">
-          {params.row.specialPrice && (
-            <p className="text-[#8F8F8F] text-[16px] line-through h-[18px] mb-2">
-              {formatNumber(params.row.price)} ฿
-            </p>
-          )}
+          {params.row.special_price !== null &&
+            params.row.special_price !== 0 && (
+              <p className="text-[#8F8F8F] text-[16px] line-through h-[18px] mb-2">
+                {formatNumber(params.row.price)} ฿
+              </p>
+            )}
           <p className="text-black text-[20px]">
-            {formatNumber(params.row.specialPrice || params.row.price)} ฿
+            {formatNumber(params.row.special_price || params.row.price)} ฿
           </p>
         </div>
       ),
     },
     {
-      field: "status",
+      field: "display",
       headerName: "สถานะ",
       headerAlign: "center",
       align: "center",
@@ -172,9 +264,9 @@ function FoodMenu() {
       renderCell: (params) => (
         <div className="flex justify-center items-center h-full">
           <p className="text-[#313131] xl:text-lg text-base font-[400] text-center">
-            {params.value === 1
+            {params.value === true
               ? "พร้อมบริการ"
-              : params.value === 0
+              : params.value === false
               ? "สินค้าหมด"
               : "-"}
           </p>
@@ -182,7 +274,7 @@ function FoodMenu() {
       ),
     },
     {
-      field: "bestSeller",
+      field: "best_seller",
       headerName: "สินค้าขายดี",
       headerAlign: "center",
       align: "center",
@@ -190,12 +282,15 @@ function FoodMenu() {
       width: 110,
       editable: false,
       renderCell: (params) => {
+        // console.log("params.value", params.id, params.value , params.api.updateRows);
+
         return (
           <div
             className="relative flex justify-center items-center m-auto h-full w-full cursor-pointer"
             onClick={() => {
-              const newValue = !params.value ? 1 : 0;
-              params.api.updateRows([{ id: params.id, bestSeller: newValue }]);
+              const newValue = !params.value ? true : false;
+              // params.api.updateRows([{ id: params.id, bestSeller: newValue }]);
+              handleUpdateBestSeller(params.id, newValue);
             }}
           >
             <Switch
@@ -231,7 +326,7 @@ function FoodMenu() {
       },
     },
     {
-      field: "detail",
+      field: "details",
       headerName: "รายละเอียด",
       sortable: false,
       width: 300,
@@ -277,6 +372,7 @@ function FoodMenu() {
       renderCell: (params) => (
         <div className="h-full flex justify-center items-center">
           <button
+            onClick={() => functionHandleDelete(params.id)}
             className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="ลบ"
           >
@@ -308,7 +404,7 @@ function FoodMenu() {
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
                   {selectedCategory
-                    ? cate.find((c) => c.id === selectedCategory)?.name
+                    ? cateFood.find((c) => c.id === selectedCategory)?.title
                     : "เลือกหมวดหมู่"}
                 </p>
                 <figure
@@ -341,7 +437,7 @@ function FoodMenu() {
                     ทั้งหมด
                   </div>
                   <div className="border-t border-[#e6e6e6] rounded-full w-full"></div>
-                  {cate.map((category) => (
+                  {cateFood.map((category) => (
                     <div
                       key={category.id}
                       className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
@@ -354,7 +450,7 @@ function FoodMenu() {
                         setShowCategoryMenu(false);
                       }}
                     >
-                      {category.name}
+                      {category.title}
                     </div>
                   ))}
                 </div>
@@ -373,9 +469,9 @@ function FoodMenu() {
                 onClick={() => setShowBestSellerMenu(!showBestSellerMenu)}
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
-                  {selectedBestSeller === 1
+                  {selectedBestSeller === true
                     ? "สินค้าขายดี"
-                    : selectedBestSeller === 0
+                    : selectedBestSeller === false
                     ? "สินค้าทั่วไป"
                     : "เลือกแสดงผล"}
                 </p>
@@ -417,7 +513,7 @@ function FoodMenu() {
                       selectedBestSeller === 1 ? "bg-[#F5A100] text-white" : ""
                     }`}
                     onClick={() => {
-                      setSelectedBestSeller(1);
+                      setSelectedBestSeller(true);
                       setShowBestSellerMenu(false);
                     }}
                   >
@@ -428,7 +524,7 @@ function FoodMenu() {
                       selectedBestSeller === 0 ? "bg-[#F5A100] text-white" : ""
                     }`}
                     onClick={() => {
-                      setSelectedBestSeller(0);
+                      setSelectedBestSeller(false);
                       setShowBestSellerMenu(false);
                     }}
                   >
@@ -476,8 +572,9 @@ function FoodMenu() {
               },
             },
           }}
-          pageSizeOptions={[5]}
+          pageSizeOptions={[5, 10]}
           disableSelectionOnClick
+          localeText={{ noRowsLabel: "ไม่พบข้อมูล" }}
         />
       </Box>
       <Modal

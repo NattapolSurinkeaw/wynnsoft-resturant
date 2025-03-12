@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 
 function CategoryFood() {
-  const [categFood, setCateFood] = useState([]);
+  const [cateFood, setCateFood] = useState([]);
 
   const [handleCreate, setHandleCreate] = useState(false);
   const [handleEdit, setHandleEdit] = useState(false);
@@ -29,7 +29,7 @@ function CategoryFood() {
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const menuStatus = useRef(null);
 
-  const FiltercategFood = categFood
+  const FiltercateFood = cateFood
     .sort((a, b) => new Date(a.priority) - new Date(b.priority))
     .map((item, index) => ({
       ...item,
@@ -179,7 +179,7 @@ function CategoryFood() {
       width: 180,
       editable: false,
       renderCell: (params) => {
-        console.log("params.value", params.id, params.value);
+        // console.log("params.value", params.id, params.value);
 
         return (
           <div
@@ -368,7 +368,7 @@ function CategoryFood() {
         <Box className="md:w-[70%] w-[40%] h-full">
           <DataGrid
             className="bg-white"
-            rows={FiltercategFood}
+            rows={FiltercateFood}
             rowHeight={70}
             columns={columns}
             initialState={{
