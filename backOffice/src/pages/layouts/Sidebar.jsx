@@ -25,16 +25,20 @@ function Sidebar({ isSidebarOpen }) {
       className={`h-full overflow-y-auto bg-[#00537B] transition-all duration-600 ease-in-out hide-scrollbar
     ${
       isSidebarOpen
-        ? "min-w-[275px] max-w-[275px] p-5 transform translate-x-0 opacity-100"
+        ? "min-w-[275px] max-w-[275px] px-5 pb-5 transform translate-x-0 opacity-100"
         : "min-w-0 max-w-0 transform -translate-x-full opacity-0"
     }`}
     >
-      <figure className="flex justify-center w-full mt-4">
+      <figure className="flex justify-center w-full ">
         <Link to="/">
-          <img className="w-[100px] h-auto" src="/icons/LOGO.png" alt="" />
+          <img
+            className="w-[120px] h-auto"
+            src="/icons/โลโก้-Soju-Day-Final-1.png"
+            alt=""
+          />
         </Link>
       </figure>
-      <div className="border-t-2 border-white mt-6"></div>
+      <div className="border-t-2 border-white mt-2"></div>
 
       <div className="ml-3 mr-3 mt-3 ">
         <p className="text-[16px] text-[#FFEA00]">แดชบอร์ด</p>

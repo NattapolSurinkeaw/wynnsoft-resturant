@@ -8,7 +8,9 @@ import AddCardOutlinedIcon from "@mui/icons-material/AddCardOutlined";
 import BookingModal from "../../modal/BookingModal";
 import { QRCodeCanvas } from "qrcode.react";
 import { ViewTableData } from "../../../../components/mockData/CustomTable/ViewTableData";
-import { jsPDF } from "jspdf"; // Import jsPDF
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+import dayjs from "dayjs";
 
 function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
   const [tableDetails, setTableDetails] = useState(null);
@@ -41,31 +43,38 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
   };
 
   const handlePrint = () => {
-    const doc = new jsPDF('p', 'mm', 'a4'); // ใช้ A4 ขนาด
+    const doc = new jsPDF("p", "mm", "a4");
     const qrCodeCanvas = contentRef.current.querySelector("canvas");
-  
+
     if (qrCodeCanvas) {
       const qrCodeDataUrl = qrCodeCanvas.toDataURL();
-      const pageWidth = doc.internal.pageSize.width; // ความกว้างของหน้า
-      const pageHeight = doc.internal.pageSize.height; // ความสูงของหน้า
-      const qrCodeSize = 150; // ขนาด QR Code ที่คุณต้องการ (ปรับตามต้องการ)
-      const qrCodeText = "Scan this QR Code"; // ข้อความที่จะแสดงบนหัว QR Code
-  
-      // คำนวณตำแหน่งให้อยู่กลาง
-      const x = (pageWidth - qrCodeSize) / 2; // คำนวณตำแหน่ง X ของ QR Code
-      const y = (pageHeight - qrCodeSize) / 2; // คำนวณตำแหน่ง Y ของ QR Code
-  
-      // คำนวณตำแหน่ง Y สำหรับข้อความให้อยู่ด้านบนของ QR Code
-      const textY = y - 16; // ขยับข้อความขึ้นจาก QR Code เล็กน้อย
-  
-      // เพิ่มข้อความที่หัว QR Code
-      doc.setFontSize(35); // ขนาดตัวอักษร
-      doc.text(qrCodeText, pageWidth / 2, textY, { align: 'center' }); // จัดข้อความให้ตรงกลางในแนวนอน
-  
-      // วาง QR Code ที่ตำแหน่งที่คำนวณไว้
-      doc.addImage(qrCodeDataUrl, "PNG", x, y, qrCodeSize, qrCodeSize); 
-  
-      doc.save("QRCode.pdf");
+      const pageWidth = doc.internal.pageSize.width;
+      const qrCodeSize = 100; // ขนาดของ QR Code ใน PDF
+      const margin = 20; // ระยะขอบของเอกสาร
+      const textSize = 14; // ขนาดตัวอักษรใน PDF
+
+      // กำหนดตำแหน่งของ QR Code
+      const x = (pageWidth - qrCodeSize) / 2;
+      const y = 60;
+
+      // เพิ่มข้อความใน PDF
+      doc.setFontSize(textSize);
+      doc.text("บิลชำระเงิน", pageWidth / 2, 30, { align: "center" });
+      doc.text("สแกน QR Code เพื่อชำระเงิน", pageWidth / 2, 50, {
+        align: "center",
+      });
+
+      // เพิ่ม QR Code ลงใน PDF
+      doc.addImage(qrCodeDataUrl, "PNG", x, y, qrCodeSize, qrCodeSize);
+
+      // เพิ่มข้อมูลเพิ่มเติม
+      doc.setFontSize(12);
+      doc.text("เลขที่ใบเสร็จ: 123456", margin, 180);
+      doc.text("วันที่: 12 มีนาคม 2025", margin, 190);
+      doc.text("จำนวนเงิน: 500 บาท", margin, 200);
+
+      // บันทึกไฟล์ PDF
+      doc.save("receipt.pdf");
     }
   };
 
@@ -73,9 +82,9 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
     <>
       <BookingModal isOpen={isModalOpen} onClose={handleCloseModal} />
       {tableDetails ? (
-        <div className=" relative 2xl:w-full md:w-[500px] w-full mx-auto h-[683px] p-6 bg-white shadow-1 rounded-lg overflow-hidden">
+        <div className="relative 2xl:w-full md:w-[500px] w-full mx-auto h-[683px] p-6 bg-white shadow-1 rounded-lg overflow-hidden">
           {tableDetails && tableDetails.status === 3 && (
-            <div className=" absolute top-3 -left-7 flex justify-center items-center text-lg font-[600] -rotate-45 w-[120px] h-[30px] text-white bg-gradient-to-r from-[#4CC2FB] to-[#4CC2FB]">
+            <div className="absolute top-3 -left-7 flex justify-center items-center text-lg font-[600] -rotate-45 w-[120px] h-[30px] text-white bg-gradient-to-r from-[#4CC2FB] to-[#4CC2FB]">
               ติดจอง
             </div>
           )}
@@ -91,7 +100,10 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
               />
             </button>
           </div>
-          <figure ref={contentRef} className="w-[360px] h-[360px] flex justify-center items-center mx-auto mt-6 border-6 border-[#D9D9D9]">
+          <figure
+            ref={contentRef}
+            className="w-[360px] h-[360px] flex justify-center items-center mx-auto mt-6 border-6 border-[#D9D9D9]"
+          >
             <QRCodeCanvas size={343} value={tableDetails.qrcode} />
           </figure>
           <div className="border-t-2 border-gray-500 mt-8"></div>
@@ -137,7 +149,10 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
                 รายระเอียด
               </button>
             )}
-            <button onClick={handlePrint} className="mt-4 flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#FFD468] to-[#FFC107] hover:from-[#F5A100] hover:to-[#FF8C00] hover:shadow-xl hover:scale-105">
+            <button
+              onClick={handlePrint}
+              className="mt-4 flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#FFD468] to-[#FFC107] hover:from-[#F5A100] hover:to-[#FF8C00] hover:shadow-xl hover:scale-105"
+            >
               <LocalPrintshopIcon
                 sx={{ fontSize: 23 }}
                 className="text-white"
