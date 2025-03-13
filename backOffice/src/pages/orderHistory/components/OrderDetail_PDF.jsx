@@ -19,14 +19,13 @@ function OrderDetail_PDF({
       maximumFractionDigits: 2,
     });
 
-  const serviceChargeTotal =
-    detailData.totalSpecialPrice * (serviceCharge / 100);
+  const serviceChargeTotal = detailData.totalSpecialPrice * (serviceCharge / 100);
   const grandTotal = detailData.totalSpecialPrice + serviceChargeTotal;
   const taxTotal = grandTotal * (tax / 100);
   const Tatal = grandTotal + taxTotal;
 
   return (
-    <div id="print" className="w-full rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
+    <div id="print" className="w-[500px] rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
       <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg">
         <div className="flex gap-4 items-center">
           <div className="bg-white rounded-lg p-2 w-[80px] h-[80px] flex flex-col justify-center items-center flex-shrink-0">

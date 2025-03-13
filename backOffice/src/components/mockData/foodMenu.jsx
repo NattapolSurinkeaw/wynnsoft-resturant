@@ -3,7 +3,7 @@ export const foodDetail = [
     id: 1,
     name: "ไก่ทอด",
     price: 150, //ราคาอาหาร
-    specialPrice: 100, //ส่วนลด
+    specialPrice: "", //ส่วนลด
     cateID: 1, //หมวดหมู่
     count: 2, //จำนวน
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด

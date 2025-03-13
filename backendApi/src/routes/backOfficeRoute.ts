@@ -5,6 +5,8 @@ import { AuthenticateAdmin } from './../middleware/AuthAdmin'
 import { ManageDataController } from '../controllers/ManageDataController'
 import { WebSettingController } from '../controllers/WebSettingController'
 import { TableManageController } from '../controllers/TableManageController'
+import { KitchenManageController } from '../controllers/KitchenManageController'
+import { OrderFoodController } from '../controllers/OrderFoodController'
 
 const upload = multerUpload.uploadImage()
 const uploadFileManual = multerUpload.uploadFileManual();
@@ -12,11 +14,22 @@ const router = Router()
 const manageDataController = new ManageDataController();
 const websettingController = new WebSettingController();
 const tableManageController = new TableManageController();
+const kitchenManageController = new KitchenManageController();
+const orderFoodController = new OrderFoodController();
 
+// จัดการออเดอร์
+router.get('/api/backoffice/orderall', AuthenticateAdmin, orderFoodController.OngetAllOrderFoods);
 // จัดการโต๊ะ
 router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController.OngetAllTable);
+router.post('/api/backoffice/createtable', AuthenticateAdmin, tableManageController.OnCreateTable);
 router.get('/api/backoffice/generate-qrcode/:id', AuthenticateAdmin, tableManageController.OngetGenerateQrcode);
 router.get('/api/backoffice/verifyqr/:token', tableManageController.OnverifyQrCode);
+// จองโต๊ะ
+router.post('/api/backoffice/bookingtable', AuthenticateAdmin, tableManageController.OnCreateBookingTable);
+
+// ห้องครัว
+router.get('/api/backoffice/new-menufood', AuthenticateAdmin, kitchenManageController.OngetAllNewMenuFood);
+router.post('/api/backoffice/status-outfood/:id', AuthenticateAdmin, kitchenManageController.OnChangeStatusOutFood);
 
 // หมวดหมู่เมนู
 router.get('/api/backoffice/catefood', AuthenticateAdmin, manageDataController.OngetCategoryFood);
