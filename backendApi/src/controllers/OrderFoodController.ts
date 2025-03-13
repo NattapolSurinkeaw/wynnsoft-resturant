@@ -12,6 +12,26 @@ import { OrdersList } from '../models/orderList'
 
 
 export class OrderFoodController {
+  OngetAllOrderFoods = async(req: any, res: any) => {
+    try {
+      const order = await Orders.findAll({
+        include: [
+          { model: Table, as: "table" }, // ดึงข้อมูลโต๊ะ
+          { model: OrdersList, as: "orderList" }, // ดึงข้อมูลรายการอาหารในออเดอร์
+        ],
+      });
+  
+      return res.status(200).json({
+        status: true,
+        message: 'ok',
+        description: 'confirm payment success.',
+        data: order
+      })
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาด:", error);
+    }
+  } 
+
   // สั่งอาหาร
   OnAddOrderFood = async(req: any, res: any) => {
     try {
