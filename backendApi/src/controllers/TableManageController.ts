@@ -37,12 +37,15 @@ export class TableManageController {
       table.table_token = uuidv4();
       table.save();
 
-      const order = await Orders.create({
-        order_number: '',
-        table_id: table.id,
-        status: 0,
-        price: 0,
-      })
+      let order = await Orders.findOne({where: {table_id: table.id}});
+      if(!order) {
+        order = await Orders.create({
+          order_number: '',
+          table_id: table.id,
+          status: 0,
+          price: 0,
+        })
+      }
 
       const payload = {
         table_id: table.id,
@@ -59,6 +62,19 @@ export class TableManageController {
         token: token
       });
 
+    } catch(error){
+      return res.status(500).json({
+          status: false,
+          message: 'error',
+          error: error,
+          description: 'something went wrong.'
+      })
+    }
+  }
+  OnverifyQrCode = async(req: any, res: any) => {
+    try {
+      const token = req.params.token
+      
     } catch(error){
       return res.status(500).json({
           status: false,

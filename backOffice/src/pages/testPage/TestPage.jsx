@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
 import { QRCodeCanvas } from "qrcode.react";
 import { getGenerateQr } from '../../services/table_manage.service';
+import { front_path } from '../../store/setting';
 
 export default function TestPage() {
   const [text, setText] = useState('');
 
   const getQrcode = (tableId) => {
     getGenerateQr(tableId).then((res) => {
-      setText('http://localhost:5173/testpage/'+res.token)
+      setText(front_path+res.token)
     })
   }
 
