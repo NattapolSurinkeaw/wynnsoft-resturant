@@ -7,7 +7,8 @@ import { CustomTable } from "../../components/mockData/CustomTable/CustomTable";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
-
+import Pagination from "@mui/material/Pagination";
+import { ButtonGroup } from "@mui/joy";
 function OrdersDay() {
   dayjs.locale("th");
   const [selectedStatusMenu, setSelectedStatusMenu] = useState(null);
@@ -152,15 +153,17 @@ function OrdersDay() {
     selectedTable
   );
 
-  // console.log(combinedOrderDetails);
+  console.log(combinedOrderDetails);
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = combinedOrderDetails.slice(
     indexOfFirstOrder,
     indexOfLastOrder
   );
+
+  const totalPages = Math.ceil(combinedOrderDetails.length / ordersPerPage);
   const handleNext = () => {
-    if (currentPage < Math.ceil(combinedOrderDetails.length / ordersPerPage)) {
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -355,8 +358,8 @@ function OrdersDay() {
           </Link>
         </div>
       </div>
-      <div className="h-full flex flex-col justify-between">
-        <div className="grid grid-cols-4 h-[450px] gap-4">
+      <div className="h-screen flex flex-col justify-between overflow-auto hide-scrollbar">
+        <div className="grid xl:grid-cols-4 grid-cols-2 h-[450px] gap-4 ">
           {currentOrders.map((order) => (
             <div
               key={order.id}
@@ -469,23 +472,50 @@ function OrdersDay() {
             </div>
           ))}
         </div>
+      </div>
 
-        {/*  pagination */}
-        <div className="flex justify-center gap-4 mt-20">
-          <button
-            onClick={handlePrevious}
-            className="bg-[#00537B] text-white py-2 px-4 rounded-lg cursor-pointer"
-          >
-            Previous
-          </button>
+      {/*  pagination */}
+      <div className="flex justify-end gap-1 bg-white w-fit ml-auto border border-[#DFDFDF] rounded-sm">
+        <button
+          onClick={handlePrevious}
+          disabled={currentPage === 1}
+          className={`text-sm py-2 px-4 rounded-sm cursor-pointer ${
+            currentPage === 1
+              ? "bg-white text-gray-500 cursor-not-allowed"
+              : "hover:bg-[#00537B] hover:text-white"
+          }`}
+        >
+          Previous
+        </button>
 
-          <button
-            onClick={handleNext}
-            className="bg-[#00537B] text-white py-2 px-4 rounded-lg cursor-pointer"
-          >
-            Next
-          </button>
-        </div>
+        {[...Array(totalPages)].map((_, index) => {
+          const pageNumber = index + 1;
+          return (
+            <button
+              key={pageNumber}
+              onClick={() => setCurrentPage(pageNumber)}
+              className={`text-sm py-2 px-4 rounded-sm cursor-pointer ${
+                currentPage === pageNumber
+                  ? "bg-[#00537B] text-white"
+                  : "hover:bg-[#00537B] hover:text-white"
+              }`}
+            >
+              {pageNumber}
+            </button>
+          );
+        })}
+
+        <button
+          onClick={handleNext}
+          disabled={currentPage === totalPages}
+          className={`text-sm py-2 px-4 rounded-sm cursor-pointer ${
+            currentPage === totalPages
+              ? "bg-white text-gray-500 cursor-not-allowed"
+              : "hover:bg-[#00537B] hover:text-white"
+          }`}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
