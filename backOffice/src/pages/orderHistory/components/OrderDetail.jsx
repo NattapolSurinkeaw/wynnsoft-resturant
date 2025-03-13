@@ -158,7 +158,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
             <div className="flex justify-between">
               <p className="lg:text-base text-sm font-[500]">ราคา</p>
               <p className="lg:text-base text-sm font-[400]">
-                {formatNumber(detailData.totalSpecialPrice)} ฿
+                {formatNumber(detailData.totalPriceAll)} ฿
               </p>
             </div>
             <div className="flex justify-between">

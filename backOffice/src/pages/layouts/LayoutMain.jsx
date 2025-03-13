@@ -26,7 +26,7 @@ function LayoutMain() {
   return (
     <main>
       <div className="relative flex w-full h-screen overflow-hidden bg-[#FFEFC6]">
-        <div className=" absolute top-0 left-0 w-full h-[59.6px] shadow-2 bg-white "></div>
+        <div className="absolute top-0 left-0 w-full h-[59.6px] shadow-2 bg-white "></div>
         <Sidebar
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}

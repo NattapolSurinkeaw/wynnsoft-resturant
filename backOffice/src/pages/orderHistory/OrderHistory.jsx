@@ -6,7 +6,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, Modal } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
-import DateRangeIcon from "@mui/icons-material/DateRange";
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -73,28 +72,41 @@ function OrderHistory() {
 
   const calculateTotalByTable = () => {
     return order_history.map((order) => {
-      const totalPrice = order.menuID.reduce((sum, menuId) => {
+      let totalPrice = 0; // รวมราคาปกติทั้งหมด
+      let totalSpecialPrice = 0; // รวมเฉพาะสินค้าที่มี specialPrice
+      let totalPriceAll = 0; // ราคาหลังหักส่วนลด
+  
+      order.menuID.forEach((menuId) => {
         const foodItem = foodDetail.find((food) => food.id === menuId);
-        return sum + (foodItem?.price || 0) * (foodItem?.count || 1);
-      }, 0);
-
-      const totalSpecialPrice = order.menuID.reduce((sum, menuId) => {
-        const foodItem = foodDetail.find((food) => food.id === menuId);
-        return sum + (foodItem?.specialPrice || 0) * (foodItem?.count || 1);
-      }, 0);
-
-      const totalDiscount = totalPrice - totalSpecialPrice;
-
+        if (foodItem) {
+          const count = foodItem.count || 1;
+          const price = foodItem.price || 0;
+          const specialPrice = foodItem.specialPrice ? foodItem.specialPrice : price;
+  
+          totalPrice += price * count;
+          totalPriceAll += specialPrice * count;
+  
+          if (foodItem.specialPrice) {
+            totalSpecialPrice += specialPrice * count;
+          }
+        }
+      });
+  
+      const totalDiscount = totalPrice - totalPriceAll; // ส่วนลดรวม
+  
       return {
         ...order,
-        totalPrice,
-        totalSpecialPrice,
-        totalDiscount,
+        totalPrice, // ราคาปกติทั้งหมด
+        totalSpecialPrice, // รวมเฉพาะสินค้าที่มีส่วนลด
+        totalDiscount, // ยอดส่วนลดทั้งหมด
+        totalPriceAll, // ราคาสุทธิหลังหักส่วนลด
       };
     });
   };
 
   const tableData = calculateTotalByTable();
+  // console.log("tableData", tableData);
+  
 
   // **Filter ข้อมูลตามวันที่และสถานะ**
   const filteredTableData = tableData
@@ -130,7 +142,7 @@ function OrderHistory() {
 
   // คำนวณผลรวมของ ราคาพิเศษจากเฉพาะ `filteredTableData`
   const specialPriceTotal = filteredTableData.reduce(
-    (sum, order) => sum + order.totalSpecialPrice,
+    (sum, order) => sum + order.totalPriceAll,
     0
   );
 
@@ -205,7 +217,7 @@ function OrderHistory() {
       renderCell: (params) => (
         <div className="flex flex-col justify-center items-end h-full">
           <p className="text-black text-[20px]">
-            {params.value ? formatNumber(params.value) : "---"} ฿
+            {params.value ? formatNumber(params.value) : formatNumber(0) } ฿
           </p>
         </div>
       ),
@@ -227,7 +239,7 @@ function OrderHistory() {
           )}
           <p className="text-black text-[20px]">
             {formatNumber(
-              params.row.totalSpecialPrice || params.row.totalPrice
+              params.row.totalPriceAll 
             )}{" "}
             ฿
           </p>
@@ -367,7 +379,7 @@ function OrderHistory() {
           <p className="text-[#00537B] text-2xl font-[600]">ประวัติการสั่ง</p>
         </div>
 
-        <div className="lg:flex gap-4 lg:justify-end grid grid-cols-2 place-items-end mx-auto">
+        <div className="lg:flex gap-4 lg:justify-end grid grid-cols-2 place-items-end lg:mx-0 mx-auto">
           {/* cate best seller*/}
           <div className="relative" ref={menuStatus}>
             <div className="flex flex-shrink-0 gap-2 items-center">
@@ -553,16 +565,19 @@ function OrderHistory() {
         />
 
         <div className="w-full flex 3xl:justify-end justify-center items-center gap-4 absolute 2xl:-inset-x-[25%] xl:-inset-x-4 lg:-inset-x-16 -inset-x-[10%] bottom-2">
-          <div className="flex justify-center items-center gap-2 flex-shrink-0">
-            <p className="text-base font-semibold text-[#313131] ">
-              ยอดรวมทั้งหมด :{" "}
+          <div className="flex justify-center items-center gap-2 ">
+            <p className="text-lg font-semibold text-[#313131] flex-shrink-0">
+              ยอดรวมส่วนลด :{" "}
             </p>
-          </div>
-          <div className=" max-w-[300px] w-full flex justify-center items-center gap-4 border-b-6 border-red-600 border-double">
-            <p className="text-base font-bold text-[#313131] w-full text-center">
+            <p className="text-lg font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
               {formatNumber(discountTotal)} ฿
             </p>
-            <p className="text-base font-bold text-[#313131] w-full text-center">
+          </div>
+          <div className=" max-w-[300px] w-full flex justify-center items-center gap-4 ">
+            <p className="text-lg font-semibold text-[#313131] flex-shrink-0">
+              ยอดรวมทั้งหมด :{" "}
+            </p>
+            <p className="text-lg font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
               {formatNumber(specialPriceTotal)} ฿
             </p>
           </div>
