@@ -16,6 +16,7 @@ const tableManageController = new TableManageController();
 // จัดการโต๊ะ
 router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController.OngetAllTable);
 router.get('/api/backoffice/generate-qrcode/:id', AuthenticateAdmin, tableManageController.OngetGenerateQrcode);
+router.get('/api/backoffice/verifyqr/:token', tableManageController.OnverifyQrCode);
 
 // หมวดหมู่เมนู
 router.get('/api/backoffice/catefood', AuthenticateAdmin, manageDataController.OngetCategoryFood);
