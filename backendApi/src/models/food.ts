@@ -40,6 +40,15 @@ export const Foods = sequelize.define('Foods',
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    status_food: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      default: 1
+    },
+    note: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
     display: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
