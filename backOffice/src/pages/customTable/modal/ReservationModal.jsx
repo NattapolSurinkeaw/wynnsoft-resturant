@@ -7,11 +7,43 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { Select, MenuItem } from "@mui/material";
+import dayjs from "dayjs";
+import { getBookingTable } from "../../../services/table_manage.service";
+import Swal from "sweetalert2";
 
-function ReservationModal({ isReservation, closeModal }) {
+function ReservationModal({ isReservation, closeModal, customTable }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [age, setAge] = useState("");
+  const [tableBooking, setTableBooking] = useState("");
+  const [nameBooking, setNameBooking] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [people, setPeople] = useState("");
+
+  const onSubmit = () => {
+    const params = {
+      name_booking: nameBooking,
+      phone_booking: phone,
+      email_booking: email,
+      table_booking: tableBooking,
+      date_booking: dayjs(selectedDate).format('YYYY-MM-DD'), // ✅ ใช้ selectedDate ตรงๆ
+      time_booking: dayjs(selectedTime).format('HH:mm:ss'),   // ✅ ใช้ selectedTime ตรงๆ
+      people: people
+    };
+  
+    getBookingTable(params).then((res) => {
+      console.log(res)
+      if(res.status) {
+        Swal.fire({
+          position: "center",
+          text: "เพิ่มโต๊ะสำเร็จ!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => closeModal())
+      }
+    })
+  };
 
   return (
     isReservation && (
@@ -36,6 +68,8 @@ function ReservationModal({ isReservation, closeModal }) {
                 type="text"
                 className="border border-gray-300 text-gray-600 text-[15px] font-[500] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#0064d6] w-full"
                 placeholder="กรอกชื่อผู้จอง..."
+                onChange={(e) => setNameBooking(e.target.value)}
+                value={nameBooking}
               />
             </div>
             <div className="flex flex-col gap-2 items-start">
@@ -46,6 +80,8 @@ function ReservationModal({ isReservation, closeModal }) {
                 type="text"
                 className="border border-gray-300 text-gray-600 text-[15px] font-[500] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#0064d6] w-full"
                 placeholder="กรอกเบอร์..."
+                onChange={(e) => setPhone(e.target.value)}
+                value={phone}
               />
             </div>
             <div className="flex flex-col gap-2 items-start">
@@ -54,6 +90,8 @@ function ReservationModal({ isReservation, closeModal }) {
                 type="email"
                 className="border border-gray-300 text-gray-600 text-[15px] font-[500] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#0064d6] w-full"
                 placeholder="กรอกอีเมล..."
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
               />
             </div>
 
@@ -114,6 +152,8 @@ function ReservationModal({ isReservation, closeModal }) {
                   type="number"
                   className="border border-gray-300 text-gray-600 text-[15px] font-[500] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#0064d6] w-full"
                   placeholder="กรอกจำนวน..."
+                  onChange={(e) => setPeople(e.target.value)}
+                  value={people}
                 />
               </div>
               <div className="flex flex-col w-1/2 gap-2 items-start">
@@ -121,13 +161,17 @@ function ReservationModal({ isReservation, closeModal }) {
                   โต๊ะที่
                 </p>
                 <Select
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
+                  value={tableBooking}
+                  onChange={(e) => setTableBooking(e.target.value)}
                   className="w-full h-[37px] text-[14px]"
                 >
-                  <MenuItem value={10}>1</MenuItem>
-                  <MenuItem value={20}>2</MenuItem>
-                  <MenuItem value={30}>3</MenuItem>
+                  {
+                    customTable.map((table) => (
+                      <MenuItem key={table.id} value={table.id}>{table.title}</MenuItem>
+                    ))
+                  }
+                  {/* <MenuItem value={20}>2</MenuItem> */}
+                  {/* <MenuItem value={30}>3</MenuItem> */}
                 </Select>
               </div>
             </div>
@@ -140,7 +184,9 @@ function ReservationModal({ isReservation, closeModal }) {
             >
               ยกเลิก
             </button>
-            <button className="w-[100px] py-1.5 bg-[#013D59] hover:bg-[#002b3f] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
+            <button className="w-[100px] py-1.5 bg-[#013D59] hover:bg-[#002b3f] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
+             onClick={onSubmit}
+            >
               บันทึก
             </button>
           </div>

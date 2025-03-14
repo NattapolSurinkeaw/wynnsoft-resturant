@@ -8,7 +8,7 @@ import * as jwt from 'jsonwebtoken'
 import { Table } from '../models/table'
 import { Orders } from '../models/orders'
 import { OrdersList } from '../models/orderList'
-
+import { Foods } from '../models/food'
 
 
 export class OrderFoodController {
@@ -17,7 +17,9 @@ export class OrderFoodController {
       const order = await Orders.findAll({
         include: [
           { model: Table, as: "table" }, // ดึงข้อมูลโต๊ะ
-          { model: OrdersList, as: "orderList" }, // ดึงข้อมูลรายการอาหารในออเดอร์
+          { model: OrdersList, as: "orderList",
+            include: [{ model: Foods, as: "food" }] 
+           }, // ดึงข้อมูลรายการอาหารในออเดอร์
         ],
       });
   
@@ -49,10 +51,8 @@ export class OrderFoodController {
           const orderItems = paramFoods.map((item: any) => ({
             food_id: item.id, // ใช้ id ของอาหาร
             orders_id: order.id, // อ้างอิงไปที่ order_id ที่สร้าง
-            price: item.price, // ราคาหลังหักส่วนลด
             amount: item.count, // จำนวนที่สั่ง
             status: 1, // สมมุติว่า 1 = กำลังดำเนินการ
-            details: item.name, // ชื่ออาหาร (หรือใช้ id อ้างอิง)
             note: item.note, // หมายเหตุของรายการ
           }));
           

@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../util/database";
 import { Orders } from "./orders";
+import { Foods } from "./food";
 
 export const OrdersList = sequelize.define(
   "OrdersList",
@@ -18,10 +19,6 @@ export const OrdersList = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    price: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     amount: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -30,10 +27,6 @@ export const OrdersList = sequelize.define(
       type: DataTypes.STRING(100),
       allowNull: true,
       comment: "1='รับออเดอร์', 2='กำลังปรุง', 3='รอเสิร์ฟ', 4='เสิร์ฟแล้ว'",
-    },
-    details: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
     },
     note: {
       type: DataTypes.STRING(255),
@@ -50,5 +43,7 @@ export const OrdersList = sequelize.define(
 // ✅ กำหนดความสัมพันธ์ OrdersList กับ Orders
 OrdersList.belongsTo(Orders, { foreignKey: "orders_id", as: "order" });
 Orders.hasMany(OrdersList, { foreignKey: "orders_id", as: "orderList" });
+OrdersList.belongsTo(Foods, { foreignKey: "food_id", as: "food" }) // เพิ่มการเชื่อมกับ Foods
+
 
 export default OrdersList;

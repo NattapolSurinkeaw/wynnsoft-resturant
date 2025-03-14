@@ -8,8 +8,9 @@ import Table from "./sections/Table";
 import TotalBill from "./sections/tab/TotalBill";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { CustomTable as CustomTableData } from "../../components/mockData/CustomTable/CustomTable";
+// import { CustomTable as CustomTableData } from "../../components/mockData/CustomTable/CustomTable";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+import { getTableall } from "../../services/table_manage.service";
 
 function CustomTable() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -20,8 +21,14 @@ function CustomTable() {
   const [selectedTableId, setSelectedTableId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 24;
+  const [customTable, setCustomTable] = useState([]);
+  // const [tableDetail, setTableDetail] = useState([]);
 
-  // console.log("isEditTable", isEditTable);
+  useEffect(() => {
+    getTableall().then((res) => {
+      setCustomTable(res.tables);
+    })
+  }, [])
 
   useEffect(() => {
     if (!isSettingOpen) {
@@ -87,6 +94,7 @@ function CustomTable() {
           setIsAddTable={setIsAddTable}
           setIsEditTable={setIsEditTable}
           isEditTable={isEditTable}
+          customTable={customTable}
         />
         {isAddTable ? (
           <AddTable />
@@ -101,6 +109,7 @@ function CustomTable() {
             handleEditClick={handleEditClick}
             selectedTableId={selectedTableId}
             setSelectedTableId={setSelectedTableId}
+            customTable={customTable}
           />
         )}
       </div>
@@ -109,7 +118,7 @@ function CustomTable() {
       <div className=" flex justify-end mt-8">
         <Stack spacing={2}>
           <Pagination
-            count={Math.ceil(CustomTableData.length / rowsPerPage)}
+            count={Math.ceil(customTable.length / rowsPerPage)}
             page={currentPage}
             onChange={handlePageChange}
             variant="outlined"

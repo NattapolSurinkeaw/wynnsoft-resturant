@@ -18,7 +18,7 @@ const Table = sequelize.define(
       allowNull: false,
     },
     status: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: false,
       Comment: "	'1'=ว่าง,'2'=บริการ,'3'=จอง"
     },
