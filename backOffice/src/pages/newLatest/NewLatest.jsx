@@ -41,7 +41,7 @@ function NewLatest() {
         </button>
       </div>
 
-      <div className="mt-4 bg-green-50">
+      <div className="mt-4 ">
         {activeTab === "newOrder" && <NewOrder />}
         {activeTab === "orderProgress" && <OrderProgress />}
         {activeTab === "sendOrder" && <SendOrder />}
