@@ -12,8 +12,6 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
   const inputProfileImage = useRef([]);
   const [imageObj, setImageobj] = useState();
 
-  console.log("checkedStatus", checkedStatus);
-
   function inputImageOnChange(e) {
     if (!e.target.files.length) {
       return false;

@@ -34,6 +34,7 @@ function FoodMenu() {
   const [foods, setFoods] = useState([]);
   const [cateFood, setCateFood] = useState([]);
   const MySwal = withReactContent(Swal);
+  const api_path = "http://localhost:8003";
 
   const filteredFood = foods
     .filter((item) => {
@@ -196,7 +197,7 @@ function FoodMenu() {
       renderCell: (params) => (
         <div className="p-1 flex justify-center items-center">
           <img
-            src={params.value}
+            src={api_path + params.value}
             alt=""
             style={{
               borderRadius: "5px",
@@ -374,7 +375,7 @@ function FoodMenu() {
         <div className="h-full flex justify-center items-center">
           <button
             onClick={() => functionHandleDelete(params.id)}
-            className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[30px] h-[30px] m-auto rounded-lg transition-all duration-200 ease-in-out"
+            className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[40px] h-[40px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="ลบ"
           >
             <img src={"/icons/trash.png"} alt="" className="w-full h-full " />
@@ -614,7 +615,11 @@ function FoodMenu() {
             </button>
           </div>
 
-          <AddFood onClickClose={setOpenAdd} />
+          <AddFood
+            setOpenAdd={setOpenAdd}
+            setRefreshData={setRefreshData}
+            cateFood={cateFood}
+          />
         </Box>
       </Modal>
 
@@ -660,7 +665,13 @@ function FoodMenu() {
               setRefreshData={setRefreshData}
             /> */}
 
-          <EditFood selectedRow={selectedRow} onClickClose={setOpenEdit} />
+          <EditFood
+            selectedRow={selectedRow}
+            setOpenEdit={setOpenEdit}
+            cateFood={cateFood}
+            setRefreshData={setRefreshData}
+            api_path={api_path}
+          />
         </Box>
       </Modal>
     </div>

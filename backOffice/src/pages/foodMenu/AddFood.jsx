@@ -3,10 +3,14 @@ import { cate } from "../../components/mockData/foodMenu";
 import { Checkbox } from "@mui/material";
 import Switch, { switchClasses } from "@mui/joy/Switch";
 import { NumericFormat } from "react-number-format";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import SwalUI from "../../components/swal-ui/swal-ui";
+import { getCreateFood } from "../../services/manageData.services";
 
-const AddFood = ({ onClickClose }) => {
+const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
   const [image, setImage] = useState(null);
-  const [checked, setChecked] = useState(1); //สินค้าขายดี
+  const [checked, setChecked] = useState(true); //สินค้าขายดี
   const [nameFood, setNameFood] = useState(""); //ชื่อสินค้า
   const [text, setText] = useState(""); //รายละเอียด
   const [price, setPrice] = useState(""); //ราคา
@@ -15,6 +19,7 @@ const AddFood = ({ onClickClose }) => {
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const inputProfileImage = useRef([]);
 
   const handleCategoryChange = (id) => {
     setSelectedCategories((prev) =>
@@ -23,13 +28,29 @@ const AddFood = ({ onClickClose }) => {
   };
 
   const handleImageChange = (e, setImage) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (
+      ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+        e.target.files[0].type
+      )
+    ) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      Swal.fire({
+        title: "กรุณาอัปโหลดเฉพาะไฟล์รูปภาพ",
+        icon: "warning",
+        position: "center",
+        timer: 1500,
+        showConfirmButton: false,
+        target: "body",
+      });
+      e.target.value = "";
     }
   };
 
@@ -53,6 +74,38 @@ const AddFood = ({ onClickClose }) => {
       setShowStatusMenu(false);
     }
   }, [selectedStatus]);
+
+  const submitCreateFood = () => {
+    const formData = new FormData();
+    formData.append("name", nameFood);
+    formData.append("display", selectedStatus === true ? 1 : 0);
+    formData.append("price", parseInt(price, 10));
+    formData.append("special_price", parseInt(specialPrice, 10));
+    formData.append("best_seller", checked === true ? 1 : 0);
+    formData.append("details", text);
+    formData.append(
+      "cate_id",
+      selectedCategories.sort((a, b) => a - b).join(",")
+    );
+    formData.append("thumbnail_link", inputProfileImage.current.files[0]);
+    getCreateFood(formData)
+      .then((res) => {
+        SwalUI({
+          status: res.status,
+          description: res.description,
+          title: res.title,
+        });
+        setOpenAdd(false);
+        setRefreshData((prev) => prev + 1);
+      })
+      .catch((err) => {
+        SwalUI({
+          status: err.status,
+          description: err.description,
+          title: err.title,
+        });
+      });
+  };
 
   return (
     <div className="flex lg:flex-row flex-col lg:gap-2 gap-6 w-full h-full">
@@ -86,6 +139,7 @@ const AddFood = ({ onClickClose }) => {
             accept="image/*"
             className="hidden"
             id="fileInput1"
+            ref={inputProfileImage}
             onChange={(e) => handleImageChange(e, setImage)}
           />
         </div>
@@ -95,7 +149,7 @@ const AddFood = ({ onClickClose }) => {
             หมวดเมนู
           </span>
           <div className="border border-[#D9D9D9] lg:p-3 rounded-lg shadow h-[300px] overflow-y-auto grid lg:grid-cols-1 grid-cols-2">
-            {cate.map((category) => (
+            {cateFood.map((category) => (
               <div key={category.id} className="flex flex-col gap-2">
                 <div className="flex flex-row items-center justify-start gap-x-3">
                   <Checkbox
@@ -105,7 +159,7 @@ const AddFood = ({ onClickClose }) => {
                     color="default"
                   />
                   <span className="text-[#313131] lg:text-xl text-lg">
-                    {category.name}
+                    {category.title}
                   </span>
                 </div>
               </div>
@@ -138,9 +192,9 @@ const AddFood = ({ onClickClose }) => {
                 onClick={() => setShowStatusMenu((prevState) => !prevState)}
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
-                  {selectedStatus === 1
+                  {selectedStatus === true
                     ? "พร้อมบริการ"
-                    : selectedStatus === 0
+                    : selectedStatus === false
                     ? "สินค้าหมด"
                     : "สถานะเมนู"}
                 </p>
@@ -166,10 +220,10 @@ const AddFood = ({ onClickClose }) => {
                   <div className="bg-white flex flex-col gap-1 p-2 mt-1 rounded-b-lg border border-[#D9D9D9]">
                     <div
                       className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                        selectedStatus === 1 ? "bg-[#F5A100] text-white" : ""
+                        selectedStatus === true ? "bg-[#F5A100] text-white" : ""
                       }`}
                       onClick={() => {
-                        setSelectedStatus(1);
+                        setSelectedStatus(true);
                         setShowStatusMenu(false);
                       }}
                     >
@@ -177,10 +231,12 @@ const AddFood = ({ onClickClose }) => {
                     </div>
                     <div
                       className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                        selectedStatus === 0 ? "bg-[#F5A100] text-white" : ""
+                        selectedStatus === false
+                          ? "bg-[#F5A100] text-white"
+                          : ""
                       }`}
                       onClick={() => {
-                        setSelectedStatus(0);
+                        setSelectedStatus(false);
                         setShowStatusMenu(false);
                       }}
                     >
@@ -238,8 +294,10 @@ const AddFood = ({ onClickClose }) => {
               สินค้าขายดี
             </span>
             <Switch
-              checked={checked === 1} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
-              onChange={(event) => setChecked(event.target.checked ? 1 : 0)} // อัปเดตค่า 1 หรือ 0
+              checked={checked === true} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
+              onChange={(event) =>
+                setChecked(event.target.checked ? true : false)
+              } // อัปเดตค่า 1 หรือ 0
               sx={(theme) => ({
                 "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
                 "--Switch-thumbSize": "27px",
@@ -281,12 +339,15 @@ const AddFood = ({ onClickClose }) => {
         </div>
 
         <div className="flex flex-row justify-center gap-4">
-          <button className="bg-[#FFBA41] hover:bg-[#00537B]  transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl">
+          <button
+            onClick={submitCreateFood}
+            className="bg-[#FFBA41] hover:bg-[#00537B]  transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
+          >
             บันทึก
           </button>
           <button
             onClick={() => {
-              onClickClose(false);
+              setOpenAdd(false);
             }}
             className="bg-[#F44D4D] hover:bg-[#00537B]  transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
           >
