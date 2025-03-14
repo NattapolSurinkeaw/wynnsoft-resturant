@@ -2,7 +2,7 @@ import React from "react";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 
-function SaveAsPDF(elementId , today ,order_number) {
+function SaveAsPDF(elementId, today, order_number) {
   console.log("Generating PDF for:", today, order_number); // ตรวจสอบค่าที่ได้รับ
   if (!today || !order_number) {
     console.error("Error: Missing today or order_number");
@@ -15,74 +15,74 @@ function SaveAsPDF(elementId , today ,order_number) {
     return;
   }
 
-  // toPng(dom, { pixelRatio: 3 })
-  //   .then((dataUrl) => {
-  //     console.log("Generated image data URL:", dataUrl);
-  //     const img = new Image();
-  //     img.crossOrigin = "anonymous";
-  //     img.src = dataUrl;
-  //     img.onload = () => {
-  //       console.log("Image loaded");
+  toPng(dom, { pixelRatio: 3 })
+    .then((dataUrl) => {
+      console.log("Generated image data URL:", dataUrl);
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = dataUrl;
+      img.onload = () => {
+        console.log("Image loaded");
 
-  //       const pdf = new jsPDF({
-  //         orientation: "portrait",
-  //         unit: "mm",
-  //         format: "a4", //"a4" ✅ ใช้ค่าตัวเลข
-  //       });
-
-  //       pdf.addImage(dataUrl, "PNG", 10, 10, 180, 0);
-  //       console.log("Saving PDF...");
-  //       if (order_number) {
-  //         pdf.save(`receipt-${today}-bill-${order_number}.pdf`);
-  //       } else {
-  //         pdf.save(`receipt-${today}-bill.pdf`);
-  //       }
-  //     };
-  //   })
-  //   .catch((error) => {
-  //     console.error("oops, something went wrong!", error);
-  //   });
- 
-  toPng(dom, { pixelRatio: 3 }) // ใช้ pixelRatio 2x เพื่อความคมชัดที่ดีขึ้น
-        .then((dataUrl) => {
-            console.log("Image data URL generated");
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.src = dataUrl;
-            img.onload = () => {
-                console.log("Image loaded");
-
-                const pdfWidth = 80; // ความกว้างของ PDF เป็น 80 มม.
-                const padding = 2; // Padding 1rem (ประมาณ 4.23 มม.)
-
-                // คำนวณความสูงของ PDF โดยคำนวณจากอัตราส่วนของภาพ
-                const aspectRatio = img.height / img.width;
-                const pdfHeight = pdfWidth * aspectRatio; // ความสูงของ PDF ตามอัตราส่วนภาพ
-
-                // สร้าง PDF
-                const pdf = new jsPDF({
-                    orientation: "portrait",
-                    unit: "mm", // หน่วยเป็นมิลลิเมตร
-                    format: [pdfWidth, pdfHeight + 2 * padding], // ขนาด PDF ที่กำหนดจากการคำนวณพร้อม padding
-                });
-
-                const imgProps = pdf.getImageProperties(img);
-                const imageType = imgProps.fileType;
-
-                // เพิ่ม padding ที่แกน X
-                const xPosition = padding; // ตำแหน่ง X ของภาพที่มี padding
-                const imgWidthWithPadding = pdfWidth - 2 * padding; // ความกว้างของภาพหลังจากลบ padding
-
-                // เพิ่มภาพลงใน PDF
-                pdf.addImage(dataUrl, imageType, xPosition, padding, imgWidthWithPadding, pdfHeight);
-
-                console.log("Saving PDF...");
-                pdf.save(`receipt-${today}-bill.pdf`);
-            };
-        })
-        .catch((error) => {
-            console.error("oops, something went wrong!", error);
+        const pdf = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4", //"a4" ✅ ใช้ค่าตัวเลข
         });
+
+        pdf.addImage(dataUrl, "PNG", 10, 10, 180, 0);
+        console.log("Saving PDF...");
+        if (order_number) {
+          pdf.save(`receipt-${today}-bill-${order_number}.pdf`);
+        } else {
+          pdf.save(`receipt-${today}-bill.pdf`);
+        }
+      };
+    })
+    .catch((error) => {
+      console.error("oops, something went wrong!", error);
+    });
+
+  // toPng(dom, { pixelRatio: 3 }) // ใช้ pixelRatio 2x เพื่อความคมชัดที่ดีขึ้น
+  //       .then((dataUrl) => {
+  //           console.log("Image data URL generated");
+  //           const img = new Image();
+  //           img.crossOrigin = "anonymous";
+  //           img.src = dataUrl;
+  //           img.onload = () => {
+  //               console.log("Image loaded");
+
+  //               const pdfWidth = 80; // ความกว้างของ PDF เป็น 80 มม.
+  //               const padding = 2; // Padding 1rem (ประมาณ 4.23 มม.)
+
+  //               // คำนวณความสูงของ PDF โดยคำนวณจากอัตราส่วนของภาพ
+  //               const aspectRatio = img.height / img.width;
+  //               const pdfHeight = pdfWidth * aspectRatio; // ความสูงของ PDF ตามอัตราส่วนภาพ
+
+  //               // สร้าง PDF
+  //               const pdf = new jsPDF({
+  //                   orientation: "portrait",
+  //                   unit: "mm", // หน่วยเป็นมิลลิเมตร
+  //                   format: [pdfWidth, pdfHeight + 2 * padding], // ขนาด PDF ที่กำหนดจากการคำนวณพร้อม padding
+  //               });
+
+  //               const imgProps = pdf.getImageProperties(img);
+  //               const imageType = imgProps.fileType;
+
+  //               // เพิ่ม padding ที่แกน X
+  //               const xPosition = padding; // ตำแหน่ง X ของภาพที่มี padding
+  //               const imgWidthWithPadding = pdfWidth - 2 * padding; // ความกว้างของภาพหลังจากลบ padding
+
+  //               // เพิ่มภาพลงใน PDF
+  //               pdf.addImage(dataUrl, imageType, xPosition, padding, imgWidthWithPadding, pdfHeight);
+
+  //               console.log("Saving PDF...");
+  //               pdf.save(`receipt-${today}-bill.pdf`);
+  //           };
+  //       })
+  //       .catch((error) => {
+  //           console.error("oops, something went wrong!", error);
+  //       });
 
   // toPng(dom, { pixelRatio: 3 })
   //   .then((dataUrl) => {
@@ -115,6 +115,5 @@ function SaveAsPDF(elementId , today ,order_number) {
   //   .catch((error) => {
   //     console.error("oops, something went wrong!", error);
   //   });
-
-  }
+}
 export default SaveAsPDF;

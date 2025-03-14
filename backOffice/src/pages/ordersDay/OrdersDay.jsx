@@ -1,4 +1,4 @@
-import React, { useEffect,useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
 import { Link } from "react-router-dom";
@@ -126,8 +126,6 @@ function OrdersDay() {
     selectedTable
   );
 
-  // console.log(filteredOrders);
-
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = filteredOrders.slice(
@@ -150,7 +148,7 @@ function OrdersDay() {
   };
 
   return (
-    <div className="flex flex-col justify-start gap-6 w-full h-full flex-1">
+    <div className="flex flex-col justify-start gap-4 w-full">
       <div className="flex 2xl:flex-row flex-col gap-4 w-full justify-between 2xl:items-center">
         <div className="flex flex-shrink-0 gap-2 justify-start items-center">
           <AssignmentIndOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
@@ -325,17 +323,17 @@ function OrdersDay() {
         </div>
       </div>
 
-      <div className="h-screen flex flex-col overflow-auto hide-scrollbar">
-        <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 h-[450px] gap-y-2 gap-x-3 ">
+      <div className="h-auto flex flex-col overflow-auto hide-scrollbar">
+        <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 h-full gap-3 ">
           {currentOrders.length === 0 ? (
-            <div className="flex justify-center items-center w-full py-10 col-span-4">
+            <div className="flex justify-center items-center w-full py-10 col-span-4 h-full">
               <p className="text-lg text-gray-500">ไม่มีข้อมูล</p>
             </div>
           ) : (
             currentOrders.map((order) => (
               <div
                 key={order.id}
-                className="bg-white rounded-lg py-3 px-6 w-full h-full flex flex-col gap-2 shadow"
+                className="bg-white rounded-lg py-3 px-6 w-full h-full flex flex-col gap-2 shadow "
               >
                 <div className="flex justify-between gap-4 items-center">
                   <div className="flex gap-2 h-full">
@@ -356,15 +354,15 @@ function OrdersDay() {
                   </div>
                   <div
                     className={`max-w-[120px] w-full text-center text-white rounded-full p-1 
-              ${
-                order.status === "1"
-                  ? "bg-[#39C526]"
-                  : order.status === "2"
-                  ? "bg-[#FF6A00]"
-                  : order.status === "3"
-                  ? "bg-[#F92727]"
-                  : ""
-              }`}
+                  ${
+                    order.status === "1"
+                      ? "bg-[#39C526]"
+                      : order.status === "2"
+                      ? "bg-[#FF6A00]"
+                      : order.status === "3"
+                      ? "bg-[#F92727]"
+                      : ""
+                  }`}
                   >
                     {order.status === "1"
                       ? "ครบเเล้ว"
@@ -395,7 +393,7 @@ function OrdersDay() {
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-1 w-full h-[90px] ">
+                <div className="flex flex-col gap-1 w-full h-[100px] ">
                   {order.orderList.slice(0, 3).map((menu) => (
                     <div
                       key={menu.id}
@@ -456,6 +454,7 @@ function OrdersDay() {
       </div>
 
       {/*  pagination */}
+
       <div className="flex justify-end gap-1 bg-white w-fit ml-auto border border-[#DFDFDF] rounded-sm">
         <button
           onClick={handlePrevious}
