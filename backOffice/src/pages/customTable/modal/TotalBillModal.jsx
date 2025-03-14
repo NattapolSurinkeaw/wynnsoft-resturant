@@ -95,12 +95,12 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
             <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
           </div>
           <div className="flex items-start justify-between px-6 ">
-            <p className="text-[18px] font-[500] text-[#313131]">ภาษี 7%</p>
+            <p className="text-[18px] font-[500] text-[#313131]">ภาษี {tax}%</p>
             <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
           </div>
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">
-              Service charge 5%
+               Service charge {serviceCharge}%
             </p>
             <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
           </div>

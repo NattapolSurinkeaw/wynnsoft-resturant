@@ -34,7 +34,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
     const grouped = detailData.menuDetails.reduce((acc, item) => {
       const existingItem = acc.find((menu) => menu.name === item.name);
       if (existingItem) {
-        existingItem.count += item.count; // Add the counts together
+        existingItem.count += item.count;
       } else {
         acc.push({ ...item });
       }
@@ -170,7 +170,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
 
             {tax !== 0 && (
               <div className="flex justify-between">
-                <p className="lg:text-base text-sm font-[500]">ภาษี 7%</p>
+                <p className="lg:text-base text-sm font-[500]">ภาษี {tax}%</p>
                 <p className="lg:text-base text-sm font-[400]">
                   {formatNumber(taxTotal)} ฿
                 </p>
@@ -180,7 +180,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
             {serviceCharge !== 0 && (
               <div className="flex justify-between">
                 <p className="lg:text-base text-sm font-[500]">
-                  Service charge 5%
+                   Service charge {serviceCharge}%
                 </p>
                 <p className="lg:text-base text-sm font-[400]">
                   {formatNumber(serviceChargeTotal)} ฿
@@ -262,7 +262,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
 
 
       {showPdfContent && (
-      <div style={{ position: "absolute", left: "-9999px" }}>
+      <div style={{ position: "absolute", left: "-999999px" }}>
         <div ref={pdfRef}>
           <OrderDetail_PDF
             detailData={detailData}

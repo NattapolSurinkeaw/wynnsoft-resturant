@@ -25,8 +25,8 @@ function OrderDetail_PDF({
   const Tatal = grandTotal + taxTotal;
 
   return (
-    <div id="print" className="w-[500px] rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
-      <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg">
+    <div id="print" className="w-full rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
+      <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg h-[90px]">
         <div className="flex gap-4 items-center">
           <div className="bg-white rounded-lg p-2 w-[80px] h-[80px] flex flex-col justify-center items-center flex-shrink-0">
             <p className="text-lg text-[#00537B] font-[600]">โต๊ะ</p>

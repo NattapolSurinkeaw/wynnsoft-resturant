@@ -80,7 +80,7 @@ function Sidebar({ isSidebarOpen }) {
           to="ordersDay"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 "
           ${
-            location.pathname === "/ordersDay"
+          location.pathname.startsWith("/ordersDay")
               ? "bg-white"
               : "hover:bg-white group"
           }`}
@@ -89,14 +89,14 @@ function Sidebar({ isSidebarOpen }) {
             <AssignmentIndOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-                location.pathname === "/ordersDay"
+              location.pathname.startsWith("/ordersDay")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-                location.pathname === "/ordersDay"
+              location.pathname.startsWith("/ordersDay")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
@@ -106,7 +106,7 @@ function Sidebar({ isSidebarOpen }) {
           </div>
           <div
             className={`flex justify-center items-center w-6 h-6 rounded-md ${
-              location.pathname === "/ordersDay"
+              location.pathname.startsWith("/ordersDay")
                 ? "text-white bg-[#00537B]"
                 : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
             }`}
