@@ -34,11 +34,11 @@ export const Foods = sequelize.define('Foods',
     },
     thumbnail_title: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: true
     },
     thumbnail_link: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     status_food: {
       type: DataTypes.BOOLEAN,

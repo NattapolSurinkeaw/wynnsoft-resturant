@@ -390,7 +390,7 @@ function CategoryFood() {
                 },
               },
             }}
-            pageSizeOptions={[5]}
+            pageSizeOptions={[5,10]}
             disableSelectionOnClick
           />
         </Box>

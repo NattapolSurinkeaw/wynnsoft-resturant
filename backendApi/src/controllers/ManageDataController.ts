@@ -19,6 +19,8 @@ export class ManageDataController {
   };
 
   OnCreateCategoryFood = async (req: any, res: any) => {
+    console.log(req.file);
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -39,7 +41,7 @@ export class ManageDataController {
           status: false,
           message: "error",
           title: "เกิดข้อผิดพลาด!",
-          description: "มีหมวดหมู่นี้อยู่แล้ว",
+          description: "มีหมวดหมู่อาหารนี้อยู่แล้ว",
         });
       }
 
@@ -240,11 +242,26 @@ export class ManageDataController {
       return res.status(400).json({
         status: false,
         message: "error",
+        title: "เกิดข้อผิดพลาด!",
+        description: "กรุณากรอกข้อมูลให้ครบ",
         errorMessage: errors.array(),
       });
     }
 
     try {
+      // throw new Error("นี่เป็นข้อผิดพลาดที่จำลองขึ้นมาเพื่อทดสอบ catch!");
+
+      const { name } = req.body;
+      const existingCategory = await Foods.findOne({ where: { name } });
+      if (existingCategory) {
+        return res.status(400).json({
+          status: false,
+          message: "error",
+          title: "เกิดข้อผิดพลาด!",
+          description: "มีเมนูอาหารนี้อยู่แล้ว",
+        });
+      }
+
       let image = null;
       if (req.file) {
         let upload = "/uploads" + req.file.destination.split("uploads").pop();
@@ -271,45 +288,60 @@ export class ManageDataController {
           });
       }
 
-      const status_display = req.body.display === "true" ? 1 : 0;
-      const best_seller = req.body.best_seller === "true" ? 1 : 0;
-
       const food = await Foods.create({
         cate_id: req.body.cate_id,
         name: req.body.name,
         price: req.body.price,
         special_price: req.body.special_price,
-        best_seller: best_seller,
+        best_seller: req.body.best_seller,
         details: req.body.details,
         thumbnail_link: image,
-        thumbnail_title: req.body.thumbnail_title,
-        display: status_display,
+        thumbnail_title: null,
+        display: req.body.display,
+        status_food: req.body.status_food,
       });
-      return res.status(200).json({
+      return res.status(201).json({
         status: true,
-        message: "get data foods",
+        message: "ok",
+        title: "สำเร็จ!",
+        description: "เพิ่มเมนูอาหารเรียบร้อยแล้ว",
         data: food,
       });
-    } catch (error) {
+    } catch (error: any) {
       return res.status(500).json({
         status: false,
-        message: error,
-        description: "something went wrong.",
+        message: "error",
+        title: "เกิดข้อผิดพลาด!",
+        description: "ไม่สามารถเพิ่มเมนูอาหารนี้ได้ กรุณาลองใหม่อีกครั้ง",
+        errorsMessage: error.message,
       });
     }
   };
   OnUpdateFood = async (req: any, res: any) => {
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
         status: false,
         message: "error",
+        title: "เกิดข้อผิดพลาด",
+        description: "กรุณากรอกข้อมูลให้ครบ",
         errorMessage: errors.array(),
       });
     }
 
     try {
+      // throw new Error("นี่เป็นข้อผิดพลาดที่จำลองขึ้นมาเพื่อทดสอบ catch!");
+
       const food = await Foods.findOne({ where: { id: req.params.id } });
+      if (!food) {
+        return res.status(404).json({
+          status: false,
+          message: "error",
+          title: "เกิดข้อผิดพลาด!",
+          description: "ไม่พบข้อมูล",
+        });
+      }
 
       if (req.file) {
         let upload = "/uploads" + req.file.destination.split("uploads").pop();
@@ -338,32 +370,35 @@ export class ManageDataController {
         food.thumbnail_link = image;
       }
 
-      const status_display = req.body.display === "true" ? 1 : 0;
-      const best_seller = req.body.best_seller === "true" ? 1 : 0;
-
       food.cate_id = req.body.cate_id;
       food.name = req.body.name;
       food.price = req.body.price;
       food.special_price = req.body.special_price;
-      food.best_seller = best_seller;
+      food.best_seller = req.body.best_seller;
       food.details = req.body.details;
-      food.thumbnail_title = req.body.thumbnail_title;
-      food.display = status_display;
+      food.thumbnail_title = null;
+      food.display = req.body.display;
+      food.status_food = req.body.status_food;
       food.save();
 
       return res.status(200).json({
         status: true,
-        message: "get data foods",
+        message: "ok",
+        title: "สำเร็จ!",
+        description: "ข้อมูลเมนูอาหารถูกอัปเดตแล้ว",
         data: food,
       });
-    } catch (error) {
+    } catch (error: any) {
       return res.status(500).json({
         status: false,
-        message: error,
-        description: "something went wrong.",
+        message: "error",
+        title: "เกิดข้อผิดพลาด!",
+        description: "ไม่สามารถลบเมนูอาหารนี้ได้ กรุณาลองใหม่อีกครั้ง",
+        errorsMessage: error.message,
       });
     }
   };
+
   OnDeleteFood = async (req: any, res: any) => {
     try {
       // throw new Error("นี่เป็นข้อผิดพลาดที่จำลองขึ้นมาเพื่อทดสอบ catch!");
