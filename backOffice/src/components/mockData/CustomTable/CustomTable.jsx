@@ -5,6 +5,9 @@ export const CustomTable = [
     qrcode: "/images/001.jpg",
     priority: 1,
     status: 2,
+    table_token: "0801ab50-84fd-4567-93c1-f7957464567e",
+    call_staff: false,
+    display: true,
   },
   {
     id: 2,

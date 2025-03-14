@@ -104,6 +104,7 @@ const EditFood = ({
       selectedCategories.sort((a, b) => a - b).join(",")
     );
     formData.append("thumbnail_link", inputProfileImage.current.files[0]);
+    formData.append("status_food", selectedStatus === true ? 1 : 0);
     getUpdateFood(selectedRow.id, formData)
       .then((res) => {
         SwalUI({

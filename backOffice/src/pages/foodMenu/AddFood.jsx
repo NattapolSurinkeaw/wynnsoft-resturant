@@ -75,6 +75,8 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
     }
   }, [selectedStatus]);
 
+  console.log(selectedStatus)
+
   const submitCreateFood = () => {
     const formData = new FormData();
     formData.append("name", nameFood);
@@ -88,6 +90,7 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
       selectedCategories.sort((a, b) => a - b).join(",")
     );
     formData.append("thumbnail_link", inputProfileImage.current.files[0]);
+    formData.append("status_food", selectedStatus === true ? 1 : 0);
     getCreateFood(formData)
       .then((res) => {
         SwalUI({

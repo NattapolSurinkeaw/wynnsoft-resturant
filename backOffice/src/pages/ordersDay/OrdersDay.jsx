@@ -1,14 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect,useRef, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
-import { foodDetail } from "../../components/mockData/foodMenu";
-import { order_history } from "../../components/mockData/OrderHistory";
-import { CustomTable } from "../../components/mockData/CustomTable/CustomTable";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
-import Pagination from "@mui/material/Pagination";
-import { ButtonGroup } from "@mui/joy";
+import { orderToday } from "../../components/mockData/orderToDay";
+
 function OrdersDay() {
   dayjs.locale("th");
   const [selectedStatusMenu, setSelectedStatusMenu] = useState(null);
@@ -57,111 +54,89 @@ function OrdersDay() {
     }
   }, [selectedStatusMenu, selectedTable]);
 
-  const clearFiltersStatusMenu = () => {
-    setSelectedStatusMenu(null);
-  };
-
-  const clearFiltersTable = () => {
-    setSelectedTable(null);
-  };
-
   const getFilteredOrderDetails = (
-    order_history,
-    CustomTable,
-    foodDetail,
+    orderToday,
     selectedStatusMenu,
     selectedTable
   ) => {
-    return (
-      order_history
-        .map((order) => {
-          // Find the table from CustomTable
-          const table = CustomTable.find((table) => table.id === order.tableID);
+    return orderToday
+      .map((order) => {
+        const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
+        const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
 
-          // Find the menu details from foodDetail
-          const menuDetails = foodDetail.filter((food) =>
-            order.menuID.includes(food.id)
-          );
+        let totalPrice = 0;
+        let totalSpecialPrice = 0;
+        let totalPriceAll = 0;
 
-          const formattedDate = dayjs(order.createdAt, "DD-MM-YYYY").format(
-            "DD MMMM YYYY"
-          );
-
-          let totalPrice = 0;
-          let totalSpecialPrice = 0;
-          let totalPriceAll = 0;
-
-          order.menuID.forEach((menuId) => {
-            const foodItem = foodDetail.find((food) => food.id === menuId);
-            if (foodItem) {
-              const count = foodItem.count || 1;
-              const price = foodItem.price || 0;
-              const specialPrice = foodItem.specialPrice || price;
-
-              totalPrice += price * count;
-              totalPriceAll += specialPrice * count;
-
-              if (foodItem.specialPrice) {
-                totalSpecialPrice += specialPrice * count;
-              }
+        // รวมจำนวน (`amount`) ของเมนูที่ชื่อซ้ำกัน
+        const mergedOrderList = Object.values(
+          order.orderList.reduce((acc, orderItem) => {
+            const foodName = orderItem.food.name;
+            if (!acc[foodName]) {
+              acc[foodName] = { ...orderItem };
+            } else {
+              acc[foodName].amount += orderItem.amount;
             }
-          });
+            return acc;
+          }, {})
+        );
 
-          const totalDiscount = totalPrice - totalPriceAll;
+        mergedOrderList.forEach((orderItem) => {
+          const foodItem = orderItem.food;
+          if (foodItem) {
+            const count = orderItem.amount || 1;
+            const price = foodItem.price || 0;
+            const specialPrice = foodItem.special_price || price;
 
-          return {
-            ...order,
-            table: table ? table.name_table : "ไม่มีข้อมูลโต๊ะ",
-            tableQRCode: table ? table.qrcode : "",
-            menu: menuDetails.map((food) => ({
-              name: food.name,
-              price: food.price,
-              specialPrice: food.specialPrice,
-              count: food.count,
-              detail: food.detail,
-              image: food.images,
-            })),
-            formattedDate,
-            totalPrice,
-            totalSpecialPrice,
-            totalDiscount,
-            totalPriceAll,
-          };
-        })
-        // Filter by selected status
-        .filter((order) => {
-          if (selectedStatusMenu) {
-            return order.statusOrder === selectedStatusMenu;
+            totalPrice += price * count;
+            totalPriceAll += specialPrice * count;
+
+            if (foodItem.special_price) {
+              totalSpecialPrice += specialPrice * count;
+            }
           }
-          return true; // No filtering if no status is selected
-        })
-        // Filter by selected table
-        .filter((order) => {
-          if (selectedTable) {
-            return order.tableID === selectedTable;
-          }
-          return true; // No filtering if no table is selected
-        })
-    );
+        });
+
+        const totalDiscount = totalPrice - totalPriceAll;
+
+        return {
+          ...order,
+          orderList: mergedOrderList, // ใช้รายการออเดอร์ที่รวมจำนวนแล้ว
+          table: order.table ? order.table.title : "ไม่มีข้อมูลโต๊ะ",
+          table_id: order.table?.id || null,
+          formattedDate,
+          formattedTime,
+          totalPrice,
+          totalSpecialPrice,
+          totalDiscount,
+          totalPriceAll,
+        };
+      })
+      .filter((order) => {
+        // กรองตามสถานะและโต๊ะ
+        const statusMatch =
+          !selectedStatusMenu || order.status === selectedStatusMenu;
+        const tableMatch = !selectedTable || order.table_id === selectedTable;
+        return statusMatch && tableMatch;
+      });
   };
-
-  const combinedOrderDetails = getFilteredOrderDetails(
-    order_history,
-    CustomTable,
-    foodDetail,
+  const filteredOrders = getFilteredOrderDetails(
+    orderToday,
     selectedStatusMenu,
     selectedTable
   );
 
-  console.log(combinedOrderDetails);
+  // console.log(filteredOrders);
+
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = combinedOrderDetails.slice(
+  const currentOrders = filteredOrders.slice(
     indexOfFirstOrder,
     indexOfLastOrder
   );
 
-  const totalPages = Math.ceil(combinedOrderDetails.length / ordersPerPage);
+  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+
   const handleNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -218,7 +193,7 @@ function OrdersDay() {
             </div>
 
             {/* สินค้าขายดี */}
-            <div className="absolute w-full h-full z-99">
+            <div className="absolute w-full h-full z-50">
               {showStatusMenu && (
                 <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow">
                   <div
@@ -228,7 +203,7 @@ function OrdersDay() {
                         : ""
                     }`}
                     onClick={() => {
-                      clearFiltersStatusMenu();
+                      setSelectedStatusMenu(null);
                       setShowStatusMenu(false);
                     }}
                   >
@@ -236,45 +211,26 @@ function OrdersDay() {
                   </div>
                   <div className="border-t border-[#e6e6e6] rounded-full w-full"></div>
 
-                  <div
-                    className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                      selectedStatusMenu === "1"
-                        ? "bg-[#F5A100] text-white"
-                        : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedStatusMenu("1");
-                      setShowStatusMenu(false);
-                    }}
-                  >
-                    ครบเเล้ว
-                  </div>
-                  <div
-                    className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                      selectedStatusMenu === "2"
-                        ? "bg-[#F5A100] text-white"
-                        : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedStatusMenu("2");
-                      setShowStatusMenu(false);
-                    }}
-                  >
-                    พร้อมเสริฟ
-                  </div>
-                  <div
-                    className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                      selectedStatusMenu === "3"
-                        ? "bg-[#F5A100] text-white"
-                        : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedStatusMenu("3");
-                      setShowStatusMenu(false);
-                    }}
-                  >
-                    เรียกพนักงาน
-                  </div>
+                  {[
+                    { id: "1", label: "ครบเเล้ว" },
+                    { id: "2", label: "พร้อมเสริฟ" },
+                    { id: "3", label: "เรียกพนักงาน" },
+                  ].map(({ id, label }) => (
+                    <div
+                      key={id}
+                      className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                        selectedStatusMenu === id
+                          ? "bg-[#F5A100] text-white"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setSelectedStatusMenu(id);
+                        setShowStatusMenu(false);
+                      }}
+                    >
+                      {label}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -292,10 +248,12 @@ function OrdersDay() {
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
                   {selectedTable
-                    ? CustomTable.find((c) => c.id === selectedTable)
-                        ?.name_table
+                    ? orderToday.find(
+                        (order) => order.table_id === selectedTable
+                      )?.table?.title || "ไม่พบโต๊ะ"
                     : "เลือกโต๊ะ"}
                 </p>
+
                 <figure
                   className={`lg:w-[30px] w-[25px] lg:h-[30px] h-[25px] transition-all duration-300 ${
                     !showTable ? "" : "rotate-180"
@@ -311,37 +269,45 @@ function OrdersDay() {
             </div>
 
             {/* ชื่อโต๊ะ */}
-            <div className="absolute w-full h-full z-99">
+            <div className="absolute w-full h-full z-50">
               {showTable && (
-                <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow h-[400px] overflow-y-auto">
+                <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow max-h-[400px] overflow-y-auto">
                   <div
                     className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
                       selectedTable === null ? "bg-[#F5A100] text-white" : ""
                     }`}
                     onClick={() => {
-                      clearFiltersTable();
-                      setTimeout(() => setShowTable(false), 0);
+                      setSelectedTable(null);
+                      setTimeout(() => setShowTable(false), 100);
                     }}
                   >
                     ทั้งหมด
                   </div>
                   <div className="border-t border-[#e6e6e6] rounded-full w-full"></div>
-                  {CustomTable.map((table) => (
-                    <div
-                      key={table.id}
-                      className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                        selectedTable === table.id
-                          ? "bg-[#F5A100] text-white"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        setSelectedTable(table.id);
-                        setShowTable(false);
-                      }}
-                    >
-                      {table.name_table}
-                    </div>
-                  ))}
+                  {orderToday
+                    .filter(
+                      (value, index, self) =>
+                        index ===
+                        self.findIndex(
+                          (t) => t.table.title === value.table.title
+                        )
+                    )
+                    .map((table) => (
+                      <div
+                        key={table.table.id}
+                        className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
+                          selectedTable === table.table.id
+                            ? "bg-[#F5A100] text-white"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          setSelectedTable(table.table.id);
+                          setShowTable(false);
+                        }}
+                      >
+                        {table.table.title}
+                      </div>
+                    ))}
                 </div>
               )}
             </div>
@@ -358,119 +324,134 @@ function OrdersDay() {
           </Link>
         </div>
       </div>
-      <div className="h-screen flex flex-col justify-between overflow-auto hide-scrollbar">
-        <div className="grid xl:grid-cols-4 grid-cols-2 h-[450px] gap-4 ">
-          {currentOrders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-white rounded-lg py-4 px-6 w-full h-full flex flex-col gap-2 shadow"
-            >
-              <div className="flex justify-between gap-4 items-center">
-                <div className="flex gap-2 h-full">
-                  <div className="bg-[#FFBA41] flex flex-col justify-center items-center p-1.5 w-[60px] h-[60px] rounded-lg">
-                    <p className="text-white text-sm">โต๊ะ</p>
-                    <p className="text-white text-3xl font-[600]">
-                      {order.table}
-                    </p>
-                  </div>
-                  <div className="flex flex-col justify-between h-full">
-                    <p className="text-[#013D59] font-[600] text-xl">
-                      #{order.order_number}
-                    </p>
-                    <p className="text-[#00537B]">
-                      {order.menu.length} ออเดอร์
-                    </p>
-                  </div>
-                </div>
-                <div
-                  className={`max-w-[120px] w-full text-center text-white rounded-full p-1 
-                ${
-                  order.statusOrder === "1"
-                    ? "bg-[#39C526]"
-                    : order.statusOrder === "2"
-                    ? "bg-[#FF6A00]"
-                    : order.statusOrder === "3"
-                    ? "bg-[#F92727]"
-                    : ""
-                }`}
-                >
-                  {order.statusOrder === "1"
-                    ? "ครบเเล้ว"
-                    : order.statusOrder === "2"
-                    ? "พร้อมเสริฟ"
-                    : order.statusOrder === "3"
-                    ? "เรียกพนักงาน"
-                    : ""}
-                </div>
-              </div>
-              <div className="flex justify-between gap-4 items-center">
-                <p className="text-base text-[#00537B] font-[500]">
-                  {order.formattedDate}
-                </p>
-                <p className="text-base text-[#00537B] font-[500]">
-                  {order.time}
-                </p>
-              </div>
-              <div className="border-y-2 border-[#CACACA] py-1 flex justify-between gap-2 w-full">
-                <p className="w-[60%] text-[#8F8F8F] text-base font-[500]">
-                  รายการ
-                </p>
-                <p className="w-[10%] text-center text-[#8F8F8F] text-base font-[500]">
-                  จำนวน
-                </p>
-                <p className="w-[20%] text-right text-[#8F8F8F] text-base font-[500]">
-                  ราคา
-                </p>
-              </div>
 
-              <div className="flex flex-col gap-2 w-full max-h-[200px] h-full ">
-                {order.menu.slice(0, 5).map((menu) => (
-                  <div
-                    key={menu.name}
-                    className="flex justify-between w-full items-center gap-2"
-                  >
-                    <p className="w-[60%] text-[#013D59] text-base font-[500] line-clamp-1">
-                      {menu.name}
-                    </p>
-                    <p className="w-[10%] text-center text-[#013D59] text-base font-[500]">
-                      {menu.count}
-                    </p>
-                    <div className="flex flex-col w-[20%]">
-                      {menu.specialPrice > 0 && (
-                        <p className="text-right text-[#013D59] text-[10px] line-through">
-                          {menu.price}
-                        </p>
-                      )}
-                      <p className="text-right text-[#013D59] text-base font-[500]">
-                        {menu.price || menu.specialPrice}
+      <div className="h-screen flex flex-col overflow-auto hide-scrollbar">
+        <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 h-[450px] gap-y-2 gap-x-3 ">
+          {currentOrders.length === 0 ? (
+            <div className="flex justify-center items-center w-full py-10 col-span-4">
+              <p className="text-lg text-gray-500">ไม่มีข้อมูล</p>
+            </div>
+          ) : (
+            currentOrders.map((order) => (
+              <div
+                key={order.id}
+                className="bg-white rounded-lg py-3 px-6 w-full h-full flex flex-col gap-2 shadow"
+              >
+                <div className="flex justify-between gap-4 items-center">
+                  <div className="flex gap-2 h-full">
+                    <div className="bg-[#FFBA41] flex flex-col justify-center items-center p-1.5 w-[50px] h-[50px] rounded-lg">
+                      <p className="text-white text-sm leading-none">โต๊ะ</p>
+                      <p className="text-white text-2xl font-[600] leading-none">
+                        {order.table}
+                      </p>
+                    </div>
+                    <div className="flex flex-col justify-between h-full">
+                      <p className="text-[#013D59] font-[600] text-lg">
+                        #{order.order_number}
+                      </p>
+                      <p className="text-[#00537B]">
+                        {order.orderList.length} ออเดอร์
                       </p>
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div
+                    className={`max-w-[120px] w-full text-center text-white rounded-full p-1 
+              ${
+                order.status === "1"
+                  ? "bg-[#39C526]"
+                  : order.status === "2"
+                  ? "bg-[#FF6A00]"
+                  : order.status === "3"
+                  ? "bg-[#F92727]"
+                  : ""
+              }`}
+                  >
+                    {order.status === "1"
+                      ? "ครบเเล้ว"
+                      : order.status === "2"
+                      ? "พร้อมเสริฟ"
+                      : order.status === "3"
+                      ? "เรียกพนักงาน"
+                      : ""}
+                  </div>
+                </div>
+                <div className="flex justify-between gap-4 items-center">
+                  <p className="text-base text-[#00537B] font-[500]">
+                    {order.formattedDate}
+                  </p>
+                  <p className="text-base text-[#00537B] font-[500]">
+                    {order.formattedTime}
+                  </p>
+                </div>
+                <div className="border-y-2 border-[#CACACA] py-1 flex justify-between gap-2 w-full">
+                  <p className="w-[60%] text-[#8F8F8F] text-sm font-[500]">
+                    รายการ
+                  </p>
+                  <p className="w-[10%] text-center text-[#8F8F8F] text-sm font-[500]">
+                    จำนวน
+                  </p>
+                  <p className="w-[20%] text-right text-[#8F8F8F] text-sm font-[500]">
+                    ราคา
+                  </p>
+                </div>
 
-              <div className="border-b-2 border-[#00537B] w-full flex justify-center items-center">
-                <p className="w-[60%] text-[#00537B] text-base text-center font-[500]">
-                  + {order.menu.length > 5 ? order.menu.length - 5 : 0} รายการ
-                </p>
-              </div>
+                <div className="flex flex-col gap-1 w-full h-[90px] ">
+                  {order.orderList.slice(0, 3).map((menu) => (
+                    <div
+                      key={menu.id}
+                      className="flex justify-between w-full items-end  gap-2"
+                    >
+                      <p className="w-[60%] text-[#013D59] text-sm font-[500] line-clamp-1">
+                        {menu.food.name}
+                      </p>
+                      <p className="w-[10%] text-center text-[#013D59] text-sm font-[500]">
+                        {menu.amount}
+                      </p>
+                      <div className="flex flex-col w-[20%]">
+                        {menu.food.special_price > 0 && (
+                          <p className="text-right text-[#013D59] text-[8px] line-through">
+                            {menu.food.price * menu.amount}
+                          </p>
+                        )}
+                        <p className="text-right text-[#013D59] text-sm font-[500]">
+                          {(menu.food.special_price || menu.food.price) *
+                            menu.amount}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-              <div className="flex justify-between w-full">
-                <p className=" text-left text-[#013D59] text-2xl font-[600]">
-                  ยอดทั้งหมด
-                </p>
-                <p className=" text-right text-[#013D59] text-2xl font-[600]">
-                  ฿ {formatNumber(order.totalPriceAll)}
-                </p>
-              </div>
+                <div className="border-b-2 border-[#00537B] w-full flex justify-center items-center">
+                  <p className="w-[60%] text-[#00537B] text-sm text-center font-[500]">
+                    +{" "}
+                    {order.orderList.length > 3
+                      ? order.orderList.length - 3
+                      : 0}{" "}
+                    รายการ
+                  </p>
+                </div>
 
-              <div className="flex justify-center items-center">
-                <button className="bg-[#00537B] hover:bg-[#FFBA41] p-2 max-w-[150px] w-full text-white text-xl font-[500] rounded-lg cursor-pointer transition-all duration-200 ease-in-out">
-                  ดูรายละเอียด
-                </button>
+                <div className="flex justify-between w-full">
+                  <p className=" text-left text-[#013D59] text-xl font-[600]">
+                    ยอดทั้งหมด
+                  </p>
+                  <p className=" text-right text-[#013D59] text-xl font-[600]">
+                    ฿ {formatNumber(order.totalPriceAll)}
+                  </p>
+                </div>
+
+                <div className="flex justify-center items-center">
+                  <Link
+                    to={`/ordersDay/detail/${order.id}`}
+                    className="bg-[#00537B] hover:bg-[#FFBA41] text-center p-1 max-w-[150px] w-full text-white text-lg font-[500] rounded-lg cursor-pointer transition-all duration-200 ease-in-out"
+                  >
+                    ดูรายละเอียด
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 

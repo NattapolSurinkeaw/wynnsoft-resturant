@@ -41,7 +41,7 @@ export class ManageDataController {
           status: false,
           message: "error",
           title: "เกิดข้อผิดพลาด!",
-          description: "มีหมวดหมู่นี้อยู่แล้ว",
+          description: "มีหมวดหมู่อาหารนี้อยู่แล้ว",
         });
       }
 
@@ -250,6 +250,18 @@ export class ManageDataController {
 
     try {
       // throw new Error("นี่เป็นข้อผิดพลาดที่จำลองขึ้นมาเพื่อทดสอบ catch!");
+
+      const { name } = req.body;
+      const existingCategory = await Foods.findOne({ where: { name } });
+      if (existingCategory) {
+        return res.status(400).json({
+          status: false,
+          message: "error",
+          title: "เกิดข้อผิดพลาด!",
+          description: "มีเมนูอาหารนี้อยู่แล้ว",
+        });
+      }
+
       let image = null;
       if (req.file) {
         let upload = "/uploads" + req.file.destination.split("uploads").pop();
@@ -286,6 +298,7 @@ export class ManageDataController {
         thumbnail_link: image,
         thumbnail_title: null,
         display: req.body.display,
+        status_food: req.body.status_food,
       });
       return res.status(201).json({
         status: true,
@@ -365,6 +378,7 @@ export class ManageDataController {
       food.details = req.body.details;
       food.thumbnail_title = null;
       food.display = req.body.display;
+      food.status_food = req.body.status_food;
       food.save();
 
       return res.status(200).json({
