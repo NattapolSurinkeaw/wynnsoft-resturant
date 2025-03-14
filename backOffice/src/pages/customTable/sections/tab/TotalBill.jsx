@@ -4,16 +4,20 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Checkbox from "@mui/material/Checkbox";
+import { FoodListData } from "../../../../components/mockData/CustomTable/FoodListData";
 
 function TotalBill() {
   const [isTotalBill, setIsTotalBill] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedTableId, setSelectedTableId] = useState(null);
 
-  const handleTotalBillOnClick = () => {
+  const handleTotalBillOnClick = (id) => {
+    setSelectedTableId(id);
     setIsTotalBill(true);
   };
 
   const closeModal = () => {
+    setSelectedTableId(null);
     setIsTotalBill(false);
   };
 
@@ -34,14 +38,14 @@ function TotalBill() {
 
   return (
     <>
-      <TotalBillModal isTotalBill={isTotalBill} closeModal={closeModal} />
-      <div className="flex flex-col w-full min-h-[631px]">
+      <TotalBillModal isTotalBill={isTotalBill} closeModal={closeModal} selectedTableId={selectedTableId }  />
+      <div className="flex flex-col 2xl:w-full md:w-[500px] w-full mx-auto 2xl:min-h-[631px] min-h-auto">
         <div className="w-full h-full bg-white shadow-1 rounded-lg p-6">
           <p className="text-[18px] font-[500] text-[#313131]">
             เลือกโต๊ะรวมบิล
           </p>
 
-          {tables.map((table) => (
+          {FoodListData.map((table) => (
             <div
               key={table.id}
               className="flex items-center justify-between w-full border-b border-gray-300 py-2"
@@ -53,7 +57,7 @@ function TotalBill() {
                   onChange={() => handleCheckboxChange(table.id)}
                 />
                 <p className="text-[16px] font-[400] text-[#313131]">
-                  {table.name}
+                  โต๊ะ {table.name_table}
                 </p>
               </div>
               <p className="text-[16px] font-[400] text-[#313131]">ยอดรวม</p>
@@ -61,7 +65,7 @@ function TotalBill() {
                 {table.total.toLocaleString()} $
               </p>
               <button
-                onClick={handleTotalBillOnClick}
+                onClick={() => handleTotalBillOnClick(table.id)}
                 className="flex items-center justify-center gap-2 xl:w-[110px] w-[120px] shadow-md py-1 rounded-lg cursor-pointer text-white text-[14px] font-medium duration-300 transition-all bg-[#F5A100] hover:bg-[#ffa600] hover:shadow-xl hover:scale-105"
               >
                 <VisibilityOutlinedIcon

@@ -10,7 +10,7 @@ function EditTable() {
 
   return (
     <>
-      <div className="w-full h-[683px] p-6 bg-white shadow-1 rounded-lg">
+      <div className="2xl:w-full md:w-[500px] w-full mx-auto h-[683px] p-6 bg-white shadow-1 rounded-lg">
         <div className="flex justify-center items-center gap-6">
           <p className="text-[20px] text-[#313131] font-[500]">ชื่อ</p>
           <input

@@ -174,3 +174,8 @@ body {
   border:#00537b !important
 }
 /* DatePicker */
+
+
+.swal-popup-top {
+  z-index: 9999 !important; /* กำหนดให้ SweetAlert อยู่บนสุด */
+}

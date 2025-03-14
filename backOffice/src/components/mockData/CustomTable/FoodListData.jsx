@@ -5,6 +5,7 @@ export const FoodListData = [
     order_number: "000004",
     date: "16 พฤษภาคม 2024",
     qrcode: "/images/123.jpg",
+    total: 520,
     order_items: [
       {
         id: 1,
@@ -53,7 +54,8 @@ export const FoodListData = [
     name_table: "05",
     order_number: "003004",
     date: "16 พฤษภาคม 2024",
-    qrcode: "/images/123.jpg",
+    qrcode: "/images/1.jpg",
+    total: 750,
     order_items: [
       {
         id: 1,
@@ -102,7 +104,8 @@ export const FoodListData = [
     name_table: "06",
     order_number: "00054",
     date: "16 พฤษภาคม 2024",
-    qrcode: "/images/123.jpg",
+    qrcode: "/images/2.jpg",
+    total: 390,
     order_items: [
       {
         id: 1,
@@ -151,7 +154,8 @@ export const FoodListData = [
     name_table: "10",
     order_number: "00084",
     date: "16 พฤษภาคม 2024",
-    qrcode: "/images/123.jpg",
+    qrcode: "/images/11.jpg",
+    total: 690,
     order_items: [
       {
         id: 1,

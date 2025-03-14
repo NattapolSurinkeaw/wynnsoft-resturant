@@ -21,7 +21,7 @@ function CustomTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 24;
 
-  console.log("selectedTableId", selectedTableId);
+  // console.log("isEditTable", isEditTable);
 
   useEffect(() => {
     if (!isSettingOpen) {
@@ -73,7 +73,7 @@ function CustomTable() {
         isAddTable={isAddTable}
         setIsAddTable={setIsAddTable}
       />
-      <div className="flex 2xl:flex-row flex-col gap-6 w-full mt-6">
+      <div className="flex 2xl:flex-row flex-col-reverse gap-6 w-full mt-6">
         <Table
           isSettingOpen={isSettingOpen}
           currentPage={currentPage}
@@ -86,6 +86,7 @@ function CustomTable() {
           setIsFoodList={setIsFoodList}
           setIsAddTable={setIsAddTable}
           setIsEditTable={setIsEditTable}
+          isEditTable={isEditTable}
         />
         {isAddTable ? (
           <AddTable />
