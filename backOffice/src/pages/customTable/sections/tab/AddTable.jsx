@@ -4,9 +4,39 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import SaveIcon from "@mui/icons-material/Save";
+import { getCreateTable } from "../../../../services/table_manage.service";
+import Swal from "sweetalert2";
 
 function AddTable() {
   const [imageSrc, setImageSrc] = useState("");
+  const [title, setTitle] = useState("");
+  const [priority, setPriority] = useState(1);
+  const [display, setDisplay ] = useState(true);
+
+  const onSubmit = () => {
+    const params = {
+      title: title,
+      priority: priority,
+      display: display
+    }
+
+    if(!title) {
+      return false;
+    }
+
+    getCreateTable(params).then((res) => {
+      console.log(res);
+      if(res.status) {
+        Swal.fire({
+          position: "center",
+          text: "เพิ่มโต๊ะสำเร็จ!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      }
+    })
+  }
 
   return (
     <>
@@ -17,6 +47,8 @@ function AddTable() {
             type="text"
             className="w-[310px] border border-gray-300 text-gray-600 text-[16px] font-[500] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] "
             placeholder="ชื่อโต๊ะ..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <figure className="w-[360px] h-[360px] mx-auto mt-6 border-6 border-[#D9D9D9]">
@@ -32,18 +64,23 @@ function AddTable() {
         </button>
         <div className="border-t-2 border-gray-500 mt-6"></div>
         <div className="flex items-center justify-center mt-4">
-          <p className="mr-2 text-[18px] text-[#313131] font-[500]">ชื่อ</p>
+          <p className="mr-2 text-[18px] text-[#313131] font-[500]">ลำดับ</p>
           <input
             type="number"
             className="mr-12 w-[100px] h-[35px] border border-gray-300 text-gray-600 text-[16px] font-[500] rounded-sm  px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] "
             placeholder="เลข..."
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
           />
           <p className="mr-2 text-[18px] text-[#313131] font-[500]">แสดงผล</p>
           <FormControlLabel
             className="px-2 py-3"
             control={
               <Switch
-                defaultChecked
+                checked={display === true} // ถ้า checked เป็น 1 ให้เปิดสวิตช์
+                onChange={(event) =>
+                  setDisplay(event.target.checked ? true : false)
+                } // อัปเดตค่า 1 หรือ 0
                 sx={{
                   "& .MuiSwitch-switchBase.Mui-checked": {
                     color: "#39C526",
@@ -62,7 +99,9 @@ function AddTable() {
             ปริ้น QR
           </button> */}
 
-          <button className="mt-4 flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#00537B] to-[#0072A0] hover:from-[#004669] hover:to-[#005F85] hover:shadow-xl hover:scale-105">
+          <button className="mt-4 flex items-center justify-center gap-1 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#00537B] to-[#0072A0] hover:from-[#004669] hover:to-[#005F85] hover:shadow-xl hover:scale-105"
+            onClick={onSubmit}
+          >
             <SaveIcon sx={{ fontSize: 23 }} className="text-white" />
             บันทึก
           </button>

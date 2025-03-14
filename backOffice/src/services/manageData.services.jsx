@@ -104,3 +104,43 @@ export const getDeleteFood = (id) => {
       };
     });
 };
+
+export const getCreateFood = (formData) => {
+  return axios
+    .post("/api/backoffice/food", formData)
+    .then((res) => {
+      return {
+        status: res.data.status,
+        description: res.data.description,
+        title: res.data.title,
+        data: res.data.data,
+      };
+    })
+    .catch((err) => {
+      console.log(err)
+      throw {
+        status: err.response.data.status,
+        description: err.response.data.description,
+        title: err.response.data.title,
+      };
+    });
+};
+
+export const getUpdateFood = (id, formData) => {
+  return axios
+    .post(`/api/backoffice/food/${id}`, formData)
+    .then((res) => {
+      return {
+        status: res.data.status,
+        description: res.data.description,
+        title: res.data.title,
+      };
+    })
+    .catch((err) => {
+      throw {
+        status: err.response.data.status,
+        description: err.response.data.description,
+        title: err.response.data.title,
+      };
+    });
+};

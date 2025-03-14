@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -7,25 +8,25 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddCardOutlinedIcon from "@mui/icons-material/AddCardOutlined";
 import BookingModal from "../../modal/BookingModal";
 import { QRCodeCanvas } from "qrcode.react";
-import { ViewTableData } from "../../../../components/mockData/CustomTable/ViewTableData";
+// import { ViewTableData } from "../../../../components/mockData/CustomTable/ViewTableData";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import dayjs from "dayjs";
 
-function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
+function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, customTable }) {
   const [tableDetails, setTableDetails] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const contentRef = useRef();
 
   useEffect(() => {
-    if (!selectedTableId && ViewTableData.length > 0) {
-      setSelectedTableId(ViewTableData[0].id);
+    if (!selectedTableId && customTable.length > 0) {
+      setSelectedTableId(customTable[0].id);
     }
   }, [selectedTableId, setSelectedTableId]);
 
   useEffect(() => {
     if (selectedTableId) {
-      const table = ViewTableData.find((table) => table.id === selectedTableId);
+      const table = customTable.find((table) => table.id === selectedTableId);
       if (table) {
         setTableDetails(table);
       } else {
@@ -78,6 +79,7 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
     }
   };
 
+  console.log(tableDetails)
   return (
     <>
       <BookingModal isOpen={isModalOpen} onClose={handleCloseModal} />
@@ -91,7 +93,7 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
           <div className="flex justify-around items-center gap-6">
             <p className="text-[20px] text-[#313131] font-[500]">ชื่อ</p>
             <p className="text-[35px] text-[#313131] font-[700]">
-              โต๊ะ {tableDetails.name_table}
+              โต๊ะ {tableDetails.title}
             </p>
             <button onClick={handleEditClick}>
               <BorderColorIcon
@@ -104,7 +106,13 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
             ref={contentRef}
             className="w-[360px] h-[360px] flex justify-center items-center mx-auto mt-6 border-6 border-[#D9D9D9]"
           >
-            <QRCodeCanvas size={343} value={tableDetails.qrcode} />
+            <img
+              className="w-full h-full"
+              src={tableDetails.qrcode || "/images/not_qrcode.jpg"}
+              alt="QRCode"
+            />
+            
+            {/* <QRCodeCanvas size={343} value={tableDetails.qrcode} /> */}
           </figure>
           <div className="border-t-2 border-gray-500 mt-8"></div>
           <div className="flex items-center justify-center mt-4">
@@ -122,7 +130,7 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId }) {
               className="px-2 py-3"
               control={
                 <Switch
-                  checked={tableDetails.status === 1}
+                  checked={tableDetails.display}
                   disabled
                   sx={{
                     "& .MuiSwitch-switchBase.Mui-checked": {

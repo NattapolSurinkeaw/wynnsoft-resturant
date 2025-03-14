@@ -5,7 +5,6 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ReservationModal from "../modal/ReservationModal";
 import OpenTable from "../modal/OpenTable";
-import { CustomTable as CustomTableData } from "../../../components/mockData/CustomTable/CustomTable";
 import { ViewTableData } from "../../../components/mockData/CustomTable/ViewTableData";
 
 function Table({
@@ -21,26 +20,35 @@ function Table({
   setIsEditTable,
   isEditTable,
   setSelectedTableId,
+  customTable
 }) {
   const [isReservation, setIsReservation] = useState(false);
   const [isOpenTable, setIsOpenTable] = useState(false);
   const [activeTable, setActiveTable] = useState(null);
+  // console.log(ViewTableData)
+  // console.log(customTable)
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentTables = ViewTableData.slice(indexOfFirstRow, indexOfLastRow);
+  const currentTables = customTable.slice(indexOfFirstRow, indexOfLastRow);
 
   const handleTableClick = (tableId) => {
     setActiveTable(activeTable === tableId ? null : tableId);
   };
 
   console.log("isTotalBill", isTotalBill);
+  const handleOpenTable = (table) => {
+    console.log(table)
+    setIsOpenTable(true);
+    setTableDetail(table);
+  }
 
   return (
     <>
       <ReservationModal
         isReservation={isReservation}
         closeModal={() => setIsReservation(false)}
+        customTable={customTable}
       />
       <OpenTable
         isOpenTable={isOpenTable}
@@ -131,10 +139,10 @@ function Table({
                     <div className="text-center">
                       <p className="text-[#013D59] font-[500] text-[18px]">
                         โต๊ะ <br />
-                        <span className="text-[26px]">{table.name_table}</span>
+                        <span className="text-[26px]">{table.title}</span>
                       </p>
                       {!isSettingOpen && !isEditTable && !isTotalBill && (
-                        <button onClick={() => setIsOpenTable(true)}>
+                        <button onClick={() => handleOpenTable(table)}>
                           <AddCircleIcon
                             sx={{ fontSize: 25 }}
                             className="text-[#013D59] hover:text-green-500 cursor-pointer"

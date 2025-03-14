@@ -17,7 +17,7 @@ export default function TestPage() {
       <h1>TestPage</h1>
       <QRCodeCanvas value={text} size={200} />
     <button
-      onClick={() => getQrcode(1)}
+      onClick={() => getQrcode(2)}
     >โต๊ะ 1</button>
     </div>
   )
