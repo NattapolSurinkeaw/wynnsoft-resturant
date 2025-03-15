@@ -7,6 +7,7 @@ import { jsPDF } from "jspdf";
 function QrCodeModal({ isOpen, closeModal, qrCode }) {
   const contentRef = useRef();
   if (!isOpen) return null;
+  console.log(qrCode)
 
   const handlePrint = () => {
     const doc = new jsPDF("p", "mm", "a4"); // ใช้ A4 ขนาด

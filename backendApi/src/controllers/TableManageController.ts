@@ -57,11 +57,47 @@ export class TableManageController {
       })
     }
   }
+  OnEditTable = async(req: any, res: any) => {
+    try {
+      const table = await Table.findOne({where: {id: req.params.id}});
+      if(!table) {
+        return res.status(404).json({
+          status: false,
+          message: "error",
+          description: "table not found",
+        });
+      }
+      table.title = req.body.title;
+      table.priority = req.body.priority;
+      table.display = req.body.display;
+      if(req.body.display == true && table.status == 4) {
+        table.status = 1;
+      } else if (req.body.display == false) {
+        table.status = 4;
+      }
+      table.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "get edit tablee success.",
+        booking: table
+      });
+
+    } catch(error){
+      return res.status(500).json({
+          status: false,
+          message: 'error',
+          error: error,
+          description: 'something went wrong.'
+      })
+    }
+  }
   OngetGenerateQrcode = async(req: any, res: any) => {
     try {
       const table = await Table.findOne({where: {id: req.params.id}});
-      table.table_token = uuidv4();
-      table.save();
+      const generate_token = uuidv4();
+      
 
       let order = await Orders.findOne({where: {table_id: table.id}});
       if(!order) {
@@ -75,17 +111,21 @@ export class TableManageController {
 
       const payload = {
         table_id: table.id,
-        table_token: table.table_token,
+        table_token: generate_token,
         order_id: order.id,
       };
 
-      const token = jwt.sign(payload, 'nattapolsurinkeaw', { expiresIn: "1h" });
+      const JWT_token = jwt.sign(payload, 'nattapolsurinkeaw', { expiresIn: "1h" });
+      table.table_token = generate_token;
+      table.qrcode = JWT_token;
+      table.status = 2;
+      await table.save();
 
       return res.status(200).json({
         status: true,
         message: "ok",
         description: "get data success.",
-        token: token
+        token: JWT_token
       });
 
     } catch(error){
@@ -115,6 +155,17 @@ export class TableManageController {
   // จองโต๊ะ
   OnCreateBookingTable = async (req: any, res: any) => {
     try {
+      const table = await Table.findOne({where: {id: req.body.table_booking}}); 
+      if(!table) {
+        return res.status(404).json({
+          status: false,
+          message: "error",
+          description: "table not found",
+        });
+      }
+      table.status = 3;
+      await table.save();
+      
       const bookingTable = await BookingTable.create({
         name_booking: req.body.name_booking,
         phone_booking: req.body.phone_booking,

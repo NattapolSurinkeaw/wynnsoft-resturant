@@ -13,6 +13,10 @@ const Table = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    qrcode: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     title: {
       type: DataTypes.STRING(100),
       allowNull: false,
@@ -20,7 +24,7 @@ const Table = sequelize.define(
     status: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      Comment: "	'1'=ว่าง,'2'=บริการ,'3'=จอง"
+      Comment: "'1'=ว่าง,'2'=บริการ,'3'=จอง"
     },
     call_staff: {
       type: DataTypes.BOOLEAN,

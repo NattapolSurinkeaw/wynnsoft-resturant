@@ -8,27 +8,30 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddCardOutlinedIcon from "@mui/icons-material/AddCardOutlined";
 import BookingModal from "../../modal/BookingModal";
 import { QRCodeCanvas } from "qrcode.react";
-// import { ViewTableData } from "../../../../components/mockData/CustomTable/ViewTableData";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import dayjs from "dayjs";
+import { front_readqr } from "../../../../store/setting";
 
-function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, customTable }) {
+function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, customTable, setTableEdit }) {
   const [tableDetails, setTableDetails] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const contentRef = useRef();
 
   useEffect(() => {
+    console.log(customTable);
     if (!selectedTableId && customTable.length > 0) {
       setSelectedTableId(customTable[0].id);
     }
-  }, [selectedTableId, setSelectedTableId]);
+  }, [selectedTableId, customTable]); // ลบ setSelectedTableId ออกจาก dependency array
 
   useEffect(() => {
+    console.log(selectedTableId)
     if (selectedTableId) {
       const table = customTable.find((table) => table.id === selectedTableId);
       if (table) {
         setTableDetails(table);
+        setTableEdit(table);
       } else {
         console.log("ไม่พบข้อมูลโต๊ะที่มี id:", selectedTableId);
       }
@@ -106,13 +109,17 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, custo
             ref={contentRef}
             className="w-[360px] h-[360px] flex justify-center items-center mx-auto mt-6 border-6 border-[#D9D9D9]"
           >
-            <img
-              className="w-full h-full"
-              src={tableDetails.qrcode || "/images/not_qrcode.jpg"}
-              alt="QRCode"
-            />
-            
-            {/* <QRCodeCanvas size={343} value={tableDetails.qrcode} /> */}
+            {
+              tableDetails.token ? (
+                <QRCodeCanvas size={343} value={front_readqr + tableDetails.qrcode} />
+              ) : (
+                <img
+                  className="w-full h-full"
+                  src={"/images/not_qrcode.jpg"}
+                  alt="QRCode"
+                />
+              )
+            }
           </figure>
           <div className="border-t-2 border-gray-500 mt-8"></div>
           <div className="flex items-center justify-center mt-4">

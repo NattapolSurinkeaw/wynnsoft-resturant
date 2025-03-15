@@ -22,6 +22,7 @@ router.get('/api/backoffice/orderall', AuthenticateAdmin, orderFoodController.On
 // จัดการโต๊ะ
 router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController.OngetAllTable);
 router.post('/api/backoffice/createtable', AuthenticateAdmin, tableManageController.OnCreateTable);
+router.post('/api/backoffice/edittable/:id', AuthenticateAdmin, tableManageController.OnEditTable);
 router.get('/api/backoffice/generate-qrcode/:id', AuthenticateAdmin, tableManageController.OngetGenerateQrcode);
 router.get('/api/backoffice/verifyqr/:token', tableManageController.OnverifyQrCode);
 // จองโต๊ะ
