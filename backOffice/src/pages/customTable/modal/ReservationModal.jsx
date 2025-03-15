@@ -30,6 +30,10 @@ function ReservationModal({ isReservation, closeModal, customTable }) {
       time_booking: dayjs(selectedTime).format('HH:mm:ss'),   // ✅ ใช้ selectedTime ตรงๆ
       people: people
     };
+
+    if(!params.name_booking || !params.phone_booking || !params.email_booking) {
+      return false;
+    }
   
     getBookingTable(params).then((res) => {
       console.log(res)

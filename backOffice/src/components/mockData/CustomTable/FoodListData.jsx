@@ -200,7 +200,7 @@ export const FoodListData = [
     ],
   },
   {
-    id: 10,
+    id: 38,
     name_table: "10",
     order_number: "00084",
     date: "16 พฤษภาคม 2024",

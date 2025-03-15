@@ -427,7 +427,7 @@ function CategoryFood() {
                   setHandleCreate(false);
                 }}
               >
-                <CancelIcon className="hover:text-[#00537B]" />
+                <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
               </button>
             </div>
 
@@ -470,7 +470,7 @@ function CategoryFood() {
                   setHandleEdit(false);
                 }}
               >
-                <CancelIcon className="hover:text-[#00537B]" />
+              <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
               </button>
             </div>
 

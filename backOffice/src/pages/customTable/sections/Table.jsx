@@ -20,7 +20,8 @@ function Table({
   setIsEditTable,
   isEditTable,
   setSelectedTableId,
-  customTable
+  customTable,
+  setTableDetail
 }) {
   const [isReservation, setIsReservation] = useState(false);
   const [isOpenTable, setIsOpenTable] = useState(false);
@@ -37,11 +38,6 @@ function Table({
   };
 
   console.log("isTotalBill", isTotalBill);
-  const handleOpenTable = (table) => {
-    console.log(table)
-    setIsOpenTable(true);
-    setTableDetail(table);
-  }
 
   return (
     <>
@@ -113,6 +109,7 @@ function Table({
                     ? () => {
                         setSelectedTableId(table.id);
                         handleTableClick(table.id);
+                        setTableDetail(table);
 
                         // เช็คว่า table.status เป็น 2 หรือไม่
                         if (table.status === 2) {
@@ -142,7 +139,7 @@ function Table({
                         <span className="text-[26px]">{table.title}</span>
                       </p>
                       {!isSettingOpen && !isEditTable && !isTotalBill && (
-                        <button onClick={() => handleOpenTable(table)}>
+                        <button onClick={() => setIsOpenTable(true)}>
                           <AddCircleIcon
                             sx={{ fontSize: 25 }}
                             className="text-[#013D59] hover:text-green-500 cursor-pointer"
