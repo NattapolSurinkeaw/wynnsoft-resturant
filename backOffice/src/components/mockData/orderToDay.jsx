@@ -5,6 +5,8 @@ export const orderToday = [
     table_id: 1, //ไอดีโต๊ะ
     status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
+    order_note:
+      "In viverra ex urna. felis, amet, vehicula, ex. elit vitae eget eget libero, Quisque amet, amet, dui. vitae Nam leo. nisl.  dui id tincidunt Nunc Nunc ipsum dolor enim. Nullam risus tincidunt odio dignissim.",
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
     table: {
@@ -23,8 +25,8 @@ export const orderToday = [
         id: 56,
         food_id: 1, //ไอดีอาหาร
         orders_id: 6, // ไอดีออเดอร์
-        amount: 1, // จำนวนอาหารที่สั่ง
-        status: "1", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
+        amount: 3, // จำนวนอาหารที่สั่ง
+        status: "4", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
         note: "", // รายละเอียดเพิ่มเติม เช่น ขอน้ำมันน้อย ไม่หวาน ไม่เค็ม ไม่ใส่มะเขือเทศ
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -33,11 +35,11 @@ export const orderToday = [
           cate_id: "1,2",
           name: "ทอดปลาทูตัวเล็ก", //ชื่ออาหาร
           price: 40, //ราคาปกติ
-          special_price:10, //ราคาพิเศษ
+          special_price: 10, //ราคาพิเศษ
           best_seller: true, //สถานะอาหารขายดี true false
           details: "ปลาทูแมวทอด 2 ตัว", //รายละเอียดของอาหาร
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(1).jpg", //รูปอาหาร
+          thumbnail_link: "/images/img/Rectangle 1131.png", //รูปอาหาร
           status_food: true, //สถานะแจ้งอาหารหมด
           note: null, // ลายละเอียดเอาไว้แจ้งเวลาอาหารหมด
           display: true, //สถานะแสดงผล
@@ -63,7 +65,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/19431.jpg",
+          thumbnail_link: "/images/img/Rectangle 1141.png",
           status_food: false,
           note: null,
           display: true,
@@ -76,20 +78,20 @@ export const orderToday = [
         food_id: 3,
         orders_id: 6,
         amount: 1,
-        status: "1",
+        status: "5", //ยกเลิก
         note: "",
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
         food: {
           id: 3,
           cate_id: "1,2",
-          name: "ทอดปลาทูตัวเล็ก",
+          name: "ข้าวผัด",
           price: 40,
           special_price: 30,
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -98,37 +100,11 @@ export const orderToday = [
         },
       },
       {
-        id: 56,
-        food_id: 1, //ไอดีอาหาร
-        orders_id: 6, // ไอดีออเดอร์
-        amount: 1, // จำนวนอาหารที่สั่ง
-        status: "1", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
-        note: "", // รายละเอียดเพิ่มเติม เช่น ขอน้ำมันน้อย ไม่หวาน ไม่เค็ม ไม่ใส่มะเขือเทศ
-        createdAt: "2025-03-12T09:44:19.000Z",
-        updatedAt: "2025-03-12T09:44:19.000Z",
-        food: {
-          id: 1,
-          cate_id: "1,2",
-          name: "ทอดปลาทูตัวเล็ก", //ชื่ออาหาร
-          price: 40, //ราคาปกติ
-          special_price:10, //ราคาพิเศษ
-          best_seller: true, //สถานะอาหารขายดี true false
-          details: "ปลาทูแมวทอด 2 ตัว", //รายละเอียดของอาหาร
-          thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(1).jpg", //รูปอาหาร
-          status_food: true, //สถานะแจ้งอาหารหมด
-          note: null, // ลายละเอียดเอาไว้แจ้งเวลาอาหารหมด
-          display: true, //สถานะแสดงผล
-          createdAt: null,
-          updatedAt: "2025-03-04T09:32:46.000Z",
-        },
-      },
-      {
         id: 57,
         food_id: 2,
         orders_id: 6,
         amount: 1,
-        status: "1",
+        status: "4",
         note: "",
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -141,7 +117,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/19431.jpg",
+          thumbnail_link: "/images/img/Rectangle 1141.png",
           status_food: false,
           note: null,
           display: true,
@@ -154,20 +130,20 @@ export const orderToday = [
         food_id: 3,
         orders_id: 6,
         amount: 1,
-        status: "1",
+        status: "4",
         note: "",
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
         food: {
           id: 3,
           cate_id: "1,2",
-          name: "ทอดปลาทูตัวเล็ก",
+          name: "ทอดปลาทูตัวเล็ก ๆ",
           price: 40,
           special_price: 30,
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -183,6 +159,7 @@ export const orderToday = [
     table_id: 2,
     status: "3",
     price: 60,
+    order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
@@ -202,7 +179,7 @@ export const orderToday = [
         food_id: 3,
         orders_id: 15,
         amount: 2,
-        status: "1",
+        status: "4",
         note: "",
         createdAt: "2025-03-14T02:33:12.000Z",
         updatedAt: "2025-03-14T02:33:12.000Z",
@@ -215,7 +192,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -241,7 +218,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/19431.jpg",
+          thumbnail_link: "/images/img/Rectangle 1141.png",
           status_food: false,
           note: null,
           display: true,
@@ -257,6 +234,7 @@ export const orderToday = [
     table_id: 1, //ไอดีโต๊ะ
     status: "2", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
+    order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
     table: {
@@ -285,11 +263,11 @@ export const orderToday = [
           cate_id: "1,2",
           name: "ข้าวผัด", //ชื่ออาหาร
           price: 140, //ราคาปกติ
-          special_price:100, //ราคาพิเศษ
+          special_price: 100, //ราคาพิเศษ
           best_seller: true, //สถานะอาหารขายดี true false
           details: "ปลาทูแมวทอด 2 ตัว", //รายละเอียดของอาหาร
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(1).jpg", //รูปอาหาร
+          thumbnail_link: "/images/img/Rectangle 1131.png", //รูปอาหาร
           status_food: true, //สถานะแจ้งอาหารหมด
           note: null, // ลายละเอียดเอาไว้แจ้งเวลาอาหารหมด
           display: true, //สถานะแสดงผล
@@ -315,7 +293,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/19431.jpg",
+          thumbnail_link: "/images/img/Rectangle 1141.png",
           status_food: false,
           note: null,
           display: true,
@@ -341,7 +319,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -357,6 +335,7 @@ export const orderToday = [
     table_id: 2,
     status: "3",
     price: 60,
+    order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
@@ -389,7 +368,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -411,11 +390,11 @@ export const orderToday = [
           cate_id: "1,2",
           name: "ข้าวผัด", //ชื่ออาหาร
           price: 140, //ราคาปกติ
-          special_price:100, //ราคาพิเศษ
+          special_price: 100, //ราคาพิเศษ
           best_seller: true, //สถานะอาหารขายดี true false
           details: "ปลาทูแมวทอด 2 ตัว", //รายละเอียดของอาหาร
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(1).jpg", //รูปอาหาร
+          thumbnail_link: "/images/img/Rectangle 1131.png", //รูปอาหาร
           status_food: true, //สถานะแจ้งอาหารหมด
           note: null, // ลายละเอียดเอาไว้แจ้งเวลาอาหารหมด
           display: true, //สถานะแสดงผล
@@ -431,6 +410,7 @@ export const orderToday = [
     table_id: 1, //ไอดีโต๊ะ
     status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
+    order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
     table: {
@@ -459,11 +439,11 @@ export const orderToday = [
           cate_id: "1,2",
           name: "ทอดปลาทูตัวเล็ก", //ชื่ออาหาร
           price: 40, //ราคาปกติ
-          special_price:10, //ราคาพิเศษ
+          special_price: 10, //ราคาพิเศษ
           best_seller: true, //สถานะอาหารขายดี true false
           details: "ปลาทูแมวทอด 2 ตัว", //รายละเอียดของอาหาร
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(1).jpg", //รูปอาหาร
+          thumbnail_link: "/images/img/Rectangle 1131.png", //รูปอาหาร
           status_food: true, //สถานะแจ้งอาหารหมด
           note: null, // ลายละเอียดเอาไว้แจ้งเวลาอาหารหมด
           display: true, //สถานะแสดงผล
@@ -489,7 +469,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/19431.jpg",
+          thumbnail_link: "/images/img/Rectangle 1141.png",
           status_food: false,
           note: null,
           display: true,
@@ -515,7 +495,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -531,6 +511,7 @@ export const orderToday = [
     table_id: 2,
     status: "2",
     price: 60,
+    order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
@@ -563,7 +544,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -589,7 +570,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/19431.jpg",
+          thumbnail_link: "/images/img/Rectangle 1141.png",
           status_food: false,
           note: null,
           display: true,
@@ -605,6 +586,7 @@ export const orderToday = [
     table_id: 1, //ไอดีโต๊ะ
     status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
+    order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
     table: {
@@ -633,11 +615,11 @@ export const orderToday = [
           cate_id: "1,2",
           name: "ทอดปลาทูตัวเล็ก", //ชื่ออาหาร
           price: 40, //ราคาปกติ
-          special_price:0, //ราคาพิเศษ
+          special_price: 0, //ราคาพิเศษ
           best_seller: true, //สถานะอาหารขายดี true false
           details: "ปลาทูแมวทอด 2 ตัว", //รายละเอียดของอาหาร
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(1).jpg", //รูปอาหาร
+          thumbnail_link: "/images/img/Rectangle 1131.png", //รูปอาหาร
           status_food: true, //สถานะแจ้งอาหารหมด
           note: null, // ลายละเอียดเอาไว้แจ้งเวลาอาหารหมด
           display: true, //สถานะแสดงผล
@@ -659,11 +641,11 @@ export const orderToday = [
           cate_id: "11",
           name: "ทอดปลาทู",
           price: 40,
-          special_price:0,
+          special_price: 0,
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/19431.jpg",
+          thumbnail_link: "/images/img/Rectangle 1141.png",
           status_food: false,
           note: null,
           display: true,
@@ -689,7 +671,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -705,6 +687,7 @@ export const orderToday = [
     table_id: 3,
     status: "1",
     price: 60,
+    order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
@@ -737,7 +720,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/6000095562_front_XXXL(2).jpg",
+          thumbnail_link: "/images/img/Rectangle 1136.png",
           status_food: true,
           note: null,
           display: true,
@@ -763,7 +746,7 @@ export const orderToday = [
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/uploads/2025/03/19431.jpg",
+          thumbnail_link: "/images/img/Rectangle 1141.png",
           status_food: false,
           note: null,
           display: true,

@@ -611,7 +611,7 @@ function FoodMenu() {
                 setOpenAdd(false);
               }}
             >
-              <CancelIcon className="hover:text-[#00537B]" />
+            <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
             </button>
           </div>
 
@@ -655,7 +655,7 @@ function FoodMenu() {
                 setOpenEdit(false);
               }}
             >
-              <CancelIcon className="hover:text-[#00537B]" />
+            <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
             </button>
           </div>
 

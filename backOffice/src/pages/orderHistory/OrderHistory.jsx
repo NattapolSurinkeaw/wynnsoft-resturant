@@ -653,7 +653,7 @@ function OrderHistory() {
                 setOpenModalDetail(false);
               }}
             >
-              <CancelIcon className="hover:text-[#00537B]" />
+            <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
             </button>
           </div>
 

@@ -148,7 +148,8 @@ function OrdersDay() {
   };
 
   return (
-    <div className="flex flex-col justify-start gap-4 w-full">
+    <div className="flex flex-col justify-between h-full gap-4 w-full">
+      <div className="flex flex-col gap-4">
       <div className="flex 2xl:flex-row flex-col gap-4 w-full justify-between 2xl:items-center">
         <div className="flex flex-shrink-0 gap-2 justify-start items-center">
           <AssignmentIndOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
@@ -246,9 +247,11 @@ function OrdersDay() {
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
                   {selectedTable
-                    ? orderToday.find(
-                        (order) => order.table_id === selectedTable
-                      )?.table?.title || "ไม่พบโต๊ะ"
+                    ? `โต๊ะ ${
+                        orderToday.find(
+                          (order) => order.table_id === selectedTable
+                        )?.table?.title || "ไม่พบโต๊ะ"
+                      }`
                     : "เลือกโต๊ะ"}
                 </p>
 
@@ -303,7 +306,7 @@ function OrdersDay() {
                           setShowTable(false);
                         }}
                       >
-                        {table.table.title}
+                        โต๊ะ {table.table.title}
                       </div>
                     ))}
                 </div>
@@ -452,7 +455,7 @@ function OrdersDay() {
           )}
         </div>
       </div>
-
+      </div>
       {/*  pagination */}
 
       <div className="flex justify-end gap-1 bg-white w-fit ml-auto border border-[#DFDFDF] rounded-sm">

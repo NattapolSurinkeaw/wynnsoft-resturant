@@ -80,7 +80,7 @@ function Sidebar({ isSidebarOpen }) {
           to="ordersDay"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 "
           ${
-          location.pathname.startsWith("/ordersDay")
+            location.pathname.startsWith("/ordersDay")
               ? "bg-white"
               : "hover:bg-white group"
           }`}
@@ -89,14 +89,14 @@ function Sidebar({ isSidebarOpen }) {
             <AssignmentIndOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-              location.pathname.startsWith("/ordersDay")
+                location.pathname.startsWith("/ordersDay")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-              location.pathname.startsWith("/ordersDay")
+                location.pathname.startsWith("/ordersDay")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
@@ -118,7 +118,7 @@ function Sidebar({ isSidebarOpen }) {
           to="payment"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 "
             ${
-              location.pathname === "/payment"
+              location.pathname.startsWith("/payment")
                 ? "bg-white"
                 : "hover:bg-white group"
             }`}
@@ -127,14 +127,14 @@ function Sidebar({ isSidebarOpen }) {
             <ReceiptLongOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-                location.pathname === "/payment"
+                location.pathname.startsWith("/payment")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-                location.pathname === "/payment"
+                location.pathname.startsWith("/payment")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
@@ -144,7 +144,7 @@ function Sidebar({ isSidebarOpen }) {
           </div>
           <div
             className={`flex justify-center items-center w-6 h-6 rounded-md ${
-              location.pathname === "/payment"
+              location.pathname.startsWith("/payment")
                 ? "text-white bg-[#00537B]"
                 : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
             }`}
@@ -156,7 +156,7 @@ function Sidebar({ isSidebarOpen }) {
           to="served"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 "
             ${
-              location.pathname === "/served"
+              location.pathname.startsWith("/served")
                 ? "bg-white"
                 : "hover:bg-white group"
             }`}
@@ -165,14 +165,14 @@ function Sidebar({ isSidebarOpen }) {
             <FastfoodOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-                location.pathname === "/served"
+                location.pathname.startsWith("/served")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-                location.pathname === "/served"
+                location.pathname.startsWith("/served")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
@@ -182,7 +182,7 @@ function Sidebar({ isSidebarOpen }) {
           </div>
           <div
             className={`flex justify-center items-center w-6 h-6 rounded-md ${
-              location.pathname === "/served"
+              location.pathname.startsWith("/served")
                 ? "text-white bg-[#00537B]"
                 : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
             }`}
@@ -194,7 +194,7 @@ function Sidebar({ isSidebarOpen }) {
           to="orders"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
             ${
-              location.pathname === "/orders"
+              location.pathname == "/orders"
                 ? "bg-white"
                 : "hover:bg-white group"
             }`}
@@ -203,14 +203,14 @@ function Sidebar({ isSidebarOpen }) {
             <RequestQuoteOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-                location.pathname === "/orders"
+                location.pathname == "/orders"
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-                location.pathname === "/orders"
+                location.pathname == "/orders"
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
@@ -223,7 +223,7 @@ function Sidebar({ isSidebarOpen }) {
           to="customTable"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
             ${
-              location.pathname === "/customTable"
+              location.pathname.startsWith("/customTable")
                 ? "bg-white"
                 : "hover:bg-white group"
             }`}
@@ -232,14 +232,14 @@ function Sidebar({ isSidebarOpen }) {
             <WidgetsOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-                location.pathname === "/customTable"
+                location.pathname.startsWith("/customTable")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-                location.pathname === "/customTable"
+                location.pathname.startsWith("/customTable")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
@@ -257,7 +257,7 @@ function Sidebar({ isSidebarOpen }) {
           to="newLatest"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
             ${
-              location.pathname === "/newLatest"
+              location.pathname.startsWith("/newLatest")
                 ? "bg-white"
                 : "hover:bg-white group"
             }`}
@@ -266,14 +266,14 @@ function Sidebar({ isSidebarOpen }) {
             <ChecklistOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-                location.pathname === "/newLatest"
+                location.pathname.startsWith("/newLatest")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-                location.pathname === "/newLatest"
+                location.pathname.startsWith("/newLatest")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
@@ -286,7 +286,7 @@ function Sidebar({ isSidebarOpen }) {
           to="menuStatus"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
             ${
-              location.pathname === "/menuStatus"
+              location.pathname.startsWith("/menuStatus")
                 ? "bg-white"
                 : "hover:bg-white group"
             }`}

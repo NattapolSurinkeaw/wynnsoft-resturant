@@ -27,6 +27,7 @@ import CategoryFood from "./pages/categoryfood/CategoryFood";
 import Settings from "./pages/settings/Settings";
 import ConfirmPassword from "./components/auth/ConfirmPassword";
 import DetailOrderToday from "./pages/ordersDay/components/DetailOrderToday";
+import DetailAll from "./pages/payment/DetailAll";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -41,6 +42,7 @@ function App() {
             <Route path="/ordersDay" element={<OrdersDay />} />
             <Route path="/ordersDay/detail/:id" element={<DetailOrderToday />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/payment/detail-all/:id" element={<DetailAll />} />
             <Route path="/served" element={<Served />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/customTable" element={<CustomTable />} />
