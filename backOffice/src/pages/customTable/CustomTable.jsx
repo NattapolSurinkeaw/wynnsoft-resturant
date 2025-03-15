@@ -22,7 +22,8 @@ function CustomTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 24;
   const [customTable, setCustomTable] = useState([]);
-  // const [tableDetail, setTableDetail] = useState([]);
+  const [tableDetail, setTableDetail] = useState([]);
+
 
   useEffect(() => {
     getTableall().then((res) => {
@@ -71,6 +72,8 @@ function CustomTable() {
     setCurrentPage(value);
   };
 
+  console.log(customTable)
+  console.log(selectedTableId)
   return (
     <div>
       <Header
@@ -95,13 +98,21 @@ function CustomTable() {
           setIsEditTable={setIsEditTable}
           isEditTable={isEditTable}
           customTable={customTable}
+          setTableDetail={setTableDetail}
         />
         {isAddTable ? (
           <AddTable />
         ) : isEditTable ? (
-          <EditTable setIsSettingOpen={setIsSettingOpen} />
+          <EditTable 
+            setIsSettingOpen={setIsSettingOpen} 
+            tableDetail={tableDetail}
+          />
         ) : isFoodList ? (
-          <FoodList handleFoodListClick={handleFoodListClick} selectedTableId={selectedTableId} />
+          <FoodList 
+            handleFoodListClick={handleFoodListClick} 
+            selectedTableId={selectedTableId} 
+            tableDetail={tableDetail}
+          />
         ) : isTotalBill ? (
           <TotalBill />
         ) : (
@@ -110,6 +121,7 @@ function CustomTable() {
             selectedTableId={selectedTableId}
             setSelectedTableId={setSelectedTableId}
             customTable={customTable}
+            setTableEdit={setTableDetail}
           />
         )}
       </div>

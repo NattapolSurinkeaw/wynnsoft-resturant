@@ -3,8 +3,9 @@ import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined
 import MoveTable from "../../modal/MoveTable";
 import QrCodeModal from "../../modal/QrCodeModal";
 import { FoodListData } from "../../../../components/mockData/CustomTable/FoodListData";
+import { front_readqr } from "../../../../store/setting";
 
-function FoodList({ selectedTableId }) {
+function FoodList({ selectedTableId, tableDetail }) {
   const [isMoveTable, setIsMoveTable] = useState(false);
   const [currentFoodData, setCurrentFoodData] = useState(null);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
@@ -32,7 +33,7 @@ function FoodList({ selectedTableId }) {
           <QrCodeModal
             isOpen={isQrModalOpen}
             closeModal={() => setIsQrModalOpen(false)}
-            qrCode={currentFoodData.qrcode}
+            qrCode={ front_readqr + tableDetail.qrcode }
           />
           <div className="flex flex-col 2xl:w-full md:w-[500px] w-full mx-auto min-h-[730px]">
             <div className="w-full h-full bg-white shadow-1 rounded-lg">
@@ -119,12 +120,12 @@ function FoodList({ selectedTableId }) {
                 <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
               </div>
               <div className="flex items-start justify-between px-6 ">
-                <p className="text-[18px] font-[500] text-[#313131]">ภาษี {tax}%</p>
+                <p className="text-[18px] font-[500] text-[#313131]">ภาษี 7%</p>
                 <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
               </div>
               <div className="flex items-start justify-between px-6 ">
                 <p className="text-[18px] font-[500] text-[#313131]">
-                   Service charge {serviceCharge}%
+                   Service charge 5%
                 </p>
                 <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
               </div>
