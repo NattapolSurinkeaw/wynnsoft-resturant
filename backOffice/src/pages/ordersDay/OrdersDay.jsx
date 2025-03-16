@@ -148,8 +148,8 @@ function OrdersDay() {
   };
 
   return (
-    <div className="flex flex-col justify-between h-full gap-4 w-full">
-      <div className="flex flex-col gap-4">
+    <div >
+      <div className="flex flex-col gap-4 ">
       <div className="flex 2xl:flex-row flex-col gap-4 w-full justify-between 2xl:items-center">
         <div className="flex flex-shrink-0 gap-2 justify-start items-center">
           <AssignmentIndOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
@@ -456,9 +456,9 @@ function OrdersDay() {
         </div>
       </div>
       </div>
-      {/*  pagination */}
 
-      <div className="flex justify-end gap-1 bg-white w-fit ml-auto border border-[#DFDFDF] rounded-sm">
+      {/*  pagination */}
+      <div className="flex justify-end gap-1 bg-white w-fit mt-3 ml-auto border border-[#DFDFDF] rounded-sm ">
         <button
           onClick={handlePrevious}
           disabled={currentPage === 1}

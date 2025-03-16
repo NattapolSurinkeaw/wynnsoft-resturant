@@ -254,7 +254,7 @@ function DetailOrderToday() {
             </div>
             {/* header */}
 
-            <div className="max-h-[486px] h-full">
+            <div className="max-h-[486px] h-full overflow-auto hide-scrollbar">
               {groupedMenuDetails.length > 0 ? (
                 groupedMenuDetails.map((item) => (
                   <div

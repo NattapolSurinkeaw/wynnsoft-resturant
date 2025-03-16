@@ -10,6 +10,28 @@ function DetailAll() {
   const [tax, setTaxTotal] = useState(7);
   const [serviceCharge, setServiceCharge] = useState(5);
   const detailOrder = orderToday.find((item) => item.id === parseInt(id));
+  const [height, setHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const updateSize = () => setHeight(window.innerHeight);
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  const reducedHeight =
+  tax === 0 && serviceCharge === 0
+    ? window.innerWidth >= 768
+      ? height - 440
+      : height - 420
+    : tax > 0 && serviceCharge > 0
+    ? window.innerWidth >= 768
+      ? height - 500
+      : height - 420
+    : window.innerWidth >= 768
+    ? height - 460
+    : height - 420;
+
+
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -19,23 +41,31 @@ function DetailAll() {
   const formattedDate = dayjs(detailOrder.createdAt).format("D MMMM YYYY");
 
   const groupedMenuDetails = useMemo(() => {
-    const grouped = detailOrder.orderList
-      .filter((item) => item.status === "4" || item.status === "5") // รวม status 5
-      .reduce((acc, item) => {
-        const existingItem = acc.find((menu) => menu.name === item.food.name);
-        if (existingItem) {
+    const map = new Map();
+
+    detailOrder.orderList
+      .filter((item) => item.status === "4" || item.status === "5")
+      .forEach((item) => {
+        const key = item.food.name;
+        if (map.has(key)) {
+          const existingItem = map.get(key);
           existingItem.amount += item.amount;
+          existingItem.statusList.add(item.status); // เก็บค่า status เป็น Set
         } else {
-          acc.push({
+          map.set(key, {
             ...item.food,
             amount: item.amount,
             price: item.status === "5" ? 0 : item.food.price, // ราคา 0 ถ้าเป็น status 5
             special_price: item.status === "5" ? 0 : item.food.special_price,
+            statusList: new Set([item.status]), // เก็บ status ในรูปแบบ Set
           });
         }
-        return acc;
-      }, []);
-    return grouped;
+      });
+
+    return Array.from(map.values()).map((item) => ({
+      ...item,
+      status: Array.from(item.statusList).join(", "), // แปลง Set เป็น string
+    }));
   }, [detailOrder.orderList]);
 
   console.log("groupedMenuDetails", groupedMenuDetails);
@@ -70,7 +100,7 @@ function DetailAll() {
   const Tatal = grandTotal + taxTotal;
   return (
     <div className="flex gap-4">
-      <div className="w-full  rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
+      <div className="w-full h-full rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
         <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg">
           <div className="flex gap-4 items-center">
             <div className="bg-white rounded-lg p-2 w-[90px] h-[90px] flex flex-col justify-center items-center ">
@@ -101,7 +131,7 @@ function DetailAll() {
             <p className="w-[55%] lg:text-base text-sm text-[#013D59] font-[500]">
               รายการ
             </p>
-            <p className="w-[20%] lg:text-base text-sm text-[#013D59] font-[500] text-center">
+            <p className="w-[10%] lg:text-base text-sm text-[#013D59] font-[500] text-center">
               จำนวน
             </p>
             <p className="w-[30%] lg:text-base text-sm text-[#013D59] font-[500] text-right pr-4">
@@ -110,7 +140,10 @@ function DetailAll() {
           </div>
           {/* header */}
 
-          <div className={`xl:h-[350px] h-[240px] overflow-y-auto`}>
+          <div
+            style={{ height: `calc(${reducedHeight}px)` }}
+            className={`overflow-auto hide-scrollbar`}
+          >
             {groupedMenuDetails.length > 0 ? (
               groupedMenuDetails.map((item) => (
                 <div
@@ -126,29 +159,44 @@ function DetailAll() {
                       {item.name}
                     </p>
 
-                    <p className="lg:text-base text-sm font-[500] text-center w-[20%]">
+                    <p
+                      className={`lg:text-base text-sm font-[500] line-clamp-1 text-center w-[10%] ${
+                        item.status === "5" ? "line-through text-gray-500" : ""
+                      }`}
+                    >
                       {item.amount}
                     </p>
 
-                    <div className="w-[30%] flex flex-col justify-end text-right flex-1">
-                      {item.special_price > 0 && (
-                        <p className="text-[12px] font-[300] line-through">
-                          {formatNumber(item.price * item.amount)}
+                    <div className="w-[30%] flex justify-between">
+                      {item.status === "5" && (
+                        <p
+                          className={`lg:text-base text-sm font-[500] ${
+                            item.status === "5" ? " text-gray-500" : ""
+                          }`}
+                        >
+                          ยกเลิก
                         </p>
                       )}
+                      <div className=" flex flex-col justify-end text-right flex-1">
+                        {item.special_price > 0 && (
+                          <p className="text-[12px] font-[300] line-through">
+                            {formatNumber(item.price * item.amount)}
+                          </p>
+                        )}
 
-                      <p
-                        className={`lg:text-base text-sm font-[500] ${
-                          item.status === "5"
-                            ? "line-through text-gray-500"
-                            : ""
-                        }`}
-                      >
-                        {formatNumber(
-                          (item.special_price || item.price) * item.amount
-                        )}{" "}
-                        ฿
-                      </p>
+                        <p
+                          className={`lg:text-base text-sm font-[500] ${
+                            item.status === "5"
+                              ? "line-through text-gray-500"
+                              : ""
+                          }`}
+                        >
+                          {formatNumber(
+                            (item.special_price || item.price) * item.amount
+                          )}{" "}
+                          ฿
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -219,7 +267,7 @@ function DetailAll() {
         </div>
       </div>
 
-      <div className="xl:max-w-[500px] w-full flex xl:flex-col gap-4"></div>
+      <div className="xl:max-w-[500px] w-full h-full flex xl:flex-col gap-4"></div>
     </div>
   );
 }

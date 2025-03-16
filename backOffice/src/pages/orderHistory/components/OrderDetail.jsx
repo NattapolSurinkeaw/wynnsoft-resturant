@@ -17,7 +17,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
   const formattedDate = dayjs(detailData.createdAt, "DD-MM-YYYY").format(
     "DD MMMM YYYY"
   );
-  console.log(detailData);
+  // console.log(detailData);
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
