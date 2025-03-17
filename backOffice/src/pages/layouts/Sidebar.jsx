@@ -32,7 +32,7 @@ function Sidebar({ isSidebarOpen }) {
       <figure className="flex justify-center w-full ">
         <Link to="/">
           <img
-            className="w-[120px] h-auto"
+            className="w-[180px] h-auto"
             src="/icons/โลโก้-Soju-Day-Final-1.png"
             alt=""
           />

@@ -12,7 +12,7 @@ export const orderToday = [
     table: {
       id: 1,
       table_token: "6e87770d-3684-47d1-b384-95fd0cf55051",
-      title: "01", //ชื่อโต๊ะ
+      title: "VIPP", //ชื่อโต๊ะ
       status: 2, //สถานะโต๊ะ ว่าง จอง บริการ
       call_staff: false, // สถานะการเรียกพนักงาน true false
       priority: 1,
@@ -165,7 +165,7 @@ export const orderToday = [
     table: {
       id: 2,
       table_token: "bf3136cd-2241-4cae-bd7f-62573d0ad41e",
-      title: "02",
+      title: "luxury",
       status: true,
       call_staff: false,
       priority: 2,
@@ -240,7 +240,7 @@ export const orderToday = [
     table: {
       id: 1,
       table_token: "6e87770d-3684-47d1-b384-95fd0cf55051",
-      title: "01", //ชื่อโต๊ะ
+      title: "dinosaur", //ชื่อโต๊ะ
       status: 2, //สถานะโต๊ะ ว่าง จอง บริการ
       call_staff: false, // สถานะการเรียกพนักงาน true false
       priority: 1,
