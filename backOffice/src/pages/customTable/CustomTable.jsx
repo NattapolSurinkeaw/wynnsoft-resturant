@@ -72,8 +72,8 @@ function CustomTable() {
     setCurrentPage(value);
   };
 
-  console.log(customTable)
-  console.log(selectedTableId)
+  // console.log(customTable)
+  // console.log(selectedTableId)
   return (
     <div>
       <Header

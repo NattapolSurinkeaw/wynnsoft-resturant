@@ -4,7 +4,7 @@ import TableMenuStatus from "./sections/TableMenuStatus";
 import MenuStatusModal from "./modal/MenuStatusModal";
 import { NewLatestData } from "../../components/mockData/NewLatest/NewLatestData";
 
-function MenuStatus() {
+function OutStock() {
   const [selectedStatusMenu1, setSelectedStatusMenu1] = useState(null);
   const [selectedStatusMenu2, setSelectedStatusMenu2] = useState(null);
   const [showStatusMenu1, setShowStatusMenu1] = useState(false);
@@ -253,4 +253,4 @@ function MenuStatus() {
   );
 }
 
-export default MenuStatus;
+export default OutStock;

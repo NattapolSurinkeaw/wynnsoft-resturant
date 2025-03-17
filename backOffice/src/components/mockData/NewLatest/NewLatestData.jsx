@@ -13,7 +13,7 @@ export const NewLatestData = [
     createdAt: "2025-03-12T16:10:45.000Z",
     Order: {
       order_number: "00000616",
-      Table: { title: "โต๊ะ 06" },
+      Table: { title: "06" },
     },
   },
   {
@@ -30,7 +30,7 @@ export const NewLatestData = [
     createdAt: "2025-03-12T17:25:30.000Z",
     Order: {
       order_number: "00000617",
-      Table: { title: "โต๊ะ 07" },
+      Table: { title: "07" },
     },
   },
   {
@@ -39,7 +39,7 @@ export const NewLatestData = [
     orders_id: 13,
     price: 180,
     amount: 2,
-    status: "2",
+    status: "3",
     thumbnail_link: "/images/3.jpg",
     food_items: 2,
     details: "ข้าวไข่เจียวกุ้งสับ",
@@ -47,7 +47,7 @@ export const NewLatestData = [
     createdAt: "2025-03-12T18:40:15.000Z",
     Order: {
       order_number: "00000618",
-      Table: { title: "โต๊ะ 08" },
+      Table: { title: "08" },
     },
   },
   {
@@ -56,7 +56,7 @@ export const NewLatestData = [
     orders_id: 14,
     price: 300,
     amount: 1,
-    status: "1",
+    status: "4",
     thumbnail_link: "/images/4.jpg",
     food_items: 1,
     details: "แกงเขียวหวานไก่",
@@ -64,7 +64,7 @@ export const NewLatestData = [
     createdAt: "2025-03-12T19:55:05.000Z",
     Order: {
       order_number: "00000619",
-      Table: { title: "โต๊ะ 09" },
+      Table: { title: "09" },
     },
   },
   {
@@ -81,7 +81,7 @@ export const NewLatestData = [
     createdAt: "2025-03-12T21:10:20.000Z",
     Order: {
       order_number: "00000620",
-      Table: { title: "โต๊ะ 10" },
+      Table: { title: "10" },
     },
   },
   {
@@ -98,7 +98,7 @@ export const NewLatestData = [
     createdAt: "2025-03-12T22:25:10.000Z",
     Order: {
       order_number: "00000621",
-      Table: { title: "โต๊ะ 11" },
+      Table: { title: "11" },
     },
   },
   {
@@ -115,7 +115,7 @@ export const NewLatestData = [
     createdAt: "2025-03-12T23:40:55.000Z",
     Order: {
       order_number: "00000622",
-      Table: { title: "โต๊ะ 12" },
+      Table: { title: "12" },
     },
   },
   {
@@ -124,7 +124,7 @@ export const NewLatestData = [
     orders_id: 18,
     price: 750,
     amount: 1,
-    status: "1",
+    status: "4",
     thumbnail_link: "/images/44.jpg",
     food_items: 1,
     details: "สุกี้ทะเล",
@@ -132,7 +132,7 @@ export const NewLatestData = [
     createdAt: "2025-03-13T00:55:40.000Z",
     Order: {
       order_number: "00000623",
-      Table: { title: "โต๊ะ 13" },
+      Table: { title: "13" },
     },
   },
   {
@@ -149,7 +149,7 @@ export const NewLatestData = [
     createdAt: "2025-03-13T02:10:30.000Z",
     Order: {
       order_number: "00000624",
-      Table: { title: "โต๊ะ 14" },
+      Table: { title: "14" },
     },
   },
   {
@@ -166,7 +166,7 @@ export const NewLatestData = [
     createdAt: "2025-03-13T03:25:15.000Z",
     Order: {
       order_number: "00000625",
-      Table: { title: "โต๊ะ 15" },
+      Table: { title: "15" },
     },
   },
   {
@@ -183,7 +183,7 @@ export const NewLatestData = [
     createdAt: "2025-03-13T04:40:00.000Z",
     Order: {
       order_number: "00000626",
-      Table: { title: "โต๊ะ 16" },
+      Table: { title: "16" },
     },
   },
   {
@@ -192,7 +192,7 @@ export const NewLatestData = [
     orders_id: 22,
     price: 650,
     amount: 1,
-    status: "2",
+    status: "5",
     thumbnail_link: "/images/1.jpg",
     food_items: 1,
     details: "หอยนางรมทรงเครื่อง",
@@ -200,7 +200,7 @@ export const NewLatestData = [
     createdAt: "2025-03-13T05:55:30.000Z",
     Order: {
       order_number: "00000627",
-      Table: { title: "โต๊ะ 17" },
+      Table: { title: "17" },
     },
   },
   {
@@ -217,7 +217,7 @@ export const NewLatestData = [
     createdAt: "2025-03-13T07:10:45.000Z",
     Order: {
       order_number: "00000628",
-      Table: { title: "โต๊ะ 18" },
+      Table: { title: "18" },
     },
   },
   {
@@ -234,7 +234,7 @@ export const NewLatestData = [
     createdAt: "2025-03-13T08:25:20.000Z",
     Order: {
       order_number: "00000629",
-      Table: { title: "โต๊ะ 19" },
+      Table: { title: "19" },
     },
   },
   {
@@ -251,7 +251,7 @@ export const NewLatestData = [
     createdAt: "2025-03-13T09:40:10.000Z",
     Order: {
       order_number: "00000630",
-      Table: { title: "โต๊ะ 20" },
+      Table: { title: "20" },
     },
   },
 ];
