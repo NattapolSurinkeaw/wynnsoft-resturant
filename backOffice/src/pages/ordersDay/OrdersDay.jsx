@@ -340,9 +340,9 @@ function OrdersDay() {
               >
                 <div className="flex justify-between gap-4 items-center">
                   <div className="flex gap-2 h-full">
-                    <div className="bg-[#FFBA41] flex flex-col justify-center items-center p-1.5 w-[50px] h-[50px] rounded-lg">
-                      <p className="text-white text-sm leading-none">โต๊ะ</p>
-                      <p className="text-white text-2xl font-[600] leading-none">
+                    <div className="bg-[#FFBA41] flex flex-col justify-center items-center p-1.5 w-[60px] h-[60px] rounded-lg">
+                      {/* <p className="text-white text-sm leading-none">โต๊ะ</p> */}
+                      <p className="text-white text-sm font-[600] leading-none line-clamp-3 break-all">
                         {order.table}
                       </p>
                     </div>

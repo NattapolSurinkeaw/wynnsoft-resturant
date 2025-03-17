@@ -1,18 +1,18 @@
-import { toPng } from "html-to-image";
-import { jsPDF } from "jspdf";
+import React from "react";
 
-const ViewTablePDF = () => {
-    const elementId = 1;
-    const today = 20;
-  console.log("SaveAsPDFHandler invoked");
+const Receipt_PDF = (elementId, today, order_number) => {
+  console.log("Generating PDF for:", today, order_number); // ตรวจสอบค่าที่ได้รับ
+  if (!today || !order_number) {
+    console.error("Error: Missing today or order_number");
+    return;
+  }
+
   const dom = document.getElementById(elementId);
-
   if (!dom) {
     console.error("Element not found:", elementId);
     return;
   }
 
-  // เพิ่ม pixelRatio เพื่อเพิ่มความละเอียดของภาพ
   toPng(dom, { pixelRatio: 3 }) // ใช้ pixelRatio 2x เพื่อความคมชัดที่ดีขึ้น
     .then((dataUrl) => {
       console.log("Image data URL generated");
@@ -60,8 +60,38 @@ const ViewTablePDF = () => {
     .catch((error) => {
       console.error("oops, something went wrong!", error);
     });
+
+  // toPng(dom, { pixelRatio: 3 })
+  //   .then((dataUrl) => {
+  //     console.log("Generated image data URL:", dataUrl);
+  //     const img = new Image();
+  //     img.crossOrigin = "anonymous";
+  //     img.src = dataUrl;
+  //     img.onload = () => {
+  //       console.log("Image loaded");
+
+  //       const pdfWidth = 80; // กำหนดความกว้าง 80mm
+  //       const pdfHeight = 297; // ความสูงสามารถปรับตามเนื้อหา (เช่น 297mm เท่ากระดาษ A4)
+
+  //       const pdf = new jsPDF({
+  //         orientation: "portrait",
+  //         unit: "mm",
+  //         format: [pdfWidth, pdfHeight], // กำหนดขนาดกระดาษแบบกำหนดเอง
+  //       });
+
+  //       pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, 0); // ให้ความกว้างเต็ม 80mm และสูงอัตโนมัติ
+
+  //       console.log("Saving PDF...");
+  //       if (order_number) {
+  //         pdf.save(`receipt-${today}-bill-${order_number}.pdf`);
+  //       } else {
+  //         pdf.save(`receipt-${today}-bill.pdf`);
+  //       }
+  //     };
+  //   })
+  //   .catch((error) => {
+  //     console.error("oops, something went wrong!", error);
+  //   });
 };
 
-export default ViewTablePDF;
-
-
+export default Receipt_PDF;

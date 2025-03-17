@@ -218,8 +218,7 @@ function DetailOrderToday() {
         <div className="w-full h-full flex flex-col bg-white rounded-lg shadow">
           <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg">
             <div className="bg-white rounded-lg p-2 w-[90px] h-[90px] flex flex-col justify-center items-center flex-shrink-0 shadow">
-              <p className="text-lg text-[#00537B] font-[600]">โต๊ะ</p>
-              <p className="text-5xl text-[#00537B] font-[700]">
+              <p className="text-lg text-[#00537B] font-[700] line-clamp-3 break-all">
                 {menuOrder.table.title}
               </p>
             </div>

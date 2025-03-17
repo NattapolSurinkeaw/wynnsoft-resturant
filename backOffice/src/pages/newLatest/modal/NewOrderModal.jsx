@@ -141,11 +141,11 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
                       น.
                     </p>
                   </div>
-                  <div className="flex items-center gap-4 ">
+                  <div className="flex items-center gap-2 ">
                     <p className="text-[#00537B] text-[18px] font-[600]">
                       จำนวน
                     </p>
-                    <p className="text-[#00537B] text-[26px] font-[600]">
+                    <p className="flex justify-center items-center w-[70px] h-[40px] text-[#00537B] text-[26px] font-[600] bg-[#EEEEEE] p-1 border border-[#D9D9D9] rounded-lg">
                       {fillterOrderData.amount}
                     </p>
                     <p className="text-[#00537B] text-[18px] font-[400]">

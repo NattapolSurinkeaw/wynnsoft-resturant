@@ -1,16 +1,34 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { orderToday } from "../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
+import Cash from "./components/Cash";
+import QRcode from "./components/QRcode";
+import Receipt from "./components/Receipt";
+import Swal from "sweetalert2";
+import Receipt_PDF from "../../components/Receipt/Receipt_PDF";
 
 function DetailAll() {
   dayjs.locale("th");
   const { id } = useParams(); // ดึง `id` จาก URL
+  const location = useLocation();
   const [tax, setTaxTotal] = useState(7);
   const [serviceCharge, setServiceCharge] = useState(5);
   const detailOrder = orderToday.find((item) => item.id === parseInt(id));
   const [height, setHeight] = useState(window.innerHeight);
+  const [activeTab, setActiveTab] = useState("QRcode");
+  const [showPdfContent, setShowPdfContent] = useState(false);
+  const pdfRef = useRef();
+
+  // console.log("detailOrder", detailOrder);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    const tab = params.get("tab") || "QRcode";
+    setActiveTab(tab);
+  }, [location.search]);
 
   useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
@@ -18,19 +36,21 @@ function DetailAll() {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
-  const reducedHeight =
-  tax === 0 && serviceCharge === 0
-    ? window.innerWidth >= 768
-      ? height - 440
-      : height - 420
-    : tax > 0 && serviceCharge > 0
-    ? window.innerWidth >= 768
-      ? height - 500
-      : height - 420
-    : window.innerWidth >= 768
-    ? height - 460
-    : height - 420;
+  let deduction = 420; // ค่าหักเริ่มต้นสำหรับหน้าจอขนาดเล็ก
+  if (window.innerWidth >= 768) {
+    deduction = 440;
+  }
+  if (tax > 0 && serviceCharge > 0 && detailOrder.order_note) {
+    deduction = window.innerWidth >= 768 ? 500 : 420;
+  } else if (tax > 0 && serviceCharge > 0) {
+    deduction = window.innerWidth >= 768 ? 450 : 420;
+  } else if (tax === 0 && serviceCharge === 0 && !detailOrder.order_note) {
+    deduction = window.innerWidth >= 768 ? 450 : 420;
+  } else {
+    deduction = window.innerWidth >= 768 ? 450 : 420;
+  }
 
+  const reducedHeight = height - deduction;
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
@@ -68,7 +88,7 @@ function DetailAll() {
     }));
   }, [detailOrder.orderList]);
 
-  console.log("groupedMenuDetails", groupedMenuDetails);
+  // console.log("groupedMenuDetails", groupedMenuDetails);
 
   const { totalPrice, totalSpecialPrice, totalPriceAll } = detailOrder.orderList
     .filter((orderItem) => orderItem.status === "4" || orderItem.status === "5") // รวม status 5
@@ -93,35 +113,85 @@ function DetailAll() {
       { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
     );
 
+  const handleSavePDF = () => {
+    setShowPdfContent(true); // แสดงเนื้อหาชั่วคราวเพื่อให้จับภาพได้
+  };
+
+  useEffect(() => {
+    if (showPdfContent) {
+      const date = new Date();
+      const today = date.toLocaleDateString("en-GB", {
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      const order_number = detailData.order_number;
+
+      setTimeout(() => {
+        onClickClose(false);
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+
+        Toast.fire({
+          icon: "success",
+          title: "กำลังดาวน์โหลด PDF",
+        });
+
+        Receipt_PDF("print", today, order_number);
+
+        // Hide the PDF content after generating the PDF
+        setTimeout(() => {
+          setShowPdfContent(false);
+        }, 500); // Delay to ensure PDF is generated before hiding
+      }, 500);
+    }
+  }, [showPdfContent]);
   const totalDiscount = totalPrice - totalPriceAll; // ส่วนลดรวม
   const serviceChargeTotal = totalPriceAll * (serviceCharge / 100);
   const grandTotal = totalPriceAll + serviceChargeTotal;
   const taxTotal = grandTotal * (tax / 100);
   const Tatal = grandTotal + taxTotal;
+
   return (
     <div className="flex gap-4">
       <div className="w-full h-full rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
-        <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg">
+        <div className="flex justify-between bg-[#00537B] py-3 lg:px-4 px-2 rounded-t-lg h-full">
           <div className="flex gap-4 items-center">
-            <div className="bg-white rounded-lg p-2 w-[90px] h-[90px] flex flex-col justify-center items-center ">
-              <p className="text-xl text-[#00537B] font-[600]">โต๊ะ</p>
-              <p className="text-6xl text-[#00537B] font-[700]">
+            <div className="bg-white rounded-lg p-2 w-[90px] h-[90px] flex gap-1 justify-center items-center flex-shrink-0 ">
+              <p className="text-xl text-[#00537B] font-[700] line-clamp-3 break-all">
                 {detailOrder.table.title}
               </p>
             </div>
             <div className="flex flex-col">
-              <p className="text-3xl text-white font-[600]">ชื่อร้าน</p>
-              <p className="text-xl text-white font-[600]">ที่อยู่ติดต่อ</p>
-              <p className="text-base text-white font-[600]">
+              <p className="xl:text-3xl lg:text-xl text-white font-[600]">
+                ชื่อร้าน
+              </p>
+              <p className="xl:text-xl lg:text-lg text-white font-[600]">
+                ที่อยู่ติดต่อ
+              </p>
+              <p className="xl:text-base text-sm text-white font-[600]">
                 เลขประจำตัวผู้เสียภาษี : 11111111121
               </p>
             </div>
           </div>
-          <div className="flex flex-col justify-between items-end h-full">
-            <p className="text-xl text-white font-[600]">
+          <div className="flex flex-col justify-between gap-2">
+            <p className="xl:text-xl lg:text-lg text-right text-white font-[600] ">
               หมายเลขออเดอร์ : {detailOrder.order_number}
             </p>
-            <p className="text-base text-white font-[600]">{formattedDate}</p>
+            <p className="xl:text-base text-sm text-white text-right font-[600] ">
+              {formattedDate}
+            </p>
           </div>
         </div>
 
@@ -257,9 +327,9 @@ function DetailAll() {
           {detailOrder.order_note && (
             <div className="flex flex-row gap-2 justify-start items-start lg:py-2 py-1 px-4">
               <p className="lg:text-base text-sm font-[400] flex-shrink-0">
-                หมายเหตุ :{" "}
+                หมายเหตุ :
               </p>
-              <p className="lg:text-base text-sm font-[400] line-clamp-4">
+              <p className="lg:text-base text-sm font-[400] line-clamp-3">
                 {detailOrder.order_note}
               </p>
             </div>
@@ -267,7 +337,166 @@ function DetailAll() {
         </div>
       </div>
 
-      <div className="xl:max-w-[500px] w-full h-full flex xl:flex-col gap-4"></div>
+      <div className="2xl:max-w-[500px] lg:max-w-[400px] max-w-[300px] w-full flex flex-col gap-4">
+        <div className="w-full h-full bg-white p-4 rounded-lg flex flex-col gap-6">
+          <div className="flex  lg:gap-4 gap-2 justify-between items-center">
+            <Link
+              to={`/payment/detail-all/${detailOrder.id}?tab=QRcode`}
+              className={`group flex lg:flex-row flex-col justify-center items-center lg:gap-4 gap-2 lg:max-w-[50%] w-full rounded-2xl border border-[#D9D9D9] lg:p-3 py-3 cursor-pointer transition-all duration-200 ease-in-out hover:bg-[#013D59] ${
+                activeTab === "QRcode"
+                  ? "bg-[#013D59] text-white"
+                  : "bg-white text-[#013D59]"
+              }`}
+            >
+              <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
+                <img
+                  src="/icons/QR.svg"
+                  alt=""
+                  className={`w-full h-full group-hover:filter group-hover:invert group-hover:brightness-0 ${
+                    activeTab === "QRcode" ? "filter invert brightness-0" : ""
+                  }`}
+                />
+              </figure>
+              <div
+                className={`border-l-2 border-[#013D59] group-hover:border-white lg:h-[50px] lg:block hidden rounded-full ${
+                  activeTab === "QRcode" ? "border-white" : ""
+                }`}
+              ></div>
+
+              <p
+                className={`2xl:text-2xl text-lg font-[500] text-[#013D59] group-hover:text-white ${
+                  activeTab === "QRcode" ? "text-white" : ""
+                }`}
+              >
+                เเสกน QR
+              </p>
+            </Link>
+
+            <Link
+              to={`/payment/detail-all/${detailOrder.id}?tab=Cash`}
+              className={`group flex lg:flex-row flex-col justify-center items-center lg:gap-4 gap-2 lg:max-w-[50%] w-full rounded-2xl border border-[#D9D9D9] lg:p-3 py-3 cursor-pointer transition-all duration-200 ease-in-out hover:bg-[#013D59] ${
+                activeTab === "Cash"
+                  ? "bg-[#013D59] text-white"
+                  : "bg-white text-[#013D59]"
+              }`}
+            >
+              <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
+                <img
+                  src="/icons/Group 591.svg"
+                  alt=""
+                  className={`w-full h-full group-hover:filter group-hover:invert group-hover:brightness-0 ${
+                    activeTab === "Cash" ? "filter invert brightness-0" : ""
+                  }`}
+                />
+              </figure>
+              <div
+                className={`border-l-2 border-[#013D59] group-hover:border-white lg:h-[50px] lg:block hidden rounded-full ${
+                  activeTab === "Cash" ? "border-white" : ""
+                }`}
+              ></div>
+
+              <p
+                className={`2xl:text-2xl text-lg font-[500] text-[#013D59] group-hover:text-white ${
+                  activeTab === "Cash" ? "text-white" : ""
+                }`}
+              >
+                ชำระเงินสด
+              </p>
+            </Link>
+          </div>
+
+          {activeTab === "QRcode" && <QRcode Tatal={Tatal} />}
+          {activeTab === "Cash" && <Cash Tatal={Tatal} />}
+        </div>
+
+        <div className="flex gap-4 flex-wrap items-center justify-center">
+          {activeTab === "QRcode" && (
+            <div className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px]  w-full cursor-pointer group hover:bg-[#FF6A00]">
+              <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
+                <img
+                  src="/icons/Group 322.svg"
+                  alt=""
+                  className={`w-full h-full group-hover:filter group-hover:invert group-hover:brightness-0 `}
+                />
+              </figure>
+              <div
+                className={`border-l-2 border-[#313131] group-hover:border-white lg:h-[30px] h-[20px] rounded-full `}
+              ></div>
+
+              <p
+                className={`2xl:text-2xl lg:text-lg font-[500] text-[#313131] group-hover:text-white`}
+              >
+                อัปสลิป
+              </p>
+            </div>
+          )}
+          {activeTab === "Cash" && (
+            <div className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px] w-full cursor-pointer group hover:bg-[#FF6A00]">
+              <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
+                <img
+                  src="/icons/cash-money.svg"
+                  alt=""
+                  className={`w-full h-full group-hover:filter group-hover:invert group-hover:brightness-0 `}
+                />
+              </figure>
+              <div
+                className={`border-l-2 border-[#313131] group-hover:border-white lg:h-[30px] h-[20px] rounded-full `}
+              ></div>
+
+              <p
+                className={`2xl:text-2xl lg:text-lg font-[500] text-[#313131] group-hover:text-white`}
+              >
+                ยืนยัน
+              </p>
+            </div>
+          )}
+          <div className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[150px]  w-full cursor-pointer group hover:bg-[#FF6A00]">
+            <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
+              <img
+                src="/icons/edit.svg"
+                alt=""
+                className={`w-full h-full group-hover:filter group-hover:invert group-hover:brightness-0 `}
+              />
+            </figure>
+            <div
+              className={`border-l-2 border-[#313131] group-hover:border-white lg:h-[30px] h-[20px]  rounded-full `}
+            ></div>
+
+            <p
+              className={`2xl:text-2xl lg:text-lg font-[500] text-[#313131] group-hover:text-white`}
+            >
+              แก้ไขเมนู
+            </p>
+          </div>
+          <div
+            onClick={handleSavePDF}
+            className="bg-[#013D59] hover:bg-[#FF6A00] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[170px] w-full cursor-pointer group"
+          >
+            <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
+              <img
+                src="/icons/print.svg"
+                alt=""
+                className={`w-full h-full group-hover:filter group-hover:invert group-hover:brightness-0 `}
+              />
+            </figure>
+            <div
+              className={`border-l-2 border-white lg:h-[30px] h-[20px] rounded-full `}
+            ></div>
+
+            <p className={`2xl:text-2xl lg:text-lg font-[500] text-white`}>
+              พิมพ์ใบเสร็จ
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {showPdfContent && (
+        <div style={{ position: "absolute", left: "-999999px" }}>
+          <div ref={pdfRef}>
+            <Receipt />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

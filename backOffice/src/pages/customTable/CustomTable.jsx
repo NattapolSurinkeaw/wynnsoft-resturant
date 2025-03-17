@@ -72,16 +72,6 @@ function CustomTable() {
     setCurrentPage(value);
   };
 
-  useEffect(() => {
-    console.log("isAddTable : " + isAddTable);
-    console.log("isEditTable : " + isEditTable);
-    console.log("isFoodList : " + isFoodList);
-    console.log("isTotalBill : " + isTotalBill);
-  }, [isAddTable,
-    isEditTable,
-    isFoodList,
-    isTotalBill,])
-
   // console.log(customTable)
   // console.log(selectedTableId)
   return (
