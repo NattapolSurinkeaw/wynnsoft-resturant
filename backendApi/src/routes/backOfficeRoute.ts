@@ -19,8 +19,10 @@ const orderFoodController = new OrderFoodController();
 
 // จัดการออเดอร์
 router.get('/api/backoffice/orderall', AuthenticateAdmin, orderFoodController.OngetAllOrderFoods);
+router.get('/api/backoffice/order/:id', AuthenticateAdmin, orderFoodController.OngetOrderFoodById);
 // จัดการโต๊ะ
 router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController.OngetAllTable);
+router.get('/api/backoffice/onlyTable', AuthenticateAdmin, tableManageController.OngetOnlyTable);
 router.post('/api/backoffice/createtable', AuthenticateAdmin, tableManageController.OnCreateTable);
 router.post('/api/backoffice/edittable/:id', AuthenticateAdmin, tableManageController.OnEditTable);
 router.get('/api/backoffice/generate-qrcode/:id', AuthenticateAdmin, tableManageController.OngetGenerateQrcode);

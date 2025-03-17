@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { Select, MenuItem } from "@mui/material";
+import { getTableOnly } from "../../../services/table_manage.service";
 
-function MoveTable({ isMoveTable, closeModal }) {
-  const [age, setAge] = useState("");
+function MoveTable({ isMoveTable, closeModal, table }) {
+  const [tables, setTables] = useState("");
+  const [currentTable, setCurrentTable] = useState([]);
+
+  useEffect(() => {
+    getTableOnly().then((res) => {
+      setTables(res.tables);
+    })
+  }, [])
+
+  useEffect(() => {
+    setCurrentTable(table.id);
+  }, [table])
 
   return (
     isMoveTable && (
@@ -24,13 +36,15 @@ function MoveTable({ isMoveTable, closeModal }) {
 
           <div className="flex justify-center mt-4">
             <Select
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
+              value={currentTable}
+              onChange={(e) => setCurrentTable(e.target.value)}
               className="w-[200px] h-[37px] text-[14px]"
             >
-              <MenuItem value={10}>1</MenuItem>
-              <MenuItem value={20}>2</MenuItem>
-              <MenuItem value={30}>3</MenuItem>
+              {
+                tables.map((table) => (
+                  <MenuItem key={table.id} value={table.id}>{table.title}</MenuItem>
+                ))
+              }
             </Select>
           </div>
 

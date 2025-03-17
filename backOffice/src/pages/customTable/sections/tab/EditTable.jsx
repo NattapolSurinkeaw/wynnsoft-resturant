@@ -7,6 +7,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { getEditTable, getGenerateQr } from "../../../../services/table_manage.service";
 import { QRCodeCanvas } from "qrcode.react";
 import { front_readqr } from "../../../../store/setting";
+import Swal from "sweetalert2";
 
 function EditTable({tableDetail}) {
   // console.log(tableDetail)
@@ -32,6 +33,15 @@ function EditTable({tableDetail}) {
 
     getEditTable(tableDetail.id, params).then((res) => {
       console.log(res);
+      if(res.status) {
+        Swal.fire({
+          position: "center",
+          text: "แก้ไขมูลโต๊ะสำเร็จ!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      }
     })
   }
 

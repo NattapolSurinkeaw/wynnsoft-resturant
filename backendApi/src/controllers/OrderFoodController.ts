@@ -26,13 +26,43 @@ export class OrderFoodController {
       return res.status(200).json({
         status: true,
         message: 'ok',
-        description: 'confirm payment success.',
+        description: 'get order All success.',
         data: order
       })
     } catch (error) {
       console.error("เกิดข้อผิดพลาด:", error);
     }
   } 
+  OngetOrderFoodById = async(req: any, res:any) => {
+    try {
+      const order = await Orders.findOne({
+        where: { id: req.params.id },
+        include: [
+          { model: Table, as: "table" },
+          { model: OrdersList, as: "orderList",
+            include: [{ model: Foods, as: "food" }] 
+           },
+        ],
+      });
+
+      if(!order) {
+        return res.status(400).json({
+          status: false,
+          message: "error",
+          description: "order was not found.",
+        });
+      }
+  
+      return res.status(200).json({
+        status: true,
+        message: 'ok',
+        description: 'get order by id success.',
+        data: order
+      })
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาด:", error);
+    }
+  }
 
   // สั่งอาหาร
   OnAddOrderFood = async(req: any, res: any) => {

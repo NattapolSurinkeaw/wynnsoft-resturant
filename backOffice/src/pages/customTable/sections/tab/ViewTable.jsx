@@ -19,7 +19,7 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, custo
   const contentRef = useRef();
 
   useEffect(() => {
-    console.log(customTable);
+    // console.log(customTable);
     if (!selectedTableId && customTable.length > 0) {
       setSelectedTableId(customTable[0].id);
     }
@@ -96,7 +96,7 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, custo
           <div className="flex justify-around items-center gap-6">
             <p className="text-[20px] text-[#313131] font-[500]">ชื่อ</p>
             <p className="text-[35px] text-[#313131] font-[700]">
-              โต๊ะ {tableDetails.title}
+              {tableDetails.title}
             </p>
             <button onClick={handleEditClick}>
               <BorderColorIcon

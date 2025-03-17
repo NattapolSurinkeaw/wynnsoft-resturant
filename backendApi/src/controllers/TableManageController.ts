@@ -16,7 +16,22 @@ export class TableManageController {
 
   OngetAllTable = async(req: any, res: any) => {
     try {
-      const tables = await Table.findAll({order: [['priority', 'ASC']]});
+      const tables = await Table.findAll({
+        order: [['priority', 'ASC']], // ✅ เรียงลำดับตาม priority ของ Table
+        include: [
+          {
+            model: BookingTable,
+            as: "bookings",
+            attributes: ["id", "name_booking", "date_booking", "time_booking", "people"],
+            order: [
+              ["date_booking", "ASC"],  // ✅ เรียงลำดับวันที่
+              ["time_booking", "ASC"],  // ✅ เรียงลำดับเวลา
+            ],
+            separate: true, // ✅ ใช้ separate เพื่อให้ order ทำงานกับ BookingTable
+          },
+        ],
+      });
+      
       return res.status(200).json({
         status: true,
         message: "ok",
@@ -33,6 +48,25 @@ export class TableManageController {
       })
     }
   } 
+  OngetOnlyTable = async(req: any, res: any) => {
+    try {
+      const table = await Table.findAll({order: [['priority', 'ASC']]});
+
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "get data success.",
+        table: table
+      });
+    } catch(error){
+      return res.status(500).json({
+          status: false,
+          message: 'error',
+          error: error,
+          description: 'something went wrong.'
+      })
+    }
+  }
   OnCreateTable = async(req: any, res: any) => {
     try {
       const table = await Table.create({
