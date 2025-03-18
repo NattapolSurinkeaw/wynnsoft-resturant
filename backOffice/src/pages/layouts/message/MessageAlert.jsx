@@ -1,0 +1,26 @@
+
+import React from "react";
+
+function MessageAlert({ message, onClose }) {
+  return (
+    <div
+      className="modal fixed top-0 left-0 w-full h-full bg-black/20 bg-opacity-50 flex justify-center items-center z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white p-6 rounded-lg"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 className="text-center text-xl">{message}</h2>
+        <button
+          className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
+          onClick={onClose}
+        >
+          ปิด
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default MessageAlert;

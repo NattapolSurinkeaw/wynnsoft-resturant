@@ -46,8 +46,8 @@ const TableMenuStatus = ({
             <tr className="text-[18px] bg-white text-[#013D59]">
               <th className="rounded-tl-lg p-4">รายการอาหาร</th>
               <th className="p-4">หมายเหตุ</th>
-              <th className="py-4 pr-4">แก้ไข</th>
-              <th className="rounded-tr-lg py-4 pr-6">ลบ</th>
+              <th className="py-4 pr-4">เพิ่มเหตุ</th>
+              <th className="rounded-tr-lg py-4 pr-6">ยกเลิก</th>
             </tr>
           </thead>
           <tbody>
