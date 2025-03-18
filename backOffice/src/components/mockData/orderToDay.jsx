@@ -2,7 +2,7 @@ export const orderToday = [
   {
     id: 6,
     order_number: "000000006",
-    table_id: 1, //ไอดีโต๊ะ
+    table_id: 111, //ไอดีโต๊ะ
     status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note:
@@ -10,7 +10,7 @@ export const orderToday = [
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
     table: {
-      id: 1,
+      id: 111,
       table_token: "6e87770d-3684-47d1-b384-95fd0cf55051",
       title: "VIPP", //ชื่อโต๊ะ
       status: 2, //สถานะโต๊ะ ว่าง จอง บริการ
@@ -127,7 +127,7 @@ export const orderToday = [
       },
       {
         id: 58,
-        food_id: 3,
+        food_id: 10,
         orders_id: 6,
         amount: 1,
         status: "4",
@@ -135,7 +135,7 @@ export const orderToday = [
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
         food: {
-          id: 3,
+          id: 10,
           cate_id: "1,2",
           name: "ทอดปลาทูตัวเล็ก ๆ",
           price: 40,
@@ -155,7 +155,7 @@ export const orderToday = [
   },
   {
     id: 15,
-    order_number: "000000015",
+    order_number: "0000000216",
     table_id: 2,
     status: "3",
     price: 60,
@@ -332,14 +332,14 @@ export const orderToday = [
   {
     id: 10,
     order_number: "000000010",
-    table_id: 2,
+    table_id: 12,
     status: "3",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
-      id: 2,
+      id: 12,
       table_token: "bf3136cd-2241-4cae-bd7f-62573d0ad41e",
       title: "02",
       status: true,
@@ -407,14 +407,14 @@ export const orderToday = [
   {
     id: 16,
     order_number: "000000016",
-    table_id: 1, //ไอดีโต๊ะ
+    table_id: 11, //ไอดีโต๊ะ
     status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
     table: {
-      id: 1,
+      id: 11,
       table_token: "6e87770d-3684-47d1-b384-95fd0cf55051",
       title: "01", //ชื่อโต๊ะ
       status: 2, //สถานะโต๊ะ ว่าง จอง บริการ
@@ -508,14 +508,14 @@ export const orderToday = [
   {
     id: 12,
     order_number: "000000215",
-    table_id: 2,
+    table_id: 22,
     status: "2",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
-      id: 2,
+      id: 22,
       table_token: "bf3136cd-2241-4cae-bd7f-62573d0ad41e",
       title: "02",
       status: true,
@@ -583,14 +583,14 @@ export const orderToday = [
   {
     id: 11,
     order_number: "000000011",
-    table_id: 1, //ไอดีโต๊ะ
+    table_id: 15, //ไอดีโต๊ะ
     status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
     table: {
-      id: 1,
+      id: 15,
       table_token: "6e87770d-3684-47d1-b384-95fd0cf55051",
       title: "01", //ชื่อโต๊ะ
       status: 2, //สถานะโต๊ะ ว่าง จอง บริการ
@@ -684,14 +684,14 @@ export const orderToday = [
   {
     id: 167,
     order_number: "00044516",
-    table_id: 3,
+    table_id: 31,
     status: "1",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
-      id: 3,
+      id: 31,
       table_token: "bf3136cd-2241-4cae-bd7f-62573d0ad41e",
       title: "03",
       status: true,

@@ -153,7 +153,7 @@ function Payment() {
                   โต๊ะที่เปิด
                 </p>
                 <div
-                  className="bg-white cursor-pointer flex justify-between items-center gap-2 p-1.5 px-2 rounded-lg shadow  w-[170px] max-w-full"
+                  className="bg-white cursor-pointer flex justify-between items-center gap-2 p-1.5 px-2 rounded-lg shadow  w-[250px] max-w-full"
                   onClick={() => setShowTable(!showTable)}
                 >
                   <p className="text-[#313131] xl:text-lg text-base font-[400]">
@@ -351,7 +351,6 @@ function Payment() {
       </div>
 
       {/*  pagination */}
-
       <div className="flex justify-end gap-1 bg-white w-fit ml-auto border border-[#DFDFDF] rounded-sm">
         <button
           onClick={handlePrevious}

@@ -13,6 +13,7 @@ function OrderDetail_PDF({
   const formattedDate = dayjs(detailData.createdAt, "DD-MM-YYYY").format(
     "DD MMMM YYYY"
   );
+  
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
