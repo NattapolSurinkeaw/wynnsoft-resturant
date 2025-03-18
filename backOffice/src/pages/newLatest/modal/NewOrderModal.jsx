@@ -5,11 +5,14 @@ import html2canvas from "html2canvas";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
 import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
-
+import Receipt_Print from "../../../components/Receipt/Receipt_Print ";
+Receipt_Print;
 function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
   const [activeTab, setActiveTab] = useState(1);
 
   const printRef = useRef(null);
+  const formatNumber = (num) =>
+    Number(num).toLocaleString("en-US",);
 
   const fillterOrderData = NewLatestData.find((table) => table.id === orderId);
 
@@ -26,7 +29,8 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
     setActiveTab(3);
 
     setTimeout(() => {
-      handleExportPDF();
+      // handleExportPDF();
+      Receipt_Print("print");
 
       setTimeout(() => {
         handleCloseModal();
@@ -51,50 +55,51 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
     }, 500);
   };
 
-  const handleExportPDF = async () => {
-    if (!printRef.current) return;
+  // const handleExportPDF = async () => {
+  //   if (!printRef.current) return;
 
-    const canvas = await html2canvas(printRef.current, { scale: 10 });
-    const imgData = canvas.toDataURL("image/png");
+  //   const canvas = await html2canvas(printRef.current, { scale: 10 });
+  //   const imgData = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
+  //   const pdf = new jsPDF({
+  //     orientation: "portrait",
+  //     unit: "mm",
+  //     format: "a4",
+  //   });
 
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pageWidth - 20; // ลดขอบ
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //   const pageWidth = pdf.internal.pageSize.getWidth();
+  //   const pageHeight = pdf.internal.pageSize.getHeight();
+  //   const imgWidth = pageWidth - 20; // ลดขอบ
+  //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    if (imgHeight > pageHeight - 10) {
-      pdf.addImage(
-        imgData,
-        "PNG",
-        10,
-        10,
-        imgWidth,
-        imgHeight,
-        undefined,
-        "FAST"
-      );
-      pdf.addPage();
-    } else {
-      pdf.addImage(
-        imgData,
-        "PNG",
-        10,
-        10,
-        imgWidth,
-        imgHeight,
-        undefined,
-        "FAST"
-      );
-    }
-
-    pdf.save("Order.pdf");
-  };
+  //   if (imgHeight > pageHeight - 10) {
+  //     pdf.addImage(
+  //       imgData,
+  //       "PNG",
+  //       10,
+  //       10,
+  //       imgWidth,
+  //       imgHeight,
+  //       undefined,
+  //       "FAST"
+  //     );
+  //     pdf.addPage();
+  //   } else {
+  //     pdf.addImage(
+  //       imgData,
+  //       "PNG",
+  //       10,
+  //       10,
+  //       imgWidth,
+  //       imgHeight,
+  //       undefined,
+  //       "FAST"
+  //     );
+  //   }
+  //   pdf.autoPrint();
+  //   window.open(pdf.output("bloburl"), "_blank");
+  //   // pdf.save("Order.pdf");
+  // };
 
   return (
     isOpenNewOrderModal && (
@@ -232,8 +237,9 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
         {/* Tab 3 */}
         {activeTab === 3 && (
           <div
+            id="print"
             ref={printRef}
-            className=" relative bg-white p-2 shadow-lg w-[316px] "
+            className=" relative bg-white py-3 pl-3 pr-8 shadow-lg w-[316px] "
           >
             <button
               onClick={handleCloseModal}
@@ -282,7 +288,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
                   {fillterOrderData.details}
                 </p>
                 <p className="text-black text-[16px] font-[500] mt-4">
-                  {fillterOrderData.price}
+                  {formatNumber(fillterOrderData.price)}
                 </p>
               </div>
               <p className="text-black text-[15px] font-[500] mt-1 underline decoration-1">
@@ -298,7 +304,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
                   {fillterOrderData.details}
                 </p>
                 <p className="text-black text-[16px] font-[500] mt-4">
-                  {fillterOrderData.price}
+                  {formatNumber(fillterOrderData.price)}
                 </p>
               </div>
               <p className="text-black text-[15px] font-[500] mt-1 underline decoration-1">
