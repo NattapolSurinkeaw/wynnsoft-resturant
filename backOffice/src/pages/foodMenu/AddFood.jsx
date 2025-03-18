@@ -21,6 +21,8 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const inputProfileImage = useRef([]);
 
+
+
   const handleCategoryChange = (id) => {
     setSelectedCategories((prev) =>
       prev.includes(id) ? prev.filter((catId) => catId !== id) : [...prev, id]

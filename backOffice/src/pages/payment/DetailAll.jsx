@@ -7,7 +7,11 @@ import Cash from "./components/Cash";
 import QRcode from "./components/QRcode";
 import Receipt from "./components/Receipt";
 import Swal from "sweetalert2";
-import Receipt_PDF from "../../components/Receipt/Receipt_PDF";
+import { Box, Dialog, DialogContent, DialogTitle, Modal } from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
+import EditOrder from "./components/EditOrder";
+import Receipt_Print from "../../components/Receipt/Receipt_Print ";
+
 
 function DetailAll() {
   dayjs.locale("th");
@@ -20,8 +24,12 @@ function DetailAll() {
   const [activeTab, setActiveTab] = useState("QRcode");
   const [showPdfContent, setShowPdfContent] = useState(false);
   const pdfRef = useRef();
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [image, setImage] = useState(null);
+  const [open, setOpen] = useState(false);
+  const inputProfileImage = useRef(null);
 
-  // console.log("detailOrder", detailOrder);
+  console.log("image", image);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -114,23 +122,12 @@ function DetailAll() {
     );
 
   const handleSavePDF = () => {
-    setShowPdfContent(true); // แสดงเนื้อหาชั่วคราวเพื่อให้จับภาพได้
+    setShowPdfContent(true);
   };
 
   useEffect(() => {
     if (showPdfContent) {
-      const date = new Date();
-      const today = date.toLocaleDateString("en-GB", {
-        month: "numeric",
-        day: "numeric",
-        year: "numeric",
-      });
-
-      const order_number = detailData.order_number;
-
       setTimeout(() => {
-        onClickClose(false);
-
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -145,18 +142,48 @@ function DetailAll() {
 
         Toast.fire({
           icon: "success",
-          title: "กำลังดาวน์โหลด PDF",
+          title: "กำลังดาวน์โหลดใบเสร็จ",
         });
 
-        Receipt_PDF("print", today, order_number);
+        Receipt_Print("print");
 
-        // Hide the PDF content after generating the PDF
         setTimeout(() => {
           setShowPdfContent(false);
         }, 500); // Delay to ensure PDF is generated before hiding
       }, 500);
     }
   }, [showPdfContent]);
+
+  const handleOpenModal = () => {
+    setOpenModalEdit(true);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (
+      file &&
+      ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(file.type)
+    ) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+        setOpen(true);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      Swal.fire({
+        title: "กรุณาอัปโหลดเฉพาะไฟล์รูปภาพ",
+        icon: "warning",
+        position: "center",
+        timer: 1500,
+        showConfirmButton: false,
+        target: "body",
+      });
+      e.target.value = "";
+    }
+  };
+
   const totalDiscount = totalPrice - totalPriceAll; // ส่วนลดรวม
   const serviceChargeTotal = totalPriceAll * (serviceCharge / 100);
   const grandTotal = totalPriceAll + serviceChargeTotal;
@@ -411,23 +438,66 @@ function DetailAll() {
 
         <div className="flex gap-4 flex-wrap items-center justify-center">
           {activeTab === "QRcode" && (
-            <div className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px]  w-full cursor-pointer group hover:bg-[#FF6A00]">
-              <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
-                <img
-                  src="/icons/Group 322.svg"
-                  alt=""
-                  className={`w-full h-full group-hover:filter group-hover:invert group-hover:brightness-0 `}
-                />
-              </figure>
-              <div
-                className={`border-l-2 border-[#313131] group-hover:border-white lg:h-[30px] h-[20px] rounded-full `}
-              ></div>
+            <div>
+              <label htmlFor="upload-slip" className="cursor-pointer">
+                <div className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px] w-full group hover:bg-[#FF6A00]">
+                  <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
+                    <img
+                      src="/icons/Group 322.svg"
+                      alt=""
+                      className="w-full h-full group-hover:filter group-hover:invert group-hover:brightness-0"
+                    />
+                  </figure>
+                  <div className="border-l-2 border-[#313131] group-hover:border-white lg:h-[30px] h-[20px] rounded-full"></div>
+                  <p className="2xl:text-2xl lg:text-lg font-[500] text-[#313131] group-hover:text-white">
+                    อัปสลิป
+                  </p>
+                </div>
+              </label>
 
-              <p
-                className={`2xl:text-2xl lg:text-lg font-[500] text-[#313131] group-hover:text-white`}
-              >
-                อัปสลิป
-              </p>
+              <input
+                type="file"
+                id="upload-slip"
+                className="hidden"
+                ref={inputProfileImage}
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+
+              <Modal open={open} onClose={() => setOpen(false)}>
+                <Box
+                  className="flex flex-col gap-4 2xl:max-w-[30%] lg:max-w-[40%] max-w-[65%] w-full py-4 outline-none"
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    bgcolor: "white",
+                    borderRadius: "10px",
+                    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <div className="flex justify-between gap-4 w-full px-4">
+                    <p className="text-[#00537B] text-2xl font-[600] ">
+                      หลักฐานการโอนเงิน
+                    </p>
+                    <button onClick={() => setOpen(false)}>
+                      <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
+                    </button>
+                  </div>
+
+                  {/* Image Preview */}
+                  {image && (
+                    <figure className="w-[380px] h-[650px] rounded-lg mx-auto">
+                      <img
+                        src={image}
+                        alt="Slip Preview"
+                        className="w-full h-full rounded-lg object-cover"
+                      />
+                    </figure>
+                  )}
+                </Box>
+              </Modal>
             </div>
           )}
           {activeTab === "Cash" && (
@@ -450,7 +520,10 @@ function DetailAll() {
               </p>
             </div>
           )}
-          <div className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[150px]  w-full cursor-pointer group hover:bg-[#FF6A00]">
+          <div
+            onClick={handleOpenModal}
+            className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[150px]  w-full cursor-pointer group hover:bg-[#FF6A00]"
+          >
             <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
               <img
                 src="/icons/edit.svg"
@@ -490,13 +563,65 @@ function DetailAll() {
         </div>
       </div>
 
+      <Modal
+        open={openModalEdit}
+        onClose={() => {
+          setOpenModalEdit(false);
+        }}
+      >
+        <Box
+          className="flex flex-col gap-4 2xl:max-w-[50%] lg:max-w-[80%] max-w-[95%] w-full py-4 outline-none"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "white",
+            borderRadius: "10px",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#FFf",
+          }}
+        >
+          <div className="flex gap-4 w-full px-4">
+            <div className="flex gap-2 items-center w-[60%]">
+              <p className="text-[#00537B] text-2xl font-[600] ">แก้ไขเมนู</p>
+            </div>
+
+            <p className="text-[#313131] text-lg text-left w-[35%]">จำนวน</p>
+
+            <button
+              onClick={() => {
+                setOpenModalEdit(false);
+              }}
+              className="flex flex-row justify-end gap-4 w-[20%]"
+            >
+              <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
+            </button>
+          </div>
+
+          <EditOrder
+            groupedMenuDetails={groupedMenuDetails}
+            setOpenModalEdit={setOpenModalEdit}
+          />
+        </Box>
+      </Modal>
+
       {showPdfContent && (
-        <div style={{ position: "absolute", left: "-999999px" }}>
+        <div style={{ position: "absolute", left: "-99999px" }}>
           <div ref={pdfRef}>
-            <Receipt />
+            <Receipt
+              detailOrder={detailOrder}
+              groupedMenuDetails={groupedMenuDetails}
+              serviceCharge={serviceCharge}
+              tax={tax}
+              formattedDate={formattedDate}
+              formatNumber={formatNumber}
+              totalPriceAll={totalPriceAll}
+              totalDiscount={totalDiscount}
+            />
           </div>
         </div>
-      )}
+        )} 
     </div>
   );
 }
