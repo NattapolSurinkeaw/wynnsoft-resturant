@@ -46,8 +46,8 @@ const TableMenuStatus = ({
             <tr className="text-[18px] bg-white text-[#013D59]">
               <th className="rounded-tl-lg p-4">รายการอาหาร</th>
               <th className="p-4">หมายเหตุ</th>
-              <th className="py-4">แก้ไข</th>
-              <th className="rounded-tr-lg py-4">ลบ</th>
+              <th className="py-4 pr-4">แก้ไข</th>
+              <th className="rounded-tr-lg py-4 pr-6">ลบ</th>
             </tr>
           </thead>
           <tbody>
@@ -56,7 +56,7 @@ const TableMenuStatus = ({
                 key={order.id}
                 className={index % 2 === 0 ? "bg-[#EEEEEE]" : "bg-white"}
               >
-                <td className="py-3">
+                <td className="py-3 pl-6">
                   <div className="flex gap-3">
                     <figure className="w-[55px] h-[55px] rounded-lg shadow-sm">
                       <img
@@ -72,17 +72,17 @@ const TableMenuStatus = ({
                   </div>
                 </td>
                 <td className="p-3">{order.note || "-"}</td>
-                <td className="py-3 w-[60px]">
+                <td className="py-3 w-[60px] pr-4">
                   <div className="w-full flex items-center justify-center">
                     <button
-                      onClick={() => handleEditClick(order.id)}
+                      // onClick={() => handleEditClick(order.id)}
                       className="flex justify-center items-center w-[80px] h-[35px] text-white font-[500] bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg"
                     >
                       เพิ่มเหตุ
                     </button>
                   </div>
                 </td>
-                <td className="py-3 w-[60px]">
+                <td className="py-3 w-[60px] pr-6">
                   <div className="w-full flex items-center justify-center">
                     <button className="flex justify-center items-center w-[80px] h-[35px] text-white font-[500] bg-[#F44D4D] hover:bg-[#ff1c1c] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg">
                       ยกเลิก
