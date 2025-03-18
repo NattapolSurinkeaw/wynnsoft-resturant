@@ -45,5 +45,4 @@ OrdersList.belongsTo(Orders, { foreignKey: "orders_id", as: "order" });
 Orders.hasMany(OrdersList, { foreignKey: "orders_id", as: "orderList" });
 OrdersList.belongsTo(Foods, { foreignKey: "food_id", as: "food" }) // เพิ่มการเชื่อมกับ Foods
 
-
 export default OrdersList;

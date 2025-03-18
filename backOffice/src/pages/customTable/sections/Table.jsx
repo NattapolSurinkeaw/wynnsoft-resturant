@@ -37,7 +37,7 @@ function Table({
     setActiveTable(activeTable === tableId ? null : tableId);
   };
 
-  console.log("isTotalBill", isTotalBill);
+  // console.log("isTotalBill", isTotalBill);
 
   return (
     <>
@@ -135,7 +135,6 @@ function Table({
                   {table.status === 1 && (
                     <div className="text-center">
                       <p className="text-[#013D59] font-[500] text-[18px]">
-                        โต๊ะ <br />
                         <span className="text-[26px]">{table.title}</span>
                       </p>
                       {!isSettingOpen && !isEditTable && !isTotalBill && (
@@ -157,7 +156,7 @@ function Table({
                     <div className="text-center">
                       <p className="text-[#013D59] font-[500] text-[18px]">
                         จอง <br />
-                        <span className="text-[20px]">12.30 น.</span>
+                        <div className="text-[20px]">{table.bookings[0]?.time_booking?.slice(0, 5) || "ไม่ระบุ"} น.</div>
                       </p>
                       {!isSettingOpen && !isEditTable && !isTotalBill && (
                         <button onClick={() => setIsOpenTable(true)}>

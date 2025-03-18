@@ -45,7 +45,8 @@ const Table = sequelize.define(
   {
     sequelize,
     tableName: "tables",
-    timestamp: true,
+    timestamps: true,
   }
 );
+
 export { Table };

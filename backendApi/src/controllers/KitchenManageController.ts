@@ -9,29 +9,36 @@ import { Table } from "../models/table";
 import { Foods } from "../models/food";
 
 export class KitchenManageController {
-  OngetAllNewMenuFood = async(req: any, res: any) => {
+  // ดึงข้อมูลอาหารที่ลูกค้ากดสั่งเข้ามา
+  OngetAllNewMenuFood = async (req: any, res: any) => {
     try {
       const orderList = await OrdersList.findAll({
         include: [
           {
             model: Orders,
-            attributes: ['order_number'],
+            as: "order", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
+            attributes: ["order_number"],
             include: [
               {
-                  model: Table,
-                  attributes: ['title'],
-              }
-            ]
-          }
-        ]
-      });
-    
-      return res.status(200).json({
-        status: true,
-        message: 'get data foods',
-        orderList: orderList
+                model: Table,
+                as: "table", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
+                attributes: ["title"],
+              },
+            ],
+          },
+          {
+            model: Foods,
+            as: "food", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
+            attributes: ["name", "price", "special_price", "thumbnail_link"],
+          },
+        ],
       });
   
+      return res.status(200).json({
+        status: true,
+        message: "get data foods",
+        orderList: orderList,
+      });
     } catch (error) {
       return res.status(500).json({
         status: false,

@@ -1,10 +1,20 @@
 import axios from "axios";
 
+// ดึงข้อมูลโต๊ะและการจอง
 export const getTableall = () => {
   return axios.get('/api/backoffice/alltables').then((res) => {
     return {
       status: res.data.status,
       tables: res.data.tables
+    }
+  })
+}
+
+export const getTableOnly = () => {
+  return axios.get('/api/backoffice/onlyTable').then((res) => {
+    return {
+      status: res.data.status,
+      tables: res.data.table
     }
   })
 }
