@@ -3,7 +3,7 @@ import path from "path";
 import moment from 'moment'
 import bcrypt from "bcrypt";
 import * as jwt from 'jsonwebtoken'
-import { validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
 import * as Config from '../util/config'
 
 const sharp = require("sharp");
@@ -29,6 +29,79 @@ export class WebSettingController {
       return res.status(500).json({
           status: false,
           message: 'error',
+          description: 'something went wrong.'
+      })
+    }
+  }
+  // โปรไฟล์ร้านค้า
+  OnUpdateProfileShop = async(req: any, res: any) => {
+    try {
+      const webInfo = await WebInfo.findAll();
+      const arrayImage = req.files
+      let web_logoImage = null;
+      let web_bgImage = null;
+      
+      if (arrayImage.web_logo) {
+        let upload = "/uploads" + req.files.destination.split("uploads").pop();
+        console.log(upload);
+        let dest = req.files.destination;
+        var ext = path.extname(req.files.originalname);
+        let originalname = path.basename(req.files.originalname, ext);
+
+        for (let i = 1; fs.existsSync(dest + originalname + ext); i++) {
+          originalname = originalname.split("(")[0];
+          originalname += "(" + i + ")";
+        }
+
+        web_logoImage = await sharp(req.files.path)
+          .withMetadata()
+          .jpeg({ quality: 95 })
+          .toFile(path.resolve(req.files.destination, originalname + ext))
+          .then(() => {
+            fs.unlink(req.files.path, (err) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+            return upload + originalname + ext;
+          });
+
+          console.log(web_logoImage)
+      }
+
+      // if (arrayImage.web_bg) {
+      //   let upload = "/uploads" + req.file.destination.split("uploads").pop();
+      //   let dest = req.file.destination;
+      //   var ext = path.extname(req.file.originalname);
+      //   let originalname = path.basename(req.file.originalname, ext);
+
+      //   for (let i = 1; fs.existsSync(dest + originalname + ext); i++) {
+      //     originalname = originalname.split("(")[0];
+      //     originalname += "(" + i + ")";
+      //   }
+
+      //   web_bgImage = await sharp(req.file.path)
+      //     .withMetadata()
+      //     .jpeg({ quality: 95 })
+      //     .toFile(path.resolve(req.file.destination, originalname + ext))
+      //     .then(() => {
+      //       fs.unlink(req.file.path, (err) => {
+      //         if (err) {
+      //           console.log(err);
+      //         }
+      //       });
+      //       return upload + originalname + ext;
+      //     });
+      // }
+
+      console.log(web_logoImage)
+      console.log(web_bgImage)
+
+    } catch(error){
+      return res.status(500).json({
+          status: false,
+          message: 'error',
+          error: error,
           description: 'something went wrong.'
       })
     }

@@ -19,6 +19,14 @@ export const getUserAll = () => {
   }) 
 }
 
+export const getUpdateProfileShop = (formData) => {
+  return axios.post('/api/backoffice/updateProfile', formData).then((res) => {
+    return {
+      status: res.data.status
+    }
+  })
+}
+
 export const getEditShopData = (params) => {
   return axios.post('/api/backoffice/editshopdata', params).then((res) => {
     return { 

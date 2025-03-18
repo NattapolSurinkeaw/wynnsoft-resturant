@@ -14,7 +14,6 @@ import { getWebinfoSetting, getUserAll } from "../../services/setting.service";
 
 function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
-  const [age, setAge] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [infoType, setinfoType] = useState([]);
   const [webinfo, setWebinfo] = useState([]);
@@ -23,10 +22,6 @@ function Settings() {
   const [slcPermission, setSlcPermission] = useState(0);
   const [slcStatus, setStatus] = useState("all");
   const [filteredUsers, setFilteredUsers] = useState(userAll);
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
   const handleAdd = () => {
     setIsOpen(true);
@@ -71,7 +66,6 @@ function Settings() {
 
     filterUsers();
   }, [slcPermission, slcStatus, userAll]); // อัปเดตเมื่อค่าพวกนี้เปลี่ยน
-
 
   return (
     <>
