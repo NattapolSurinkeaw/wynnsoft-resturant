@@ -5,6 +5,7 @@ import Badge from "@mui/material/Badge";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import Message from "./message/Message";
 import MessageAlert from "./message/MessageAlert";
+import alertSound from "../../../public/sound/incoming.mp3";
 import { MessageOrderData } from "../../components/mockData/MessageData/MessageData";
 import { MessageCallData } from "../../components/mockData/MessageData/MessageData";
 
@@ -13,23 +14,82 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [modalMessageAlert, setModalMessageAlert] = useState(false);
 
+  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(() => {
+    return JSON.parse(localStorage.getItem("notificationsEnabled")) ?? true;
+  });
+
+  const [isSoundEnabled, setIsSoundEnabled] = useState(() => {
+    return JSON.parse(localStorage.getItem("soundEnabled")) ?? true;
+  });
+
+  const [volume, setVolume] = useState(() => {
+    return Number(localStorage.getItem("volume")) ?? 50;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "notificationsEnabled",
+      JSON.stringify(isNotificationsEnabled)
+    );
+  }, [isNotificationsEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem("soundEnabled", JSON.stringify(isSoundEnabled));
+  }, [isSoundEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem("volume", volume.toString());
+  }, [volume]);
+
+  const handleNotificationChange = (event) => {
+    setIsNotificationsEnabled(event.target.checked);
+  };
+
+  const handleSoundChange = (event) => {
+    setIsSoundEnabled(event.target.checked);
+  };
+
+  const handleVolumeChange = (event, newValue) => {
+    setVolume(newValue);
+  };
+
   const handleModalClose = () => {
     setModalMessageAlert(false);
   };
 
   useEffect(() => {
-    const hasAlert = MessageOrderData.some(order => order.status === "2");
+    const notificationsEnabled =
+      localStorage.getItem("notificationsEnabled") === "true";
+    const soundEnabled = localStorage.getItem("soundEnabled") === "true";
+    const volume = parseFloat(localStorage.getItem("volume")) || 1.0;
+
+    if (!notificationsEnabled) {
+      setModalMessageAlert(false);
+      return;
+    }
+
+    const hasAlert =
+      MessageOrderData.some((order) => order.status === "2") ||
+      MessageCallData.length > 0;
+
     if (hasAlert) {
       setModalMessageAlert(true);
-      // ตั้งเวลาให้ปิด modal หลังจาก 3 วินาที
+
+      if (soundEnabled) {
+        const audio = new Audio(alertSound);
+        audio.volume = Math.min(Math.max(volume, 0), 1);
+        audio.play();
+      }
+
       const timeoutId = setTimeout(() => {
         setModalMessageAlert(false);
-      }, 3000); // 3000ms = 3 วินาที
+      }, 3000);
 
-      // ทำการเคลียร์ timeout ทุกครั้งที่ useEffect ถูกเรียกใหม่
-      return () => clearTimeout(timeoutId);
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
-  }, [MessageOrderData]);
+  }, [MessageOrderData, MessageCallData]);
 
   const logOut = () => {
     localStorage.clear();
@@ -42,7 +102,7 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
         <MessageAlert message="Hello world" onClose={handleModalClose} />
       )}
       <div className="flex items-center justify-between xl:justify-end w-full h-[60px] bg-white shadow-2 py-4 xl:px-6 px-4 ">
-        <div className="xl:hidden z-10">
+        <div className="xl:hidden z-90">
           {isSidebarOpen ? (
             <MenuOpenIcon
               sx={{ fontSize: 35 }}
@@ -60,7 +120,7 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
 
         <div className="flex gap-5 items-center z-10">
           <div
-            className="border border-gray-300/50 shadow-sm rounded-full cursor-pointer"
+            className="border border-gray-300/50 shadow-sm rounded-full cursor-pointer "
             onClick={() => setIsImageVisible(!isImageVisible)}
           >
             <Badge color="error" variant="dot" invisible={!hasNotification}>
@@ -93,7 +153,16 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
           Logout
         </button> */}
       </div>
-      <Message isImageVisible={isImageVisible} />
+      <Message
+        isImageVisible={isImageVisible}
+        setIsImageVisible={setIsImageVisible}
+        handleNotificationChange={handleNotificationChange}
+        handleSoundChange={handleSoundChange}
+        handleVolumeChange={handleVolumeChange}
+        isNotificationsEnabled={isNotificationsEnabled}
+        isSoundEnabled={isSoundEnabled}
+        volume={volume}
+      />
     </>
   );
 }
