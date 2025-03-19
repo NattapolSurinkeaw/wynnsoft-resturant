@@ -6,7 +6,7 @@ import EditUser from "../modal/EditUser";
 import Swal from "sweetalert2";
 import { getDeleteUser } from "../../../services/setting.service";
 
-function User({userAll, permission}) {
+function User({userAll, permission, setRefreshUser}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -53,6 +53,7 @@ function User({userAll, permission}) {
             closeModal={closeModal}
             selectedUser={selectedUser}
             permissionAll={permission}
+            setRefreshUser={setRefreshUser}
           />
         )
       }

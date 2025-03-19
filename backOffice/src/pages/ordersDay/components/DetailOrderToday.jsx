@@ -21,7 +21,7 @@ function DetailOrderToday() {
       maximumFractionDigits: 2,
     });
 
-  console.log("Menu Order:", menuOrder.orderList);
+  // console.log("Menu Order:", menuOrder.orderList);
   const formattedDate = dayjs(menuOrder.createdAt).format("D MMMM YYYY");
 
   const filteredOrderList = menuOrder

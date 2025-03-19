@@ -9,7 +9,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import EditTax from "../modal/EditTax";
 
-function Taxes({webinfo}) {
+function Taxes({webinfo, setRefresh}) {
   const [dataTax, setDataTax] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [slcTax, setSlcTax] = useState([]);
@@ -97,6 +97,7 @@ function Taxes({webinfo}) {
                           isOpen={isOpen} 
                           closeModal={closeModal} 
                           slcTax={slcTax} 
+                          setRefresh={setRefresh}
                         />
                       )
                     }

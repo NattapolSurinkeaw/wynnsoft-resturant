@@ -3,7 +3,7 @@ export const orderToday = [
     id: 6,
     order_number: "000000006",
     table_id: 111, //ไอดีโต๊ะ
-    status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
+    status: "4", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว ชำระแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note:
       "In viverra ex urna. felis, amet, vehicula, ex. elit vitae eget eget libero, Quisque amet, amet, dui. vitae Nam leo. nisl.  dui id tincidunt Nunc Nunc ipsum dolor enim. Nullam risus tincidunt odio dignissim.",
@@ -129,8 +129,8 @@ export const orderToday = [
         id: 58,
         food_id: 10,
         orders_id: 6,
-        amount: 1,
-        status: "4",
+        amount: 2,
+        status: "3",
         note: "",
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -205,7 +205,7 @@ export const orderToday = [
         food_id: 2,
         orders_id: 15,
         amount: 1,
-        status: "1",
+        status: "3",
         note: "",
         createdAt: "2025-03-14T02:33:12.000Z",
         updatedAt: "2025-03-14T02:33:12.000Z",
@@ -254,7 +254,7 @@ export const orderToday = [
         food_id: 1, //ไอดีอาหาร
         orders_id: 6, // ไอดีออเดอร์
         amount: 1, // จำนวนอาหารที่สั่ง
-        status: "1", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
+        status: "3", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
         note: "", // รายละเอียดเพิ่มเติม เช่น ขอน้ำมันน้อย ไม่หวาน ไม่เค็ม ไม่ใส่มะเขือเทศ
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -280,7 +280,7 @@ export const orderToday = [
         food_id: 2,
         orders_id: 6,
         amount: 1,
-        status: "1",
+        status: "3",
         note: "",
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -333,7 +333,7 @@ export const orderToday = [
     id: 10,
     order_number: "000000010",
     table_id: 12,
-    status: "3",
+    status: "4",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
@@ -355,7 +355,7 @@ export const orderToday = [
         food_id: 3,
         orders_id: 15,
         amount: 1,
-        status: "1",
+        status: "4",
         note: "",
         createdAt: "2025-03-14T02:33:12.000Z",
         updatedAt: "2025-03-14T02:33:12.000Z",
@@ -381,7 +381,7 @@ export const orderToday = [
         food_id: 2,
         orders_id: 15,
         amount: 1,
-        status: "1",
+        status: "4",
         note: "",
         createdAt: "2025-03-14T02:33:12.000Z",
         updatedAt: "2025-03-14T02:33:12.000Z",
@@ -408,7 +408,7 @@ export const orderToday = [
     id: 16,
     order_number: "000000016",
     table_id: 11, //ไอดีโต๊ะ
-    status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
+    status: "4", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
@@ -430,7 +430,7 @@ export const orderToday = [
         food_id: 1, //ไอดีอาหาร
         orders_id: 6, // ไอดีออเดอร์
         amount: 1, // จำนวนอาหารที่สั่ง
-        status: "1", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
+        status: "4", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
         note: "", // รายละเอียดเพิ่มเติม เช่น ขอน้ำมันน้อย ไม่หวาน ไม่เค็ม ไม่ใส่มะเขือเทศ
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -456,7 +456,7 @@ export const orderToday = [
         food_id: 2,
         orders_id: 6,
         amount: 1,
-        status: "1",
+        status: "3",
         note: "",
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -482,7 +482,7 @@ export const orderToday = [
         food_id: 3,
         orders_id: 6,
         amount: 1,
-        status: "1",
+        status: "3",
         note: "",
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -606,7 +606,7 @@ export const orderToday = [
         food_id: 1, //ไอดีอาหาร
         orders_id: 6, // ไอดีออเดอร์
         amount: 1, // จำนวนอาหารที่สั่ง
-        status: "1", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
+        status: "3", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
         note: "", // รายละเอียดเพิ่มเติม เช่น ขอน้ำมันน้อย ไม่หวาน ไม่เค็ม ไม่ใส่มะเขือเทศ
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -707,7 +707,7 @@ export const orderToday = [
         food_id: 3,
         orders_id: 15,
         amount: 1,
-        status: "1",
+        status: "3",
         note: "",
         createdAt: "2025-03-14T02:33:12.000Z",
         updatedAt: "2025-03-14T02:33:12.000Z",

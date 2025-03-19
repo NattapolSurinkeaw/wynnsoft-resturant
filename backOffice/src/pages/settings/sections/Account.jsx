@@ -14,6 +14,7 @@ function Account() {
   const [bankName, setBankName] = useState("");
   const [bankNumber, setBankNumber] = useState("");
   const [bankId, setBankId] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchBankAccounts = async () => {
@@ -26,7 +27,7 @@ function Account() {
     };
 
     fetchBankAccounts();
-  }, []);
+  }, [refresh]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -62,7 +63,7 @@ function Account() {
           title: "บันทึกข้อมูลเสร็จ",
           showConfirmButton: false,
           timer: 1500,
-        })
+        }).then(() => setRefresh(prev => !prev))
       }
     })
   }

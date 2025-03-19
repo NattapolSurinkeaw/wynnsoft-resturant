@@ -10,8 +10,8 @@ function NewOrder() {
   const filteredOrders = NewLatestData.filter((order) => order.status === "1");
 
   const handleOpenModal = (id) => {
-    setSelectedOrderId(id); 
-    setIsOpenNewOrderModal(true); 
+    setSelectedOrderId(id);
+    setIsOpenNewOrderModal(true);
   };
 
   return (
@@ -21,30 +21,26 @@ function NewOrder() {
         closeModal={() => setIsOpenNewOrderModal(false)}
         orderId={selectedOrderId}
       />
-      <div className="grid 2xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 2xl:gap-4 gap-2 w-full">
+      <div className="grid max-md:grid-cols-2 max-lg:grid-cols-3 max-xxl:grid-cols-4 grid-cols-5 gap-3 2xl:gap-4">
         {filteredOrders.map((order) => (
           <div
             key={order.id}
             className="w-full h-auto bg-white rounded-lg shadow-md 2xl:px-4 px-2 2xl:py-3 py-2"
           >
-            <div className="flex 2xl:flex-row flex-col 2xl:gap-3 gap-2">
-              <figure className="2xl:w-1/2 w-full 2xl:h-[130px] h-[120px]">
+            <div className="flex 2xl:flex-row flex-col 2xl:gap-4 gap-2">
+              <figure className="2xl:w-[150px] 2xl:h-[150px] w-full h-[120px] rounded-lg flex-shrink-0 shadow">
                 <img
                   className="w-full h-full object-cover rounded-lg"
                   src={order.thumbnail_link.toLocaleString()}
                   alt=""
                 />
               </figure>
+
               <div className="flex 2xl:w-1/2 2xl:flex-col flex-row items-end justify-center 2xl:gap-3 gap-2">
-                <div className="flex flex-col items-center justify-center 2xl:w-[55px] sm:w-1/3 w-1/2 2xl:h-[55px] h-[50px] rounded-lg bg-[#FFBA41]">
-                  <p className="text-center text-[16px] text-white font-[600] leading-5">
-                    โต๊ะ <br />
-                    <span className="2xl:text-[23px] text-[20px]">
-                      {order.Order.Table.title.replace("โต๊ะ ", "")}
-                    </span>
-                  </p>
-                </div>
-                <div className="flex flex-col justify-center items-center 2xl:w-full sm:w-1/3 w-1/2 2xl:h-1/2 h-[50px] rounded-lg border-2 border-[#b6b6b6] bg-[#D9D9D9] 2xl:leading-6 leading-5">
+                <p className="bg-[#FFBA41] p-1 2xl:w-[60px] h-[60px] sm:w-1/3 w-1/2 rounded-lg line-clamp-2 items-center flex justify-center break-all sm:flex-shrink-0 text-white text-sm font-[600]">
+                  {order.Order.Table.title.replace("โต๊ะ ", "")}
+                </p>
+                <div className="flex flex-col justify-center items-center sm:flex-shrink-0 2xl:w-full sm:w-1/3 w-1/2 2xl:h-1/2 h-[60px] rounded-lg bg-[#EEEEEE] border border-[#D9D9D9] 2xl:leading-6 leading-5">
                   <p className="text-[#00537B] 2xl:text-[25px] text-[20px] font-[600]">
                     {order.food_items.toLocaleString()}
                   </p>
@@ -54,7 +50,7 @@ function NewOrder() {
                 </div>
               </div>
             </div>
-            <p className="2xl:h-[60px] h-auto 2xl:text-[20px] text-[16px] font-[600] text-[#313131] 2xl:line-clamp-2 line-clamp-1 mt-2">
+            <p className="2xl:h-[60px] h-auto 2xl:text-[20px] text-[16px] font-[600] text-[#313131] 2xl:line-clamp-2 line-clamp-1 mt-2 break-all">
               {order.details}
             </p>
             <p className="text-[14px] text-[#00537B]">
@@ -78,7 +74,7 @@ function NewOrder() {
             </div>
             <button
               onClick={() => handleOpenModal(order.id)}
-              className="w-full py-2 text-white 2xl:text-[20px] text-[16px] font-[600] rounded-lg bg-[#013D59] hover:bg-[#005983] shadow-md cursor-pointer mt-4"
+              className="bg-[#013D59] hover:bg-[#FFBA41] w-full rounded-lg py-2 text-white 2xl:text-xl md:text-lg font-[600] cursor-pointer transition-all duration-200 ease-in-out mt-4"
             >
               รับออเดอร์
             </button>

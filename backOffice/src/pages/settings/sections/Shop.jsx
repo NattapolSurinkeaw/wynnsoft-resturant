@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getEditShopData } from "../../../services/setting.service";
 import Swal from "sweetalert2";
 
-function Shop({webinfo}) {
+function Shop({webinfo, setRefresh}) {
   const [shopName, setShopName] = useState("");
   const [shopOwner, setShopOwner] = useState("");
   const [address, setAddress] = useState("");
@@ -39,7 +39,7 @@ function Shop({webinfo}) {
           title: "บันทึกข้อมูลเสร็จ",
           showConfirmButton: false,
           timer: 1500,
-        })
+        }).then(() => setRefresh(prev => !prev))
       }
     })
   }
