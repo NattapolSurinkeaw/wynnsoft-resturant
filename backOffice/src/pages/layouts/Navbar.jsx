@@ -162,6 +162,7 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
         isNotificationsEnabled={isNotificationsEnabled}
         isSoundEnabled={isSoundEnabled}
         volume={volume}
+        setHasNotification={setHasNotification}
       />
     </>
   );

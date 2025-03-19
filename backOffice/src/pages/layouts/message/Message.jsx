@@ -24,6 +24,7 @@ function Message({
   isNotificationsEnabled,
   isSoundEnabled,
   volume,
+  setHasNotification,
 }) {
   const [activeTab, setActiveTab] = useState("order");
   const [loadingId, setLoadingId] = useState(null);
@@ -38,6 +39,10 @@ function Message({
   ).length;
 
   const countPendingCall = MessageCallData.length;
+
+  console.log("countPendingOrders", countPendingOrders);
+  console.log("countPendingCall", countPendingCall);
+  
 
   const handleAccept = (id) => {
     setLoadingId(id);
@@ -155,7 +160,7 @@ function Message({
                   />
                 </button>
                 <Link
-                  to="/orders"
+                  to="/ordersDay"
                   className="text-[16px] font-[500] text-[#013D59] text-end hover:underline"
                 >
                   ออเดอร์ทั้งหมด
