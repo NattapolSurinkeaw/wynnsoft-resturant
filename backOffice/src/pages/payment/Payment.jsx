@@ -58,18 +58,19 @@ function Payment() {
         );
 
         if (filteredOrderList.length === 0) {
-          return null; // ถ้าไม่มีรายการอาหารที่ตรงเงื่อนไข ให้ return null (เพื่อกรองออกในขั้นตอนถัดไป)
+          return null;
         }
 
-        // รวมจำนวน (`amount`) ของเมนูที่ชื่อซ้ำกัน
         const mergedOrderList = Object.values(
           filteredOrderList.reduce((acc, orderItem) => {
-            const foodName = orderItem.food.name;
-            if (!acc[foodName]) {
-              acc[foodName] = { ...orderItem };
+            const key = `${orderItem.food.id}_${orderItem.food.name}_${orderItem.status}`;
+        
+            if (!acc[key]) {
+              acc[key] = { ...orderItem };
             } else {
-              acc[foodName].amount += orderItem.amount;
+              acc[key].amount += orderItem.amount;
             }
+        
             return acc;
           }, {})
         );
