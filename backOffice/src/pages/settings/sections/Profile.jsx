@@ -7,8 +7,10 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import dayjs from "dayjs";
 import { getUpdateProfileShop } from "../../../services/setting.service";
+import { api_path } from "../../../store/setting";
+import Swal from "sweetalert2";
 
-function Profile({webinfo}) {
+function Profile({webinfo, setRefresh}) {
   const [preview1, setPreview1] = useState(null);
   const [preview2, setPreview2] = useState(null);
   const [image1, setImage1] = useState(null);
@@ -17,9 +19,8 @@ function Profile({webinfo}) {
   const [timeClose, setTimeClose] = useState(null);
 
   useEffect(() => {
-    console.log(webinfo);
-    setPreview1(filterWebinfo(1)?.info_link)
-    setPreview2(filterWebinfo(2)?.info_link)
+    setPreview1(api_path + filterWebinfo(1)?.info_link)
+    setPreview2(api_path + filterWebinfo(2)?.info_link)
     setTimeOpen(filterWebinfo(5)?.info_value)
     setTimeClose(filterWebinfo(6)?.info_value)
   }, [webinfo])
@@ -54,11 +55,16 @@ function Profile({webinfo}) {
     formData.append('time_open', timeOpen);
     formData.append('time_close', timeClose);
 
-    formData.forEach((key, value) => {
-      console.log( value + " : " + key)
-    });
     getUpdateProfileShop(formData).then((res) => {
-      console.log(res)
+      if(res.status) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "บันทึกข้อมูลเสร็จ",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => setRefresh(prev => !prev))
+      }
     })
   }
   console.log(getToday());

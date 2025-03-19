@@ -36,67 +36,65 @@ export class WebSettingController {
   // โปรไฟล์ร้านค้า
   OnUpdateProfileShop = async(req: any, res: any) => {
     try {
-      const webInfo = await WebInfo.findAll();
-      const arrayImage = req.files
-      let web_logoImage = null;
-      let web_bgImage = null;
-      
-      if (arrayImage.web_logo) {
-        let upload = "/uploads" + req.files.destination.split("uploads").pop();
-        console.log(upload);
-        let dest = req.files.destination;
-        var ext = path.extname(req.files.originalname);
-        let originalname = path.basename(req.files.originalname, ext);
+      const { time_open, time_close } = req.body;
 
+      const processImage = async (file: any) => {
+        if (!file) return null;
+    
+        let uploadPath = "/uploads" + file.destination.split("uploads").pop();
+        let dest = file.destination;
+        let ext = path.extname(file.originalname);
+        let originalname = path.basename(file.originalname, ext);
+    
+        // ป้องกันชื่อไฟล์ซ้ำ
         for (let i = 1; fs.existsSync(dest + originalname + ext); i++) {
-          originalname = originalname.split("(")[0];
-          originalname += "(" + i + ")";
+            originalname = originalname.split("(")[0] + `(${i})`;
         }
-
-        web_logoImage = await sharp(req.files.path)
-          .withMetadata()
-          .jpeg({ quality: 95 })
-          .toFile(path.resolve(req.files.destination, originalname + ext))
-          .then(() => {
-            fs.unlink(req.files.path, (err) => {
-              if (err) {
-                console.log(err);
-              }
+    
+        const outputPath = path.resolve(file.destination, originalname + ext);
+    
+        // ประมวลผลภาพด้วย sharp
+        const imagePath = await sharp(file.path)
+            .withMetadata()
+            .jpeg({ quality: 95 })
+            .toFile(outputPath)
+            .then(() => {
+                fs.unlink(file.path, (err) => {
+                    if (err) console.log(err);
+                });
+                return uploadPath + originalname + ext;
             });
-            return upload + originalname + ext;
-          });
-
-          console.log(web_logoImage)
+    
+        return imagePath;
+      };
+    
+      if (req.files.web_logo) {
+          const webLogoPath = await processImage(req.files.web_logo[0]);
+          await WebInfo.update(
+            { info_link: webLogoPath },
+            { where: { info_param: 'web_logo' } }
+          );
+      }
+      
+      if (req.files.web_bg) {
+          const webBgPath = await processImage(req.files.web_bg[0]);
+          await WebInfo.update(
+            { info_link: webBgPath },
+            { where: { info_param: 'web_bg' } }
+          );
       }
 
-      // if (arrayImage.web_bg) {
-      //   let upload = "/uploads" + req.file.destination.split("uploads").pop();
-      //   let dest = req.file.destination;
-      //   var ext = path.extname(req.file.originalname);
-      //   let originalname = path.basename(req.file.originalname, ext);
+      await Promise.all([
+        WebInfo.update({ info_value: time_open }, { where: { info_param: 'time_open' } }),
+        WebInfo.update({ info_value: time_close }, { where: { info_param: 'time_close' } })
+      ]);
 
-      //   for (let i = 1; fs.existsSync(dest + originalname + ext); i++) {
-      //     originalname = originalname.split("(")[0];
-      //     originalname += "(" + i + ")";
-      //   }
-
-      //   web_bgImage = await sharp(req.file.path)
-      //     .withMetadata()
-      //     .jpeg({ quality: 95 })
-      //     .toFile(path.resolve(req.file.destination, originalname + ext))
-      //     .then(() => {
-      //       fs.unlink(req.file.path, (err) => {
-      //         if (err) {
-      //           console.log(err);
-      //         }
-      //       });
-      //       return upload + originalname + ext;
-      //     });
-      // }
-
-      console.log(web_logoImage)
-      console.log(web_bgImage)
-
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "get data success."
+      });
+    
     } catch(error){
       return res.status(500).json({
           status: false,

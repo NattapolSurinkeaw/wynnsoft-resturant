@@ -22,6 +22,8 @@ function Settings() {
   const [slcPermission, setSlcPermission] = useState(0);
   const [slcStatus, setStatus] = useState("all");
   const [filteredUsers, setFilteredUsers] = useState(userAll);
+  const [refresh, setRefresh] = useState(false);
+  const [refreshUser, setRefreshUser] = useState(false);
 
   const handleAdd = () => {
     setIsOpen(true);
@@ -41,11 +43,14 @@ function Settings() {
       setinfoType(res.webinfotype);
       setWebinfo(res.webinfo);
     })
+  }, [refresh])
+
+  useEffect(() => {
     getUserAll().then((res) => {
       setUserAll(res.user);
       setPermission(res.permission);
     })
-  }, [])
+  }, [refreshUser])
 
   useEffect(() => {
     const filterUsers = () => {
@@ -141,11 +146,11 @@ function Settings() {
         />
 
         <main className="w-full ">
-          {activeTab === "profile" && <Profile webinfo={filterWebinfo(1)} />}
-          {activeTab === "shop" && <Shop webinfo={filterWebinfo(2)} />}
-          {activeTab === "bankaccount" && <Account webinfo={filterWebinfo(3)} />}
-          {activeTab === "taxes" && <Taxes webinfo={filterWebinfo(4)} />}
-          {activeTab === "user" && <User userAll={filteredUsers} permission={permission} />}
+          {activeTab === "profile" && <Profile webinfo={filterWebinfo(1)} setRefresh={setRefresh} />}
+          {activeTab === "shop" && <Shop webinfo={filterWebinfo(2)} setRefresh={setRefresh} />}
+          {activeTab === "bankaccount" && <Account />}
+          {activeTab === "taxes" && <Taxes webinfo={filterWebinfo(4)} setRefresh={setRefresh} />}
+          {activeTab === "user" && <User userAll={filteredUsers} permission={permission} setRefreshUser={setRefreshUser} />}
         </main>
       </div>
     </>

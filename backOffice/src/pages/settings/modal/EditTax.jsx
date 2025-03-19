@@ -4,7 +4,7 @@ import Switch from "@mui/material/Switch";
 import { getUpdateTaxService } from "../../../services/setting.service";
 import Swal from "sweetalert2";
 
-function EditTax({ isOpen, closeModal, slcTax }) {
+function EditTax({ isOpen, closeModal, slcTax, setRefresh }) {
   const [infoValue, setInfoValue] = useState("");
   const [status, setStatus] = useState(true);
 
@@ -30,7 +30,10 @@ function EditTax({ isOpen, closeModal, slcTax }) {
           title: "บันทึกข้อมูลเสร็จ",
           showConfirmButton: false,
           timer: 1500,
-        }).then(() => closeModal())
+        }).then(() => {
+          setRefresh(prev => !prev)
+          closeModal()
+        })
       }
     })
   }

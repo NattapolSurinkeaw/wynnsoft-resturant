@@ -3,7 +3,7 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import { getUpdateDataUser } from "../../../services/setting.service";
 import Swal from "sweetalert2";
 
-function EditUser({ isOpen, closeModal, selectedUser, permissionAll }) {
+function EditUser({ isOpen, closeModal, selectedUser, permissionAll, setRefreshUser }) {
   const [adminCode, setAdminCode] = useState("");
   const [nameUser, setNameUser] = useState("");
   const [emailUser, setEmailUser] = useState("");
@@ -35,7 +35,10 @@ function EditUser({ isOpen, closeModal, selectedUser, permissionAll }) {
           title: "บันทึกข้อมูลเสร็จ",
           showConfirmButton: false,
           timer: 1500,
-        }).then(() => closeModal())
+        }).then(() => {
+          closeModal()
+          setRefreshUser(prev => !prev)
+        })
       }
     })
   }
@@ -102,9 +105,9 @@ function EditUser({ isOpen, closeModal, selectedUser, permissionAll }) {
                 value={statusUser}
                 onChange={(e) => setStatusUser(e.target.value)}
               >
-                <option value="activate">เปิดใช้งาน</option>
+                <option value="active">เปิดใช้งาน</option>
                 <option value="pending">รออนุมัติ</option>
-                <option value="inactivate">ปิดใช้งาน</option>
+                <option value="inactive">ปิดใช้งาน</option>
                 <option value="banned">ปิดกั้น</option>
               </select>
             </div>
