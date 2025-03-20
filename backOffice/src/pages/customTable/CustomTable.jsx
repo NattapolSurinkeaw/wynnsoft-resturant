@@ -23,13 +23,14 @@ function CustomTable() {
   const rowsPerPage = 24;
   const [customTable, setCustomTable] = useState([]);
   const [tableDetail, setTableDetail] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
 
   useEffect(() => {
     getTableall().then((res) => {
       setCustomTable(res.tables);
     })
-  }, [])
+  }, [refresh])
 
   useEffect(() => {
     if (!isSettingOpen) {
@@ -106,6 +107,7 @@ function CustomTable() {
           <EditTable 
             setIsSettingOpen={setIsSettingOpen} 
             tableDetail={tableDetail}
+            setRefresh={setRefresh}
           />
         ) : isFoodList ? (
           <FoodList 

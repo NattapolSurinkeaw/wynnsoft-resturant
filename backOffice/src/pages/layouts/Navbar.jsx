@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import Badge from "@mui/material/Badge";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Message from "./message/Message";
 import MessageAlert from "./message/MessageAlert";
-import alertSound from "../../../public/sound/incoming.mp3";
+import alertSound from "../../../public/sound/order3.mp3";
 import { MessageOrderData } from "../../components/mockData/MessageData/MessageData";
 import { MessageCallData } from "../../components/mockData/MessageData/MessageData";
 
 function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
-  const [hasNotification, setHasNotification] = useState(true);
+  const [hasNotification, setHasNotification] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [modalMessageAlert, setModalMessageAlert] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(() => {
     return JSON.parse(localStorage.getItem("notificationsEnabled")) ?? true;
@@ -58,6 +62,17 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
   };
 
   useEffect(() => {
+    if (
+      MessageOrderData.some((order) => order.status === "2") ||
+      MessageCallData.length > 0
+    ) {
+      setHasNotification(true);
+    } else {
+      setHasNotification(false);
+    }
+  }, [MessageOrderData, MessageCallData]);
+
+  useEffect(() => {
     const notificationsEnabled =
       localStorage.getItem("notificationsEnabled") === "true";
     const soundEnabled = localStorage.getItem("soundEnabled") === "true";
@@ -74,11 +89,14 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
 
     if (hasAlert) {
       setModalMessageAlert(true);
+      document.body.focus();
 
       if (soundEnabled) {
         const audio = new Audio(alertSound);
         audio.volume = Math.min(Math.max(volume, 0), 1);
-        audio.play();
+        audio.play().catch((error) => {
+          console.error("เสียงถูกบล็อกโดยเบราว์เซอร์:", error);
+        });
       }
 
       const timeoutId = setTimeout(() => {
@@ -131,27 +149,63 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
             </Badge>
           </div>
 
-          <div className="flex w-[110px] h-[35px] gap-2 items-center rounded-full p-1 bg-[#00537B] shadow-1 cursor-pointer">
-            <figure className="bg-white shadow-md p-0.5 rounded-full">
-              <img
-                className="w-[23px] h-auto"
-                src="/icons/material-symbols_person.png"
-                alt=""
-              />
-            </figure>
-            <p className="text-[14px] text-white ml-2">ADMIN</p>
+          <div
+            className="relative group "
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <div className="flex w-[110px] h-[35px] gap-2 items-center rounded-full p-1 bg-[#00537B] shadow-1 cursor-pointer">
+              <AccountCircleIcon sx={{ fontSize: 29 }} className="text-white" />
+              <p className="text-[14px] text-white ml-2">ADMIN</p>
+            </div>
+
+            <div
+              className={`absolute -left-[3.6rem] top-10 flex flex-col w-[168px] justify-between bg-white shadow-lg rounded-md cursor-pointer transition-all duration-300 ${
+                isHovered
+                  ? "opacity-100 translate-y-0 visible"
+                  : "opacity-0 -translate-y-3 invisible"
+              }`}
+            >
+              <div className="flex gap-4 px-4 pt-2">
+                <div className="flex w-[45px] h-[45px] items-center justify-center rounded-full bg-[#00537B] shadow-md">
+                  <AccountCircleIcon
+                    sx={{
+                      fontSize: 40,
+                      transition: "transform 0.3s ease-in-out",
+                      transform: isHovered ? "rotate(0deg)" : "rotate(-90deg)",
+                    }}
+                    className="text-white"
+                  />
+                </div>
+                <div>
+                  <p className="text-green-500 text-[12px] font-[600]">
+                    Superadmin
+                  </p>
+                  <p className="text-gray-400 text-[11px] font-[400]">
+                    ta@gmail.com
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={logOut}
+                className="w-full bg-[#e71a68] hover:bg-[#0dcf2d] cursor-pointer mt-2"
+              >
+                <div className="flex items-center justify-center gap-2 text-white text-[12px] font-[400] p-1">
+                  <LogoutIcon sx={{ fontSize: 18 }} className="text-white" />
+                  ออกจากระบบ
+                </div>
+              </button>
+            </div>
           </div>
 
-          <img
-            className="w-[24px] h-auto cursor-pointer"
-            src="/icons/Vector (1).png"
-            alt=""
-          />
+          <Link to="/settings">
+            <img
+              className="w-[24px] h-auto cursor-pointer hover:rotate-90 transition duration-400"
+              src="/icons/Vector (1).png"
+              alt=""
+            />
+          </Link>
         </div>
-        
-        <button onClick={logOut} className="cursor-pointer border z-10">
-          Logout
-        </button>
       </div>
       <Message
         isImageVisible={isImageVisible}
