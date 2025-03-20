@@ -1,5 +1,5 @@
 import React from "react";
-import animationGif from "../../../../public/sound/Animation - 1742356737363.gif";
+import animationGif from "../../../../public/sound/Order Food.gif";
 
 function MessageAlert({ message, onClose }) {
   return (
@@ -8,14 +8,14 @@ function MessageAlert({ message, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded-lg"
+        // className="bg-white p-6 rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
         {/* แสดง Animation.gif */}
         <img
           src={animationGif}
           alt="Loading Animation"
-          className="w-[100px] h-auto mb-4"
+          className="w-[300px] h-auto mb-4"
         />
         {/* <h2 className="text-center text-xl">{message}</h2> */}
         {/* <button

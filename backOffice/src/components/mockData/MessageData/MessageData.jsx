@@ -243,7 +243,7 @@ export const MessageOrderData = [
     orders_id: 25,
     price: 1300,
     amount: 1,
-    status: "3",
+    status: "1",
     thumbnail_link: "/images/4.jpg",
     food_items: 1,
     details: "ฟัวกราส์ย่าง",
@@ -256,7 +256,7 @@ export const MessageOrderData = [
   },
 ];
 
-export const  MessageCallData = [
+export const MessageCallData = [
   {
     id: 1,
     status_call: true,
