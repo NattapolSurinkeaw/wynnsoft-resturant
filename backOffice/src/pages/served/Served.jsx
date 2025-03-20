@@ -72,7 +72,10 @@ function Served() {
                   {order.nameFood}
                 </p>
                 <div className="flex gap-1 items-end">
-                  <p className="text-[#00537B] text-sm font-[400]"> เลขออเดอร์ :</p>
+                  <p className="text-[#00537B] text-sm font-[400]">
+                    {" "}
+                    เลขออเดอร์ :
+                  </p>
                   <p className="text-[#00537B] 2xl:text-lg text-sm font-[400] leading-none">
                     {order.order_munber}
                   </p>
