@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+import { getAllOutFoods } from "../../../services/kitchen.service";
 
 const TableMenuStatus = ({
   selectedStatusMenu1,
@@ -9,10 +10,17 @@ const TableMenuStatus = ({
   selectedEditId,
   handleEditClick,
 }) => {
+  const [outFoods, setOutFoods] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
-  const filteredData = NewLatestData.filter(
+  useEffect(() => {
+    getAllOutFoods().then((res) => {
+      setOutFoods(res.outFoods);
+    })
+  }, [])
+
+  const filteredData = outFoods.filter(
     (item) =>
       (selectedStatusMenu1 === null || item.status === selectedStatusMenu1) &&
       (selectedStatusMenu2 === null ||
@@ -56,6 +64,9 @@ const TableMenuStatus = ({
                 key={order.id}
                 className={index % 2 === 0 ? "bg-[#EEEEEE]" : "bg-white"}
               >
+                {
+                  console.log(order)
+                }
                 <td className="py-3 pl-6">
                   <div className="flex gap-3">
                     <figure className="w-[55px] h-[55px] rounded-lg shadow-sm">
@@ -66,8 +77,8 @@ const TableMenuStatus = ({
                       />
                     </figure>
                     <div className="flex flex-col items-start">
-                      <p className="text-[16px] font-[500]">{order.details}</p>
-                      <p className="text-[12px] font-[300]">{order.note}</p>
+                      <p className="text-[16px] font-[500]">{order.name}</p>
+                      {/* <p className="text-[12px] font-[300]">{order.note}</p> */}
                     </div>
                   </div>
                 </td>

@@ -32,7 +32,10 @@ router.post('/api/backoffice/bookingtable', AuthenticateAdmin, tableManageContro
 
 // ห้องครัว
 router.get('/api/backoffice/new-menufood', AuthenticateAdmin, kitchenManageController.OngetAllNewMenuFood);
+router.post('/api/backoffice/update-statusOrderList', AuthenticateAdmin, kitchenManageController.OnUpdateOrderListStatus);
+router.get('/api/backoffice/outfoodAll', AuthenticateAdmin, kitchenManageController.OngetAllOutFoods);
 router.post('/api/backoffice/status-outfood/:id', AuthenticateAdmin, kitchenManageController.OnChangeStatusOutFood);
+router.post('/api/backoffice/updatenote-outfood/:id', AuthenticateAdmin, kitchenManageController.OnUpdateNoteOutfood);
 
 // หมวดหมู่เมนู
 router.get('/api/backoffice/catefood', AuthenticateAdmin, manageDataController.OngetCategoryFood);

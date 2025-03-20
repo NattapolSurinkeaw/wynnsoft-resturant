@@ -9,7 +9,7 @@ import { QRCodeCanvas } from "qrcode.react";
 import { front_readqr } from "../../../../store/setting";
 import Swal from "sweetalert2";
 
-function EditTable({tableDetail}) {
+function EditTable({tableDetail, setRefresh}) {
   // console.log(tableDetail)
   const [imageSrc, setImageSrc] = useState("/images/123.jpg");
   const [title, setTitle] = useState("");
@@ -40,7 +40,7 @@ function EditTable({tableDetail}) {
           icon: "success",
           showConfirmButton: false,
           timer: 1500,
-        })
+        }).then(() => setRefresh(prev => !prev))
       }
     })
   }

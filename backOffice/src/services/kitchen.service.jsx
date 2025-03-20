@@ -8,3 +8,12 @@ export const getOrderList = () => {
     }
   })
 }
+
+export const getAllOutFoods = () => {
+  return axios.get('/api/backoffice/outfoodAll').then((res) => {
+    return {
+      status: res.data.status,
+      outFoods: res.data.outFood
+    }
+  })
+}

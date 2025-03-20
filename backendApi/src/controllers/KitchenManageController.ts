@@ -47,7 +47,57 @@ export class KitchenManageController {
       });
     }
   }
-  OnChangeStatusOutFood = async (req: any, res: any) => {
+  //เปลี่ยนสถานะอาหาร
+  OnUpdateOrderListStatus = async(req: any, res: any) => {
+    try {
+      const { orderList, orderId }: { orderList: { id: number; status: number }[]; orderId: number } = req.body;
+
+      await Promise.all(
+        orderList.map(({ id, status }: { id: number; status: number }) => 
+          OrdersList.update(
+            { status }, 
+            { where: { id } }
+          )
+        )
+      );
+      
+      
+      console.log(orderList)
+      console.log(orderId)
+
+      return res.status(200).json({
+        status: true,
+        message: "update status food success",
+      });
+      
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        errorsMessage: error,
+      });
+    }
+  }
+
+  // สินค้าหมด
+  OngetAllOutFoods = async(req: any, res: any) => {
+    try {
+      const outfood = await Foods.findAll({where: {status_food: false}});
+
+      return res.status(200).json({
+        status: true,
+        message: "get data out foods success",
+        outFood: outfood,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        errorsMessage: error,
+      });
+    }
+  }
+  OnChangeStatusOutFood = async(req: any, res: any) => {
     try {
       // 🔹 ค้นหา Food ตาม id
       const food = await Foods.findOne({ where: { id: req.params.id } });
@@ -94,7 +144,22 @@ export class KitchenManageController {
   }
   OnUpdateNoteOutfood = async(req: any, res: any) => {
     try {
-      
+      const food = await Foods.findOne({where: {id: req.params.id}});
+      if (!food) {
+        return res.status(404).json({
+          status: false,
+          message: "food data is not found",
+        });
+      }
+
+      food.note = req.body.note;
+      food.save();
+      return res.status(200).json({
+        status: true,
+        message: "Food status updated successfully.",
+        food: food
+      });
+
     } catch (error: any) {
       console.error("Error updating food status:", error);
       return res.status(500).json({
