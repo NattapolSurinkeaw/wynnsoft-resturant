@@ -26,7 +26,7 @@ function OrderDetail_PDF({
   const Tatal = grandTotal + taxTotal;
 
   return (
-    <div id="print" className="w-full rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
+    <div id="print" className="w-[794px] rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
       <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg h-[90px]">
         <div className="flex gap-4 items-center">
           <div className="bg-white rounded-lg p-2 w-[80px] h-[80px] flex flex-col justify-center items-center flex-shrink-0">
@@ -45,7 +45,7 @@ function OrderDetail_PDF({
         </div>
         <div className="flex flex-col justify-between items-end text-right gap-3 h-full">
           <p className="text-lg text-white font-[600]">
-            หมายเลขออเดอร์ : {detailData.order_number}
+            เลขออเดอร์ : {detailData.order_number}
           </p>
           <p className="text-sm text-white font-[600] ">{formattedDate}</p>
         </div>

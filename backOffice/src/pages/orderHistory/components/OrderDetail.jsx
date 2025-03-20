@@ -114,7 +114,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
               </div>
               <div className="flex flex-col justify-between items-end h-full">
                 <p className="text-xl text-white font-[600]">
-                  หมายเลขออเดอร์ : {detailData.order_number}
+                  เลขออเดอร์ : {detailData.order_number}
                 </p>
                 <p className="text-base text-white font-[600]">
                   {formattedDate}

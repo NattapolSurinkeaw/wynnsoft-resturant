@@ -6,7 +6,7 @@ import Switch, { switchClasses } from "@mui/joy/Switch";
 import CancelIcon from "@mui/icons-material/Cancel";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddFood from "./AddFood";
 import EditFood from "./EditFood";
 import {
@@ -401,10 +401,10 @@ function FoodMenu() {
                 หมวดเมนู
               </p>
               <div
-                className="bg-white cursor-pointer flex justify-between items-center gap-2 p-1.5 px-2 rounded-lg shadow  w-[170px] max-w-full"
+                className="bg-white cursor-pointer flex justify-between items-center gap-2 p-1.5 px-2 rounded-lg shadow  lg:w-[250px] w-[170px] max-w-full"
                 onClick={() => setShowCategoryMenu(!showCategoryMenu)}
               >
-                <p className="text-[#313131] xl:text-lg text-base font-[400]">
+                <p className="text-[#313131] xl:text-lg text-base font-[400] line-clamp-1">
                   {selectedCategory
                     ? cateFood.find((c) => c.id === selectedCategory)?.title
                     : "เลือกหมวดหมู่"}
@@ -426,7 +426,7 @@ function FoodMenu() {
             {/* เมนูหมวดหมู่ */}
             <div className="absolute w-full h-full z-99">
               {showCategoryMenu && (
-                <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow">
+                <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow max-h-[400px] overflow-y-auto">
                   <div
                     className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
                       selectedCategory === null ? "bg-[#F5A100] text-white" : ""
@@ -467,10 +467,10 @@ function FoodMenu() {
                 สินค้าขายดี
               </p>
               <div
-                className="bg-white cursor-pointer flex justify-between items-center gap-2 py-1.5 px-2 rounded-lg shadow w-[180px] max-w-full "
+                className="bg-white cursor-pointer flex justify-between items-center gap-2 py-1.5 px-2 rounded-lg shadow lg:w-[250px] w-[180px] max-w-full"
                 onClick={() => setShowBestSellerMenu(!showBestSellerMenu)}
               >
-                <p className="text-[#313131] xl:text-lg text-base font-[400]">
+                <p className="text-[#313131] xl:text-lg text-base font-[400] line-clamp-1">
                   {selectedBestSeller === true
                     ? "สินค้าขายดี"
                     : selectedBestSeller === false
@@ -494,7 +494,7 @@ function FoodMenu() {
             {/* สินค้าขายดี */}
             <div className="absolute w-full h-full z-99">
               {showBestSellerMenu && (
-                <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow">
+                <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow max-h-[400px] overflow-y-auto">
                   <div
                     className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
                       selectedBestSeller === null
@@ -550,11 +550,11 @@ function FoodMenu() {
           </div>
 
           <button
-            className="bg-[#00537B] cursor-pointer max-w-[110px] w-full flex flex-shrink-0 justify-center items-center gap-2 p-1 px-2 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+            className="bg-[#00537B] cursor-pointer lg:max-w-[150px] max-w-[110px] w-full flex flex-shrink-0 justify-center items-center gap-2 p-1 px-2 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             onClick={handleOpenAdd}
           >
-            <AddIcon sx={{ color: "#fff", fontSize: 30 }} />
-            <p className="text-white xl:text-lg text-base font-[400]">
+            <AddCircleOutlineIcon sx={{ color: "#fff", fontSize: 30 }} />
+            <p className="text-white xl:text-lg text-base font-[400] ">
               เพิ่มเมนู
             </p>
           </button>

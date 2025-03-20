@@ -148,10 +148,10 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
             alt=""
           />
         </div>
-        {/* 
+        
         <button onClick={logOut} className="cursor-pointer border z-10">
           Logout
-        </button> */}
+        </button>
       </div>
       <Message
         isImageVisible={isImageVisible}

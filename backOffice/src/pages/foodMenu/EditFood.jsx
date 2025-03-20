@@ -166,22 +166,24 @@ const EditFood = ({
           <span className="text-[#00537B] lg:text-2xl text-xl font-medium">
             หมวดเมนู
           </span>
-          <div className="border border-[#D9D9D9] lg:p-3 rounded-lg shadow h-[300px] overflow-y-auto">
-            {cateFood.map((category) => (
-              <div key={category.id} className="flex flex-col gap-2">
-                <div className="flex flex-row items-center justify-start gap-x-3">
-                  <Checkbox
-                    checked={selectedCategories.includes(category.id)}
-                    onChange={() => handleCategoryChange(category.id)}
-                    sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
-                    color="default"
-                  />
-                  <span className="text-[#313131] lg:text-xl text-lg">
-                    {category.title}
-                  </span>
+          <div className="h-[300px] overflow-y-auto border border-[#D9D9D9] rounded-lg shadow lg:p-3">
+            <div className="grid lg:grid-cols-1 grid-cols-2">
+              {cateFood.map((category) => (
+                <div key={category.id} className="flex flex-col gap-2">
+                  <div className="flex flex-row items-center justify-start gap-x-3">
+                    <Checkbox
+                      checked={selectedCategories.includes(category.id)}
+                      onChange={() => handleCategoryChange(category.id)}
+                      sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+                      color="default"
+                    />
+                    <span className="text-[#313131] lg:text-xl text-lg">
+                      {category.title}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

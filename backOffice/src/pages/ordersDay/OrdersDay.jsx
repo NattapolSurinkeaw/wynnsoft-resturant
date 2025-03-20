@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
@@ -322,7 +323,7 @@ function OrdersDay() {
               to={"/customTable"}
               className="bg-[#00537B] cursor-pointer max-w-[150px] w-full flex flex-shrink-0 justify-center items-center gap-2 p-1 px-2 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
-              <AddIcon sx={{ color: "#fff", fontSize: 30 }} />
+              <AddCircleOutlineIcon sx={{ color: "#fff", fontSize: 30 }} />
               <p className="text-white xl:text-lg text-base font-[400]">
                 เปิดโต๊ะ
               </p>

@@ -214,7 +214,7 @@ function DetailAll() {
           </div>
           <div className="flex flex-col justify-between gap-2">
             <p className="xl:text-xl lg:text-lg text-right text-white font-[600] ">
-              หมายเลขออเดอร์ : {detailOrder.order_number}
+              เลขออเดอร์ : {detailOrder.order_number}
             </p>
             <p className="xl:text-base text-sm text-white text-right font-[600] ">
               {formattedDate}

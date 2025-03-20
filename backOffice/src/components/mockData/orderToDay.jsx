@@ -3,7 +3,7 @@ export const orderToday = [
     id: 6,
     order_number: "000000006",
     table_id: 111, //ไอดีโต๊ะ
-    status: "4", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว ชำระแล้ว
+    status: "5", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว รอการชำระ ชำระแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note:
       "In viverra ex urna. felis, amet, vehicula, ex. elit vitae eget eget libero, Quisque amet, amet, dui. vitae Nam leo. nisl.  dui id tincidunt Nunc Nunc ipsum dolor enim. Nullam risus tincidunt odio dignissim.",

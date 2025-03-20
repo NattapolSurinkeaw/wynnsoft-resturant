@@ -8,12 +8,11 @@ import AddCategoryFood from "./components/AddCategoryFood";
 import EditCategoryFood from "./components/EditCategoryFood";
 import { Box, Modal } from "@mui/material";
 import Switch, { switchClasses } from "@mui/joy/Switch";
-
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import SwalUI from "../../components/swal-ui/swal-ui";
 import { DataGrid } from "@mui/x-data-grid";
-import AddIcon from "@mui/icons-material/Add";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import CancelIcon from "@mui/icons-material/Cancel";
 
@@ -368,7 +367,7 @@ function CategoryFood() {
             className="bg-[#00537B] cursor-pointer max-w-[150px] w-full flex flex-shrink-0 justify-center items-center gap-2 p-1 px-2 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             onClick={functionHandleCreate}
           >
-            <AddIcon sx={{ color: "#fff", fontSize: 30 }} />
+            <AddCircleOutlineIcon sx={{ color: "#fff", fontSize: 30 }} />
             <p className="text-white xl:text-lg text-base font-[400]">
               เพิ่มหมวดหมู่
             </p>

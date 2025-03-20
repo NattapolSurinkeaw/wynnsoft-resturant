@@ -4,11 +4,17 @@ import { orderToday } from "../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import { Link } from "react-router-dom";
+import { Box, Modal } from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
+import OrderDetail from "./components/OrderDetail";
 
 function Orders() {
   dayjs.locale("th");
   const [showDate, setShowDate] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [openModalDetail, setOpenModalDetail] = useState(false);
+  const [selectedRow, setSelectedRow] = useState({});
+
   const menuDate = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
@@ -36,7 +42,7 @@ function Orders() {
 
   const getFilteredOrderDetails = (orderToday, selectedDate) => {
     return orderToday
-      .filter((order) => order.status === "4") // 🔹 กรองออเดอร์ที่มี status === "4"
+      .filter((order) => order.status === "5") // 🔹 กรองออเดอร์ที่มี status === "4"
       .map((order) => {
         const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
         const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
@@ -127,13 +133,20 @@ function Orders() {
     }
   };
 
+  const handleOpenModalDetail = (order) => {
+    console.log("order", order);
+
+    setSelectedRow({ ...order });
+    setOpenModalDetail(true);
+  };
+
   return (
     <div className="flex flex-col justify-between h-full gap-4 w-full">
       <div className="flex flex-col gap-4">
         <div className="flex 2xl:flex-row flex-col gap-4 w-full justify-between 2xl:items-center">
           <div className="flex flex-shrink-0 gap-2 justify-start items-center">
             <RequestQuoteOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
-            <p className="text-[#00537B] text-2xl font-[600]">รอเสริฟ</p>
+            <p className="text-[#00537B] text-2xl font-[600]">ออเดอร์ทั้งหมด</p>
           </div>
 
           <div className="flex gap-4 justify-ennd items-center ">
@@ -191,6 +204,10 @@ function Orders() {
                         index ===
                         self.findIndex((t) => t.createdAt === value.createdAt)
                     )
+                    .sort(
+                      (a, b) =>
+                        dayjs(a.createdAt).date() - dayjs(b.createdAt).date()
+                    )
                     .map((date) => (
                       <div
                         key={date.createdAt}
@@ -212,6 +229,7 @@ function Orders() {
             </div>
           </div>
         </div>
+        
         <div className="h-auto flex flex-col overflow-auto hide-scrollbar">
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 h-full gap-3 ">
             {currentOrders.length === 0 ? (
@@ -309,19 +327,20 @@ function Orders() {
                   </div>
 
                   <div className="flex justify-center items-center gap-3">
-                    <Link
-                      to={`/ordersDay/detail/${order.id}`}
+                    <button
+                      onClick={() => {
+                        handleOpenModalDetail(order);
+                      }}
                       className="bg-[#FFBA41] hover:bg-[#00537B] text-center p-1 w-full text-white text-lg font-[500] rounded-lg cursor-pointer transition-all duration-200 ease-in-out"
                     >
                       ดูรายละเอียด
-                    </Link>
+                    </button>
 
-                    <Link
-                      to={`/payment/detail-all/${order.id}`}
+                    <button
                       className={`bg-[#00537B] hover:bg-[#F44D4D] text-center p-1 w-full text-white text-lg font-[500] rounded-lg cursor-pointer transition-all duration-200 ease-in-out`}
                     >
                       ลบ
-                    </Link>
+                    </button>
                   </div>
                 </div>
               ))
@@ -373,6 +392,43 @@ function Orders() {
           Next
         </button>
       </div>
+
+      <Modal
+        open={openModalDetail}
+        onClose={() => {
+          setOpenModalDetail(false);
+        }}
+      >
+        <Box
+          className="flex flex-col gap-4 2xl:max-w-[60%] lg:max-w-[80%] max-w-[95%] w-full px-4 "
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "white",
+            borderRadius: "10px",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#FFEFC6",
+            p: 2,
+          }}
+        >
+          <div className="flex justify-end ">
+            <button
+              onClick={() => {
+                setOpenModalDetail(false);
+              }}
+            >
+              <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
+            </button>
+          </div>
+
+          <OrderDetail
+            selectedRow={selectedRow}
+            onClickClose={setOpenModalDetail}
+          />
+        </Box>
+      </Modal>
     </div>
   );
 }

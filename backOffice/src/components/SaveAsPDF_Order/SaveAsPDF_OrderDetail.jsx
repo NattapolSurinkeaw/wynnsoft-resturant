@@ -30,7 +30,7 @@ function SaveAsPDF(elementId, today, order_number) {
           format: "a4", //"a4" ✅ ใช้ค่าตัวเลข
         });
 
-        pdf.addImage(dataUrl, "PNG", 10, 10, 180, 0);
+        pdf.addImage(dataUrl, "PNG", 5, 5, 200, 0);
         console.log("Saving PDF...");
         if (order_number) {
           pdf.save(`receipt-${today}-bill-${order_number}.pdf`);

@@ -5,7 +5,7 @@ import Account from "./sections/Account";
 import Taxes from "./sections/Taxes";
 import Tab from "./sections/Tab";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import AddIcon from "@mui/icons-material/Add";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import User from "./sections/User";
@@ -131,7 +131,7 @@ function Settings() {
               onClick={() => handleAdd()}
               className="flex items-center justify-center xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer text-white text-[16px] duration-200 transition bg-[#005179] hover:bg-[#F5A100]"
             >
-              <AddIcon className="text-white" />
+              <AddCircleOutlineIcon className="text-white" />
               เพิ่มผู้ใช้งาน
             </button>
           </div>

@@ -33,7 +33,7 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
               </div>
               <div className="flex items-center">
                 <p className="text-[16px] font-[400] text-white">
-                  หมายเลขออเดอร์ :
+                  เลขออเดอร์ :
                 </p>
                 <p className="ml-2 text-[18px] font-[600] text-white">
                   {selectedTable.order_number}

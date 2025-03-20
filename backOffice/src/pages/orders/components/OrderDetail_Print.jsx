@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import dayjs from "dayjs";
+import "dayjs/locale/th"; // ใช้ภาษาไทย
 
-function Receipt({
-  detailOrder,
+function OrderDetail_Print({
+  detailData,
   formattedDate,
   formatNumber,
   groupedMenuDetails,
@@ -10,10 +12,12 @@ function Receipt({
   totalPriceAll,
   totalDiscount,
 }) {
+
   const serviceChargeTotal = totalPriceAll * (serviceCharge / 100);
   const grandTotal = totalPriceAll + serviceChargeTotal;
   const taxTotal = grandTotal * (tax / 100);
   const Tatal = grandTotal + taxTotal;
+  
   return (
     <div id="print" className="w-[400px] h-full flex flex-col">
       <div className="flex justify-between bg-white py-3 pl-4 pr-10 h-full">
@@ -35,7 +39,7 @@ function Receipt({
         </div>
         <div className="flex flex-col justify-between gap-2">
           <p className="text-lg text-right text-black font-[600] ">
-            เลขออเดอร์ : {detailOrder.order_number}
+            เลขออเดอร์ : {detailData.order_number}
           </p>
           <p className="text-sm text-black text-right font-[600] ">
             {formattedDate}
@@ -162,11 +166,11 @@ function Receipt({
           <p className="text-xl font-[700]">ยอดทั้งหมด</p>
           <p className="text-xl font-[700]">{formatNumber(Tatal)} ฿</p>
         </div>
-        {detailOrder.order_note && (
+        {detailData.order_note && (
           <div className="flex w-full flex-row gap-2 justify-start items-start lg:py-2 py-1 pl-4 pr-10 ">
             <p className="text-sm font-[400] flex-shrink-0">หมายเหตุ :</p>
             <p className="text-sm font-[400] line-clamp-3">
-              {detailOrder.order_note}
+              {detailData.order_note}
             </p>
           </div>
         )}
@@ -175,4 +179,4 @@ function Receipt({
   );
 }
 
-export default Receipt;
+export default OrderDetail_Print;
