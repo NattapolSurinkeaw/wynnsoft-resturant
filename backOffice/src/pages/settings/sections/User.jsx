@@ -37,7 +37,7 @@ function User({userAll, permission, setRefreshUser}) {
               title: "Deleted!",
               text: "Your file has been deleted.",
               icon: "success"
-            });
+            }).then(() => setRefreshUser(prev => !prev))
           }
         })
       }

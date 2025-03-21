@@ -9,6 +9,7 @@ import { Table } from '../models/table'
 import { Orders } from '../models/orders'
 import { OrdersList } from '../models/orderList'
 import { Foods } from '../models/food'
+import { SIO } from '../util/Sockets'
 
 
 export class OrderFoodController {
@@ -69,6 +70,7 @@ export class OrderFoodController {
     try {
       const decodedJWT = jwt.decode(req.body.token);
       const paramFoods = req.body.food;
+      const io = SIO.getIO(); // ใช้งาน Socket.IO
 
       if (decodedJWT && typeof decodedJWT === "object") {
         const table = await Table.findOne({where: {id: decodedJWT.table_id}});
@@ -79,11 +81,11 @@ export class OrderFoodController {
           }
 
           const orderItems = paramFoods.map((item: any) => ({
-            food_id: item.id, // ใช้ id ของอาหาร
-            orders_id: order.id, // อ้างอิงไปที่ order_id ที่สร้าง
-            amount: item.count, // จำนวนที่สั่ง
-            status: 1, // สมมุติว่า 1 = กำลังดำเนินการ
-            note: item.note, // หมายเหตุของรายการ
+            food_id: item.id,
+            orders_id: order.id,
+            amount: item.count,
+            status: 1,
+            note: item.note,
           }));
           
           console.log(orderItems);
@@ -92,20 +94,26 @@ export class OrderFoodController {
           order.price = orderItems.reduce((sum: any, item: any) => sum + item.price, 0);
           await order.save();
 
+          // ✅ แจ้งเตือน React Backoffice ผ่าน Socket.IO
+          io.emit("newOrder", { 
+            order_id: order.id, 
+            order_number: order.order_number, 
+            items: orderItems 
+          });
+
           return res.status(200).json({
             status: true,
             message: 'ok',
             description: 'confirm payment success.'
-          })
+          });
         } else {
           return res.status(400).json({
             status: false,
             message: 'error',
             description: 'qrcode incorrect'
-          })
+          });
         }
       }
-
 
     } catch(error){
       return res.status(500).json({
@@ -113,7 +121,7 @@ export class OrderFoodController {
           message: 'error',
           error: error,
           description: 'something went wrong.'
-      })
+      });
     }
   }
 }

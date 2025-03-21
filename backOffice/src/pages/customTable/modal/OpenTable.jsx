@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import { getGenerateQr } from "../../../services/table_manage.service";
 
-function OpenTable({ isOpenTable, closeModal }) {
+function OpenTable({ isOpenTable, closeModal, selectedTableId, setRefresh }) {
+
+  const getOpenTable = () => {
+    getGenerateQr(selectedTableId).then((res) => {
+      console.log(res);
+      closeModal()
+      setRefresh(prev => !prev)
+    })
+  }
 
   return (
     isOpenTable && (
@@ -21,7 +30,10 @@ function OpenTable({ isOpenTable, closeModal }) {
           </p>
 
           <div className="flex justify-center space-x-5 mt-8">
-            <button className="w-[110px] py-1.5 bg-[#013D59] hover:bg-[#002b3f] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
+            <button 
+              className="w-[110px] py-1.5 bg-[#013D59] hover:bg-[#002b3f] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
+              onClick={getOpenTable}
+            >
               ยืนยัน
             </button>
           </div>

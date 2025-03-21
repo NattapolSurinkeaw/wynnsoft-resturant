@@ -100,6 +100,7 @@ function CustomTable() {
           isEditTable={isEditTable}
           customTable={customTable}
           setTableDetail={setTableDetail}
+          setRefresh={setRefresh}
         />
         {isAddTable ? (
           <AddTable />

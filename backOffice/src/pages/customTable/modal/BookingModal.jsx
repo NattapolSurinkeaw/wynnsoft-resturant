@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 
-function BookingModal({ isOpen, onClose }) {
+function BookingModal({ isOpen, onClose, tableDetails }) {
   if (!isOpen) return null;
+  const [dataBooking, setDataBooking] = useState([]);
+  console.log(dataBooking);
+  useEffect(() => {
+    setDataBooking(tableDetails.bookings[0]);
+  }, [])
 
   return (
     <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
@@ -28,23 +33,23 @@ function BookingModal({ isOpen, onClose }) {
         </div>
         <div className="w-full mt-4 space-y-2 border-3 p-4 border-[#39ACE3]">
           <p className="min-w-[90px] text-[#313131] font-[600]">
-            ชื่อผู้จอง : <span className="text-[#313131] font-[400]">Ta</span>
+            ชื่อผู้จอง : <span className="text-[#313131] font-[400]">{dataBooking.name_booking}</span>
           </p>
           <p className="min-w-[90px] text-[#313131] font-[600]">
             เบอร์ติดต่อ :{" "}
-            <span className="text-[#313131] font-[400]">09343762374</span>
+            <span className="text-[#313131] font-[400]">{dataBooking.phone_booking}</span>
           </p>
           <p className="min-w-[90px] text-[#313131] font-[600]">
             E-mail :{" "}
-            <span className="text-[#313131] font-[400]">Ta@gmail.com</span>
+            <span className="text-[#313131] font-[400]">{dataBooking.email_booking}</span>
           </p>
           <p className="min-w-[90px] text-[#313131] font-[600]">
             วันที่ :{" "}
-            <span className="text-[#313131] font-[400]">10/01/2558</span>
+            <span className="text-[#313131] font-[400]">{dataBooking.date_booking}</span>
           </p>
           <p className="min-w-[90px] text-[#313131] font-[600]">
             เวลาจอง :{" "}
-            <span className="text-[#313131] font-[400]">12.30 น.</span>
+            <span className="text-[#313131] font-[400]">{dataBooking.time_booking?.slice(0, 5)} น.</span>
           </p>
         </div>
       </div>

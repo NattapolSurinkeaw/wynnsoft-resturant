@@ -22,7 +22,7 @@ export class TableManageController {
           {
             model: BookingTable,
             as: "bookings",
-            attributes: ["id", "name_booking", "date_booking", "time_booking", "people"],
+            attributes: ["id", "name_booking", "phone_booking", "email_booking", "date_booking", "time_booking", "people"],
             order: [
               ["date_booking", "ASC"],  // ✅ เรียงลำดับวันที่
               ["time_booking", "ASC"],  // ✅ เรียงลำดับเวลา

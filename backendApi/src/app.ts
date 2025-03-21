@@ -55,8 +55,8 @@ app.use("/test", (req:any, res:any) => {
 })
 
 /* Socket Start */
-// const server = app.listen(socketPort,'0.0.0.0')
-// const io = SIO.init(server)
+const server = app.listen(socketPort,'0.0.0.0')
+const io = SIO.init(server)
 
 /**------------- 0 0 * * * * -------------
  * run cron-job every 1 Hour

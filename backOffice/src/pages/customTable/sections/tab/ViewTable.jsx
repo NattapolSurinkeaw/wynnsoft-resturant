@@ -26,9 +26,9 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, custo
   }, [selectedTableId, customTable]); // ลบ setSelectedTableId ออกจาก dependency array
 
   useEffect(() => {
-    console.log(selectedTableId)
     if (selectedTableId) {
       const table = customTable.find((table) => table.id === selectedTableId);
+     
       if (table) {
         setTableDetails(table);
         setTableEdit(table);
@@ -82,10 +82,14 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, custo
     }
   };
 
-  console.log(tableDetails)
+  // console.log(tableDetails)
   return (
     <>
-      <BookingModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <BookingModal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+        tableDetails={tableDetails}
+      />
       {tableDetails ? (
         <div className="relative 2xl:w-full md:w-[500px] w-full mx-auto h-[683px] p-6 bg-white shadow-1 rounded-lg overflow-hidden">
           {tableDetails && tableDetails.status === 3 && (

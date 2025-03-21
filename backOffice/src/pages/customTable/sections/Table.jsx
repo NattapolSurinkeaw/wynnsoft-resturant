@@ -21,7 +21,8 @@ function Table({
   isEditTable,
   setSelectedTableId,
   customTable,
-  setTableDetail
+  setTableDetail,
+  setRefresh
 }) {
   const [isReservation, setIsReservation] = useState(false);
   const [isOpenTable, setIsOpenTable] = useState(false);
@@ -49,6 +50,8 @@ function Table({
       <OpenTable
         isOpenTable={isOpenTable}
         closeModal={() => setIsOpenTable(false)}
+        selectedTableId={selectedTableId}
+        setRefresh={setRefresh}
       />
 
       <div className="2xl:min-w-[1100px] min-w-full min-h-[683px] p-6 rounded-lg shadow-1 bg-white">
