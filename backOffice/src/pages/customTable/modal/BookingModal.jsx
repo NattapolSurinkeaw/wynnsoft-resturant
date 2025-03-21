@@ -6,8 +6,14 @@ function BookingModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
-      <div className=" relative bg-white py-8 px-6 rounded-lg shadow-lg w-[380px]">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className=" relative bg-white py-8 px-6 rounded-lg shadow-lg w-[380px]"
+      >
         <button
           onClick={onClose}
           className=" absolute -top-8 -right-8 cursor-pointer"

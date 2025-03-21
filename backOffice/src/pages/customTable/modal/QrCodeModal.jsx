@@ -7,7 +7,7 @@ import { jsPDF } from "jspdf";
 function QrCodeModal({ isOpen, closeModal, qrCode }) {
   const contentRef = useRef();
   if (!isOpen) return null;
-  console.log(qrCode)
+  console.log(qrCode);
 
   const handlePrint = () => {
     const doc = new jsPDF("p", "mm", "a4"); // ใช้ A4 ขนาด
@@ -39,9 +39,13 @@ function QrCodeModal({ isOpen, closeModal, qrCode }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-50">
+    <div
+      onClick={closeModal}
+      className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-50"
+    >
       <div
         ref={contentRef}
+        onClick={(e) => e.stopPropagation()}
         className=" relative bg-white p-6 rounded-lg shadow-lg w-auto max-w-[570px] max-h-screen"
       >
         <h2 className="text-xl font-semibold mb-4">QR Code</h2>

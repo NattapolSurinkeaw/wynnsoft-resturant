@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 function OpenTable({ isOpenTable, closeModal }) {
-
   return (
     isOpenTable && (
-      <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
-        <div className=" relative bg-white p-8 rounded-lg shadow-lg w-[380px]">
+      <div
+        onClick={closeModal}
+        className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20"
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className=" relative bg-white p-8 rounded-lg shadow-lg w-[380px]"
+        >
           <button
             onClick={closeModal}
             className=" absolute -top-8 -right-8 cursor-pointer"

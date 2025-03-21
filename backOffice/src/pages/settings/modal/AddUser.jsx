@@ -44,8 +44,8 @@ function AddUser({ isOpen, closeModal, permissionAll }) {
 
   return (
     isOpen && (
-      <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
-        <div className=" relative bg-white p-8 rounded-lg shadow-lg w-[480px]">
+      <div onClick={closeModal} className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-20">
+        <div onClick={(e) => e.stopPropagation()} className=" relative bg-white p-8 rounded-lg shadow-lg w-[480px]">
           <div className="flex w-full items-center gap-2">
             <PersonAddAltOutlinedIcon
               sx={{ fontSize: 25 }}

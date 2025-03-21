@@ -3,7 +3,7 @@ export const orderToday = [
     id: 6,
     order_number: "000000006",
     table_id: 111, //ไอดีโต๊ะ
-    status: "5", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว รอการชำระ ชำระแล้ว
+    status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว รอการชำระ ชำระแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note:
       "In viverra ex urna. felis, amet, vehicula, ex. elit vitae eget eget libero, Quisque amet, amet, dui. vitae Nam leo. nisl.  dui id tincidunt Nunc Nunc ipsum dolor enim. Nullam risus tincidunt odio dignissim.",
@@ -26,7 +26,7 @@ export const orderToday = [
         food_id: 1, //ไอดีอาหาร
         orders_id: 6, // ไอดีออเดอร์
         amount: 3, // จำนวนอาหารที่สั่ง
-        status: "4", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
+        status: "2", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
         note: "", // รายละเอียดเพิ่มเติม เช่น ขอน้ำมันน้อย ไม่หวาน ไม่เค็ม ไม่ใส่มะเขือเทศ
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -186,7 +186,7 @@ export const orderToday = [
         food: {
           id: 3,
           cate_id: "1,2",
-          name: "ทอดปลาทูตัวเล็ก",
+          name: "ทอดปลาทูตัวเล็ก2",
           price: 40,
           special_price: 0,
           best_seller: true,
@@ -333,7 +333,7 @@ export const orderToday = [
     id: 10,
     order_number: "000000010",
     table_id: 12,
-    status: "4",
+    status: "1",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
@@ -362,7 +362,7 @@ export const orderToday = [
         food: {
           id: 3,
           cate_id: "1,2",
-          name: "ทอดปลาทูตัวเล็ก",
+          name: "ทอดปลาทูตัวเล็ก123",
           price: 40,
           special_price: 30,
           best_seller: true,
@@ -408,7 +408,7 @@ export const orderToday = [
     id: 16,
     order_number: "000000016",
     table_id: 11, //ไอดีโต๊ะ
-    status: "4", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
+    status: "2", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
@@ -685,7 +685,7 @@ export const orderToday = [
     id: 167,
     order_number: "00044516",
     table_id: 31,
-    status: "1",
+    status: "2",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
