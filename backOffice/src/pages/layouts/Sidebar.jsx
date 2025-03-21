@@ -528,7 +528,7 @@ function Sidebar({ isSidebarOpen }) {
           to="topMenu"
           className={`flex items-center justify-between transition duration-100 rounded-md px-4 pt-1.5 pb-1.5 mt-2 
             ${
-              location.pathname === "/topMenu"
+              location.pathname.startsWith("/topMenu")
                 ? "bg-white"
                 : "hover:bg-white group"
             }`}
@@ -537,14 +537,14 @@ function Sidebar({ isSidebarOpen }) {
             <FormatListNumberedOutlinedIcon
               sx={{ fontSize: 25 }}
               className={`${
-                location.pathname === "/topMenu"
+                location.pathname.startsWith("/topMenu")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
             />
             <p
               className={`text-[16px] ${
-                location.pathname === "/topMenu"
+                location.pathname.startsWith("/topMenu")
                   ? "text-[#00537B]"
                   : "text-white group-hover:text-[#00537B]"
               }`}
