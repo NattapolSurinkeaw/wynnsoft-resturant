@@ -100,7 +100,7 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
           </div>
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">
-               Service charge {serviceCharge}%
+              Service charge {serviceCharge}%
             </p>
             <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
           </div>

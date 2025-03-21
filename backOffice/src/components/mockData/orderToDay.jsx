@@ -3,7 +3,7 @@ export const orderToday = [
     id: 6,
     order_number: "000000006",
     table_id: 111, //ไอดีโต๊ะ
-    status: "5", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว รอการชำระ ชำระแล้ว
+    status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว รอการชำระ ชำระแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note:
       "In viverra ex urna. felis, amet, vehicula, ex. elit vitae eget eget libero, Quisque amet, amet, dui. vitae Nam leo. nisl.  dui id tincidunt Nunc Nunc ipsum dolor enim. Nullam risus tincidunt odio dignissim.",
@@ -26,7 +26,7 @@ export const orderToday = [
         food_id: 1, //ไอดีอาหาร
         orders_id: 6, // ไอดีออเดอร์
         amount: 3, // จำนวนอาหารที่สั่ง
-        status: "4", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
+        status: "2", //สถานะของอาหาร รับออเดอร์ กำลังปรุง รอเสิร์ฟ เสิร์ฟแล้ว ยกเลิก หมด
         note: "", // รายละเอียดเพิ่มเติม เช่น ขอน้ำมันน้อย ไม่หวาน ไม่เค็ม ไม่ใส่มะเขือเทศ
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
@@ -157,7 +157,7 @@ export const orderToday = [
     id: 15,
     order_number: "0000000216",
     table_id: 2,
-    status: "3",
+    status: "5",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
@@ -178,26 +178,26 @@ export const orderToday = [
         id: 63,
         food_id: 3,
         orders_id: 15,
-        amount: 2,
+        amount: 4,
         status: "4",
         note: "",
         createdAt: "2025-03-14T02:33:12.000Z",
         updatedAt: "2025-03-14T02:33:12.000Z",
         food: {
-          id: 3,
+          id: 1,
           cate_id: "1,2",
-          name: "ทอดปลาทูตัวเล็ก",
+          name: "ทอดปลาทูตัวเล็ก2",
           price: 40,
           special_price: 0,
           best_seller: true,
           details: "ปลาทูแมวทอด 2 ตัว",
           thumbnail_title: "",
-          thumbnail_link: "/images/img/Rectangle 1136.png",
-          status_food: true,
-          note: null,
-          display: true,
-          createdAt: "2025-03-04T09:40:28.000Z",
-          updatedAt: "2025-03-04T09:40:28.000Z",
+          thumbnail_link: "/images/img/Rectangle 1131.png", //รูปอาหาร
+          status_food: true, //สถานะแจ้งอาหารหมด
+          note: null, // ลายละเอียดเอาไว้แจ้งเวลาอาหารหมด
+          display: true, //สถานะแสดงผล
+          createdAt: null,
+          updatedAt: "2025-03-04T09:32:46.000Z",
         },
       },
       {
@@ -333,7 +333,7 @@ export const orderToday = [
     id: 10,
     order_number: "000000010",
     table_id: 12,
-    status: "4",
+    status: "1",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
@@ -362,7 +362,7 @@ export const orderToday = [
         food: {
           id: 3,
           cate_id: "1,2",
-          name: "ทอดปลาทูตัวเล็ก",
+          name: "ทอดปลาทูตัวเล็ก123",
           price: 40,
           special_price: 30,
           best_seller: true,
@@ -408,7 +408,7 @@ export const orderToday = [
     id: 16,
     order_number: "000000016",
     table_id: 11, //ไอดีโต๊ะ
-    status: "4", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
+    status: "2", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
@@ -509,11 +509,11 @@ export const orderToday = [
     id: 12,
     order_number: "000000215",
     table_id: 22,
-    status: "2",
+    status: "5",
     price: 60,
     order_note: "",
-    createdAt: "2025-03-14T02:31:10.000Z",
-    updatedAt: "2025-03-14T02:33:12.000Z",
+    createdAt: "2025-04-14T02:31:10.000Z",
+    updatedAt: "2025-04-14T02:33:12.000Z",
     table: {
       id: 22,
       table_token: "bf3136cd-2241-4cae-bd7f-62573d0ad41e",
@@ -557,12 +557,12 @@ export const orderToday = [
         food_id: 2,
         orders_id: 15,
         amount: 1,
-        status: "1",
+        status: "4",
         note: "",
         createdAt: "2025-03-14T02:33:12.000Z",
         updatedAt: "2025-03-14T02:33:12.000Z",
         food: {
-          id: 2,
+          id: 3,
           cate_id: "11",
           name: "ทอดปลาทู",
           price: 40,
@@ -685,7 +685,7 @@ export const orderToday = [
     id: 167,
     order_number: "00044516",
     table_id: 31,
-    status: "1",
+    status: "2",
     price: 60,
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",

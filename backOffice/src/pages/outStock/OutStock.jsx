@@ -77,10 +77,6 @@ function OutStock() {
           />
           <p className="text-[25px] font-[600] text-[#00537B]">สินค้าหมด</p>
         </div>
-
-
-
-
       </div>
 
       <TableMenuStatus

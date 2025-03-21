@@ -26,33 +26,43 @@ function ReservationModal({ isReservation, closeModal, customTable }) {
       phone_booking: phone,
       email_booking: email,
       table_booking: tableBooking,
-      date_booking: dayjs(selectedDate).format('YYYY-MM-DD'), // ✅ ใช้ selectedDate ตรงๆ
-      time_booking: dayjs(selectedTime).format('HH:mm:ss'),   // ✅ ใช้ selectedTime ตรงๆ
-      people: people
+      date_booking: dayjs(selectedDate).format("YYYY-MM-DD"), // ✅ ใช้ selectedDate ตรงๆ
+      time_booking: dayjs(selectedTime).format("HH:mm:ss"), // ✅ ใช้ selectedTime ตรงๆ
+      people: people,
     };
 
-    if(!params.name_booking || !params.phone_booking || !params.email_booking) {
+    if (
+      !params.name_booking ||
+      !params.phone_booking ||
+      !params.email_booking
+    ) {
       return false;
     }
-  
+
     getBookingTable(params).then((res) => {
-      console.log(res)
-      if(res.status) {
+      console.log(res);
+      if (res.status) {
         Swal.fire({
           position: "center",
           text: "เพิ่มโต๊ะสำเร็จ!",
           icon: "success",
           showConfirmButton: false,
           timer: 1500,
-        }).then(() => closeModal())
+        }).then(() => closeModal());
       }
-    })
+    });
   };
 
   return (
     isReservation && (
-      <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
-        <div className=" relative bg-white p-8 rounded-lg shadow-lg w-[480px]">
+      <div
+        onClick={closeModal}
+        className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20"
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className=" relative bg-white p-8 rounded-lg shadow-lg w-[480px]"
+        >
           <div className="flex w-full items-center gap-2">
             <InsertInvitationIcon
               sx={{ fontSize: 25 }}
@@ -169,11 +179,11 @@ function ReservationModal({ isReservation, closeModal, customTable }) {
                   onChange={(e) => setTableBooking(e.target.value)}
                   className="w-full h-[37px] text-[14px]"
                 >
-                  {
-                    customTable.map((table) => (
-                      <MenuItem key={table.id} value={table.id}>{table.title}</MenuItem>
-                    ))
-                  }
+                  {customTable.map((table) => (
+                    <MenuItem key={table.id} value={table.id}>
+                      {table.title}
+                    </MenuItem>
+                  ))}
                   {/* <MenuItem value={20}>2</MenuItem> */}
                   {/* <MenuItem value={30}>3</MenuItem> */}
                 </Select>
@@ -188,8 +198,9 @@ function ReservationModal({ isReservation, closeModal, customTable }) {
             >
               ยกเลิก
             </button>
-            <button className="w-[100px] py-1.5 bg-[#013D59] hover:bg-[#002b3f] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
-             onClick={onSubmit}
+            <button
+              className="w-[100px] py-1.5 bg-[#013D59] hover:bg-[#002b3f] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
+              onClick={onSubmit}
             >
               บันทึก
             </button>

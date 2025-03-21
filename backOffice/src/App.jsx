@@ -28,6 +28,7 @@ import Settings from "./pages/settings/Settings";
 import ConfirmPassword from "./components/auth/ConfirmPassword";
 import DetailOrderToday from "./pages/ordersDay/components/DetailOrderToday";
 import DetailAll from "./pages/payment/DetailAll";
+import DetailTopMenu from "./pages/topMenu/components/DetailTopMenu";
 
 function App() {
   const [count, setCount] = useState(0);

@@ -10,20 +10,20 @@ function EditTax({ isOpen, closeModal, slcTax, setRefresh }) {
 
   useEffect(() => {
     console.log(slcTax.info_value);
-    setInfoValue(slcTax.info_value)
-    setStatus(slcTax.info_display)
-  }, [slcTax])
+    setInfoValue(slcTax.info_value);
+    setStatus(slcTax.info_display);
+  }, [slcTax]);
 
   const onSubmit = () => {
     const params = {
       id: slcTax.info_id,
       info_value: infoValue,
-      display_status: status
-    } 
-    
+      display_status: status,
+    };
+
     getUpdateTaxService(params).then((res) => {
-      console.log(res)
-      if(res.status) {
+      console.log(res);
+      if (res.status) {
         Swal.fire({
           position: "center",
           icon: "success",
@@ -31,17 +31,23 @@ function EditTax({ isOpen, closeModal, slcTax, setRefresh }) {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          setRefresh(prev => !prev)
-          closeModal()
-        })
+          setRefresh((prev) => !prev);
+          closeModal();
+        });
       }
-    })
-  }
+    });
+  };
 
   return (
     isOpen && (
-      <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
-        <div className=" relative bg-white p-8 rounded-lg shadow-lg w-[480px]">
+      <div
+        onClick={closeModal}
+        className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-20"
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className=" relative bg-white p-8 rounded-lg shadow-lg w-[480px]"
+        >
           <div className="flex w-full items-center gap-2">
             <BorderColorOutlinedIcon
               sx={{ fontSize: 25 }}
@@ -93,8 +99,9 @@ function EditTax({ isOpen, closeModal, slcTax, setRefresh }) {
                   "& .MuiSwitch-switchBase.Mui-checked": {
                     color: "#39C526",
                   },
-                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
-                    { backgroundColor: "#39C526" },
+                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                    backgroundColor: "#39C526",
+                  },
                 }}
               />
             </div>
@@ -104,7 +111,9 @@ function EditTax({ isOpen, closeModal, slcTax, setRefresh }) {
             <button onClick={closeModal} className="button-cancel-1">
               ยกเลิก
             </button>
-            <button onClick={onSubmit} className="button-save-1">บันทึก</button>
+            <button onClick={onSubmit} className="button-save-1">
+              บันทึก
+            </button>
           </div>
         </div>
       </div>

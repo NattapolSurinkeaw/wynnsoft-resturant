@@ -10,17 +10,23 @@ function MoveTable({ isMoveTable, closeModal, table }) {
   useEffect(() => {
     getTableOnly().then((res) => {
       setTables(res.tables);
-    })
-  }, [])
+    });
+  }, []);
 
   useEffect(() => {
     setCurrentTable(table.id);
-  }, [table])
+  }, [table]);
 
   return (
     isMoveTable && (
-      <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
-        <div className=" relative bg-white py-8 px-[4rem] rounded-lg shadow-lg w-[380px]">
+      <div
+        onClick={closeModal}
+        className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20"
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className=" relative bg-white py-8 px-[4rem] rounded-lg shadow-lg w-[380px]"
+        >
           <button
             onClick={closeModal}
             className=" absolute -top-8 -right-8 cursor-pointer"
@@ -40,11 +46,11 @@ function MoveTable({ isMoveTable, closeModal, table }) {
               onChange={(e) => setCurrentTable(e.target.value)}
               className="w-[200px] h-[37px] text-[14px]"
             >
-              {
-                tables.map((table) => (
-                  <MenuItem key={table.id} value={table.id}>{table.title}</MenuItem>
-                ))
-              }
+              {tables.map((table) => (
+                <MenuItem key={table.id} value={table.id}>
+                  {table.title}
+                </MenuItem>
+              ))}
             </Select>
           </div>
 

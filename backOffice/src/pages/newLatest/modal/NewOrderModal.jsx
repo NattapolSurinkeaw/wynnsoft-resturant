@@ -1,20 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import html2canvas from "html2canvas";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
 import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+import { orderToday } from "../../../components/mockData/orderToDay";
 import Receipt_Print from "../../../components/Receipt/Receipt_Print ";
+
 Receipt_Print;
+
 function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
   const [activeTab, setActiveTab] = useState(1);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenModal = () => setIsOpen(true);
+  const closeModalAddOrder = () => setIsOpen(false);
 
   const printRef = useRef(null);
-  const formatNumber = (num) =>
-    Number(num).toLocaleString("en-US",);
+  const formatNumber = (num) => Number(num).toLocaleString("en-US");
 
-  const fillterOrderData = NewLatestData.find((table) => table.id === orderId);
+  const fillterOrderData = orderToday.find((table) => table.id === orderId);
 
   if (!isOpenNewOrderModal || !orderId) return null;
 
@@ -55,52 +63,6 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
     }, 500);
   };
 
-  // const handleExportPDF = async () => {
-  //   if (!printRef.current) return;
-
-  //   const canvas = await html2canvas(printRef.current, { scale: 10 });
-  //   const imgData = canvas.toDataURL("image/png");
-
-  //   const pdf = new jsPDF({
-  //     orientation: "portrait",
-  //     unit: "mm",
-  //     format: "a4",
-  //   });
-
-  //   const pageWidth = pdf.internal.pageSize.getWidth();
-  //   const pageHeight = pdf.internal.pageSize.getHeight();
-  //   const imgWidth = pageWidth - 20; // ลดขอบ
-  //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  //   if (imgHeight > pageHeight - 10) {
-  //     pdf.addImage(
-  //       imgData,
-  //       "PNG",
-  //       10,
-  //       10,
-  //       imgWidth,
-  //       imgHeight,
-  //       undefined,
-  //       "FAST"
-  //     );
-  //     pdf.addPage();
-  //   } else {
-  //     pdf.addImage(
-  //       imgData,
-  //       "PNG",
-  //       10,
-  //       10,
-  //       imgWidth,
-  //       imgHeight,
-  //       undefined,
-  //       "FAST"
-  //     );
-  //   }
-  //   pdf.autoPrint();
-  //   window.open(pdf.output("bloburl"), "_blank");
-  //   // pdf.save("Order.pdf");
-  // };
-
   return (
     isOpenNewOrderModal && (
       <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
@@ -119,16 +81,23 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
 
             <div className="flex gap-4 w-full">
               <figure className="max-w-[130px] min-w-[130px] h-[130px] shadow-md">
-                <img
-                  className="w-full h-full object-cover rounded-lg"
-                  src={fillterOrderData.thumbnail_link}
-                  alt={fillterOrderData.details}
-                />
+                {fillterOrderData?.orderList?.length > 0 && (
+                  <img
+                    className="w-full h-full object-cover rounded-lg"
+                    src={fillterOrderData.orderList[0].food.thumbnail_link}
+                    alt={
+                      fillterOrderData.orderList[0].food.thumbnail_title ||
+                      "อาหาร"
+                    }
+                  />
+                )}
               </figure>
               <div className="flex flex-col justify-between w-full">
-                <p className="text-[#313131] text-[22px] font-[600] line-clamp-2">
-                  {fillterOrderData.details}
-                </p>
+                {fillterOrderData?.orderList?.length > 0 && (
+                  <p className="text-[#313131] text-[22px] font-[600] line-clamp-2">
+                    {fillterOrderData.orderList[0].food.name}
+                  </p>
+                )}
                 <div className="flex justify-between">
                   <div className="flex items-center gap-1">
                     <ScheduleOutlinedIcon
@@ -150,9 +119,11 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
                     <p className="text-[#00537B] text-[18px] font-[600]">
                       จำนวน
                     </p>
-                    <p className="flex justify-center items-center w-[70px] h-[40px] text-[#00537B] text-[26px] font-[600] bg-[#EEEEEE] p-1 border border-[#D9D9D9] rounded-lg">
-                      {fillterOrderData.amount}
-                    </p>
+                    {fillterOrderData.orderList.length > 0 && (
+                      <p className="flex justify-center items-center w-[70px] h-[40px] text-[#00537B] text-[26px] font-[600] bg-[#EEEEEE] p-1 border border-[#D9D9D9] rounded-lg">
+                        {fillterOrderData.orderList.length}
+                      </p>
+                    )}
                     <p className="text-[#00537B] text-[18px] font-[400]">
                       รายการ
                     </p>
@@ -162,7 +133,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
             </div>
 
             <div className="w-full text-[#313131] text-[16px] font-[400] h-[100px] bg-[#EEEEEE] rounded-md p-2 mt-6">
-              {fillterOrderData.note}
+              {fillterOrderData.order_note}
             </div>
 
             <div className="flex justify-between space-x-3 mt-7">
@@ -184,7 +155,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
 
         {/* Tab 2 */}
         {activeTab === 2 && (
-          <div className="relative bg-white p-4 rounded-lg shadow-lg 2xl:w-[580px] w-[85%]">
+          <div className="relative bg-white p-4 rounded-lg shadow-lg 2xl:w-[580px] w-[85%] ">
             <button
               onClick={handleCloseModal}
               className="absolute -top-8 -right-8 cursor-pointer"
@@ -194,34 +165,47 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
                 className="text-white hover:text-red-500"
               />
             </button>
-
-            <div className="flex gap-4 w-full">
-              <figure className="max-w-[80px] h-[80px] shadow-md">
-                <img
-                  className="w-full h-full object-cover rounded-lg"
-                  src="/images/66.jpg"
-                  alt=""
-                />
-              </figure>
-              <div className="flex 2xl:flex-row flex-col w-full justify-between">
-                <div>
-                  <p className="text-[18px] text-[#313131] font-[500]">
-                    {fillterOrderData.details}
-                  </p>
-                  <p className="text-[16px] text-[#313131] font-[400]">
-                    {fillterOrderData.note}
-                  </p>
+            <div className="w-full h-[400px] px-2 overflow-y-auto">
+              {fillterOrderData.orderList.map((orderItem, index) => (
+                <div key={index}>
+                  <div className="flex gap-4 w-full">
+                    <figure className="min-w-[80px] h-[80px] shadow-md">
+                      <img
+                        className="w-full h-full object-cover rounded-lg"
+                        src={orderItem.food.thumbnail_link}
+                        alt={orderItem.food.thumbnail_title || "อาหาร"}
+                      />
+                    </figure>
+                    <div className="flex 2xl:flex-row flex-col w-full justify-between">
+                      <div>
+                        <p className="text-[18px] text-[#313131] font-[500]">
+                          {orderItem.food.name}
+                        </p>
+                        <p className="text-[16px] text-[#313131] font-[400]">
+                          {orderItem.food.details}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-center justify-between">
+                        <p className="text-[18px] text-[#313131] font-[400]">
+                          {orderItem.amount}{" "}
+                          <span className="ml-2">รายการ</span>
+                        </p>
+                        <DeleteForeverIcon
+                          sx={{ fontSize: 32 }}
+                          className="text-red-500 hover:text-red-800 cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border-t border-[#8F8F8F]/50 my-3"></div>
                 </div>
-                <p className="text-[18px] text-[#313131] font-[400]">
-                  {fillterOrderData.amount} <span className="ml-2">รายการ</span>
-                </p>
-              </div>
+              ))}
             </div>
-
-            <div className="border-t border-[#8F8F8F]/50 my-3"></div>
-
             <div className="flex justify-center space-x-5 mt-7">
-              <button className="w-[137px] py-1.5 bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
+              <button
+                onClick={handleOpenModal}
+                className="w-[137px] py-1.5 bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
+              >
                 เพิ่มรายการ
               </button>
               <button
@@ -231,6 +215,66 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
                 ยืนยันพิมพ์
               </button>
             </div>
+
+            {/* ✅ แก้เงื่อนไขให้ถูกต้อง */}
+            {isOpen && (
+              <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-20">
+                <div className="relative bg-white p-8 rounded-lg shadow-lg w-[480px]">
+                  <div className="flex w-full items-center gap-2">
+                    <BorderColorOutlinedIcon
+                      sx={{ fontSize: 25 }}
+                      className="text-[#00537B]"
+                    />
+                    <p className="text-[25px] font-[600] text-[#00537B]">
+                      เพิ่มรายการอาหาร
+                    </p>
+                  </div>
+                  <div className="w-full space-y-3 mt-6">
+                    <div className="flex items-center">
+                      <p className="min-w-[90px] text-[#313131] font-[400]">
+                        Param
+                      </p>
+                      <input
+                        type="text"
+                        className="border border-gray-300 text-gray-600 text-[14px] font-[300] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
+                        placeholder="กรอกชื่อ..."
+                        disabled
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <p className="min-w-[90px] text-[#313131] font-[400]">
+                        Title
+                      </p>
+                      <input
+                        type="text"
+                        className="border border-gray-300 text-gray-600 text-[14px] font-[300] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
+                        placeholder="กรอกอีเมล..."
+                        disabled
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <p className="min-w-[90px] text-[#313131] font-[400]">
+                        Value
+                      </p>
+                      <input
+                        type="text"
+                        className="border border-gray-300 text-gray-600 text-[14px] font-[300] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end space-x-3 mt-8">
+                    <button
+                      onClick={closeModalAddOrder}
+                      className="button-cancel-1"
+                    >
+                      ยกเลิก
+                    </button>
+                    <button className="button-save-1">บันทึก</button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -257,7 +301,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
               alt=""
             />
             <p className="text-black text-[35px] font-[700] text-center">
-              {fillterOrderData.Order.Table.title}
+              {fillterOrderData.table.title}
             </p>
             <div className="flex justify-between mt-4 mb-1">
               <p className="text-black text-[14px] font-[300] text-center">
@@ -282,38 +326,24 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
               </p>
             </div>
 
-            <div className="mb-2">
-              <div className="flex justify-between">
-                <p className="w-[220px] text-black text-[16px] font-[500] mt-4">
-                  {fillterOrderData.details}
+            {fillterOrderData.orderList.map((orderItem, index) => (
+              <div key={index}>
+                <div className="flex justify-between">
+                  <p className="w-[220px] text-black text-[16px] font-[500] mt-3">
+                    {orderItem.food.name}
+                  </p>
+                  <p className="text-black text-[16px] font-[500] mt-4">
+                    {formatNumber(orderItem.food.price)}
+                  </p>
+                </div>
+                <p className="text-black text-[15px] font-[500] mt-1 underline decoration-1">
+                  หมายเหตุ
                 </p>
-                <p className="text-black text-[16px] font-[500] mt-4">
-                  {formatNumber(fillterOrderData.price)}
-                </p>
-              </div>
-              <p className="text-black text-[15px] font-[500] mt-1 underline decoration-1">
-                หมายเหตุ
-              </p>
-              <p className="text-black text-[15px] font-[300]">
-                {fillterOrderData.note}
-              </p>
-            </div>
-            <div className="mb-2">
-              <div className="flex justify-between">
-                <p className="w-[220px] text-black text-[16px] font-[500] mt-4">
-                  {fillterOrderData.details}
-                </p>
-                <p className="text-black text-[16px] font-[500] mt-4">
-                  {formatNumber(fillterOrderData.price)}
+                <p className="text-black text-[15px] font-[300]">
+                  {orderItem.food.details}
                 </p>
               </div>
-              <p className="text-black text-[15px] font-[500] mt-1 underline decoration-1">
-                หมายเหตุ
-              </p>
-              <p className="text-black text-[15px] font-[300]">
-                {fillterOrderData.note}
-              </p>
-            </div>
+            ))}
           </div>
         )}
       </div>
