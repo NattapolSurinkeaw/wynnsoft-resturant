@@ -514,7 +514,7 @@ export const orderToday = [
     id: 12,
     order_number: "000000215",
     table_id: 22,
-    status: "5",
+    status: "3",
     price: 60,
     payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
     order_note: "",
