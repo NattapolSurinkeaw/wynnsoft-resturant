@@ -6,7 +6,6 @@ function OpenTable({ isOpenTable, closeModal, selectedTableId, setRefresh }) {
 
   const getOpenTable = () => {
     getGenerateQr(selectedTableId).then((res) => {
-      console.log(res);
       closeModal()
       setRefresh(prev => !prev)
     })

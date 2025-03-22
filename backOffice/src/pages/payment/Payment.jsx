@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { orderToday } from "../../components/mockData/orderToDay";
+// import { orderToday } from "../../components/mockData/orderToDay";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import { Link } from "react-router-dom";
+import { getOrderAll } from "../../services/order.service";
 
 function Payment() {
   dayjs.locale("th");
@@ -12,12 +13,22 @@ function Payment() {
   const tableRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
+  const [orderToday, setOrderToday] = useState([]);
 
   const formatNumber = (num) =>
-    Number(num).toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+  Number(num).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  useEffect(() => {
+    getOrderAll().then((res) => {
+      // console.log(res)
+      setOrderToday(res.orders)
+    })
+  }, [])
+
+  // console.log(orderToday)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,7 +65,8 @@ function Payment() {
 
         // 🔹 กรองเฉพาะ orderList ที่มี status === "4"
         const filteredOrderList = order.orderList.filter(
-          (orderItem) => orderItem.status === "4"
+          // (orderItem) => orderItem.status === "4"
+          (orderItem) => orderItem.status
         );
 
         if (filteredOrderList.length === 0) {
@@ -197,10 +209,12 @@ function Payment() {
                       ทั้งหมด
                     </div>
                     <div className="border-t border-[#e6e6e6] rounded-full w-full"></div>
+                   
                     {orderToday
                       .filter((order) =>
                         order.orderList.some(
-                          (orderItem) => orderItem.status === "4"
+                          // (orderItem) => orderItem.status === "4"
+                          (orderItem) => orderItem.status
                         )
                       ) // 🔹 กรองเฉพาะออเดอร์ที่มีเมนูที่มีสถานะ "4"
                       .filter(

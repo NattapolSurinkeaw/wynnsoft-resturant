@@ -6,7 +6,7 @@ import { getTableOnly } from "../../../services/table_manage.service";
 function MoveTable({ isMoveTable, closeModal, table }) {
   const [tables, setTables] = useState("");
   const [currentTable, setCurrentTable] = useState([]);
-
+  console.log(tables)
   useEffect(() => {
     getTableOnly().then((res) => {
       setTables(res.tables);
@@ -47,7 +47,7 @@ function MoveTable({ isMoveTable, closeModal, table }) {
               className="w-[200px] h-[37px] text-[14px]"
             >
               {tables.map((table) => (
-                <MenuItem key={table.id} value={table.id}>
+                <MenuItem key={table.id} value={table.id} disabled={table.status === 2}>
                   {table.title}
                 </MenuItem>
               ))}

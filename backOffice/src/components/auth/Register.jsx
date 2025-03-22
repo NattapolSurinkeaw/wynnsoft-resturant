@@ -55,16 +55,27 @@ function Register() {
   
     try {
       const res = await getRegister(formData);
-      console.log(res);
-      Swal.fire({
-        position: "center",
-        text: "ลงทะเบียนสำเร็จ!",
-        icon: "success",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        navigate("/login");
-      });
+      if(res.status === true) {
+        Swal.fire({
+          position: "center",
+          text: "ลงทะเบียนสำเร็จ!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigate("/login");
+        });
+      } else {
+        Swal.fire({
+          position: "center",
+          title: "เกิดข้อผิดพลาด!",
+          text: "error : " + res.response.data.description,
+          icon: "error",
+          showConfirmButton: false,
+          // timer: 1500,
+        })
+      }
+      
     } catch (error) {
       console.error("Registration Error:", error);
       Swal.fire({

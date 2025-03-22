@@ -8,7 +8,11 @@ export const getTest = () => {
 
 export const getRegister = (formData) => {
   return axios.post('/api/admin/register', formData).then((res) => {
-    return { status: res.data.status, message: res.data.message, description: res.data.description}
+    return { 
+      status: res.data.status, 
+      message: res.data.message, 
+      description: res.data.description
+    }
   }).catch((err) => err)
 }
 

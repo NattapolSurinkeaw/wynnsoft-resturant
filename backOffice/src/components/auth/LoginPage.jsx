@@ -6,12 +6,12 @@ import LockIcon from "@mui/icons-material/Lock";
 import Swal from "sweetalert2";
 
 function LoginPage() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const submitLogin = async () => {
-    if (!username.trim() || !password.trim()) {
+    if (!email.trim() || !password.trim()) {
       Swal.fire({
         text: "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน",
         icon: "warning",
@@ -21,7 +21,7 @@ function LoginPage() {
       return;
     }
   
-    const param = { username: username.trim(), password: password.trim() };
+    const param = { email: email.trim(), password: password.trim() };
   
     try {
       const res = await getLogin(param);
@@ -86,7 +86,7 @@ function LoginPage() {
           type="email"
           placeholder="เมลผู้ใช้งาน"
           className="outline-none bg-transparent text-[#8F8F8F] lg:text-2xl text-base w-full"
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <div className="bg-white md:px-4 p-6 rounded-2xl w-full mx-auto h-[30px] text-[#8F8F8F] flex gap-2 items-center border border-gray-300 justify-start">
@@ -96,6 +96,11 @@ function LoginPage() {
           placeholder="พาสเวิร์ด"
           className="outline-none bg-transparent text-[#8F8F8F] lg:text-2xl text-base w-full"
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              submitLogin();
+            }
+          }}
         />
       </div>{" "}
       <div

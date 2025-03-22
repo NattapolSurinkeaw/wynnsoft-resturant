@@ -1,11 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { orderToday } from "../../../components/mockData/orderToDay";
+// import { orderToday } from "../../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import EditOrder from "./EditOrder";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Box, Modal } from "@mui/material";
+import { getOrderById } from "../../../services/order.service";
+import { api_path } from "../../../store/setting";
 
 function DetailOrderToday() {
   dayjs.locale("th");
@@ -13,8 +15,21 @@ function DetailOrderToday() {
   const [tax, setTaxTotal] = useState(7);
   const [serviceCharge, setServiceCharge] = useState(5);
   const [openModal, setOpenModal] = useState(false);
-  const menuOrder = orderToday.find((item) => item.id === parseInt(id));
+  const [orderToday, setOrderToday] = useState([]);
+  // console.log(orderToday);
 
+  useEffect(() => {
+    getOrderById(id).then((res) => {
+      if (res && res.order) {
+        setOrderToday(res.order);
+      } else {
+        setOrderToday([]); // ป้องกันการเป็น undefined
+      }
+    });
+  }, []);
+
+  const menuOrder = orderToday
+  // const menuOrder = orderToday.find((item) => item.id === parseInt(id));
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -22,17 +37,19 @@ function DetailOrderToday() {
     });
 
   // console.log("Menu Order:", menuOrder.orderList);
-  const formattedDate = dayjs(menuOrder.createdAt).format("D MMMM YYYY");
+  const formattedDate = dayjs(menuOrder?.createdAt).format("D MMMM YYYY");
 
-  const filteredOrderList = menuOrder
-    ? menuOrder.orderList.filter((item) => item.status !== "4")
-    : [];
+  const filteredOrderList = menuOrder?.orderList
+  ? menuOrder.orderList.filter((item) => item.status !== "4")
+  : [];
     
   // console.log("filteredOrderList", filteredOrderList);
 
   const groupedMenuDetails = useMemo(() => {
-    const grouped = menuOrder.orderList
-      .filter((item) => item.status === "4") // กรองเฉพาะ status === "4"
+    if (!menuOrder.orderList) return []; // ถ้าไม่มี orderList ให้คืนค่าเป็น []
+  
+    return menuOrder.orderList
+      // .filter((item) => item.status === "4")
       .reduce((acc, item) => {
         const existingItem = acc.find((menu) => menu.name === item.food.name);
         if (existingItem) {
@@ -42,30 +59,32 @@ function DetailOrderToday() {
         }
         return acc;
       }, []);
-    return grouped;
   }, [menuOrder.orderList]);
 
-  const { totalPrice, totalSpecialPrice, totalPriceAll } = menuOrder.orderList
-    .filter((orderItem) => orderItem.status === "4") // กรองเฉพาะ status === "4"
-    .reduce(
-      (acc, orderItem) => {
-        const foodItem = orderItem.food;
-        if (foodItem) {
-          const count = orderItem.amount || 1;
-          const price = foodItem.price || 0;
-          const specialPrice = foodItem.special_price || price;
+  console.log(groupedMenuDetails)
 
-          acc.totalPrice += price * count;
-          acc.totalPriceAll += specialPrice * count;
+  const { totalPrice, totalSpecialPrice, totalPriceAll } = 
+  (menuOrder?.orderList || []) // ถ้า undefined ให้ใช้ []
+  .filter((orderItem) => orderItem.status === "4")
+  .reduce(
+    (acc, orderItem) => {
+      const foodItem = orderItem.food;
+      if (foodItem) {
+        const count = orderItem.amount || 1;
+        const price = foodItem.price || 0;
+        const specialPrice = foodItem.special_price || price;
 
-          if (foodItem.special_price > 0) {
-            acc.totalSpecialPrice += specialPrice * count;
-          }
+        acc.totalPrice += price * count;
+        acc.totalPriceAll += specialPrice * count;
+
+        if (foodItem.special_price > 0) {
+          acc.totalSpecialPrice += specialPrice * count;
         }
-        return acc;
-      },
-      { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
-    );
+      }
+      return acc;
+    },
+    { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
+  );
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -92,7 +111,7 @@ function DetailOrderToday() {
               </button>
             </div>
           </div>
-          {menuOrder.orderList.some((item) => item.status !== "4") && (
+          {(menuOrder.orderList || []).some((item) => item.status !== "4") && (
             <div className="flex flex-col overflow-auto hide-scrollbar">
               {menuOrder.orderList
                 .filter((item) => item.status !== "4") // กรองเฉพาะออเดอร์ที่ยังไม่เสิร์ฟ
@@ -107,7 +126,7 @@ function DetailOrderToday() {
                       <div className="flex gap-4 w-full items-center">
                         <figure className="2xl:w-[75px] 2xl:h-[75px] w-[70px] h-[60px] rounded-lg">
                           <img
-                            src={item.food.thumbnail_link}
+                            src={api_path + item.food.thumbnail_link}
                             alt={item.food.name}
                             className="w-full h-full rounded-lg object-cover"
                           />
@@ -155,7 +174,7 @@ function DetailOrderToday() {
             </p>
             <p className="text-[#313131] text-lg w-[40%]">จำนวน</p>
           </div>
-          {menuOrder.orderList.some((item) => item.status === "4") && (
+          {(menuOrder.orderList || []).some((item) => item.status === "4") && (
             <div className="flex flex-col gap-2 overflow-auto hide-scrollbar">
               {menuOrder.orderList
                 .filter((item) => item.status === "4") // กรองเฉพาะออเดอร์ที่ยังไม่เสิร์ฟ
@@ -219,7 +238,7 @@ function DetailOrderToday() {
           <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg">
             <div className="bg-white rounded-lg p-2 w-[90px] h-[90px] flex flex-col justify-center items-center flex-shrink-0 shadow">
               <p className="text-lg text-[#00537B] font-[700] line-clamp-3 break-all">
-                {menuOrder.table.title}
+                {menuOrder.table?.title}
               </p>
             </div>
 

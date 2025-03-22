@@ -5,7 +5,8 @@ import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
-import { orderToday } from "../../components/mockData/orderToDay";
+// import { orderToday } from "../../components/mockData/orderToDay";
+import { getOrderAll } from "../../services/order.service";
 
 function OrdersDay() {
   dayjs.locale("th");
@@ -17,6 +18,7 @@ function OrdersDay() {
   const tableRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
+  const [orderToday, setOrderToday] = useState([]);
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
@@ -55,12 +57,19 @@ function OrdersDay() {
     }
   }, [selectedStatusMenu, selectedTable]);
 
+  useEffect(() => {
+    console.log(orderToday)
+    getOrderAll().then((res) => {
+      setOrderToday(res.orders);
+    })
+  }, [])
+
   const getFilteredOrderDetails = (
-    orderToday,
+    orderAll,
     selectedStatusMenu,
     selectedTable
   ) => {
-    return orderToday
+    return orderAll
       .map((order) => {
         const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
         const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
@@ -123,6 +132,7 @@ function OrdersDay() {
         return statusMatch && tableMatch;
       });
   };
+
   const filteredOrders = getFilteredOrderDetails(
     orderToday,
     selectedStatusMenu,

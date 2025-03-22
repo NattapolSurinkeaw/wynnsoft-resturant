@@ -11,6 +11,7 @@ import { Box, Dialog, DialogContent, DialogTitle, Modal } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditOrder from "./components/EditOrder";
 import Receipt_Print from "../../components/Receipt/Receipt_Print ";
+import { getOrderById } from "../../services/order.service";
 
 
 function DetailAll() {
@@ -19,7 +20,6 @@ function DetailAll() {
   const location = useLocation();
   const [tax, setTaxTotal] = useState(7);
   const [serviceCharge, setServiceCharge] = useState(5);
-  const detailOrder = orderToday.find((item) => item.id === parseInt(id));
   const [height, setHeight] = useState(window.innerHeight);
   const [activeTab, setActiveTab] = useState("QRcode");
   const [showPdfContent, setShowPdfContent] = useState(false);
@@ -28,7 +28,16 @@ function DetailAll() {
   const [image, setImage] = useState(null);
   const [open, setOpen] = useState(false);
   const inputProfileImage = useRef(null);
-
+  const [detailOrder, setDetailOrder] = useState(null);
+  
+  useEffect(() => {
+    console.log(orderToday.find((item) => item.id === parseInt(id)))
+    getOrderById(id).then((res) => {
+      setDetailOrder(res.order)
+    })
+  }, [])
+  // const detailOrder = orderToday.find((item) => item.id === parseInt(id));
+  // console.log(detailOrder)
   console.log("image", image);
 
   useEffect(() => {
@@ -48,7 +57,7 @@ function DetailAll() {
   if (window.innerWidth >= 768) {
     deduction = 440;
   }
-  if (tax > 0 && serviceCharge > 0 && detailOrder.order_note) {
+  if (tax > 0 && serviceCharge > 0 && detailOrder?.order_note) {
     deduction = window.innerWidth >= 768 ? 500 : 420;
   } else if (tax > 0 && serviceCharge > 0) {
     deduction = window.innerWidth >= 768 ? 450 : 420;
@@ -66,13 +75,13 @@ function DetailAll() {
       maximumFractionDigits: 2,
     });
 
-  const formattedDate = dayjs(detailOrder.createdAt).format("D MMMM YYYY");
+  const formattedDate = dayjs(detailOrder?.createdAt).format("D MMMM YYYY");
 
   const groupedMenuDetails = useMemo(() => {
     const map = new Map();
 
-    detailOrder.orderList
-      .filter((item) => item.status === "4" || item.status === "5")
+    detailOrder?.orderList
+      // .filter((item) => item.status === "4" || item.status === "5")
       .forEach((item) => {
         const key = item.food.name;
         if (map.has(key)) {
@@ -94,32 +103,34 @@ function DetailAll() {
       ...item,
       status: Array.from(item.statusList).join(", "), // แปลง Set เป็น string
     }));
-  }, [detailOrder.orderList]);
+  }, [detailOrder?.orderList]);
 
   // console.log("groupedMenuDetails", groupedMenuDetails);
 
-  const { totalPrice, totalSpecialPrice, totalPriceAll } = detailOrder.orderList
-    .filter((orderItem) => orderItem.status === "4" || orderItem.status === "5") // รวม status 5
-    .reduce(
-      (acc, orderItem) => {
-        const foodItem = orderItem.food;
-        if (foodItem) {
-          const count = orderItem.amount || 1;
-          const price = orderItem.status === "5" ? 0 : foodItem.price || 0; // ราคา 0 ถ้า status 5
-          const specialPrice =
-            orderItem.status === "5" ? 0 : foodItem.special_price || price;
+  const { totalPrice, totalSpecialPrice, totalPriceAll } = detailOrder?.orderList
+  ? detailOrder.orderList
+      .filter((orderItem) => orderItem.status === "4" || orderItem.status === "5")
+      .reduce(
+        (acc, orderItem) => {
+          const foodItem = orderItem.food;
+          if (foodItem) {
+            const count = orderItem.amount || 1;
+            const price = orderItem.status === "5" ? 0 : foodItem.price || 0;
+            const specialPrice =
+              orderItem.status === "5" ? 0 : foodItem.special_price || price;
 
-          acc.totalPrice += price * count;
-          acc.totalPriceAll += specialPrice * count;
+            acc.totalPrice += price * count;
+            acc.totalPriceAll += specialPrice * count;
 
-          if (foodItem.special_price > 0 && orderItem.status !== "5") {
-            acc.totalSpecialPrice += specialPrice * count;
+            if (foodItem.special_price > 0 && orderItem.status !== "5") {
+              acc.totalSpecialPrice += specialPrice * count;
+            }
           }
-        }
-        return acc;
-      },
-      { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
-    );
+          return acc;
+        },
+        { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
+      )
+    : { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }; // ป้องกัน error
 
   const handleSavePDF = () => {
     setShowPdfContent(true);
@@ -197,7 +208,7 @@ function DetailAll() {
           <div className="flex gap-4 items-center">
             <div className="bg-white rounded-lg p-2 w-[90px] h-[90px] flex gap-1 justify-center items-center flex-shrink-0 ">
               <p className="text-xl text-[#00537B] font-[700] line-clamp-3 break-all">
-                {detailOrder.table.title}
+                {detailOrder?.table.title}
               </p>
             </div>
             <div className="flex flex-col">
@@ -214,7 +225,7 @@ function DetailAll() {
           </div>
           <div className="flex flex-col justify-between gap-2">
             <p className="xl:text-xl lg:text-lg text-right text-white font-[600] ">
-              เลขออเดอร์ : {detailOrder.order_number}
+              เลขออเดอร์ : {detailOrder?.order_number}
             </p>
             <p className="xl:text-base text-sm text-white text-right font-[600] ">
               {formattedDate}
@@ -351,7 +362,7 @@ function DetailAll() {
               {formatNumber(Tatal)} ฿
             </p>
           </div>
-          {detailOrder.order_note && (
+          {detailOrder?.order_note && (
             <div className="flex flex-row gap-2 justify-start items-start lg:py-2 py-1 px-4">
               <p className="lg:text-base text-sm font-[400] flex-shrink-0">
                 หมายเหตุ :
@@ -368,7 +379,7 @@ function DetailAll() {
         <div className="w-full h-full bg-white p-4 rounded-lg flex flex-col gap-6">
           <div className="flex  lg:gap-4 gap-2 justify-between items-center">
             <Link
-              to={`/payment/detail-all/${detailOrder.id}?tab=QRcode`}
+              to={`/payment/detail-all/${detailOrder?.id}?tab=QRcode`}
               className={`group flex lg:flex-row flex-col justify-center items-center lg:gap-4 gap-2 lg:max-w-[50%] w-full rounded-2xl border border-[#D9D9D9] lg:p-3 py-3 cursor-pointer transition-all duration-200 ease-in-out hover:bg-[#013D59] ${
                 activeTab === "QRcode"
                   ? "bg-[#013D59] text-white"
@@ -400,7 +411,7 @@ function DetailAll() {
             </Link>
 
             <Link
-              to={`/payment/detail-all/${detailOrder.id}?tab=Cash`}
+              to={`/payment/detail-all/${detailOrder?.id}?tab=Cash`}
               className={`group flex lg:flex-row flex-col justify-center items-center lg:gap-4 gap-2 lg:max-w-[50%] w-full rounded-2xl border border-[#D9D9D9] lg:p-3 py-3 cursor-pointer transition-all duration-200 ease-in-out hover:bg-[#013D59] ${
                 activeTab === "Cash"
                   ? "bg-[#013D59] text-white"

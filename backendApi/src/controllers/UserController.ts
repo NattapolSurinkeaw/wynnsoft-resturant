@@ -26,27 +26,27 @@ export class UserController {
             })
         }
         /** finding user */
-        const finding = await User.findOne({where:{username: req.body.username}})
+        const finding = await User.findOne({where:{email: req.body.email}})
         if(finding){
             return res.status(400).json({
                 status: false,
                 message: 'error',
-                description: 'username has already used.'
+                description: 'email has already used.'
             })
         }
         /* generate access_token for user */
         const access_token = jwt.sign({
-            username: req.body.username,
+            username: req.body.email,
             at: new Date().getTime()
         }, `${Config.secretKey}`, { expiresIn: '30d' })
         /* generate refresh_token when register and no expire */
         const refresh_token = jwt.sign({
-            username: req.body.username,
+            username: req.body.email,
             at: new Date().getTime(),
             token: access_token
         }, `${Config.secretKey}`)
         /** generate user_code */
-        const users_str = req.body.username+Math.random().toString().substr(2, 8)+moment().unix()
+        const users_str = req.body.email+Math.random().toString().substr(2, 8)+moment().unix()
         const users_code = await bcrypt.hash(users_str, 10)
         /** hash password */
         const hashPass = await bcrypt.hash(req.body.password, 10)
@@ -142,12 +142,12 @@ export class UserController {
             })
         }
         /** find user */
-        const finding = await User.findOne({where:{username: req.body.username}})
+        const finding = await User.findOne({where:{email: req.body.email}})
         if(!finding){
             return res.status(404).json({
                 status: false,
                 message: 'error',
-                description: 'username was not found.'
+                description: 'email was not found.'
             })
         }
         if(finding.status !== 'active'){

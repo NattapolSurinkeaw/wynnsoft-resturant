@@ -51,7 +51,7 @@ router.post('/api/admin/register', upload.single('image'), [
     check('name').isString(),
 ], userController.OnRegister)
 router.post('/api/admin/signin', [
-    check('username').isString(),
+    check('email').isString(),
     check('password').isString()
 ], userController.OnSignin)
 router.post('/api/admin/changePassword', [
