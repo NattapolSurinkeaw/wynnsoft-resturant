@@ -509,7 +509,7 @@ export const orderToday = [
     id: 12,
     order_number: "000000215",
     table_id: 22,
-    status: "5",
+    status: "3",
     price: 60,
     order_note: "",
     createdAt: "2025-04-14T02:31:10.000Z",

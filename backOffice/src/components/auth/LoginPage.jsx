@@ -38,7 +38,7 @@ function LoginPage() {
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          navigate("/");
+          navigate("/control");
         });
       } else {
         Swal.fire({
