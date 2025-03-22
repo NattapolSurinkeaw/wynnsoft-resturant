@@ -26,8 +26,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
     });
 
   // คำนวณผลรวม
-  const serviceChargeTotal =
-    detailData.totalSpecialPrice * (serviceCharge / 100);
+  const serviceChargeTotal = detailData.totalSpecialPrice * (serviceCharge / 100);
   const grandTotal = detailData.totalSpecialPrice + serviceChargeTotal;
   const taxTotal = grandTotal * (tax / 100);
   const Tatal = grandTotal + taxTotal;
