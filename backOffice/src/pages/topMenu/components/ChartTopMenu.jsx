@@ -5,10 +5,10 @@ import { useMediaQuery } from "@mui/material";
 function ChartTopMenu({ Total, chartFilteredOrders, TotalTen }) {
   const isLargeScreen = useMediaQuery("(min-width: 1600px)"); // >= 1024px
   const isMediumScreen = useMediaQuery("(min-width: 768px)"); // >= 768px
-  // กำหนดขนาดตามขนาดหน้าจอ
   const chartWidth = isLargeScreen ? 800 : isMediumScreen ? 500 : 300;
   const chartHeight = isLargeScreen ? 600 : isMediumScreen ? 400 : 200;
   const formatNumber = (num) => Number(num).toLocaleString("en-US");
+  
   return (
     <div className="flex lg:flex-row flex-col lg:gap-4 gap-8 bg-white p-4 shadow rounded-lg">
       <div className="flex flex-col gap-6 justify-center items-center mx-auto">
@@ -22,10 +22,16 @@ function ChartTopMenu({ Total, chartFilteredOrders, TotalTen }) {
                 value: item.amount,
                 label: item.name,
               })),
+              arcLabel: (params) => `${params.label} \n (${params.value} รายการ)`,
+              arcLabelStyle: {
+                fontSize: 14,
+                fontWeight: "bold",
+                fill: "#ffffff", // สีของข้อความ
+                textAnchor: "middle", // จัดข้อความให้อยู่กลาง
+              },
             },
           ]}
         />
-
         <div className="flex gap-6 justify-center w-full items-end">
           <p className="text-[#013D59] text-2xl font-[500] leading-none">
             จำนวนยอดขาย 10 อันดับ
@@ -69,7 +75,23 @@ function ChartTopMenu({ Total, chartFilteredOrders, TotalTen }) {
           <p className="w-full text-[#013D59] text-xl font-[600]">
             อันดับยอดขาย
           </p>
-          <div className="border-t border-[#013D59] rounded-full w-full"></div>
+          <div className="border-t border-[#013D59] rounded-full w-full "></div>
+          <div className="w-full h-[500px] overflow-auto">
+            {chartFilteredOrders.slice(0, 31).map((item) => (
+              <div key={item.name} className="w-full items-center flex gap-4">
+                <p className="text-[#013D59] text-lg font-[400] ">
+                  {item.count}.{" "}
+                </p>
+                <p className="text-[#013D59] text-lg font-[400] w-[80%]">
+                  {item.name}
+                </p>
+                <p className="text-[#013D59] text-lg font-[400]">
+                  {item.amount}
+                </p>
+                <p className="text-[#013D59] text-lg font-[400]">รายการ</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

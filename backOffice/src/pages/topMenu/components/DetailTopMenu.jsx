@@ -29,6 +29,7 @@ function DetailTopMenu({}) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showDate]);
+
   const getFilteredOrderDetails = (orderToday, selectedDate) => {
     const filteredOrders = orderToday.filter((order) => {
       if (!selectedDate) return order.status === "5"; // ถ้าไม่มีวันที่เลือก ก็แสดงทั้งหมด
@@ -69,7 +70,7 @@ function DetailTopMenu({}) {
     })
   );
   const Total = filteredOrders.reduce((sum, order) => sum + order.amount, 0);
-console.log("filteredOrders",filteredOrders);
+  console.log("filteredOrders", filteredOrders);
 
   const columns = [
     {
@@ -129,7 +130,7 @@ console.log("filteredOrders",filteredOrders);
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    XLSX.writeFile(wb, `eport_TopMenu_${selectedDate}.xlsx`);
+    XLSX.writeFile(wb, `Report_TopMenu_${selectedDate}.xlsx`);
   };
 
   return (
