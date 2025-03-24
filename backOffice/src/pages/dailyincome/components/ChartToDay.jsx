@@ -1,63 +1,63 @@
 import React from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
+import { useMediaQuery } from "@mui/material";
 
-function ChartToDay({ filteredOrders }) {
-  const timeLabels = [
-    "00:00",
-    "01:00",
-    "02:00",
-    "03:00",
-    "04:00",
-    "05:00",
-    "06:00",
-    "07:00",
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
-    "22:00",
-    "23:00",
-  ];
+function ChartToDay({ filteredOrders, amountTotal }) {
+  const isLargeScreen = useMediaQuery("(min-width: 1280px)");
+  const isMediumScreen = useMediaQuery("(min-width: 1024px)");
 
-  const tableLabels = filteredOrders.map((order) => order.table); // ชื่อโต๊ะ
-  const orderAmounts = filteredOrders.map((order) => order.totalamount); // จำนวนรายการ
-  const formattedTimes = filteredOrders.map((order) => order.formattedTime); // เวลาจริง
+  const chartWidth = isLargeScreen ? 1550 : isMediumScreen ? 950 : 750;
+  const chartHeight = isLargeScreen ? 700 : isMediumScreen ? 600 : 600;
 
-  const orderAmountsByTime = new Array(24).fill(0);
+  const timeLabels = Array.from(
+    { length: 24 },
+    (_, i) => `${String(i).padStart(2, "0")}:00`
+  );
 
-  formattedTimes.forEach((time, index) => {
-    const hour = parseInt(time.split(":")[0]);
+  const groupedData = {};
+  filteredOrders.forEach((order) => {
+    const hour = parseInt(order.formattedTime.split(":")[0]);
     if (!isNaN(hour)) {
-      orderAmountsByTime[hour] += orderAmounts[index];
+      if (!groupedData[order.table]) {
+        groupedData[order.table] = new Array(24).fill(0);
+      }
+      groupedData[order.table][hour] += order.totalamount;
     }
   });
 
+  const seriesData = Object.keys(groupedData).map((table) => {
+    return {
+      label: `โต๊ะ ${table}`,
+      data: groupedData[table],
+      stack: "A",
+      color: "#FFBA41",
+    };
+  });
+
   return (
-    <div>
-      <BarChart
-        xAxis={[{ scaleType: "band", data: timeLabels }]}
-        series={[
-          {
-            data: orderAmountsByTime,
-            color: "#FFBA41",
-            ...(tableLabels.length > 0 && {
-              label: `โต๊ะ ${tableLabels.join(", ")}`,
-            }),
-          },
-        ]}
-        width={1600}
-        height={800}
-      />
+    <div className="bg-white w-full p-4 rounded-lg shadow">
+      <div className="flex gap-4 items-end">
+        <p className="text-[#013D59] text-lg">จำนวน (รายการ)</p>
+        <p className="text-[#313131] text-2xl font-bold bg-[#FFD25B] py-1 px-4 rounded-lg">
+          {amountTotal} รายการ
+        </p>
+      </div>
+      <div className="overflow-auto">
+        <BarChart
+          xAxis={[
+            {
+              data: timeLabels,
+              scaleType: "band",
+              categoryGapRatio: 0.6,
+              barGapRatio: 0.1,
+            },
+          ]}
+          series={seriesData}
+          width={chartWidth}
+          height={chartHeight}
+          // barLabel="value"
+        />
+      </div>
     </div>
   );
 }

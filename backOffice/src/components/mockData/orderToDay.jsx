@@ -514,11 +514,11 @@ export const orderToday = [
     id: 12,
     order_number: "000000215",
     table_id: 22,
-    status: "3",
+    status: "5",
     price: 60,
-    payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    payment: "2", // 1.ชำระผ่าน QR  2.ชำระเงินสด
     order_note: "",
-    createdAt: "2025-03-14T02:31:10.000Z",
+    createdAt: "2025-03-24T03:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
       id: 22,
@@ -594,8 +594,8 @@ export const orderToday = [
     price: 90, //ราคารวมอาหารดิบ
     payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
     order_note: "",
-    createdAt: "2025-03-22T02:31:10.000Z",
-    updatedAt: "2025-03-22T02:31:12.000Z",
+    createdAt: "2025-03-24T02:31:10.000Z",
+    updatedAt: "2025-03-24T02:31:12.000Z",
     table: {
       id: 15,
       table_token: "6e87770d-3684-47d1-b384-95fd0cf55051",
@@ -696,8 +696,8 @@ export const orderToday = [
     price: 60,
     payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
     order_note: "",
-    createdAt: "2025-03-22T02:31:10.000Z",
-    updatedAt: "2025-03-22T02:31:12.000Z",
+    createdAt: "2025-03-24T02:31:10.000Z",
+    updatedAt: "2025-03-24T02:31:12.000Z",
     table: {
       id: 31,
       table_token: "bf3136cd-2241-4cae-bd7f-62573d0ad41e",
