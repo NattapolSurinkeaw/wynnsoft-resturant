@@ -80,8 +80,8 @@ const TableMenuStatus = ({
                     </div>
                   </div>
                 </td>
-                <td className="p-3">{order.price}</td>
-                <td className="p-3">{order.total} ฿</td>
+                <td className="p-3">{order.amount}</td>
+                <td className="p-3">{order.price * order.amount} ฿</td>
                 <td
                   className={`p-3 ${
                     order.status === "1"

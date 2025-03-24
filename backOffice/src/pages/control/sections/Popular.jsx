@@ -6,7 +6,7 @@ import { ControlData } from "../../../components/mockData/ControlData/ControlDat
 function Popular() {
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col justify-between h-full bg-white rounded-lg ">
+      <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-sm ">
         <p className="text-center text-[23px] text-[#013D59] font-[700] mt-4">
           ยอดฮิตประจำเดือน
         </p>
