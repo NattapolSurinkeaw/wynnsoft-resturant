@@ -3,6 +3,7 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
 import { getAllOutFoods } from "../../../services/kitchen.service";
+import { api_path } from "../../../store/setting";
 
 const TableMenuStatus = ({
   selectedStatusMenu1,
@@ -64,15 +65,12 @@ const TableMenuStatus = ({
                 key={order.id}
                 className={index % 2 === 0 ? "bg-[#EEEEEE]" : "bg-white"}
               >
-                {
-                  console.log(order)
-                }
                 <td className="py-3 pl-6">
                   <div className="flex gap-3">
                     <figure className="w-[55px] h-[55px] rounded-lg shadow-sm">
                       <img
                         className="w-full h-full object-cover rounded-lg"
-                        src={order.thumbnail_link}
+                        src={api_path + order.thumbnail_link}
                         alt={order.details}
                       />
                     </figure>
