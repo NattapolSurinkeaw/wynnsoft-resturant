@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NewOrder from "./sections/NewOrder";
 import OrderProgress from "./sections/OrderProgress";
 import SendOrder from "./sections/SendOrder";
+import { getOrderList } from "../../services/kitchen.service";
 
 function NewLatest() {
   const [activeTab, setActiveTab] = useState("newOrder");
+  const [orderListAll, setOrderListAll] = useState([]);
+
+  useEffect(() => {
+    getOrderList().then((res) => {
+      setOrderListAll(res.orderList);
+    })
+  }, [])
 
   return (
     <div>
@@ -42,9 +50,9 @@ function NewLatest() {
       </div>
 
       <div className="mt-4 ">
-        {activeTab === "newOrder" && <NewOrder />}
-        {activeTab === "orderProgress" && <OrderProgress />}
-        {activeTab === "sendOrder" && <SendOrder />}
+        {activeTab === "newOrder" && <NewOrder orderListAll={orderListAll} />}
+        {activeTab === "orderProgress" && <OrderProgress orderListAll={orderListAll} />}
+        {activeTab === "sendOrder" && <SendOrder orderListAll={orderListAll} />}
       </div>
     </div>
   );

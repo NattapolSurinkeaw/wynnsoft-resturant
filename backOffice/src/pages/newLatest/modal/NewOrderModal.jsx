@@ -6,15 +6,16 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import html2canvas from "html2canvas";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
-import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
-import { orderToday } from "../../../components/mockData/orderToDay";
+// import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
 import Receipt_Print from "../../../components/Receipt/Receipt_Print ";
+import { api_path } from "../../../store/setting";
 
 Receipt_Print;
 
-function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
+function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
   const [activeTab, setActiveTab] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
+  const [slcOrderCook, setSlcOrderCook] = useState([]);
 
   const handleOpenModal = () => setIsOpen(true);
   const closeModalAddOrder = () => setIsOpen(false);
@@ -22,11 +23,17 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
   const printRef = useRef(null);
   const formatNumber = (num) => Number(num).toLocaleString("en-US");
 
-  const fillterOrderData = orderToday.find((table) => table.id === orderId);
+  const fillterOrderData = orderData;
 
-  if (!isOpenNewOrderModal || !orderId) return null;
+  useEffect(() => {
+    setSlcOrderCook([orderData]);
+  }, [orderData])
+  
+  // const fillterOrderData = orderToday.find((table) => table.id === orderId);
 
-  console.log("orderId", orderId);
+  if (!isOpenNewOrderModal || !orderData) return null;
+
+  // console.log("orderId", fillterOrderData);
 
   const handleCloseModal = () => {
     setActiveTab(1);
@@ -81,21 +88,21 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
 
             <div className="flex gap-4 w-full">
               <figure className="max-w-[130px] min-w-[130px] h-[130px] shadow-md">
-                {fillterOrderData?.orderList?.length > 0 && (
+                {fillterOrderData.food && (
                   <img
                     className="w-full h-full object-cover rounded-lg"
-                    src={fillterOrderData.orderList[0].food.thumbnail_link}
+                    src={api_path + fillterOrderData.food.thumbnail_link}
                     alt={
-                      fillterOrderData.orderList[0].food.thumbnail_title ||
+                      fillterOrderData.food.name ||
                       "อาหาร"
                     }
                   />
                 )}
               </figure>
               <div className="flex flex-col justify-between w-full">
-                {fillterOrderData?.orderList?.length > 0 && (
+                {fillterOrderData.food && (
                   <p className="text-[#313131] text-[22px] font-[600] line-clamp-2">
-                    {fillterOrderData.orderList[0].food.name}
+                    {fillterOrderData.food.name}
                   </p>
                 )}
                 <div className="flex justify-between">
@@ -119,9 +126,9 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
                     <p className="text-[#00537B] text-[18px] font-[600]">
                       จำนวน
                     </p>
-                    {fillterOrderData.orderList.length > 0 && (
+                    {fillterOrderData && (
                       <p className="flex justify-center items-center w-[70px] h-[40px] text-[#00537B] text-[26px] font-[600] bg-[#EEEEEE] p-1 border border-[#D9D9D9] rounded-lg">
-                        {fillterOrderData.orderList.length}
+                        {fillterOrderData.amount}
                       </p>
                     )}
                     <p className="text-[#00537B] text-[18px] font-[400]">
@@ -133,7 +140,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
             </div>
 
             <div className="w-full text-[#313131] text-[16px] font-[400] h-[100px] bg-[#EEEEEE] rounded-md p-2 mt-6">
-              {fillterOrderData.order_note}
+              {fillterOrderData.note}
             </div>
 
             <div className="flex justify-between space-x-3 mt-7">
@@ -166,14 +173,15 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
               />
             </button>
             <div className="w-full h-[400px] px-2 overflow-y-auto">
-              {fillterOrderData.orderList.map((orderItem, index) => (
-                <div key={index}>
+              {slcOrderCook.map((orderItem) => (
+                <div key={orderItem.id}>
+                  {console.log(orderItem)}
                   <div className="flex gap-4 w-full">
                     <figure className="min-w-[80px] h-[80px] shadow-md">
                       <img
                         className="w-full h-full object-cover rounded-lg"
-                        src={orderItem.food.thumbnail_link}
-                        alt={orderItem.food.thumbnail_title || "อาหาร"}
+                        src={api_path + orderItem.food?.thumbnail_link}
+                        alt={orderItem?.food?.thumbnail_title || "อาหาร"}
                       />
                     </figure>
                     <div className="flex 2xl:flex-row flex-col w-full justify-between">
@@ -182,12 +190,12 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
                           {orderItem.food.name}
                         </p>
                         <p className="text-[16px] text-[#313131] font-[400]">
-                          {orderItem.food.details}
+                          {orderItem.note}
                         </p>
                       </div>
                       <div className="flex flex-col items-center justify-between">
                         <p className="text-[18px] text-[#313131] font-[400]">
-                          {orderItem.amount}{" "}
+                          {orderItem?.amount}{" "}
                           <span className="ml-2">รายการ</span>
                         </p>
                         <DeleteForeverIcon
