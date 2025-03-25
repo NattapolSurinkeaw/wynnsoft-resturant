@@ -109,7 +109,6 @@ function DetailAll() {
 
   const { totalPrice, totalSpecialPrice, totalPriceAll } = detailOrder?.orderList
   ? detailOrder.orderList
-      .filter((orderItem) => orderItem.status === "4" || orderItem.status === "5")
       .reduce(
         (acc, orderItem) => {
           const foodItem = orderItem.food;

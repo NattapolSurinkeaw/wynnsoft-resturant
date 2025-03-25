@@ -14,36 +14,48 @@ function OrderDetail({ onClickClose, selectedRow }) {
   const [showDetails, setShowDetails] = useState(true);
   const pdfRef = useRef();
 
-  const formattedDate = dayjs(detailData.createdAt, "DD-MM-YYYY").format(
-    "DD MMMM YYYY"
-  );
-  // console.log(detailData);
-
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
 
+  const groupedMenuDetails = useMemo(() => {
+    const map = new Map();
+
+    detailData?.orderList
+      .filter((item) => item.status === "4" || item.status === "5")
+      .forEach((item) => {
+        const key = item.food.name;
+        if (map.has(key)) {
+          const existingItem = map.get(key);
+          existingItem.amount += item.amount;
+          existingItem.statusList.add(item.status); // เก็บค่า status เป็น Set
+        } else {
+          map.set(key, {
+            ...item.food,
+            amount: item.amount,
+            price: item.status === "5" ? 0 : item.food.price, // ราคา 0 ถ้าเป็น status 5
+            special_price: item.status === "5" ? 0 : item.food.special_price,
+            statusList: new Set([item.status]), // เก็บ status ในรูปแบบ Set
+          });
+        }
+      });
+
+    return Array.from(map.values()).map((item) => ({
+      ...item,
+      status: Array.from(item.statusList).join(", "), // แปลง Set เป็น string
+    }));
+  }, [detailData?.orderList]);
+
+  console.log("groupedMenuDetails", groupedMenuDetails);
+
   // คำนวณผลรวม
-  const serviceChargeTotal = detailData.totalSpecialPrice * (serviceCharge / 100);
-  const grandTotal = detailData.totalSpecialPrice + serviceChargeTotal;
+  const totalDiscount = detailData.totalPrice - detailData.totalPriceAll; // ส่วนลดรวม
+  const serviceChargeTotal = detailData.totalPriceAll * (serviceCharge / 100);
+  const grandTotal = detailData.totalPriceAll + serviceChargeTotal;
   const taxTotal = grandTotal * (tax / 100);
   const Tatal = grandTotal + taxTotal;
-  // const Tatal = Math.round(grandTotal + taxTotal); //ปัดเศษน้อยกว่า 0.5 ปัดลง มากกว่าปัดขึ้น
-
-  const groupedMenuDetails = useMemo(() => {
-    const grouped = detailData.menuDetails.reduce((acc, item) => {
-      const existingItem = acc.find((menu) => menu.name === item.name);
-      if (existingItem) {
-        existingItem.count += item.count;
-      } else {
-        acc.push({ ...item });
-      }
-      return acc;
-    }, []);
-    return grouped;
-  }, [detailData.menuDetails]);
 
   const handleSavePDF = () => {
     setShowPdfContent(true); // แสดงเนื้อหาชั่วคราวเพื่อให้จับภาพได้
@@ -98,9 +110,8 @@ function OrderDetail({ onClickClose, selectedRow }) {
             <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg">
               <div className="flex gap-4 items-center">
                 <div className="bg-white rounded-lg p-2 w-[90px] h-[90px] flex flex-col justify-center items-center ">
-                  {/* <p className="text-xl text-[#00537B] font-[600]">โต๊ะ</p> */}
                   <p className="text-xl text-[#00537B] font-[700] line-clamp-3 break-all">
-                    {detailData.tableDetails.name_table}
+                    {detailData.table}
                   </p>
                 </div>
                 <div className="flex flex-col">
@@ -116,7 +127,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
                   เลขออเดอร์ : {detailData.order_number}
                 </p>
                 <p className="text-base text-white font-[600]">
-                  {formattedDate}
+                  {detailData.formattedDate}
                 </p>
               </div>
             </div>
@@ -153,17 +164,17 @@ function OrderDetail({ onClickClose, selectedRow }) {
                         </p>
 
                         <div className="w-[30%] flex flex-col justify-end text-right flex-1">
-                          {item.specialPrice && (
+                          {item.special_price > 0 && (
                             <p className="text-[12px] font-[300] line-through">
-                              {formatNumber(item.price * item.count)}
+                              {formatNumber(item.price * item.amount)}
                             </p>
                           )}
 
                           <p className="lg:text-base text-sm font-[500]">
                             {/* ราคาที่ลดแล้ว คูณกับ จำนวน */}
-                            {item.specialPrice
-                              ? formatNumber(item.specialPrice * item.count)
-                              : formatNumber(item.price * item.count)}{" "}
+                            {formatNumber(
+                              (item.special_price || item.price) * item.amount
+                            )}{" "}
                             ฿
                           </p>
                         </div>
@@ -190,7 +201,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
                 <div className="flex justify-between">
                   <p className="lg:text-base text-sm font-[500]">ส่วนลด</p>
                   <p className="lg:text-base text-sm font-[400]">
-                    -{formatNumber(detailData.totalDiscount)} ฿
+                    -{formatNumber(totalDiscount)} ฿
                   </p>
                 </div>
 
@@ -289,7 +300,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
           </div>
         </div>
       )}
-      
+
       {showPdfContent && (
         <div style={{ position: "absolute", left: "-999999px" }}>
           <div ref={pdfRef}>

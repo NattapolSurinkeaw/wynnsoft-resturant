@@ -39,7 +39,7 @@ function ChartToDay({ filteredOrders, amountTotal }) {
       <div className="flex gap-4 items-end">
         <p className="text-[#013D59] text-lg">จำนวน (รายการ)</p>
         <p className="text-[#313131] text-2xl font-bold bg-[#FFD25B] py-1 px-4 rounded-lg">
-          {amountTotal} รายการ
+          {amountTotal || 0} รายการ
         </p>
       </div>
       <div className="overflow-auto">

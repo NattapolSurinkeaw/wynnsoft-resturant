@@ -6,6 +6,7 @@ export const orderToday = [
     status: "1", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว รอการชำระ ชำระแล้ว
     price: 90, //ราคารวมอาหารดิบ
     payment: "2", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    images: "",
     order_note:
       "In viverra ex urna. felis, amet, vehicula, ex. elit vitae eget eget libero, Quisque amet, amet, dui. vitae Nam leo. nisl.  dui id tincidunt Nunc Nunc ipsum dolor enim. Nullam risus tincidunt odio dignissim.",
     createdAt: "2025-03-11T09:47:46.000Z",
@@ -32,7 +33,7 @@ export const orderToday = [
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
         food: {
-          id: 1,
+          id: 3,
           cate_id: "1,2",
           name: "ทอดปลาทูตัวเล็ก", //ชื่ออาหาร
           price: 40, //ราคาปกติ
@@ -161,6 +162,7 @@ export const orderToday = [
     status: "5",
     price: 60,
     payment: "2", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    images: "",
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
@@ -237,6 +239,7 @@ export const orderToday = [
     status: "2", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    images: "",
     order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
@@ -339,6 +342,7 @@ export const orderToday = [
     status: "1",
     price: 60,
     payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    images: "",
     order_note: "",
     createdAt: "2025-03-14T02:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
@@ -415,6 +419,7 @@ export const orderToday = [
     status: "2", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    images: "",
     order_note: "",
     createdAt: "2025-03-11T09:47:46.000Z",
     updatedAt: "2025-03-12T10:05:42.000Z",
@@ -440,7 +445,7 @@ export const orderToday = [
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
         food: {
-          id: 1,
+          id: 3,
           cate_id: "1,2",
           name: "ทอดปลาทูตัวเล็ก", //ชื่ออาหาร
           price: 40, //ราคาปกติ
@@ -517,8 +522,9 @@ export const orderToday = [
     status: "5",
     price: 60,
     payment: "2", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    images: "",
     order_note: "",
-    createdAt: "2025-03-24T03:31:10.000Z",
+    createdAt: "2025-03-14T03:31:10.000Z",
     updatedAt: "2025-03-14T02:33:12.000Z",
     table: {
       id: 22,
@@ -568,7 +574,7 @@ export const orderToday = [
         createdAt: "2025-03-14T02:33:12.000Z",
         updatedAt: "2025-03-14T02:33:12.000Z",
         food: {
-          id: 3,
+          id: 2,
           cate_id: "11",
           name: "ทอดปลาทู",
           price: 40,
@@ -593,6 +599,7 @@ export const orderToday = [
     status: "5", //สถานะออเดอร์ รอเสิร์ฟ เรียกพนักงาน ครบแล้ว
     price: 90, //ราคารวมอาหารดิบ
     payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    images: "/images/img/ex-sl.jpg",
     order_note: "",
     createdAt: "2025-03-24T02:31:10.000Z",
     updatedAt: "2025-03-24T02:31:12.000Z",
@@ -618,7 +625,7 @@ export const orderToday = [
         createdAt: "2025-03-12T09:44:19.000Z",
         updatedAt: "2025-03-12T09:44:19.000Z",
         food: {
-          id: 1,
+          id: 3,
           cate_id: "1,2",
           name: "ทอดปลาทูตัวเล็ก", //ชื่ออาหาร
           price: 40, //ราคาปกติ
@@ -695,8 +702,9 @@ export const orderToday = [
     status: "5",
     price: 60,
     payment: "1", // 1.ชำระผ่าน QR  2.ชำระเงินสด
+    images: "/images/img/ex-sl.jpg",
     order_note: "",
-    createdAt: "2025-03-24T02:31:10.000Z",
+    createdAt: "2025-04-25T02:31:10.000Z",
     updatedAt: "2025-03-24T02:31:12.000Z",
     table: {
       id: 31,
