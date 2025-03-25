@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+import { api_path } from "../../../store/setting";
 
 const TableMenuStatus = ({
   selectedStatusMenu1,
   selectedStatusMenu2,
   selectedEditId,
   handleEditClick,
+  orderList
+  
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
-  const filteredData = NewLatestData.filter(
+  const filteredData = orderList.filter(
     (item) =>
       (selectedStatusMenu1 === null || item.status === selectedStatusMenu1) &&
       (selectedStatusMenu2 === null ||
-        item.Order.Table.title === selectedStatusMenu2)
+        item.order.table.title === selectedStatusMenu2)
   );
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -62,7 +64,7 @@ const TableMenuStatus = ({
               >
                 <td className="flex items-center justify-center py-3">
                   <div className="flex items-center justify-center text-[20px] font-[600] w-[55px] h-[55px] text-white bg-[#FFBA31] rounded-lg">
-                    {order.Order.Table.title}
+                    {order.order.table.title}
                   </div>
                 </td>
                 <td className="py-3">
@@ -70,18 +72,18 @@ const TableMenuStatus = ({
                     <figure className="w-[55px] h-[55px] rounded-lg shadow-sm">
                       <img
                         className="w-full h-full object-cover rounded-lg"
-                        src={order.thumbnail_link}
-                        alt={order.details}
+                        src={api_path+ order.food.thumbnail_link}
+                        alt={order.food.name}
                       />
                     </figure>
                     <div className="flex flex-col items-start">
-                      <p className="text-[16px] font-[500]">{order.details}</p>
+                      <p className="text-[16px] font-[500]">{order.food.name}</p>
                       <p className="text-[12px] font-[300]">{order.note}</p>
                     </div>
                   </div>
                 </td>
-                <td className="p-3">{order.price}</td>
-                <td className="p-3">{order.total} ฿</td>
+                <td className="p-3">{order.amount}</td>
+                <td className="p-3">{order.food.price * order.amount} ฿</td>
                 <td
                   className={`p-3 ${
                     order.status === "1"
@@ -89,10 +91,12 @@ const TableMenuStatus = ({
                       : order.status === "2"
                       ? "text-[#FF6A00]"
                       : order.status === "3"
-                      ? "text-green-500"
+                      ? "text-[#F44D4D]"
                       : order.status === "4"
-                      ? "text-red-500"
+                      ? "text-green-500"
                       : order.status === "5"
+                      ? "text-red-500"
+                      : order.status === "6"
                       ? "text-gray-500"
                       : ""
                   }`}
@@ -100,14 +104,16 @@ const TableMenuStatus = ({
                   {(() => {
                     switch (order.status) {
                       case "1":
-                        return "กำลังทำ";
+                        return "รับออเดอร์";
                       case "2":
-                        return "รอเสริฟ";
+                        return "กำลังทำ";
                       case "3":
-                        return "เสริฟเรียบร้อย";
+                        return "รอเสริฟ";
                       case "4":
-                        return "ยกเลิก";
+                        return "เสริฟเรียบร้อย";
                       case "5":
+                        return "ยกเลิก";
+                      case "6": 
                         return "สินค้าหมด";
                       default:
                         return "ไม่ทราบสถานะ";

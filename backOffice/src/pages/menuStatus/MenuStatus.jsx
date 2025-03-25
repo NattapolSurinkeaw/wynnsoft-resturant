@@ -3,6 +3,7 @@ import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlin
 import TableMenuStatus from "./sections/TableMenuStatus";
 import MenuStatusModal from "./modal/MenuStatusModal";
 import { NewLatestData } from "../../components/mockData/NewLatest/NewLatestData";
+import { getOrderList } from "../../services/kitchen.service";
 
 function MenuStatus() {
   const [selectedStatusMenu1, setSelectedStatusMenu1] = useState(null);
@@ -11,11 +12,23 @@ function MenuStatus() {
   const [showStatusMenu2, setShowStatusMenu2] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [selectedEditId, setSelectedEditId] = useState(null);
+  const [orderList, setOrderList] = useState([]);
   const statusMenuRef1 = useRef(null);
   const statusMenuRef2 = useRef(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getOrderList();
+      if(res.status) {
+        setOrderList(res.orderList);
+      }
+    }
+
+    fetchData();
+  }, [])
+
   const titles = [
-    ...new Set(NewLatestData.map((item) => item.Order.Table.title)),
+    ...new Set(orderList.map((item) => item.order.table.title)),
   ];
 
   useEffect(() => {
@@ -52,6 +65,7 @@ function MenuStatus() {
   }, [selectedStatusMenu1, selectedStatusMenu2]);
 
   const handleEditClick = (id) => {
+    console.log(id)
     setSelectedEditId(id);
     setIsOpenEditModal(true);
   };
@@ -91,14 +105,16 @@ function MenuStatus() {
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
                   {selectedStatusMenu1 === "1"
-                    ? "กำลังทำ"
+                    ? "รับออเดอร์"
                     : selectedStatusMenu1 === "2"
-                    ? "รอเสริฟ"
+                    ? "กำลังทำ"
                     : selectedStatusMenu1 === "3"
-                    ? "เสริฟเรียบร้อย"
+                    ? "รอเสริฟ"
                     : selectedStatusMenu1 === "4"
-                    ? "ยกเลิก"
+                    ? "เสริฟเรียบร้อย"
                     : selectedStatusMenu1 === "5"
+                    ? "ยกเลิก"
+                    : selectedStatusMenu1 === "6"
                     ? "สินค้าหมด"
                     : "เลือกสถานะ"}
                 </p>
@@ -137,11 +153,12 @@ function MenuStatus() {
                   <div className="border-t border-[#e6e6e6] rounded-full w-full"></div>
 
                   {[
-                    { id: "1", label: "กำลังทำ" },
-                    { id: "2", label: "รอเสริฟ" },
-                    { id: "3", label: "เสริฟเรียบร้อย" },
-                    { id: "4", label: "ยกเลิก" },
-                    { id: "5", label: "สินค้าหมด" },
+                    { id: "1", label: "รับออเดอร์" },
+                    { id: "2", label: "กำลังทำ" },
+                    { id: "3", label: "รอเสริฟ" },
+                    { id: "4", label: "เสริฟเรียบร้อย" },
+                    { id: "5", label: "ยกเลิก" },
+                    { id: "6", label: "สินค้าหมด" },
                   ].map(({ id, label }) => (
                     <div
                       key={id}
@@ -248,6 +265,7 @@ function MenuStatus() {
         closeModal={closeModal}
         selectedEditId={selectedEditId}
         handleEditClick={handleEditClick}
+        orderList={orderList}
       />
     </>
   );
