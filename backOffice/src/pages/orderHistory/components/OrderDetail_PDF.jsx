@@ -20,10 +20,11 @@ function OrderDetail_PDF({
       maximumFractionDigits: 2,
     });
 
-  const serviceChargeTotal = detailData.totalSpecialPrice * (serviceCharge / 100);
-  const grandTotal = detailData.totalSpecialPrice + serviceChargeTotal;
-  const taxTotal = grandTotal * (tax / 100);
-  const Tatal = grandTotal + taxTotal;
+    const totalDiscount = detailData.totalPrice - detailData.totalPriceAll; // ส่วนลดรวม
+    const serviceChargeTotal = detailData.totalPriceAll * (serviceCharge / 100);
+    const grandTotal = detailData.totalPriceAll + serviceChargeTotal;
+    const taxTotal = grandTotal * (tax / 100);
+    const Tatal = grandTotal + taxTotal;
 
   return (
     <div id="print" className="w-[794px] rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
@@ -32,7 +33,7 @@ function OrderDetail_PDF({
           <div className="bg-white rounded-lg p-2 w-[80px] h-[80px] flex flex-col justify-center items-center flex-shrink-0">
             {/* <p className="text-lg text-[#00537B] font-[600]">โต๊ะ</p> */}
             <p className="text-lg text-[#00537B] font-[700] line-clamp-3 break-all">
-              {detailData.tableDetails.name_table}
+              {detailData.table}
             </p>
           </div>
           <div className="flex flex-col">
@@ -47,7 +48,7 @@ function OrderDetail_PDF({
           <p className="text-lg text-white font-[600]">
             เลขออเดอร์ : {detailData.order_number}
           </p>
-          <p className="text-sm text-white font-[600] ">{formattedDate}</p>
+          <p className="text-sm text-white font-[600] ">{detailData.formattedDate}</p>
         </div>
       </div>
 

@@ -3,7 +3,6 @@ import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
 import { orderToday } from "../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
-import { Link } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import OrderDetail from "./components/OrderDetail";
@@ -42,7 +41,7 @@ function Orders() {
 
   const getFilteredOrderDetails = (orderToday, selectedDate) => {
     return orderToday
-      .filter((order) => order.status === "5") // 🔹 กรองออเดอร์ที่มี status === "4"
+      .filter((order) => order.status === "5") // 🔹 กรองออเดอร์ที่มี status === "5"
       .map((order) => {
         const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
         const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
@@ -105,12 +104,15 @@ function Orders() {
       })
       .filter((order) => order !== null)
       .filter((order) => {
-        const dateMatch = !selectedDate || order.createdAt === selectedDate;
+        const dateMatch =
+          !selectedDate ||
+          dayjs(order.createdAt).isSame(dayjs(selectedDate), "day");
         return dateMatch;
       });
   };
 
   const filteredOrders = getFilteredOrderDetails(orderToday, selectedDate);
+  console.log("filteredOrders", filteredOrders);
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
@@ -169,7 +171,6 @@ function Orders() {
                         }`
                       : "เลือกวันที่"}
                   </p>
-
                   <figure
                     className={`lg:w-[30px] w-[25px] lg:h-[30px] h-[25px] transition-all duration-300 ${
                       !showDate ? "" : "rotate-180"
@@ -199,29 +200,29 @@ function Orders() {
                   </div>
                   <div className="border-t border-[#e6e6e6] rounded-full w-[250px] max-w-full"></div>
                   {orderToday
-                    .filter(
-                      (value, index, self) =>
-                        index ===
-                        self.findIndex((t) => t.createdAt === value.createdAt)
-                    )
-                    .sort(
-                      (a, b) =>
-                        dayjs(a.createdAt).date() - dayjs(b.createdAt).date()
-                    )
+                    .filter((m) => m.status === "5")
+                    .reduce((uniqueDates, value) => {
+                      const formattedDate = dayjs(value.createdAt).format(
+                        "YYYY-MM-DD"
+                      );
+                      if (!uniqueDates.some((date) => date === formattedDate)) {
+                        uniqueDates.push(formattedDate);
+                      }
+                      return uniqueDates;
+                    }, [])
+                    .sort((a, b) => (dayjs(a).isBefore(b) ? -1 : 1))
                     .map((date) => (
                       <div
-                        key={date.createdAt}
+                        key={date}
                         className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                          selectedDate === date.createdAt
-                            ? "bg-[#F5A100] text-white"
-                            : ""
+                          selectedDate === date ? "bg-[#F5A100] text-white" : ""
                         }`}
                         onClick={() => {
-                          setSelectedDate(date.createdAt);
+                          setSelectedDate(date);
                           setShowDate(false);
                         }}
                       >
-                        {dayjs(date.createdAt).format("D MMMM YYYY")}
+                        {dayjs(date).format("D MMMM YYYY")}
                       </div>
                     ))}
                 </div>
@@ -229,7 +230,7 @@ function Orders() {
             </div>
           </div>
         </div>
-        
+
         <div className="h-auto flex flex-col overflow-auto hide-scrollbar">
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 h-full gap-3 ">
             {currentOrders.length === 0 ? (

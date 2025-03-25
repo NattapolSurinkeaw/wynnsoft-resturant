@@ -10,7 +10,7 @@ const menuItems = [
 
 function ProductOutStock() {
   return (
-    <div className="bg-white rounded-lg py-4 px-5 ">
+    <div className="bg-white rounded-lg shadow-sm py-4 px-5 ">
       <div className="flex justify-between items-center">
         <p className="text-[23px] text-[#013D59] font-[700]">สินค้าหมด</p>
         <Link

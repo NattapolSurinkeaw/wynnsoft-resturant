@@ -65,7 +65,6 @@ function DetailOrderToday() {
 
   const { totalPrice, totalSpecialPrice, totalPriceAll } = 
   (menuOrder?.orderList || []) // ถ้า undefined ให้ใช้ []
-  .filter((orderItem) => orderItem.status === "4")
   .reduce(
     (acc, orderItem) => {
       const foodItem = orderItem.food;

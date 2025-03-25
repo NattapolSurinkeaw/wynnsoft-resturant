@@ -5,7 +5,7 @@ import { ControlData } from "../../../components/mockData/ControlData/ControlDat
 function Payment() {
   return (
     <>
-      <div className="h-full bg-white rounded-lg py-4 px-5">
+      <div className="h-full bg-white rounded-lg shadow-sm py-4 px-5">
         <div className="flex justify-between items-center">
           <p className="text-[23px] text-[#013D59] font-[700]">ชำระเงิน</p>
           <Link
@@ -32,7 +32,12 @@ function Payment() {
                   </p>
                 </div>
                 <div className="flex flex-col justify-center items-center gap-1">
-                  <button className="bg-[#00537B] hover:bg-[#F5A100] transition duration-300 text-white text-[16px] w-[100px] py-1 rounded-lg shadow-md cursor-pointer">
+                  <button
+                    onClick={() =>
+                      (window.location.href = `/ordersDay/detail/${item.id}`)
+                    }
+                    className="bg-[#00537B] hover:bg-[#F5A100] transition duration-300 text-white text-[16px] w-[100px] py-1 rounded-lg shadow-md cursor-pointer"
+                  >
                     รอการชำระ
                   </button>
                 </div>

@@ -6,25 +6,21 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import html2canvas from "html2canvas";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
-// import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+import { orderToday } from "../../../components/mockData/orderToDay";
 import Receipt_Print from "../../../components/Receipt/Receipt_Print ";
 import { api_path } from "../../../store/setting";
 import { getUpdateStatusOrderList } from "../../../services/kitchen.service";
 
 Receipt_Print;
 
-function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
+function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
   const [activeTab, setActiveTab] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
-  const [slcOrderCook, setSlcOrderCook] = useState([]);
-
-  const handleOpenModal = () => setIsOpen(true);
-  const closeModalAddOrder = () => setIsOpen(false);
 
   const printRef = useRef(null);
   const formatNumber = (num) => Number(num).toLocaleString("en-US");
 
-  const fillterOrderData = orderData;
+  const fillterOrderData = orderToday.find((table) => table.id === orderId);
 
   // console.log(fillterOrderData)
 
@@ -99,21 +95,21 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
 
             <div className="flex gap-4 w-full">
               <figure className="max-w-[130px] min-w-[130px] h-[130px] shadow-md">
-                {fillterOrderData.food && (
+                {fillterOrderData?.orderList?.length > 0 && (
                   <img
                     className="w-full h-full object-cover rounded-lg"
-                    src={api_path + fillterOrderData.food.thumbnail_link}
+                    src={fillterOrderData.orderList[0].food.thumbnail_link}
                     alt={
-                      fillterOrderData.food.name ||
+                      fillterOrderData.orderList[0].food.thumbnail_title ||
                       "อาหาร"
                     }
                   />
                 )}
               </figure>
               <div className="flex flex-col justify-between w-full">
-                {fillterOrderData.food && (
+                {fillterOrderData?.orderList?.length > 0 && (
                   <p className="text-[#313131] text-[22px] font-[600] line-clamp-2">
-                    {fillterOrderData.food.name}
+                    {fillterOrderData.orderList[0].food.name}
                   </p>
                 )}
                 <div className="flex justify-between">
@@ -137,9 +133,9 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
                     <p className="text-[#00537B] text-[18px] font-[600]">
                       จำนวน
                     </p>
-                    {fillterOrderData && (
+                    {fillterOrderData.orderList.length > 0 && (
                       <p className="flex justify-center items-center w-[70px] h-[40px] text-[#00537B] text-[26px] font-[600] bg-[#EEEEEE] p-1 border border-[#D9D9D9] rounded-lg">
-                        {fillterOrderData.amount}
+                        {fillterOrderData.orderList.length}
                       </p>
                     )}
                     <p className="text-[#00537B] text-[18px] font-[400]">
@@ -151,7 +147,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
             </div>
 
             <div className="w-full text-[#313131] text-[16px] font-[400] h-[100px] bg-[#EEEEEE] rounded-md p-2 mt-6">
-              {fillterOrderData.note}
+              {fillterOrderData.order_note}
             </div>
 
             <div className="flex justify-between space-x-3 mt-7">

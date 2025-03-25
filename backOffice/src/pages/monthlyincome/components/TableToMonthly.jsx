@@ -5,7 +5,7 @@ import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import CancelIcon from "@mui/icons-material/Cancel";
 import OrderDetail from "./OrderDetail";
 
-function TableToDay({
+function TableToMonthly({
   filteredOrders,
   PriceTotal,
   DiscountTotal,
@@ -39,6 +39,14 @@ function TableToDay({
       headerAlign: "center",
       align: "center",
       width: 150,
+    },
+    {
+      field: "formattedDate",
+      headerName: "วันที่",
+      headerAlign: "center",
+      align: "center",
+      minWidth: 150,
+      maxWidth: 200,
     },
     {
       field: "formattedTime",
@@ -260,4 +268,4 @@ function TableToDay({
   );
 }
 
-export default TableToDay;
+export default TableToMonthly;

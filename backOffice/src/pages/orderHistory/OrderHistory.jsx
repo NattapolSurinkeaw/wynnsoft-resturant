@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { foodDetail } from "../../components/mockData/foodMenu";
-import { order_history } from "../../components/mockData/OrderHistory";
-import { CustomTable } from "../../components/mockData/CustomTable/CustomTable";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Modal } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  Modal,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import dayjs from "dayjs";
@@ -15,6 +19,7 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import OrderDetail from "./components/OrderDetail";
 import CancelIcon from "@mui/icons-material/Cancel";
 import * as XLSX from "xlsx";
+import { orderToday } from "../../components/mockData/orderToDay";
 
 function OrderHistory() {
   const [openModalDetail, setOpenModalDetail] = useState(false);
@@ -53,14 +58,7 @@ function OrderHistory() {
   };
 
   const handleOpenModalDetail = (row) => {
-    // หาเมนูที่ตรงกับ menuID ที่มีใน row
-    const menuDetails = row.menuID.map((menuId) => {
-      return foodDetail.find((menu) => menu.id === menuId);
-    });
-    const tableDetails = CustomTable.find((table) => table.id === row.tableID);
-    const note = row.note;
-
-    setSelectedRow({ ...row, menuDetails, tableDetails, note });
+    setSelectedRow({ ...row });
     setOpenModalDetail(true);
   };
 
@@ -70,78 +68,114 @@ function OrderHistory() {
       maximumFractionDigits: 2,
     });
 
-  const calculateTotalByTable = () => {
-    return order_history.map((order) => {
-      let totalPrice = 0; // รวมราคาปกติทั้งหมด
-      let totalSpecialPrice = 0; // รวมเฉพาะสินค้าที่มี specialPrice
-      let totalPriceAll = 0; // ราคาหลังหักส่วนลด
-  
-      order.menuID.forEach((menuId) => {
-        const foodItem = foodDetail.find((food) => food.id === menuId);
-        if (foodItem) {
-          const count = foodItem.count || 1;
-          const price = foodItem.price || 0;
-          const specialPrice = foodItem.specialPrice ? foodItem.specialPrice : price;
-  
-          totalPrice += price * count;
-          totalPriceAll += specialPrice * count;
-  
-          if (foodItem.specialPrice) {
-            totalSpecialPrice += specialPrice * count;
-          }
+  const getFilteredOrderDetails = (
+    orderToday,
+    selectedStatus,
+    selectedMonthly
+  ) => {
+    return orderToday
+      .filter((order) => order.status === "5")
+      .map((order) => {
+        const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
+        const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
+
+        let totalPrice = 0;
+        let totalSpecialPrice = 0;
+        let totalPriceAll = 0;
+        let totalamount = 0;
+
+        const filteredOrderList = order.orderList.filter(
+          (orderItem) => orderItem.status === "4"
+        );
+
+        if (filteredOrderList.length === 0) {
+          return null;
         }
+
+        const mergedOrderList = Object.values(
+          filteredOrderList.reduce((acc, orderItem) => {
+            const key = `${orderItem.food.id}_${orderItem.food.name}_${orderItem.status}`;
+
+            if (!acc[key]) {
+              acc[key] = { ...orderItem };
+            } else {
+              acc[key].amount += orderItem.amount;
+            }
+
+            return acc;
+          }, {})
+        );
+
+        mergedOrderList.forEach((orderItem) => {
+          const foodItem = orderItem.food;
+          if (foodItem) {
+            const count = orderItem.amount || 1;
+            const price = foodItem.price || 0;
+            const specialPrice = foodItem.special_price || price;
+
+            totalamount += count;
+            totalPrice += price * count;
+            totalPriceAll += specialPrice * count;
+
+            if (foodItem.special_price) {
+              totalSpecialPrice += specialPrice * count;
+            }
+          }
+        });
+
+        const totalDiscount = totalPrice - totalPriceAll;
+
+        return {
+          ...order,
+          orderList: mergedOrderList,
+          table: order.table ? order.table.title : "ไม่มีข้อมูลโต๊ะ",
+          table_id: order.table?.id || null,
+          formattedDate,
+          formattedTime,
+          totalPrice,
+          totalSpecialPrice,
+          totalDiscount,
+          totalPriceAll,
+          totalamount,
+        };
+      })
+      .filter((order) => order !== null) // กรองค่า null ที่เกิดจากออเดอร์ที่ไม่มีสินค้า
+      .filter((order) => {
+        return !selectedStatus || order.payment === selectedStatus;
       });
-  
-      const totalDiscount = totalPrice - totalPriceAll; // ส่วนลดรวม
-  
-      return {
-        ...order,
-        totalPrice, // ราคาปกติทั้งหมด
-        totalSpecialPrice, // รวมเฉพาะสินค้าที่มีส่วนลด
-        totalDiscount, // ยอดส่วนลดทั้งหมด
-        totalPriceAll, // ราคาสุทธิหลังหักส่วนลด
-      };
-    });
   };
 
-  const tableData = calculateTotalByTable();
-  // console.log("tableData", tableData);
-  
-
-  // **Filter ข้อมูลตามวันที่และสถานะ**
-  const filteredTableData = tableData
+  const filteredOrders = getFilteredOrderDetails(
+    orderToday,
+    selectedStatus,
+    dateStart
+  )
     .filter((order) => {
-      const orderDate = dayjs(order.createdAt, "DD-MM-YYYY");
+      if (!dateStart || !dateEnd) return true;
 
-      const matchStatus =
-        selectedStatus === null || order.payment_status === selectedStatus;
+      const orderDate = dayjs(order.createdAt).startOf("day");
+      const startDate = dayjs(dateStart).startOf("day");
+      const endDate = dayjs(dateEnd).endOf("day");
 
-      const matchDate =
-        (!dateStart ||
-          orderDate.isAfter(
-            dayjs(dateStart, "DD-MM-YYYY").subtract(1, "day")
-          )) &&
-        (!dateEnd ||
-          orderDate.isBefore(dayjs(dateEnd, "DD-MM-YYYY").add(1, "day")));
-
-      return matchStatus && matchDate;
+      return orderDate.isBetween(startDate, endDate, null, "[]");
     })
-    .sort((a, b) => {
-      const dateA = dayjs(a.createdAt, "DD-MM-YYYY");
-      const dateB = dayjs(b.createdAt, "DD-MM-YYYY");
+    .map((item, index) => ({
+      ...item,
+      count: index + 1,
+    }));
 
-      return dateB.isBefore(dateA) ? 1 : -1; // เรียงจากวันที่ใหม่ที่สุด
-    })
-    .map((item, index) => ({ ...item, count: index + 1 }));
+  const handleReset = () => {
+    setSelectedStatus(null); // รีเซ็ตสถานะที่เลือก
+    setDateStart(null); // รีเซ็ตวันที่เริ่มต้น
+    setDateEnd(null); // รีเซ็ตวันที่สิ้นสุด
+  };
 
-  // คำนวณผลรวมของ ส่วนลดจากเฉพาะ `filteredTableData`
-  const discountTotal = filteredTableData.reduce(
+  const discountTotal = filteredOrders.reduce(
     (sum, order) => sum + order.totalDiscount,
     0
   );
 
-  // คำนวณผลรวมของ ราคาพิเศษจากเฉพาะ `filteredTableData`
-  const specialPriceTotal = filteredTableData.reduce(
+  const specialPriceTotal = filteredOrders.reduce(
     (sum, order) => sum + order.totalPriceAll,
     0
   );
@@ -163,13 +197,13 @@ function OrderHistory() {
       editable: false,
     },
     {
-      field: "createdAt",
+      field: "formattedDate",
       headerName: "วันที่สั่ง",
       width: 150,
       editable: false,
     },
     {
-      field: "time",
+      field: "formattedTime",
       headerName: "เวลา",
       headerAlign: "center",
       align: "center",
@@ -177,18 +211,14 @@ function OrderHistory() {
       editable: false,
     },
     {
-      field: "tableID",
+      field: "table",
       headerName: "โต๊ะ",
       headerAlign: "center",
       align: "center",
       width: 100,
-      valueGetter: (params) => {
-        const tableName = CustomTable.find((item) => item.id === params);
-        return tableName ? tableName.name_table : "-";
-      },
     },
     {
-      field: "payment_status",
+      field: "payment",
       headerName: "ช่องทางชำระ",
       headerAlign: "center",
       align: "center",
@@ -197,9 +227,9 @@ function OrderHistory() {
       renderCell: (params) => (
         <div className="flex justify-center items-center h-full">
           <p className="text-[#313131] xl:text-lg text-base font-[400] text-center">
-            {params.value === 1
+            {params.value === "1"
               ? "ชำระผ่าน QR"
-              : params.value === 0
+              : params.value === "2"
               ? "ชำระเงินสด"
               : "-"}
           </p>
@@ -217,7 +247,7 @@ function OrderHistory() {
       renderCell: (params) => (
         <div className="flex flex-col justify-center items-end h-full">
           <p className="text-black text-[20px]">
-            {params.value ? formatNumber(params.value) : formatNumber(0) } ฿
+            {params.value ? formatNumber(params.value) : formatNumber(0)} ฿
           </p>
         </div>
       ),
@@ -238,10 +268,7 @@ function OrderHistory() {
             </p>
           )}
           <p className="text-black text-[20px]">
-            {formatNumber(
-              params.row.totalPriceAll 
-            )}{" "}
-            ฿
+            {formatNumber(params.row.totalPriceAll)} ฿
           </p>
         </div>
       ),
@@ -333,15 +360,15 @@ function OrderHistory() {
         "ยอดส่วนลด (฿)",
         "ยอดทั้งหมด (฿)",
       ],
-      ...filteredTableData.map((item) => [
+      ...filteredOrders.map((item) => [
         item.count,
         item.order_number,
-        item.createdAt,
-        item.time,
-        item.tableID,
-        item.payment_status === 1
+        item.formattedDate,
+        item.formattedTime,
+        item.table,
+        item.payment === "1"
           ? "ชำระผ่าน QR"
-          : item.payment_status === 0
+          : item.payment === "2"
           ? "ชำระเงินสด"
           : "-",
         item.totalDiscount,
@@ -379,7 +406,7 @@ function OrderHistory() {
           <p className="text-[#00537B] text-2xl font-[600]">ประวัติการสั่ง</p>
         </div>
 
-        <div className="lg:flex gap-4 lg:justify-end grid grid-cols-2 place-items-end lg:mx-0 mx-auto">
+        <div className="lg:flex xl:gap-4 lg:gap-2 gap-4 lg:justify-end grid grid-cols-2 place-items-end lg:mx-0 mx-auto">
           {/* cate best seller*/}
           <div className="relative" ref={menuStatus}>
             <div className="flex flex-shrink-0 gap-2 items-center">
@@ -391,9 +418,9 @@ function OrderHistory() {
                 onClick={() => setShowStatusMenu(!showStatusMenu)}
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
-                  {selectedStatus === 1
+                  {selectedStatus === "1"
                     ? "ชำระผ่าน QR"
-                    : selectedStatus === 0
+                    : selectedStatus === "2"
                     ? "ชำระเงินสด"
                     : "เลือกการชำระ"}
                 </p>
@@ -434,10 +461,10 @@ function OrderHistory() {
 
                   <div
                     className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                      selectedStatus === 1 ? "bg-[#F5A100] text-white" : ""
+                      selectedStatus === "1" ? "bg-[#F5A100] text-white" : ""
                     }`}
                     onClick={() => {
-                      setSelectedStatus(1);
+                      setSelectedStatus("1");
                       setShowStatusMenu(false);
                     }}
                   >
@@ -445,10 +472,10 @@ function OrderHistory() {
                   </div>
                   <div
                     className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
-                      selectedStatus === 0 ? "bg-[#F5A100] text-white" : ""
+                      selectedStatus === "2" ? "bg-[#F5A100] text-white" : ""
                     }`}
                     onClick={() => {
-                      setSelectedStatus(0);
+                      setSelectedStatus("2");
                       setShowStatusMenu(false);
                     }}
                   >
@@ -535,8 +562,16 @@ function OrderHistory() {
           </div>
 
           <button
+            onClick={handleReset}
+            className="max-lg:order-2 bg-[#00537B] cursor-pointer h-[40px] 2xl:max-w-[100px] lg:max-w-[80px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+          >
+            <p className="text-white 2xl:text-lg text-base font-[400]">
+              รีเซ็ต
+            </p>
+          </button>
+          <button
             onClick={exportToExcel}
-            className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+            className="max-lg:order-3 bg-[#00537B] cursor-pointer h-[40px] 2xl:max-w-[180px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             // onClick={handleOpenAdd}
           >
             <FileUploadOutlinedIcon sx={{ color: "#fff", fontSize: 30 }} />
@@ -550,7 +585,7 @@ function OrderHistory() {
       <Box className="w-full h-full relative">
         <DataGrid
           className="bg-white"
-          rows={filteredTableData}
+          rows={filteredOrders}
           rowHeight={70}
           columns={columns}
           initialState={{
@@ -614,7 +649,7 @@ function OrderHistory() {
               }}
             >
               <CancelOutlinedIcon
-                className="hover:text-[#F5A100] text-white drop-shadow"
+                className="hover:text-[#F5A100] text-white drop-shadow cursor-pointer"
                 sx={{ fontSize: "50px" }}
               />
             </button>
@@ -653,7 +688,7 @@ function OrderHistory() {
                 setOpenModalDetail(false);
               }}
             >
-            <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
+              <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
             </button>
           </div>
 

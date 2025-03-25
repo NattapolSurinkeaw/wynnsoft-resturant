@@ -3,7 +3,7 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { Link, useLocation } from "react-router-dom";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
-import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
+import ReplyIcon from "@mui/icons-material/Reply";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import TableToDay from "./components/TableToDay";
@@ -201,7 +201,7 @@ function Dailyincome() {
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    XLSX.writeFile(wb, `Report_TopMenu_${today}.xlsx`);
+    XLSX.writeFile(wb, `Report_Dailyincome_${today}.xlsx`);
   };
 
   return (
@@ -241,7 +241,6 @@ function Dailyincome() {
                 </figure>
               </div>
             </div>
-
             {/* ชำระเงิน */}
             <div
               className={`absolute w-full h-full ${
@@ -317,9 +316,9 @@ function Dailyincome() {
               to={`/dailyincome?tab=TableToDay`}
               className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[200px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
-              <BackupTableSharpIcon sx={{ color: "#fff", fontSize: 30 }} />
+              <ReplyIcon sx={{ color: "#fff", fontSize: 30 }} />
               <p className="text-white 2xl:text-lg text-base font-[400]">
-                แสดงตาราง
+                ย้อนกลับ
               </p>
             </Link>
           )}
@@ -334,7 +333,9 @@ function Dailyincome() {
           PriceAllTotal={PriceAllTotal}
         />
       )}
-      {activeTab === "ChartToDay" && <ChartToDay  filteredOrders={filteredOrders} amountTotal={amountTotal}/>}
+      {activeTab === "ChartToDay" && (
+        <ChartToDay filteredOrders={filteredOrders} amountTotal={amountTotal} />
+      )}
     </div>
   );
 }
