@@ -13,7 +13,7 @@ function ChartTopMenu({ Total, chartFilteredOrders, TotalTen }) {
     <div className="flex lg:flex-row flex-col lg:gap-4 gap-8 bg-white p-4 shadow rounded-lg">
       <div className="flex flex-col gap-6 justify-center items-center mx-auto">
         <PieChart
-          className="w-full pl-12"
+          className="w-full pl-12 text-white"
           width={chartWidth}
           height={chartHeight}
           series={[
@@ -22,12 +22,14 @@ function ChartTopMenu({ Total, chartFilteredOrders, TotalTen }) {
                 value: item.amount,
                 label: item.name,
               })),
-              arcLabel: (params) => `${params.label} \n (${params.value} รายการ)`,
+              arcLabel: (params) => `${params.label}`,
               arcLabelStyle: {
                 fontSize: 14,
                 fontWeight: "bold",
-                fill: "#ffffff", // สีของข้อความ
-                textAnchor: "middle", // จัดข้อความให้อยู่กลาง
+                fill: "#fff",
+                textAnchor: "middle",
+                stroke: "black",
+                strokeWidth: 0.5,
               },
             },
           ]}

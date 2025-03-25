@@ -417,7 +417,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
           </div>
         </div>
       )}{" "}
-      *
+      
     </>
   );
 }

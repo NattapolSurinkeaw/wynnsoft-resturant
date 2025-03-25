@@ -6,7 +6,6 @@ import ProtectRoute from "./auth/ProtechRoute";
 import LayoutMain from "./pages/layouts/LayoutMain";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import Home from "./Home";
 import Control from "./pages/control/Control";
 import OrdersDay from "./pages/ordersDay/OrdersDay";
 import Payment from "./pages/payment/Payment";
@@ -38,7 +37,7 @@ function App() {
       <Routes>
         <Route element={<ProtectRoute />}>
           <Route element={<LayoutMain />}>
-            <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/control" />} />
             <Route path="/control" element={<Control />} />
             <Route path="/ordersDay" element={<OrdersDay />} />
             <Route path="/ordersDay/detail/:id" element={<DetailOrderToday />} />

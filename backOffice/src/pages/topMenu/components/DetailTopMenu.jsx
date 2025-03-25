@@ -32,14 +32,13 @@ function DetailTopMenu({}) {
 
   const getFilteredOrderDetails = (orderToday, selectedDate) => {
     const filteredOrders = orderToday.filter((order) => {
-      if (!selectedDate) return order.status === "5"; // ถ้าไม่มีวันที่เลือก ก็แสดงทั้งหมด
+      if (!selectedDate) return order.status === "5";
       return (
         order.status === "5" &&
-        dayjs(order.createdAt).format("MMMM YYYY") === selectedDate // เปรียบเทียบเดือนและปี
+        dayjs(order.createdAt).format("MMMM YYYY") === selectedDate
       );
     });
 
-    // 🔹 รวมเมนูอาหารที่ซ้ำกัน
     const mergedOrderList = filteredOrders.reduce((acc, order) => {
       order.orderList
         .filter((orderItem) => orderItem.status === "4")
@@ -63,12 +62,13 @@ function DetailTopMenu({}) {
     return Object.values(mergedOrderList);
   };
 
-  const filteredOrders = getFilteredOrderDetails(orderToday).map(
+  const filteredOrders = getFilteredOrderDetails(orderToday, selectedDate).map(
     (item, index) => ({
       ...item,
-      count: index + 1, // เพิ่มลำดับที่เริ่มจาก 1
+      count: index + 1,
     })
   );
+
   const Total = filteredOrders.reduce((sum, order) => sum + order.amount, 0);
   console.log("filteredOrders", filteredOrders);
 
@@ -228,6 +228,7 @@ function DetailTopMenu({}) {
               )}
             </div>
           </div>
+
           <Link
             to="/topMenu"
             className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
@@ -237,6 +238,7 @@ function DetailTopMenu({}) {
               ย้อนกลับ
             </p>
           </Link>
+          
           <button
             onClick={exportToExcel}
             className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
