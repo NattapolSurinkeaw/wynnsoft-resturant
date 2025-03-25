@@ -6,34 +6,23 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import html2canvas from "html2canvas";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
-// import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+import { orderToday } from "../../../components/mockData/orderToDay";
 import Receipt_Print from "../../../components/Receipt/Receipt_Print ";
-import { api_path } from "../../../store/setting";
 
 Receipt_Print;
 
-function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
+function NewOrderModal({ isOpenNewOrderModal, closeModal, orderId }) {
   const [activeTab, setActiveTab] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
-  const [slcOrderCook, setSlcOrderCook] = useState([]);
-
-  const handleOpenModal = () => setIsOpen(true);
-  const closeModalAddOrder = () => setIsOpen(false);
 
   const printRef = useRef(null);
   const formatNumber = (num) => Number(num).toLocaleString("en-US");
 
-  const fillterOrderData = orderData;
+  const fillterOrderData = orderToday.find((table) => table.id === orderId);
 
-  useEffect(() => {
-    setSlcOrderCook([orderData]);
-  }, [orderData])
-  
-  // const fillterOrderData = orderToday.find((table) => table.id === orderId);
+  if (!isOpenNewOrderModal || !orderId) return null;
 
-  if (!isOpenNewOrderModal || !orderData) return null;
-
-  // console.log("orderId", fillterOrderData);
+  console.log("orderId", orderId);
 
   const handleCloseModal = () => {
     setActiveTab(1);
@@ -88,21 +77,21 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
 
             <div className="flex gap-4 w-full">
               <figure className="max-w-[130px] min-w-[130px] h-[130px] shadow-md">
-                {fillterOrderData.food && (
+                {fillterOrderData?.orderList?.length > 0 && (
                   <img
                     className="w-full h-full object-cover rounded-lg"
-                    src={api_path + fillterOrderData.food.thumbnail_link}
+                    src={fillterOrderData.orderList[0].food.thumbnail_link}
                     alt={
-                      fillterOrderData.food.name ||
+                      fillterOrderData.orderList[0].food.thumbnail_title ||
                       "อาหาร"
                     }
                   />
                 )}
               </figure>
               <div className="flex flex-col justify-between w-full">
-                {fillterOrderData.food && (
+                {fillterOrderData?.orderList?.length > 0 && (
                   <p className="text-[#313131] text-[22px] font-[600] line-clamp-2">
-                    {fillterOrderData.food.name}
+                    {fillterOrderData.orderList[0].food.name}
                   </p>
                 )}
                 <div className="flex justify-between">
@@ -126,9 +115,9 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
                     <p className="text-[#00537B] text-[18px] font-[600]">
                       จำนวน
                     </p>
-                    {fillterOrderData && (
+                    {fillterOrderData.orderList.length > 0 && (
                       <p className="flex justify-center items-center w-[70px] h-[40px] text-[#00537B] text-[26px] font-[600] bg-[#EEEEEE] p-1 border border-[#D9D9D9] rounded-lg">
-                        {fillterOrderData.amount}
+                        {fillterOrderData.orderList.length}
                       </p>
                     )}
                     <p className="text-[#00537B] text-[18px] font-[400]">
@@ -140,7 +129,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
             </div>
 
             <div className="w-full text-[#313131] text-[16px] font-[400] h-[100px] bg-[#EEEEEE] rounded-md p-2 mt-6">
-              {fillterOrderData.note}
+              {fillterOrderData.order_note}
             </div>
 
             <div className="flex justify-between space-x-3 mt-7">
@@ -173,15 +162,14 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
               />
             </button>
             <div className="w-full h-[400px] px-2 overflow-y-auto">
-              {slcOrderCook.map((orderItem) => (
-                <div key={orderItem.id}>
-                  {console.log(orderItem)}
+              {fillterOrderData.orderList.map((orderItem, index) => (
+                <div key={index}>
                   <div className="flex gap-4 w-full">
                     <figure className="min-w-[80px] h-[80px] shadow-md">
                       <img
                         className="w-full h-full object-cover rounded-lg"
-                        src={api_path + orderItem.food?.thumbnail_link}
-                        alt={orderItem?.food?.thumbnail_title || "อาหาร"}
+                        src={orderItem.food.thumbnail_link}
+                        alt={orderItem.food.thumbnail_title || "อาหาร"}
                       />
                     </figure>
                     <div className="flex 2xl:flex-row flex-col w-full justify-between">
@@ -190,19 +178,12 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
                           {orderItem.food.name}
                         </p>
                         <p className="text-[16px] text-[#313131] font-[400]">
-                          {orderItem.note}
+                          {orderItem.food.details}
                         </p>
                       </div>
-                      <div className="flex flex-col items-center justify-between">
-                        <p className="text-[18px] text-[#313131] font-[400]">
-                          {orderItem?.amount}{" "}
-                          <span className="ml-2">รายการ</span>
-                        </p>
-                        <DeleteForeverIcon
-                          sx={{ fontSize: 32 }}
-                          className="text-red-500 hover:text-red-800 cursor-pointer"
-                        />
-                      </div>
+                      <p className="text-[18px] text-[#313131] font-[400]">
+                        {orderItem.amount} <span className="ml-2">รายการ</span>
+                      </p>
                     </div>
                   </div>
                   <div className="border-t border-[#8F8F8F]/50 my-3"></div>
@@ -211,78 +192,12 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
             </div>
             <div className="flex justify-center space-x-5 mt-7">
               <button
-                onClick={handleOpenModal}
-                className="w-[137px] py-1.5 bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
-              >
-                เพิ่มรายการ
-              </button>
-              <button
                 onClick={handleTow}
                 className="w-[137px] py-1.5 bg-[#013D59] hover:bg-[#004b6e] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
               >
                 ยืนยันพิมพ์
               </button>
             </div>
-
-            {/* ✅ แก้เงื่อนไขให้ถูกต้อง */}
-            {isOpen && (
-              <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-20">
-                <div className="relative bg-white p-8 rounded-lg shadow-lg w-[480px]">
-                  <div className="flex w-full items-center gap-2">
-                    <BorderColorOutlinedIcon
-                      sx={{ fontSize: 25 }}
-                      className="text-[#00537B]"
-                    />
-                    <p className="text-[25px] font-[600] text-[#00537B]">
-                      เพิ่มรายการอาหาร
-                    </p>
-                  </div>
-                  <div className="w-full space-y-3 mt-6">
-                    <div className="flex items-center">
-                      <p className="min-w-[90px] text-[#313131] font-[400]">
-                        Param
-                      </p>
-                      <input
-                        type="text"
-                        className="border border-gray-300 text-gray-600 text-[14px] font-[300] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
-                        placeholder="กรอกชื่อ..."
-                        disabled
-                      />
-                    </div>
-                    <div className="flex items-center">
-                      <p className="min-w-[90px] text-[#313131] font-[400]">
-                        Title
-                      </p>
-                      <input
-                        type="text"
-                        className="border border-gray-300 text-gray-600 text-[14px] font-[300] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
-                        placeholder="กรอกอีเมล..."
-                        disabled
-                      />
-                    </div>
-                    <div className="flex items-center">
-                      <p className="min-w-[90px] text-[#313131] font-[400]">
-                        Value
-                      </p>
-                      <input
-                        type="text"
-                        className="border border-gray-300 text-gray-600 text-[14px] font-[300] rounded-sm h-[37px] px-2 focus:outline-none focus:ring-2 focus:ring-[#6db8dd] w-full"
-                        placeholder="0"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex justify-end space-x-3 mt-8">
-                    <button
-                      onClick={closeModalAddOrder}
-                      className="button-cancel-1"
-                    >
-                      ยกเลิก
-                    </button>
-                    <button className="button-save-1">บันทึก</button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         )}
 

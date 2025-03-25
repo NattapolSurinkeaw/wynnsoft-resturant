@@ -22,7 +22,7 @@ function Table({
   setSelectedTableId,
   customTable,
   setTableDetail,
-  setRefresh
+  setRefresh,
 }) {
   const [isReservation, setIsReservation] = useState(false);
   const [isOpenTable, setIsOpenTable] = useState(false);
@@ -56,31 +56,49 @@ function Table({
 
       <div className="2xl:min-w-[1100px] min-w-full min-h-[683px] p-6 rounded-lg shadow-1 bg-white">
         {!isSettingOpen && (
-          <div className="flex justify-end items-center gap-4 mb-8">
-            <button
-              onClick={() => {
-                setIsReservation(true);
-                setIsTotalBill(false);
-              }}
-              className={`flex items-center justify-center gap-2 xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer hover:bg-[#F5A100] text-white text-[16px] duration-200 transition ${
-                isReservation ? "bg-[#F5A100]" : "bg-[#005179]"
-              }`}
-            >
-              <InsertInvitationIcon
-                sx={{ fontSize: 23 }}
-                className="text-white"
-              />
-              จอง
-            </button>
-            <button
-              onClick={handleTotalBillClick}
-              className={`flex items-center justify-center gap-2 xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer hover:bg-[#F5A100] text-white text-[16px] duration-200 transition ${
-                isTotalBill ? "bg-[#F5A100]" : "bg-[#005179]"
-              }`}
-            >
-              <LibraryAddIcon sx={{ fontSize: 20 }} className="text-white" />
-              รวมบิล
-            </button>
+          <div className="flex md:flex-row flex-col justify-between md:items-center items-end gap-4 mb-8">
+            <div className="flex items-center">
+              <div className="w-4 h-4 rounded-sm bg-[#D9D9D9]"></div>
+              <p className="text-[#00537B] text-[16px] font-[500] ml-1">ว่าง</p>
+              <div className="w-4 h-4 rounded-sm bg-[#FFD25B] ml-3"></div>
+              <p className="text-[#00537B] text-[16px] font-[500] ml-1">
+                กำลังบริการ
+              </p>
+              <div className="w-4 h-4 rounded-sm bg-[#39ACE3] ml-3"></div>
+              <p className="text-[#00537B] text-[16px] font-[500] ml-1">
+                จองแล้ว
+              </p>
+              <div className="w-4 h-4 rounded-sm bg-white border border-gray-300 ml-3"></div>
+              <p className="text-[#00537B] text-[16px] font-[500] ml-1">
+                ปิดใช้งาน
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => {
+                  setIsReservation(true);
+                  setIsTotalBill(false);
+                }}
+                className={`flex items-center justify-center gap-2 xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer hover:bg-[#F5A100] text-white text-[16px] duration-200 transition ${
+                  isReservation ? "bg-[#F5A100]" : "bg-[#005179]"
+                }`}
+              >
+                <InsertInvitationIcon
+                  sx={{ fontSize: 23 }}
+                  className="text-white"
+                />
+                จอง
+              </button>
+              <button
+                onClick={handleTotalBillClick}
+                className={`flex items-center justify-center gap-2 xl:w-[130px] w-[120px] shadow-1 py-1.5 rounded-lg cursor-pointer hover:bg-[#F5A100] text-white text-[16px] duration-200 transition ${
+                  isTotalBill ? "bg-[#F5A100]" : "bg-[#005179]"
+                }`}
+              >
+                <LibraryAddIcon sx={{ fontSize: 20 }} className="text-white" />
+                รวมบิล
+              </button>
+            </div>
           </div>
         )}
 
@@ -137,9 +155,9 @@ function Table({
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                   {table.status === 1 && (
                     <div className="text-center">
-                      <p className="text-[#013D59] font-[500] text-[18px]">
-                        <span className="text-[26px]">{table.title}</span>
-                      </p>
+                      <div className="text-[#013D59] font-[500] text-[18px]">
+                        <span className="text-[20px]">{table.title}</span>
+                      </div>
                       {!isSettingOpen && !isEditTable && !isTotalBill && (
                         <button onClick={() => setIsOpenTable(true)}>
                           <AddCircleIcon
@@ -151,16 +169,21 @@ function Table({
                     </div>
                   )}
                   {table.status === 2 && (
-                    <p className="text-[#013D59] text-[18px] font-[500]">
-                      บริการ
-                    </p>
+                    <div className="text-center text-[#013D59] text-[18px] font-[500]">
+                      <span className="text-[20px]">{table.title} </span>
+                      <br /> บริการ
+                    </div>
                   )}
                   {table.status === 3 && (
                     <div className="text-center">
-                      <p className="text-[#013D59] font-[500] text-[18px]">
-                        จอง <br />
-                        <div className="text-[20px]">{table.bookings[0]?.time_booking?.slice(0, 5) || "ไม่ระบุ"} น.</div>
-                      </p>
+                      <div className="text-[#013D59] font-[500] text-[18px]">
+                        {table.title} <br />
+                        <div className="text-[18px]">
+                          {table.bookings[0]?.time_booking?.slice(0, 5) ||
+                            "ไม่ระบุ"}{" "}
+                          น.
+                        </div>
+                      </div>
                       {!isSettingOpen && !isEditTable && !isTotalBill && (
                         <button onClick={() => setIsOpenTable(true)}>
                           <AddCircleIcon
@@ -173,9 +196,11 @@ function Table({
                   )}
                   {table.status === 4 && (
                     <div className="text-center">
-                      <p className="text-[#013D59] font-[500] text-[18px]">
+                      <div className="text-[#013D59] font-[500] text-[18px]">
+                        <span className="text-[20px]">{table.title}</span>
+                        <br />
                         ปิด
-                      </p>
+                      </div>
                     </div>
                   )}
                 </div>
