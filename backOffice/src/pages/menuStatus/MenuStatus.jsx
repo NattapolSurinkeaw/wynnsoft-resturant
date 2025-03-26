@@ -28,7 +28,7 @@ function MenuStatus() {
   }, [])
 
   const titles = [
-    ...new Set(orderList.map((item) => item.order.table.title)),
+    ...new Set(orderList.map((item) => item.order?.table?.title)),
   ];
 
   useEffect(() => {
