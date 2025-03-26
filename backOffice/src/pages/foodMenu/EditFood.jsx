@@ -31,6 +31,7 @@ const EditFood = ({
     editData.cate_id ? editData.cate_id.split(",").map(Number) : []
   );
   const inputProfileImage = useRef([]);
+  const [isTitleEmpty, setIsTitleEmpty] = useState(false);
 
   const handleCategoryChange = (id) => {
     console.log("id", id);
@@ -91,7 +92,27 @@ const EditFood = ({
     setSelectedStatus(editData.display);
   }, [editData.display]);
 
+  const handleInputChange = (e) => {
+    setNameFood(e.target.value);
+    setIsTitleEmpty(e.target.value.trim() === "");
+  };
+
   const handleSave = () => {
+    if (nameFood.trim() === "") {
+      setIsTitleEmpty(true);
+      return;
+    }
+
+    if (selectedCategories.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาเลือกหมวดหมู่สำหรับเมนู",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#D33",
+      });
+      return;
+    }
+   
     const formData = new FormData();
     formData.append("name", nameFood);
     formData.append("display", selectedStatus === true ? 1 : 0);
@@ -111,6 +132,9 @@ const EditFood = ({
           status: res.status,
           description: res.description,
           title: res.title,
+          customClass: {
+            popup: "swal-popup",
+          },
         });
         setOpenEdit(false);
         setRefreshData((prev) => prev + 1);
@@ -120,6 +144,9 @@ const EditFood = ({
           status: err.status,
           description: err.description,
           title: err.title,
+          customClass: {
+            popup: "swal-popup",
+          },
         });
       });
   };
@@ -196,9 +223,13 @@ const EditFood = ({
             </span>
             <input
               type="text"
-              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
+              className={`w-full rounded-lg outline-none py-1 px-4 lg:h-[45px] ${
+                isTitleEmpty
+                  ? "border-2 border-red-600"
+                  : "border border-[#D9D9D9]"
+              }`}
               value={nameFood}
-              onChange={(e) => setNameFood(e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
 

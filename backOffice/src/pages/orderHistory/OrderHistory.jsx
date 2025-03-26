@@ -22,6 +22,8 @@ import * as XLSX from "xlsx";
 import { orderToday } from "../../components/mockData/orderToDay";
 
 function OrderHistory() {
+  dayjs.locale("th");
+
   const [openModalDetail, setOpenModalDetail] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
   const [openModalImg, setOpenModalImg] = useState(false);
@@ -186,20 +188,25 @@ function OrderHistory() {
       headerName: "ลำดับ",
       headerAlign: "center",
       align: "center",
-      width: 100,
+      maxWidth: 150,
+      minWidth: 120,
     },
     {
       field: "order_number",
       headerName: "เลขออเดอร์",
       headerAlign: "center",
-      align: "center",
-      width: 200,
+      align: "left",
+      maxWidth: 200,
+      minWidth: 150,
       editable: false,
     },
     {
       field: "formattedDate",
       headerName: "วันที่สั่ง",
-      width: 150,
+      headerAlign: "center",
+      align: "left",
+      maxWidth: 200,
+      minWidth: 150,
       editable: false,
     },
     {
@@ -207,26 +214,29 @@ function OrderHistory() {
       headerName: "เวลา",
       headerAlign: "center",
       align: "center",
-      width: 100,
+      maxWidth: 200,
+      minWidth: 150,
       editable: false,
     },
     {
       field: "table",
       headerName: "โต๊ะ",
       headerAlign: "center",
-      align: "center",
-      width: 100,
+      align: "left",
+      maxWidth: 200,
+      minWidth: 150,
     },
     {
       field: "payment",
       headerName: "ช่องทางชำระ",
       headerAlign: "center",
-      align: "center",
+      align: "left",
+      maxWidth: 200,
+      minWidth: 150,
       sortable: false,
-      width: 170,
       renderCell: (params) => (
-        <div className="flex justify-center items-center h-full">
-          <p className="text-[#313131] xl:text-lg text-base font-[400] text-center">
+        <div className="flex justify-start items-center h-full">
+          <p className="text-[#313131] xl:text-lg text-base font-[400] text-left">
             {params.value === "1"
               ? "ชำระผ่าน QR"
               : params.value === "2"
@@ -242,7 +252,8 @@ function OrderHistory() {
       type: "number",
       headerAlign: "center",
       align: "right",
-      width: 200,
+      maxWidth: 200,
+      minWidth: 180,
       editable: false,
       renderCell: (params) => (
         <div className="flex flex-col justify-center items-end h-full">
@@ -258,7 +269,8 @@ function OrderHistory() {
       type: "number",
       headerAlign: "center",
       align: "right",
-      width: 150,
+      maxWidth: 200,
+      minWidth: 180,
       editable: false,
       renderCell: (params) => (
         <div className="flex flex-col justify-center items-end h-full">
@@ -279,7 +291,8 @@ function OrderHistory() {
       headerAlign: "center",
       align: "center",
       sortable: false,
-      width: 150,
+      maxWidth: 150,
+      minWidth: 120,
       renderCell: (params) => (
         <div
           className={`p-1 flex justify-center items-center cursor-pointer m-auto h-full ${
@@ -303,7 +316,8 @@ function OrderHistory() {
       headerAlign: "center",
       align: "center",
       sortable: false,
-      width: 150,
+      maxWidth: 150,
+      minWidth: 120,
       headerName: "",
       renderCell: (params) => (
         <div
@@ -563,7 +577,7 @@ function OrderHistory() {
 
           <button
             onClick={handleReset}
-            className="max-lg:order-2 bg-[#00537B] cursor-pointer h-[40px] 2xl:max-w-[100px] lg:max-w-[80px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+            className="max-lg:order-3 bg-[#00537B] cursor-pointer h-[40px] 2xl:max-w-[100px] lg:max-w-[80px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
           >
             <p className="text-white 2xl:text-lg text-base font-[400]">
               รีเซ็ต
@@ -571,7 +585,7 @@ function OrderHistory() {
           </button>
           <button
             onClick={exportToExcel}
-            className="max-lg:order-3 bg-[#00537B] cursor-pointer h-[40px] 2xl:max-w-[180px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+            className="max-lg:order-2 bg-[#00537B] cursor-pointer h-[40px] 2xl:max-w-[180px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             // onClick={handleOpenAdd}
           >
             <FileUploadOutlinedIcon sx={{ color: "#fff", fontSize: 30 }} />
@@ -599,20 +613,20 @@ function OrderHistory() {
           disableSelectionOnClick
         />
 
-        <div className="w-full flex 3xl:justify-end justify-center items-center gap-4 absolute 2xl:-inset-x-[25%] xl:-inset-x-4 lg:-inset-x-16 -inset-x-[10%] bottom-2">
+        <div className="w-full flex 3xl:justify-end justify-center items-center gap-4 absolute 2xl:-inset-x-[20%] xl:-inset-x-4 lg:-inset-x-16 -inset-x-[10%] bottom-2">
           <div className="flex justify-center items-center gap-2 ">
-            <p className="text-lg font-semibold text-[#313131] flex-shrink-0">
+            <p className="xl:text-lg text-sm font-semibold text-[#313131] flex-shrink-0">
               ยอดรวมส่วนลด :{" "}
             </p>
-            <p className="text-lg font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
+            <p className="xl:text-lg text-sm font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
               {formatNumber(discountTotal)} ฿
             </p>
           </div>
-          <div className=" max-w-[300px] w-full flex justify-center items-center gap-4 ">
-            <p className="text-lg font-semibold text-[#313131] flex-shrink-0">
+          <div className="flex justify-center items-center gap-4 ">
+            <p className="xl:text-lg text-sm font-semibold text-[#313131] flex-shrink-0">
               ยอดรวมทั้งหมด :{" "}
             </p>
-            <p className="text-lg font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
+            <p className="xl:text-lg text-sm font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
               {formatNumber(specialPriceTotal)} ฿
             </p>
           </div>

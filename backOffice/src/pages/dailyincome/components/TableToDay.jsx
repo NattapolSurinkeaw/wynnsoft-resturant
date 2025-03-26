@@ -21,7 +21,7 @@ function TableToDay({
     });
 
   const handleOpenModalDetail = (row) => {
-    setSelectedRow({ ...row});
+    setSelectedRow({ ...row });
     setOpenModalDetail(true);
   };
 
@@ -187,28 +187,28 @@ function TableToDay({
           disableSelectionOnClick
         />
 
-        <div className="w-full flex 3xl:justify-end justify-center items-center gap-6 absolute 2xl:-inset-x-[25%] xl:-inset-x-4 lg:-inset-x-16 -inset-x-[10%] bottom-2">
+        <div className="w-full flex 3xl:justify-end justify-center items-center xl:gap-6 gap-4 absolute 2xl:-inset-x-[20%] xl:-inset-x-4 lg:-inset-x-16 -inset-x-[10%] bottom-2">
           <div className="flex justify-center items-center gap-2 ">
-            <p className="text-lg font-semibold text-[#313131] flex-shrink-0">
+            <p className="xl:text-lg text-sm font-semibold text-[#313131] flex-shrink-0">
               ยอดรวม :{" "}
             </p>
-            <p className="text-lg font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
+            <p className="xl:text-lg text-sm font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
               {formatNumber(PriceTotal)} ฿
             </p>
           </div>
           <div className="flex justify-center items-center gap-2 ">
-            <p className="text-lg font-semibold text-[#313131] flex-shrink-0">
+            <p className="xl:text-lg text-sm font-semibold text-[#313131] flex-shrink-0">
               ยอดรวมส่วนลด :{" "}
             </p>
-            <p className="text-lg font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
+            <p className="xl:text-lg text-sm font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
               {formatNumber(DiscountTotal)} ฿
             </p>
           </div>
           <div className="flex justify-center items-center gap-2 ">
-            <p className="text-lg font-semibold text-[#313131] flex-shrink-0">
+            <p className="xl:text-lg text-sm font-semibold text-[#313131] flex-shrink-0">
               ยอดรวมทั้งหมด :{" "}
             </p>
-            <p className="text-lg font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
+            <p className="xl:text-lg text-sm font-bold text-[#313131] w-full text-center border-b-6 border-red-600 border-double">
               {formatNumber(PriceAllTotal)} ฿
             </p>
           </div>
@@ -237,7 +237,9 @@ function TableToDay({
         >
           <div className="flex justify-between ">
             <div className="flex gap-2 items-center">
-              <LeaderboardOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
+              <LeaderboardOutlinedIcon
+                sx={{ color: "#00537B", fontSize: 35 }}
+              />
               <p className="text-[#00537B] text-2xl font-[600] ">รายละเอียด</p>
             </div>
 
