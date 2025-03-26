@@ -12,8 +12,10 @@ import {
   getFood,
   getCategoryFoods,
 } from "../../../services/manageData.services";
+import { api_path } from "../../../store/setting";
+import { getAddOrderFood } from "../../../services/table_manage.service";
 
-function AdditemModal({ isOpen, closeModal, itemId }) {
+function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
   const [quantities, setQuantities] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFood, setSelectedFood] = useState(null);
@@ -23,7 +25,6 @@ function AdditemModal({ isOpen, closeModal, itemId }) {
   const categoryMenuRef = useRef(null);
   const [foods, setFoods] = useState([]);
   const [cateFood, setCateFood] = useState([]);
-  const api_path = "http://localhost:8003";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +39,8 @@ function AdditemModal({ isOpen, closeModal, itemId }) {
     };
     fetchData();
   }, []);
+
+  console.log(tableDetail)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -70,6 +73,10 @@ function AdditemModal({ isOpen, closeModal, itemId }) {
   };
 
   const handleAddItem = () => {
+    const params = {
+
+    }
+
     Swal.fire({
       title: "เพิ่มรายการสำเร็จ!",
       text: "คุณได้เพิ่มเมนูลงในรายการสั่งซื้อแล้ว",
