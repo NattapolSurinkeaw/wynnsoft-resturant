@@ -8,8 +8,7 @@ const TableMenuStatus = ({
   selectedStatusMenu2,
   selectedEditId,
   handleEditClick,
-  orderList
-  
+  orderList,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
@@ -72,12 +71,14 @@ const TableMenuStatus = ({
                     <figure className="w-[55px] h-[55px] rounded-lg shadow-sm">
                       <img
                         className="w-full h-full object-cover rounded-lg"
-                        src={api_path+ order.food.thumbnail_link}
+                        src={api_path + order.food.thumbnail_link}
                         alt={order.food.name}
                       />
                     </figure>
                     <div className="flex flex-col items-start">
-                      <p className="text-[16px] font-[500]">{order.food.name}</p>
+                      <p className="text-[16px] font-[500]">
+                        {order.food.name}
+                      </p>
                       <p className="text-[12px] font-[300]">{order.note}</p>
                     </div>
                   </div>
@@ -113,7 +114,7 @@ const TableMenuStatus = ({
                         return "เสริฟเรียบร้อย";
                       case "5":
                         return "ยกเลิก";
-                      case "6": 
+                      case "6":
                         return "สินค้าหมด";
                       default:
                         return "ไม่ทราบสถานะ";
