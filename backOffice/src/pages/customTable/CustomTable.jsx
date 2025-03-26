@@ -101,6 +101,7 @@ function CustomTable() {
           customTable={customTable}
           setTableDetail={setTableDetail}
           setRefresh={setRefresh}
+          handleFoodListClick={handleFoodListClick}
         />
         {isAddTable ? (
           <AddTable />

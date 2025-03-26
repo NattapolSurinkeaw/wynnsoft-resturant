@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { getGenerateQr } from "../../../services/table_manage.service";
 
-function OpenTable({ isOpenTable, closeModal, selectedTableId, setRefresh }) {
+function OpenTable({ isOpenTable, closeModal, selectedTableId, setRefresh, handleFoodListClick }) {
 
   const getOpenTable = () => {
     getGenerateQr(selectedTableId).then((res) => {
       closeModal()
       setRefresh(prev => !prev)
+      handleFoodListClick()
     })
   }
 
