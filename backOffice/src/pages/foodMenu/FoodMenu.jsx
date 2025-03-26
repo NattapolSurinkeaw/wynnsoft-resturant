@@ -395,7 +395,7 @@ function FoodMenu() {
           <p className="text-[#00537B] text-2xl font-[600]">เมนูอาหาร</p>
         </div>
 
-        <div className="flex gap-4 justify-ennd items-center ">
+        <div className="flex gap-4 justify-end items-center ">
           {/* cate */}
           <div className="relative" ref={categoryMenuRef}>
             <div className="flex flex-shrink-0 gap-2 items-center">

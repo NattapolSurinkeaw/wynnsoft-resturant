@@ -7,33 +7,30 @@ import html2canvas from "html2canvas";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
 // import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+// import { orderToday } from "../../../components/mockData/orderToDay";
 import Receipt_Print from "../../../components/Receipt/Receipt_Print ";
 import { api_path } from "../../../store/setting";
+import { getUpdateStatusOrderList } from "../../../services/kitchen.service";
 
 Receipt_Print;
 
 function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
   const [activeTab, setActiveTab] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
   const [slcOrderCook, setSlcOrderCook] = useState([]);
-
-  const handleOpenModal = () => setIsOpen(true);
-  const closeModalAddOrder = () => setIsOpen(false);
 
   const printRef = useRef(null);
   const formatNumber = (num) => Number(num).toLocaleString("en-US");
 
   const fillterOrderData = orderData;
+  // const fillterOrderData = orderToday.find((table) => table.id === orderData);
+
+  console.log(fillterOrderData)
 
   useEffect(() => {
-    setSlcOrderCook([orderData]);
+    setSlcOrderCook(orderData);
   }, [orderData])
-  
-  // const fillterOrderData = orderToday.find((table) => table.id === orderId);
 
   if (!isOpenNewOrderModal || !orderData) return null;
-
-  // console.log("orderId", fillterOrderData);
 
   const handleCloseModal = () => {
     setActiveTab(1);
@@ -49,6 +46,18 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
 
       setTimeout(() => {
         handleCloseModal();
+
+        const params = {
+          orderList : 
+          [{
+            id: fillterOrderData.id,
+            status: 2
+          }]
+        }
+        getUpdateStatusOrderList(params).then((res) => {
+          console.log(res);
+        })
+
 
         const Toast = Swal.mixin({
           toast: true,
@@ -173,49 +182,48 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
               />
             </button>
             <div className="w-full h-[400px] px-2 overflow-y-auto">
-              {slcOrderCook.map((orderItem) => (
-                <div key={orderItem.id}>
-                  {console.log(orderItem)}
+              {slcOrderCook && (
+                <div key={slcOrderCook.id}>
                   <div className="flex gap-4 w-full">
                     <figure className="min-w-[80px] h-[80px] shadow-md">
                       <img
                         className="w-full h-full object-cover rounded-lg"
-                        src={api_path + orderItem.food?.thumbnail_link}
-                        alt={orderItem?.food?.thumbnail_title || "อาหาร"}
+                        src={api_path + slcOrderCook.food?.thumbnail_link}
+                        alt={slcOrderCook?.food?.thumbnail_title || "อาหาร"}
                       />
                     </figure>
                     <div className="flex 2xl:flex-row flex-col w-full justify-between">
                       <div>
                         <p className="text-[18px] text-[#313131] font-[500]">
-                          {orderItem.food.name}
+                          {slcOrderCook.food.name}
                         </p>
                         <p className="text-[16px] text-[#313131] font-[400]">
-                          {orderItem.note}
+                          {slcOrderCook.note}
                         </p>
                       </div>
                       <div className="flex flex-col items-center justify-between">
                         <p className="text-[18px] text-[#313131] font-[400]">
-                          {orderItem?.amount}{" "}
+                          {slcOrderCook?.amount}{" "}
                           <span className="ml-2">รายการ</span>
                         </p>
-                        <DeleteForeverIcon
+                        {/* <DeleteForeverIcon
                           sx={{ fontSize: 32 }}
                           className="text-red-500 hover:text-red-800 cursor-pointer"
-                        />
+                        /> */}
                       </div>
                     </div>
                   </div>
                   <div className="border-t border-[#8F8F8F]/50 my-3"></div>
                 </div>
-              ))}
+              )}
             </div>
             <div className="flex justify-center space-x-5 mt-7">
-              <button
+              {/* <button
                 onClick={handleOpenModal}
                 className="w-[137px] py-1.5 bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
               >
                 เพิ่มรายการ
-              </button>
+              </button> */}
               <button
                 onClick={handleTow}
                 className="w-[137px] py-1.5 bg-[#013D59] hover:bg-[#004b6e] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
@@ -224,7 +232,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
               </button>
             </div>
 
-            {/* ✅ แก้เงื่อนไขให้ถูกต้อง */}
+            {/* ✅ แก้เงื่อนไขให้ถูกต้อง
             {isOpen && (
               <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-20">
                 <div className="relative bg-white p-8 rounded-lg shadow-lg w-[480px]">
@@ -282,7 +290,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         )}
 
@@ -309,7 +317,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
               alt=""
             />
             <p className="text-black text-[35px] font-[700] text-center">
-              {fillterOrderData.table.title}
+              {fillterOrderData?.table?.title}
             </p>
             <div className="flex justify-between mt-4 mb-1">
               <p className="text-black text-[14px] font-[300] text-center">
@@ -334,24 +342,24 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
               </p>
             </div>
 
-            {fillterOrderData.orderList.map((orderItem, index) => (
-              <div key={index}>
+            {fillterOrderData && (
+              <div>
                 <div className="flex justify-between">
                   <p className="w-[220px] text-black text-[16px] font-[500] mt-3">
-                    {orderItem.food.name}
+                    {fillterOrderData.food.name}
                   </p>
                   <p className="text-black text-[16px] font-[500] mt-4">
-                    {formatNumber(orderItem.food.price)}
+                    {formatNumber(fillterOrderData.food.price)}
                   </p>
                 </div>
                 <p className="text-black text-[15px] font-[500] mt-1 underline decoration-1">
                   หมายเหตุ
                 </p>
                 <p className="text-black text-[15px] font-[300]">
-                  {orderItem.food.details}
+                  {fillterOrderData.note}
                 </p>
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>

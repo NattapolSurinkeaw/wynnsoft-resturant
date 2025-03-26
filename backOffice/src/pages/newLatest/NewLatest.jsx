@@ -9,9 +9,12 @@ function NewLatest() {
   const [orderListAll, setOrderListAll] = useState([]);
 
   useEffect(() => {
-    getOrderList().then((res) => {
-      setOrderListAll(res.orderList);
-    })
+    const fetchData = async() => {
+      const res = await getOrderList()
+      setOrderListAll(res.orderList)
+    }
+
+    fetchData()
   }, [])
 
   return (

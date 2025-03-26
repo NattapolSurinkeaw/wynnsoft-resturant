@@ -1,31 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
-import { orderToday } from "../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-import Swal from "sweetalert2";
+import { getOrderList } from "../../services/kitchen.service";
+import { api_path } from "../../store/setting";
 
 function Served() {
+  const [orderToday, setOrderToday] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   dayjs.locale("th");
 
-  const getFilteredOrderDetails = (orderToday) => {
-    return orderToday.flatMap((order) => {
-      const formattedTime = dayjs(order.orderList.createdAt).format("HH:mm น.");
+  useEffect(() => {
+    getOrderList().then((res) => {
+      setOrderToday(res.orderList);
+    })
+  }, [])
 
-      return order.orderList
-        .filter((orderItem) => orderItem.status === "3")
-        .map((filteredItem) => ({
-          order_munber: order.order_number,
-          // orderList: [filteredItem],
-          table: order.table ? order.table.title : "ไม่มีข้อมูลโต๊ะ",
-          // table_id: order.table?.id || null,
-          formattedTime,
-          nameFood: filteredItem.food.name,
-          thumbnail_link: filteredItem.food.thumbnail_link,
-          amount: filteredItem.amount,
-        }));
-    });
+  useEffect(() => {
+    if (orderToday.length > 0) {
+      setFilteredOrders(getFilteredOrderDetails(orderToday));
+    }
+  }, [orderToday]);
+
+  const getFilteredOrderDetails = (orderToday) => {
+    return orderToday.filter((order) => order.status == "3")
   };
 
   const filteredOrders = getFilteredOrderDetails(orderToday);
@@ -55,18 +54,19 @@ function Served() {
           </div>
         ) : (
           filteredOrders.map((order) => (
-            <div className="bg-white w-full h-full rounded-lg 2xl:p-4 p-3 flex flex-col gap-4">
+            <div key={order.id} className="bg-white w-full h-full rounded-lg 2xl:p-4 p-3 flex flex-col gap-4">
+              { console.log(order)}
               <div className="flex 2xl:flex-row flex-col 2xl:gap-4 gap-2">
                 <figure className="2xl:w-[150px] 2xl:h-[150px] w-full h-[120px] rounded-lg flex-shrink-0 shadow">
                   <img
-                    src={order.thumbnail_link}
+                    src={api_path + order.food.thumbnail_link}
                     alt=""
                     className="w-full h-full rounded-lg object-cover"
                   />
                 </figure>
                 <div className="flex 2xl:flex-col flex-row w-full items-end 2xl:justify-start justify-center gap-3">
                   <p className="bg-[#FFBA41] p-1 2xl:w-[60px] h-[60px] sm:w-1/3 w-1/2 rounded-lg line-clamp-2 items-center flex justify-center break-all sm:flex-shrink-0 text-white text-sm font-[600]">
-                    {order.table}
+                    {order.order.table.title}
                   </p>
                   <div className="bg-[#EEEEEE] border border-[#D9D9D9] p-1 rounded-[10px] flex flex-col justify-center items-center 2xl:w-full sm:w-1/3 w-1/2 2xl:h-1/2 h-[60px] sm:flex-shrink-0">
                     <p className="text-[#00537B] font-[600] 2xl:text-3xl text-xl">
@@ -79,7 +79,7 @@ function Served() {
               </div>
               <div className="flex flex-col justify-start gap-1 ">
                 <p className="xl:h-[60px] h-[50px] line-clamp-2 text-[#313131] xl:text-2xl text-lg font-bold break-all">
-                  {order.nameFood}
+                  {order.food.name}
                 </p>
                 <div className="flex gap-1 items-end">
                   <p className="text-[#00537B] text-sm font-[400]">
@@ -87,7 +87,7 @@ function Served() {
                     เลขออเดอร์ :
                   </p>
                   <p className="text-[#00537B] 2xl:text-lg text-sm font-[400] leading-none">
-                    {order.order_munber}
+                    {order.order.order_number}
                   </p>
                 </div>
                 <div className="flex gap-1 ">
@@ -96,7 +96,7 @@ function Served() {
                     className="text-[#8F8F8F]"
                   />
                   <p className="text-[#8F8F8F] 2xl:text-lg text-sm font-[400]">
-                    {order.formattedTime}
+                    {dayjs(order.updatedAt).format("HH:mm น.")}
                   </p>
                 </div>
 
