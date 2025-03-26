@@ -5,6 +5,7 @@ import "dayjs/locale/th"; // ใช้ภาษาไทย
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import { getOrderList } from "../../services/kitchen.service";
 import { api_path } from "../../store/setting";
+import Swal from "sweetalert2";
 
 function Served() {
   const [orderToday, setOrderToday] = useState([]);
@@ -27,7 +28,7 @@ function Served() {
     return orderToday.filter((order) => order.status == "3")
   };
 
-  const filteredOrders = getFilteredOrderDetails(orderToday);
+  // const filteredOrders = getFilteredOrderDetails(orderToday);
 
   const submitServed = () => {
     Swal.fire({
