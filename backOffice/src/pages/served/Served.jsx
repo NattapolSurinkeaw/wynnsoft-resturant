@@ -5,6 +5,7 @@ import "dayjs/locale/th"; // ใช้ภาษาไทย
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import { getOrderList } from "../../services/kitchen.service";
 import { api_path } from "../../store/setting";
+import { getUpdateStatusOrderList } from "../../services/kitchen.service";
 
 function Served() {
   const [orderToday, setOrderToday] = useState([]);
@@ -12,9 +13,12 @@ function Served() {
   dayjs.locale("th");
 
   useEffect(() => {
-    getOrderList().then((res) => {
+    const fetchData = async() => {
+      const res = await getOrderList();
       setOrderToday(res.orderList);
-    })
+    }
+
+    fetchData()
   }, [])
 
   useEffect(() => {
@@ -27,7 +31,19 @@ function Served() {
     return orderToday.filter((order) => order.status == "3")
   };
 
-  // console.log("filteredOrders", filteredOrders);
+  const getServeOrder = (order) => {
+    console.log(order)
+    const params = {
+      orderList : 
+      [{
+        id: order.id,
+        status: 4
+      }]
+    }
+    getUpdateStatusOrderList(params).then((res) => {
+      console.log(res);
+    })
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -88,7 +104,9 @@ function Served() {
                     {dayjs(order.updatedAt).format("HH:mm น.")}
                   </p>
                 </div>
-                <button className="bg-[#013D59] hover:bg-[#FFBA41] rounded-lg py-2 text-white 2xl:text-xl md:text-lg font-[600] cursor-pointer transition-all duration-200 ease-in-out mt-4">
+                <button 
+                  onClick={() => getServeOrder(order)}
+                  className="bg-[#013D59] hover:bg-[#FFBA41] rounded-lg py-2 text-white 2xl:text-xl md:text-lg font-[600] cursor-pointer transition-all duration-200 ease-in-out mt-4">
                   เสริฟออเดอร์
                 </button>
               </div>

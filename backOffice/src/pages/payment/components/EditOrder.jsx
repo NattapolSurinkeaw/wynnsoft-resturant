@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function EditOrder({ groupedMenuDetails, setOpenModalEdit }) {
+function EditOrder({ groupedMenuDetails, setOpenModalEdit, note ,setNote }) {
   const [count, setCount] = useState(() =>
     Object.fromEntries(groupedMenuDetails.map((item) => [item.id, item.amount]))
   );
@@ -110,15 +110,15 @@ function EditOrder({ groupedMenuDetails, setOpenModalEdit }) {
         ))}
       </div>
 
-      <div className="w-full h-[200px] flex flex-col px-4 gap-2">
+      <div className="w-full lg:h-[200px] flex flex-col px-4 gap-2">
         <span className="w-[140px] flex-shrink-0 text-left text-black text-xl">
           หมายเหตุ
         </span>
         <textarea
           id="message"
           className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-40 h-20 text-xl"
-          // value={text}
-          // onChange={(e) => setText(e.target.value)}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
           placeholder="หมายเหตุ..."
         />
       </div>

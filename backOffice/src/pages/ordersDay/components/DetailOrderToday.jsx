@@ -188,7 +188,7 @@ function DetailOrderToday() {
                       <div className="flex gap-4 w-[90%] items-center">
                         <figure className="2xl:w-[75px] 2xl:h-[75px] w-[70px] h-[60px] rounded-lg">
                           <img
-                            src={item.food.thumbnail_link}
+                            src={api_path + item.food.thumbnail_link}
                             alt={item.food.name}
                             className="w-full h-full rounded-lg object-cover"
                           />

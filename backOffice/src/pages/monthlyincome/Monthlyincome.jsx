@@ -166,6 +166,7 @@ function Monthlyincome() {
     (sum, order) => sum + order.totalPrice,
     0
   );
+
   const DiscountTotal = filteredOrders.reduce(
     (sum, order) => sum + order.totalDiscount,
     0
@@ -238,25 +239,31 @@ function Monthlyincome() {
     XLSX.writeFile(wb, `Report_Monthly_income_${today}.xlsx`);
   };
 
+  const handleReset = () => {
+    setSelectedStatus(null); // รีเซ็ตสถานะที่เลือก
+    setDateStart(null); // รีเซ็ตวันที่เริ่มต้น
+    setDateEnd(null); // รีเซ็ตวันที่สิ้นสุด
+  };
+
   return (
     <div className="flex flex-col gap-4">
       {activeTab === "TableToMonthly" && (
-        <div className="flex 2xl:flex-row flex-col  2xl:justify-between 2xl:h-[42px] h-full">
+        <div className="flex 3xl:flex-row flex-col gap-y-4 2xl:justify-between 3xl:h-[42px] h-full">
           <div className="flex flex-shrink-0 gap-2 justify-start items-center ">
             <LeaderboardOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
             <p className="text-[#00537B] text-2xl font-[600]">รายได้รายเดือน</p>
           </div>
-          <div className="flex gap-3 justify-end w-full">
+          <div className="lg:flex max-2xl:flex-wrap xl:gap-4 3xl:gap-2 gap-3 lg:justify-end grid grid-cols-3 place-items-end lg:mx-0 mx-auto 3xl:h-[40px] h-full">
             <div className="relative" ref={menuStatus}>
               <div className="flex flex-shrink-0 gap-2 items-center">
-                <p className="text-[#313131] 2xl:text-xl text-base font-[600] flex-shrink-0">
+                <p className="text-[#313131] 3xl:text-lg text-base font-[600] flex-shrink-0">
                   ช่องทางชำระ
                 </p>
                 <div
-                  className="bg-white cursor-pointer flex justify-between items-center gap-2 py-1.5 px-2 rounded-lg shadow w-[250px] max-w-full"
+                  className="bg-white cursor-pointer flex justify-between items-center gap-2 py-1.5 px-2 rounded-lg shadow w-[200px]  max-w-full"
                   onClick={() => setShowStatusMenu(!showStatusMenu)}
                 >
-                  <p className="text-[#313131] xl:text-lg text-base font-[400]">
+                  <p className="text-[#313131] 3xl:text-lg text-base font-[400]">
                     {selectedStatus === "1"
                       ? "ชำระผ่าน QR"
                       : selectedStatus === "2"
@@ -327,7 +334,7 @@ function Monthlyincome() {
 
             {/* Monthly start*/}
             <div className="flex flex-shrink-0 gap-2 items-center max-lg:order-3">
-              <p className="text-[#313131] 2xl:text-xl text-base font-[600] flex-shrink-0">
+              <p className="text-[#313131] 3xl:text-lg text-base font-[600] flex-shrink-0">
                 ตั้งแต่
               </p>
 
@@ -345,7 +352,7 @@ function Monthlyincome() {
                   <DatePicker
                     value={dateStart}
                     onChange={(newValue) => setDateStart(newValue)}
-                    sx={{ width: "250px", height: "100%" }}
+                    sx={{ width: "200px", height: "100%" }}
                     format="DD-MM-YYYY"
                     slotProps={{
                       textField: {
@@ -365,7 +372,7 @@ function Monthlyincome() {
 
             {/* to end*/}
             <div className="flex flex-shrink-0 gap-2 items-center max-lg:order-4">
-              <p className="text-[#313131] 2xl:text-xl text-base font-[600] flex-shrink-0">
+              <p className="text-[#313131] 3xl:text-lg text-base font-[600] flex-shrink-0">
                 จนถึง
               </p>
 
@@ -402,21 +409,30 @@ function Monthlyincome() {
             </div>
 
             <button
+              onClick={handleReset}
+              className="max-lg:order-6 bg-[#00537B] cursor-pointer 2xl:max-w-[80px] lg:max-w-[80px] h-[38px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+            >
+              <p className="text-white 3xl:text-lg text-base font-[400]">
+                รีเซ็ต
+              </p>
+            </button>
+
+            <button
               onClick={exportToExcel}
-              className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[200px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+              className="max-lg:order-2 bg-[#00537B] cursor-pointer xl:max-w-[170px] lg:max-w-[160px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
               <FileUploadOutlinedIcon sx={{ color: "#fff", fontSize: 30 }} />
-              <p className="text-white 2xl:text-lg text-base font-[400]">
+              <p className="text-white 3xl:text-lg text-base font-[400]">
                 Export Excel
               </p>
             </button>
 
             <Link
               to={`/monthlyincome?tab=ChartToMonthly`}
-              className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[200px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
+              className="max-lg:order-2 bg-[#00537B] cursor-pointer xl:max-w-[150px] lg:max-w-[140px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
               <TrendingUpIcon sx={{ color: "#fff", fontSize: 30 }} />
-              <p className="text-white 2xl:text-lg text-base font-[400]">
+              <p className="text-white 3xl:text-lg text-base font-[400]">
                 แสดงกราฟ
               </p>
             </Link>
