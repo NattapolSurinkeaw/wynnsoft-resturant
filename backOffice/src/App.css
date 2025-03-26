@@ -227,3 +227,9 @@ body {
   align-items: center !important; /* จัดตรงกลางในแนวตั้ง */
   width: 100% !important;
 }
+
+/* sweet aleft */
+.swal-popup {
+  z-index: 9999 !important;
+} 
+/* sweet aleft */

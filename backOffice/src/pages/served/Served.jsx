@@ -4,6 +4,7 @@ import { orderToday } from "../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
+import Swal from "sweetalert2";
 
 function Served() {
   dayjs.locale("th");
@@ -29,7 +30,16 @@ function Served() {
 
   const filteredOrders = getFilteredOrderDetails(orderToday);
 
-  console.log("filteredOrders", filteredOrders);
+  const submitServed = () => {
+    Swal.fire({
+      title: "เสริฟอาหารสำเร็จ",
+      icon: "success",
+      position: "center",
+      timer: 800,
+      showConfirmButton: false,
+      target: "body",
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -89,7 +99,11 @@ function Served() {
                     {order.formattedTime}
                   </p>
                 </div>
-                <button className="bg-[#013D59] hover:bg-[#FFBA41] rounded-lg py-2 text-white 2xl:text-xl md:text-lg font-[600] cursor-pointer transition-all duration-200 ease-in-out mt-4">
+
+                <button
+                  onClick={submitServed}
+                  className="bg-[#013D59] hover:bg-[#FFBA41] rounded-lg py-2 text-white 2xl:text-xl md:text-lg font-[600] cursor-pointer transition-all duration-200 ease-in-out mt-4"
+                >
                   เสริฟออเดอร์
                 </button>
               </div>
