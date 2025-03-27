@@ -3,6 +3,7 @@ import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { QRCodeCanvas } from "qrcode.react";
 import { jsPDF } from "jspdf";
+import Receipt_Print from "../../../components/Receipt/Receipt_Print ";
 
 function QrCodeModal({ isOpen, closeModal, qrCode }) {
   const contentRef = useRef();
@@ -10,32 +11,34 @@ function QrCodeModal({ isOpen, closeModal, qrCode }) {
   console.log(qrCode);
 
   const handlePrint = () => {
-    const doc = new jsPDF("p", "mm", "a4"); // ใช้ A4 ขนาด
-    const qrCodeCanvas = contentRef.current.querySelector("canvas");
+     Receipt_Print("QR_Code");
+    
+    // const doc = new jsPDF("p", "mm", "a4"); // ใช้ A4 ขนาด
+    // const qrCodeCanvas = contentRef.current.querySelector("canvas");
 
-    if (qrCodeCanvas) {
-      const qrCodeDataUrl = qrCodeCanvas.toDataURL();
-      const pageWidth = doc.internal.pageSize.width; // ความกว้างของหน้า
-      const pageHeight = doc.internal.pageSize.height; // ความสูงของหน้า
-      const qrCodeSize = 150; // ขนาด QR Code ที่คุณต้องการ (ปรับตามต้องการ)
-      const qrCodeText = "Scan this QR Code"; // ข้อความที่จะแสดงบนหัว QR Code
+    // if (qrCodeCanvas) {
+    //   const qrCodeDataUrl = qrCodeCanvas.toDataURL();
+    //   const pageWidth = doc.internal.pageSize.width; // ความกว้างของหน้า
+    //   const pageHeight = doc.internal.pageSize.height; // ความสูงของหน้า
+    //   const qrCodeSize = 150; // ขนาด QR Code ที่คุณต้องการ (ปรับตามต้องการ)
+    //   const qrCodeText = "Scan this QR Code"; // ข้อความที่จะแสดงบนหัว QR Code
 
-      // คำนวณตำแหน่งให้อยู่กลาง
-      const x = (pageWidth - qrCodeSize) / 2; // คำนวณตำแหน่ง X ของ QR Code
-      const y = (pageHeight - qrCodeSize) / 2; // คำนวณตำแหน่ง Y ของ QR Code
+    //   // คำนวณตำแหน่งให้อยู่กลาง
+    //   const x = (pageWidth - qrCodeSize) / 2; // คำนวณตำแหน่ง X ของ QR Code
+    //   const y = (pageHeight - qrCodeSize) / 2; // คำนวณตำแหน่ง Y ของ QR Code
 
-      // คำนวณตำแหน่ง Y สำหรับข้อความให้อยู่ด้านบนของ QR Code
-      const textY = y - 16; // ขยับข้อความขึ้นจาก QR Code เล็กน้อย
+    //   // คำนวณตำแหน่ง Y สำหรับข้อความให้อยู่ด้านบนของ QR Code
+    //   const textY = y - 16; // ขยับข้อความขึ้นจาก QR Code เล็กน้อย
 
-      // เพิ่มข้อความที่หัว QR Code
-      doc.setFontSize(35); // ขนาดตัวอักษร
-      doc.text(qrCodeText, pageWidth / 2, textY, { align: "center" }); // จัดข้อความให้ตรงกลางในแนวนอน
+    //   // เพิ่มข้อความที่หัว QR Code
+    //   doc.setFontSize(35); // ขนาดตัวอักษร
+    //   doc.text(qrCodeText, pageWidth / 2, textY, { align: "center" }); // จัดข้อความให้ตรงกลางในแนวนอน
 
-      // วาง QR Code ที่ตำแหน่งที่คำนวณไว้
-      doc.addImage(qrCodeDataUrl, "PNG", x, y, qrCodeSize, qrCodeSize);
+    //   // วาง QR Code ที่ตำแหน่งที่คำนวณไว้
+    //   doc.addImage(qrCodeDataUrl, "PNG", x, y, qrCodeSize, qrCodeSize);
 
-      doc.save("QRCode.pdf");
-    }
+    //   doc.save("QRCode.pdf");
+    // }
   };
 
   return (
@@ -48,8 +51,10 @@ function QrCodeModal({ isOpen, closeModal, qrCode }) {
         onClick={(e) => e.stopPropagation()}
         className=" relative bg-white p-6 rounded-lg shadow-lg w-auto max-w-[570px] max-h-screen"
       >
-        <h2 className="text-xl font-semibold mb-4">QR Code</h2>
-        <QRCodeCanvas size={343} value={qrCode} />
+        <div className="pl-4 pr-6" id="QR_Code">
+          <h2 className="text-xl font-semibold mb-4">QR Code</h2>
+          <QRCodeCanvas size={343} value={qrCode} />
+        </div>
         <button
           onClick={closeModal}
           className=" absolute -top-8 -right-8 cursor-pointer"

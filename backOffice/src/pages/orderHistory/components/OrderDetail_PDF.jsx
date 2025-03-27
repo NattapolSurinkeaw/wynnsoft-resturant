@@ -8,26 +8,24 @@ function OrderDetail_PDF({
   tax,
   serviceCharge,
 }) {
- 
+  console.log("groupedMenuDetails", groupedMenuDetails);
 
-  const formattedDate = dayjs(detailData.createdAt, "DD-MM-YYYY").format(
-    "DD MMMM YYYY"
-  );
-  
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
 
-    const totalDiscount = detailData.totalPrice - detailData.totalPriceAll; // ส่วนลดรวม
-    const serviceChargeTotal = detailData.totalPriceAll * (serviceCharge / 100);
-    const grandTotal = detailData.totalPriceAll + serviceChargeTotal;
-    const taxTotal = grandTotal * (tax / 100);
-    const Tatal = grandTotal + taxTotal;
+  const serviceChargeTotal = detailData.totalPriceAll * (serviceCharge / 100);
+  const grandTotal = detailData.totalPriceAll + serviceChargeTotal;
+  const taxTotal = grandTotal * (tax / 100);
+  const Tatal = grandTotal + taxTotal;
 
   return (
-    <div id="print" className="w-[794px] rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]">
+    <div
+      id="print"
+      className="w-[794px] rounded-lg shadow flex flex-col mx-auto border border-[#EEEEEE]"
+    >
       <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg h-[90px]">
         <div className="flex gap-4 items-center">
           <div className="bg-white rounded-lg p-2 w-[80px] h-[80px] flex flex-col justify-center items-center flex-shrink-0">
@@ -48,7 +46,9 @@ function OrderDetail_PDF({
           <p className="text-lg text-white font-[600]">
             เลขออเดอร์ : {detailData.order_number}
           </p>
-          <p className="text-sm text-white font-[600] ">{detailData.formattedDate}</p>
+          <p className="text-sm text-white font-[600] ">
+            {detailData.formattedDate}
+          </p>
         </div>
       </div>
 
@@ -67,7 +67,7 @@ function OrderDetail_PDF({
         </div>
         {/* header */}
 
-        <div className="h-full">
+        <div className="min-h-[300px] max-h-full">
           {groupedMenuDetails.length > 0 ? (
             groupedMenuDetails.map((item) => (
               <div
@@ -84,17 +84,16 @@ function OrderDetail_PDF({
                   </p>
 
                   <div className="w-[30%] flex flex-col justify-end text-right flex-1">
-                    {item.specialPrice && (
+                    {item.special_price > 0 && (
                       <p className="text-[12px] font-[300] line-through">
-                        {formatNumber(item.price * item.count)}
+                         {formatNumber(item.price * item.amount)}
                       </p>
                     )}
 
                     <p className="lg:text-base text-sm font-[500]">
-                      {/* ราคาที่ลดแล้ว คูณกับ จำนวน */}
-                      {item.specialPrice
-                        ? formatNumber(item.specialPrice * item.count)
-                        : formatNumber(item.price * item.count)}{" "}
+                      {formatNumber(
+                        (item.special_price || item.price) * item.amount
+                      )}
                       ฿
                     </p>
                   </div>

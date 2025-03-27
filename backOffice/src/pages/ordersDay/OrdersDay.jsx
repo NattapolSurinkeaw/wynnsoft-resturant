@@ -161,7 +161,7 @@ function OrdersDay() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col justify-between h-full gap-4 w-full">
       <div className="flex flex-col gap-4 ">
         <div className="flex 2xl:flex-row flex-col gap-4 w-full justify-between 2xl:items-center">
           <div className="flex flex-shrink-0 gap-2 justify-start items-center">
