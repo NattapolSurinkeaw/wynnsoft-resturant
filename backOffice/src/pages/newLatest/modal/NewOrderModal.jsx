@@ -24,11 +24,11 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
   const fillterOrderData = orderData;
   // const fillterOrderData = orderToday.find((table) => table.id === orderData);
 
-  console.log(fillterOrderData)
+  console.log("fillterOrderData", fillterOrderData);
 
   useEffect(() => {
     setSlcOrderCook(orderData);
-  }, [orderData])
+  }, [orderData]);
 
   if (!isOpenNewOrderModal || !orderData) return null;
 
@@ -48,16 +48,16 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
         handleCloseModal();
 
         const params = {
-          orderList : 
-          [{
-            id: fillterOrderData.id,
-            status: 2
-          }]
-        }
+          orderList: [
+            {
+              id: fillterOrderData.id,
+              status: 2,
+            },
+          ],
+        };
         getUpdateStatusOrderList(params).then((res) => {
           console.log(res);
-        })
-
+        });
 
         const Toast = Swal.mixin({
           toast: true,
@@ -101,10 +101,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
                   <img
                     className="w-full h-full object-cover rounded-lg"
                     src={api_path + fillterOrderData.food.thumbnail_link}
-                    alt={
-                      fillterOrderData.food.name ||
-                      "อาหาร"
-                    }
+                    alt={fillterOrderData.food.name || "อาหาร"}
                   />
                 )}
               </figure>
@@ -317,7 +314,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
               alt=""
             />
             <p className="text-black text-[35px] font-[700] text-center">
-              {fillterOrderData?.table?.title}
+              โต๊ะ {fillterOrderData?.order.table?.title}
             </p>
             <div className="flex justify-between mt-4 mb-1">
               <p className="text-black text-[14px] font-[300] text-center">
