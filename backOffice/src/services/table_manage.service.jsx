@@ -46,6 +46,15 @@ export const getEditTable = (id, params) => {
   })
 }
 
+export const getChangeTable = (params) => {
+  return axios.post('/api/backoffice/changeTable', params).then((res) => {
+    return {
+      status: res.data.status,
+      table: res.data.table
+    }
+  })
+}
+
 export const getGenerateQr = (id) => {
   return axios.get(`/api/backoffice/generate-qrcode/${id}`).then((res) => {
     return {

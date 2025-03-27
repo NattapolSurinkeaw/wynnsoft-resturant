@@ -25,6 +25,7 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
   const categoryMenuRef = useRef(null);
   const [foods, setFoods] = useState([]);
   const [cateFood, setCateFood] = useState([]);
+  const [intNote, setIntNote] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +41,8 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
     fetchData();
   }, []);
 
-  console.log(tableDetail)
+  console.log("ข้อมูลโต๊ะ : " , tableDetail)
+  console.log("itemId : " ,selectedFood)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -74,18 +76,29 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
 
   const handleAddItem = () => {
     const params = {
-
+      token: tableDetail.qrcode,
+      food: [
+        {
+          id: selectedFood.id,
+          count: quantities,
+          note: intNote,
+        }
+      ]
     }
 
-    Swal.fire({
-      title: "เพิ่มรายการสำเร็จ!",
-      text: "คุณได้เพิ่มเมนูลงในรายการสั่งซื้อแล้ว",
-      icon: "success",
-      confirmButtonText: "ตกลง",
-      timer: 1200,
-      timerProgressBar: true,
-    });
-    setIsSecondModalOpen(false);
+    getAddOrderFood(params).then((res) => {
+      if(res.status) {
+        Swal.fire({
+          title: "เพิ่มรายการสำเร็จ!",
+          text: "คุณได้เพิ่มเมนูลงในรายการสั่งซื้อแล้ว",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+          timer: 1200,
+          timerProgressBar: true,
+        });
+        setIsSecondModalOpen(false);
+      }
+    })
   };
 
   const openSecondModal = (id) => {
@@ -98,8 +111,8 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
     setIsSecondModalOpen(false);
   };
 
-  console.log("filteredFood", filteredFood);
-  console.log("selectedCategory", selectedCategory);
+  // console.log("filteredFood", filteredFood);
+  // console.log("selectedCategory", selectedCategory);
 
   return (
     <>
@@ -361,9 +374,10 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
               หมายเหตุ
             </p>
             <textarea
+              onChange={(e) => setIntNote(e.target.value)}
               className="border border-gray-300 rounded-md p-2 w-full h-[90px] mt-1"
               placeholder="หมายเหตุ..."
-            ></textarea>
+            >{intNote}</textarea>
             <div className="flex items-center justify-center gap-4 w-full mt-6">
               <button
                 onClick={closeSecondModal}

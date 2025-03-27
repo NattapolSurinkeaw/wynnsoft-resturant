@@ -83,9 +83,9 @@ export class OrderFoodController {
           const order = await Orders.findOne({
             where: { id: decodedJWT.order_id },
           });
-          if (!order.order_number) {
-            order.order_number = String(order.id).padStart(6, "0");
-          }
+          // if (!order.order_number) {
+          //   order.order_number = String(order.id).padStart(6, "0");
+          // }
 
           const orderItems = paramFoods.map((item: any) => ({
             food_id: item.id,
@@ -93,7 +93,6 @@ export class OrderFoodController {
             amount: item.count,
             status: 1,
             note: item.note,
-            price: parseInt(item.price),
           }));
 
           // console.log(orderItems);
@@ -105,7 +104,7 @@ export class OrderFoodController {
               (sum: any, item: any) => sum + item.price * item.amount,
               0
             );
-          await order.update({ price: newTotalPrice });
+          await order.update({ price: newTotalPrice , status: 2});
 
           // ✅ แจ้งเตือน React Backoffice ผ่าน Socket.IO
           io.emit("newOrder", {
