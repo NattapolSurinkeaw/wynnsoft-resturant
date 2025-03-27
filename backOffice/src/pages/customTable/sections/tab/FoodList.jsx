@@ -61,7 +61,7 @@ function FoodList({ selectedTableId, tableDetail }) {
           <MoveTable
             isMoveTable={isMoveTable}
             closeModal={closeModal}
-            table={currentFoodData?.table}
+            tableData={currentFoodData}
           />
           <QrCodeModal
             isOpen={isQrModalOpen}

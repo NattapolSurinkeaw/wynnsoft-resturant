@@ -25,6 +25,7 @@ router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController
 router.get('/api/backoffice/onlyTable', AuthenticateAdmin, tableManageController.OngetOnlyTable);
 router.post('/api/backoffice/createtable', AuthenticateAdmin, tableManageController.OnCreateTable);
 router.post('/api/backoffice/edittable/:id', AuthenticateAdmin, tableManageController.OnEditTable);
+router.post('/api/backoffice/changeTable', AuthenticateAdmin, tableManageController.OnChangeTable);
 router.get('/api/backoffice/generate-qrcode/:id', AuthenticateAdmin, tableManageController.OngetGenerateQrcode);
 router.get('/api/backoffice/verifyqr/:token', tableManageController.OnverifyQrCode);
 // จองโต๊ะ
