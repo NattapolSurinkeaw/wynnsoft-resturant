@@ -11,7 +11,7 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
   const [checkedStatus, setCheckedStatus] = useState(true);
   const inputProfileImage = useRef([]);
   const [imageObj, setImageobj] = useState();
-
+  const [isTitleEmpty, setIsTitleEmpty] = useState(false);
   function inputImageOnChange(e) {
     if (!e.target.files.length) {
       return false;
@@ -34,8 +34,24 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
       e.target.value = "";
     }
   }
-
+  const handleInputChange = (e) => {
+    setInpTitle(e.target.value);
+    setIsTitleEmpty(e.target.value.trim() === ""); // อัปเดตสถานะข้อผิดพลาด
+  };
   const submitCreateCatefood = () => {
+    if (inpTitle.trim() === "") {
+      setIsTitleEmpty(true);
+      return;
+    }
+    if (!inputProfileImage.current.files[0]) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาอัพโหลดรูปหมวดหมู่อาหาร",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#D33",
+      });
+      return;
+    }
     const formData = new FormData();
     formData.append("title", inpTitle);
     formData.append("priority", priority);
@@ -47,6 +63,9 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
           status: res.status,
           description: res.description,
           title: res.title,
+          customClass: {
+            popup: "swal-popup",
+          },
         });
         setHandleCreate(false);
         setRefreshData((prev) => prev + 1);
@@ -56,6 +75,9 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
           status: err.status,
           description: err.description,
           title: err.title,
+          customClass: {
+            popup: "swal-popup",
+          },
         });
       });
   };
@@ -99,15 +121,17 @@ function AddCategoryFood({ setRefreshData, setHandleCreate }) {
       <div className="flex flex-col gap-6 justify-between">
         <div className="flex flex-col gap-4">
           {/* ✅ ชื่อหมวดหมู่ */}
-          <div className="flex flex-row items-center  gap-3">
+          <div className="flex flex-row items-center gap-3">
             <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
               ชื่อหมวดหมู่
             </span>
             <input
               type="text"
-              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4"
+              className={`w-full border ${
+                isTitleEmpty ? "border-red-600" : "border-[#D9D9D9]"
+              } rounded-lg outline-none py-1 px-4`}
               value={inpTitle}
-              onChange={(e) => setInpTitle(e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           {/* ✅ ลำดับแสดง */}

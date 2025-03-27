@@ -52,6 +52,7 @@ export class KitchenManageController {
     try {
       const { orderList, orderId }: { orderList: { id: number; status: number }[]; orderId: number } = req.body;
 
+      console.log(orderList)
       await Promise.all(
         orderList.map(({ id, status }: { id: number; status: number }) => 
           OrdersList.update(
@@ -61,9 +62,7 @@ export class KitchenManageController {
         )
       );
       
-      
-      console.log(orderList)
-      console.log(orderId)
+      // console.log(orderId)
 
       return res.status(200).json({
         status: true,

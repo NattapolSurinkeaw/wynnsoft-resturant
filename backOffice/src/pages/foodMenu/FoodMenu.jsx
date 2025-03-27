@@ -6,7 +6,7 @@ import Switch, { switchClasses } from "@mui/joy/Switch";
 import CancelIcon from "@mui/icons-material/Cancel";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import AddFood from "./AddFood";
 import EditFood from "./EditFood";
 import {
@@ -197,7 +197,9 @@ function FoodMenu() {
       renderCell: (params) => (
         <div className="p-1 flex justify-center items-center">
           <img
-            src={api_path + params.value}
+            src={
+              params.value ? api_path + params.value : "/icons/image-off.png"
+            }
             alt=""
             style={{
               borderRadius: "5px",
@@ -393,7 +395,7 @@ function FoodMenu() {
           <p className="text-[#00537B] text-2xl font-[600]">เมนูอาหาร</p>
         </div>
 
-        <div className="flex gap-4 justify-ennd items-center ">
+        <div className="flex gap-4 justify-end items-center ">
           {/* cate */}
           <div className="relative" ref={categoryMenuRef}>
             <div className="flex flex-shrink-0 gap-2 items-center">
@@ -579,11 +581,13 @@ function FoodMenu() {
           localeText={{ noRowsLabel: "ไม่พบข้อมูล" }}
         />
       </Box>
+
       <Modal
         open={openAdd}
         onClose={() => {
           setOpenAdd(false);
         }}
+        style={{ position: "absolute", zIndex: 1,}}
       >
         <Box
           className="flex flex-col gap-4 xl:max-w-[60%] max-w-[90%] w-full px-8"
@@ -611,7 +615,7 @@ function FoodMenu() {
                 setOpenAdd(false);
               }}
             >
-            <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
+              <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
             </button>
           </div>
 
@@ -628,6 +632,7 @@ function FoodMenu() {
         onClose={() => {
           setOpenEdit(false);
         }}
+        style={{ position: "absolute", zIndex: 1,}}
       >
         <Box
           className="flex flex-col gap-4 xl:max-w-[60%] max-w-[90%] w-full px-8"
@@ -655,15 +660,9 @@ function FoodMenu() {
                 setOpenEdit(false);
               }}
             >
-            <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
+              <CancelIcon className="hover:text-[#00537B] cursor-pointer" />
             </button>
           </div>
-
-          {/* <UpdateFrom
-              selectedRow={selectedRow}
-              setOpenEdit={setOpenEdit}
-              setRefreshData={setRefreshData}
-            /> */}
 
           <EditFood
             selectedRow={selectedRow}

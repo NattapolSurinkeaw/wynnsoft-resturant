@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import NewOrderModal from "../modal/NewOrderModal";
-import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
-import { orderToday } from "../../../components/mockData/orderToDay";
+// import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+// import { orderToday } from "../../../components/mockData/orderToDay";
 import { api_path } from "../../../store/setting";
 
 function NewOrder({orderListAll}) {
   const [isOpenNewOrderModal, setIsOpenNewOrderModal] = useState(false);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const filteredOrders = orderListAll?.filter((order) => order.status === "1") || [];
+  const filteredOrders = orderListAll.filter((order) => order.status === "1");
 
   const handleOpenModal = (order) => {
-    setSelectedOrderId(order);
+    setSelectedOrder(order);
     setIsOpenNewOrderModal(true);
+
   };
 
+  console.log(filteredOrders)
   return (
     <>
-      <NewOrderModal
-        isOpenNewOrderModal={isOpenNewOrderModal}
-        closeModal={() => setIsOpenNewOrderModal(false)}
-        orderData={selectedOrderId}
-      />
+    {
+      isOpenNewOrderModal && (
+        <NewOrderModal
+          isOpenNewOrderModal={isOpenNewOrderModal}
+          closeModal={() => setIsOpenNewOrderModal(false)}
+          orderData={selectedOrder}
+        />
+      )
+    }
       <div className="grid max-md:grid-cols-2 max-lg:grid-cols-3 max-xxl:grid-cols-4 grid-cols-5 gap-3 2xl:gap-4">
         {filteredOrders.map((order) => (
           <div
@@ -45,7 +51,6 @@ function NewOrder({orderListAll}) {
                 <p className="bg-[#FFBA41] p-1 2xl:w-[60px] h-[60px] sm:w-1/3 w-1/2 rounded-lg line-clamp-2 items-center flex justify-center break-all sm:flex-shrink-0 text-white text-sm font-[600]">
                   {order.order.table.title.replace("โต๊ะ ", "")}
                 </p>
-
                 <div className="flex flex-col justify-center items-center sm:flex-shrink-0 2xl:w-full sm:w-1/3 w-1/2 2xl:h-1/2 h-[60px] rounded-lg bg-[#EEEEEE] border border-[#D9D9D9] 2xl:leading-6 leading-5">
                   {order && (
                     <p className="text-[#00537B] 2xl:text-[25px] text-[20px] font-[600]">
@@ -63,7 +68,7 @@ function NewOrder({orderListAll}) {
                 <p className="2xl:h-[60px] h-auto 2xl:text-[20px] text-[16px] font-[600] text-[#313131] 2xl:line-clamp-2 line-clamp-1 mt-2 break-all">
                   {order.food.name}
                 </p>
-              )}
+            )}
             <p className="text-[14px] text-[#00537B]">
               เลขออเดอร์ :{" "}
               <span className="2xl:text-[18px] text-[14px] font-[400]">

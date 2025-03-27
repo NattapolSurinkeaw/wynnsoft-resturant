@@ -5,7 +5,7 @@ import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import CancelIcon from "@mui/icons-material/Cancel";
 import OrderDetail from "./OrderDetail";
 
-function TableToDay({
+function TableToMonthly({
   filteredOrders,
   PriceTotal,
   DiscountTotal,
@@ -21,7 +21,7 @@ function TableToDay({
     });
 
   const handleOpenModalDetail = (row) => {
-    setSelectedRow({ ...row });
+    setSelectedRow({ ...row});
     setOpenModalDetail(true);
   };
 
@@ -39,6 +39,14 @@ function TableToDay({
       headerAlign: "center",
       align: "center",
       width: 150,
+    },
+    {
+      field: "formattedDate",
+      headerName: "วันที่",
+      headerAlign: "center",
+      align: "center",
+      minWidth: 150,
+      maxWidth: 200,
     },
     {
       field: "formattedTime",
@@ -237,9 +245,7 @@ function TableToDay({
         >
           <div className="flex justify-between ">
             <div className="flex gap-2 items-center">
-              <LeaderboardOutlinedIcon
-                sx={{ color: "#00537B", fontSize: 35 }}
-              />
+              <LeaderboardOutlinedIcon sx={{ color: "#00537B", fontSize: 35 }} />
               <p className="text-[#00537B] text-2xl font-[600] ">รายละเอียด</p>
             </div>
 
@@ -262,4 +268,4 @@ function TableToDay({
   );
 }
 
-export default TableToDay;
+export default TableToMonthly;

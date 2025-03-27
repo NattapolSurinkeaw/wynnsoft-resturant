@@ -132,7 +132,6 @@ export class TableManageController {
       const table = await Table.findOne({where: {id: req.params.id}});
       const generate_token = uuidv4();
       
-
       let order = await Orders.findOne({where: {table_id: table.id}});
       if(!order) {
         order = await Orders.create({
@@ -142,6 +141,8 @@ export class TableManageController {
           price: 0,
         })
       }
+      order.order_number = String(order.id).padStart(6, "0");
+      order.save();
 
       const payload = {
         table_id: table.id,

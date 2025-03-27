@@ -9,7 +9,7 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
   const [showStatusMenu1, setShowStatusMenu1] = useState(false);
   const [filteredOrderData, setFilteredOrderData] = useState(null);
 
-  // console.log("selectedEditId", selectedEditId);
+  console.log("selectedEditId", selectedEditId);
 
   const statusMenuRef1 = useRef(null);
 
@@ -50,6 +50,7 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
   }, [selectedStatusMenu1]);
 
   if (!isOpenEditModal || !filteredOrderData) return null;
+  console.log("modal : ", isOpenEditModal)
 
   return (
     isOpenEditModal && (

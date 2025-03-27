@@ -6,7 +6,7 @@ import { getTableOnly } from "../../../services/table_manage.service";
 function MoveTable({ isMoveTable, closeModal, table }) {
   const [tables, setTables] = useState("");
   const [currentTable, setCurrentTable] = useState([]);
-  console.log(tables)
+  // console.log(tables)
   useEffect(() => {
     getTableOnly().then((res) => {
       setTables(res.tables);

@@ -13,7 +13,12 @@ function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
   const [checkedStatus, setCheckedStatus] = useState(false);
   const inputProfileImage = useRef(null);
   const [imageObj, setImageObj] = useState(null);
+  const [isTitleEmpty, setIsTitleEmpty] = useState(false);
 
+  const handleInputChange = (e) => {
+    setInpTitle(e.target.value);
+    setIsTitleEmpty(e.target.value.trim() === "");
+  };
   // ✅ ใช้ useEffect เพื่ออัปเดตค่าเมื่อ slcEdit เปลี่ยน
   useEffect(() => {
     if (slcEdit) {
@@ -48,6 +53,11 @@ function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
 
   // ✅ ฟังก์ชันบันทึกข้อมูล
   const handleSave = () => {
+    if (inpTitle.trim() === "") {
+      setIsTitleEmpty(true);
+      return;
+    }
+    
     const formData = new FormData();
     formData.append("title", inpTitle);
     formData.append("priority", priority);
@@ -60,6 +70,9 @@ function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
           status: res.status,
           description: res.description,
           title: res.title,
+          customClass: {
+            popup: "swal-popup",
+          },
         });
         setHandleEdit(false);
         setRefreshData((prev) => prev + 1); // รีเฟรชข้อมูล
@@ -69,6 +82,9 @@ function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
           status: err.status,
           description: err.description,
           title: err.title,
+          customClass: {
+            popup: "swal-popup",
+          },
         });
       });
   };
@@ -120,9 +136,11 @@ function EditCategoryFood({ slcEdit, setRefreshData, setHandleEdit }) {
             </span>
             <input
               type="text"
-              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4"
+              className={`w-full border ${
+                isTitleEmpty ? "border-red-600" : "border-[#D9D9D9]"
+              } rounded-lg outline-none py-1 px-4`}
               value={inpTitle}
-              onChange={(e) => setInpTitle(e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
         </div>

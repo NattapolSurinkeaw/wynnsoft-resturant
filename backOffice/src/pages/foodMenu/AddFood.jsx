@@ -20,11 +20,17 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
   const menuStatus = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const inputProfileImage = useRef([]);
+  const [isTitleEmpty, setIsTitleEmpty] = useState(false);
 
   const handleCategoryChange = (id) => {
     setSelectedCategories((prev) =>
       prev.includes(id) ? prev.filter((catId) => catId !== id) : [...prev, id]
     );
+  };
+
+  const handleInputChange = (e) => {
+    setNameFood(e.target.value);
+    setIsTitleEmpty(e.target.value.trim() === "");
   };
 
   const handleImageChange = (e, setImage) => {
@@ -78,6 +84,29 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
   console.log(selectedStatus);
 
   const submitCreateFood = () => {
+    if (nameFood.trim() === "") {
+      setIsTitleEmpty(true);
+      return;
+    }
+
+    if (selectedCategories.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาเลือกหมวดหมู่สำหรับเมนู",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#D33",
+      });
+      return;
+    }
+    if (!inputProfileImage.current.files[0]) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณาอัพโหลดรูปภาพอาหาร",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#D33",
+      });
+      return;
+    }
     const formData = new FormData();
     formData.append("name", nameFood);
     formData.append("display", selectedStatus === true ? 1 : 0);
@@ -97,6 +126,9 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
           status: res.status,
           description: res.description,
           title: res.title,
+          customClass: {
+            popup: "swal-popup",
+          },
         });
         setOpenAdd(false);
         setRefreshData((prev) => prev + 1);
@@ -106,6 +138,9 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
           status: err.status,
           description: err.description,
           title: err.title,
+          customClass: {
+            popup: "swal-popup",
+          },
         });
       });
   };
@@ -147,28 +182,38 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
           />
         </div>
 
-        <div className="flex w-full flex-col gap-2 max-lg:h-[300px]">
+        <div className={`flex w-full flex-col gap-2 max-lg:h-[300px]`}>
           <span className="text-[#00537B] lg:text-2xl text-xl font-medium">
             หมวดเมนู
           </span>
 
-          <div className="h-[300px] overflow-y-auto border border-[#D9D9D9] rounded-lg shadow lg:p-3">
-            <div className="grid lg:grid-cols-1 grid-cols-2">
-              {cateFood.map((category) => (
-                <div key={category.id} className="flex flex-col gap-2">
-                  <div className="flex flex-row items-center justify-start gap-x-3">
-                    <Checkbox
-                      checked={selectedCategories.includes(category.id)}
-                      onChange={() => handleCategoryChange(category.id)}
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
-                      color="default"
-                    />
-                    <span className="text-[#313131] lg:text-xl text-lg">
-                      {category.title}
-                    </span>
+          <div
+            className={`flex w-full flex-col gap-2 max-lg:h-[300px] ${
+              selectedCategories.length === 0 ? "border-red-500" : ""
+            }`}
+          >
+            <span className="text-[#00537B] lg:text-2xl text-xl font-medium">
+              หมวดเมนู
+            </span>
+
+            <div className="h-[300px] overflow-y-auto border border-[#D9D9D9] rounded-lg shadow lg:p-3">
+              <div className="grid lg:grid-cols-1 grid-cols-2">
+                {cateFood.map((category) => (
+                  <div key={category.id} className="flex flex-col gap-2">
+                    <div className="flex flex-row items-center justify-start gap-x-3">
+                      <Checkbox
+                        checked={selectedCategories.includes(category.id)}
+                        onChange={() => handleCategoryChange(category.id)}
+                        sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+                        color="default"
+                      />
+                      <span className="text-[#313131] lg:text-xl text-lg">
+                        {category.title}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -182,9 +227,13 @@ const AddFood = ({ setOpenAdd, setRefreshData, cateFood }) => {
             </span>
             <input
               type="text"
-              className="w-full border border-[#D9D9D9] rounded-lg outline-none py-1 px-4 lg:h-[45px]"
+              className={`w-full rounded-lg outline-none py-1 px-4 lg:h-[45px] ${
+                isTitleEmpty
+                  ? "border-2 border-red-600"
+                  : "border border-[#D9D9D9]"
+              }`}
               value={nameFood}
-              onChange={(e) => setNameFood(e.target.value)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="flex flex-row items-center  gap-3">

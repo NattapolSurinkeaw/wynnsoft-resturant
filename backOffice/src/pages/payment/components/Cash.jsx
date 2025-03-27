@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NumericFormat } from "react-number-format";
 
-function Cash({ Tatal }) {
-  const [cash, setCash] = useState("");
-  const [change, setChange] = useState(0);
+function Cash({ Tatal, setCash, cash ,change ,setChange}) {
+  const inputRef = useRef(null); // ใช้ useRef เพื่ออ้างอิง input
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus(); // ทำให้ input ได้รับโฟกัสเมื่อโหลดหน้า
+    }
+  }, []);
 
   useEffect(() => {
     const changeTotal = cash - Tatal;
@@ -15,8 +20,6 @@ function Cash({ Tatal }) {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
-
-  
 
   return (
     <div className="flex flex-col h-full gap-6">
@@ -49,6 +52,7 @@ function Cash({ Tatal }) {
             onValueChange={(values) => {
               setCash(values.value);
             }}
+            getInputRef={inputRef}
           />
         </div>
       </div>

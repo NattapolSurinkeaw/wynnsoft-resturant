@@ -96,7 +96,7 @@ export class OrderFoodController {
             price: parseInt(item.price),
           }));
 
-          console.log(orderItems);
+          // console.log(orderItems);
           await OrdersList.bulkCreate(orderItems);
 
           const newTotalPrice =
@@ -117,7 +117,7 @@ export class OrderFoodController {
           return res.status(200).json({
             status: true,
             message: "ok",
-            description: "confirm payment success.",
+            description: "add order success.",
           });
         } else {
           return res.status(400).json({

@@ -82,7 +82,7 @@ function Control() {
         </Link>
       </div>
       {/* hide-scrollbar */}
-      <div className="flex gap-6 w-full overflow-x-auto pb-3">
+      <div className="flex 2xl:gap-6 gap-3 w-full overflow-x-auto pb-3">
         {ControlData.filter((table) => [1, 2, 3].includes(table.status)).map(
           (table) => (
             <div
@@ -110,7 +110,7 @@ function Control() {
         )}
       </div>
       <div className="grid 2xl:grid-cols-4 grid-cols-2 2xl:gap-6 gap-3 w-full ">
-        <div className="flex justify-between items-center 2xl:w-[370px] w-full bg-[#00537B] rounded-lg shadow py-4 px-5">
+        <div className="flex justify-between items-center w-full bg-[#00537B] rounded-lg shadow py-4 px-5">
           <div>
             <p className="text-[16px] text-white font-[500]">รายการสั่งใหม่</p>
             <p className="text-[35px] text-white font-[700]">05</p>
@@ -122,7 +122,7 @@ function Control() {
             />
           </div>
         </div>
-        <div className="flex justify-between items-center 2xl:w-[370px] w-full bg-[#F44D4D] rounded-lg shadow py-4 px-5">
+        <div className="flex justify-between items-center w-full bg-[#F44D4D] rounded-lg shadow py-4 px-5">
           <div>
             <p className="text-[16px] text-white font-[500]">รอชำระเงิน</p>
             <p className="text-[35px] text-white font-[700]">02</p>
@@ -134,9 +134,9 @@ function Control() {
             />
           </div>
         </div>
-        <div className="flex justify-between items-center 2xl:w-[370px] w-full bg-[#FF6A00] rounded-lg shadow py-4 px-5">
+        <div className="flex justify-between items-center w-full bg-[#FF6A00] rounded-lg shadow py-4 px-5">
           <div>
-            <p className="text-[16px] text-white font-[500]">รอชำระเงิน</p>
+            <p className="text-[16px] text-white font-[500]">พร้อมเสริฟ</p>
             <p className="text-[35px] text-white font-[700]">03</p>
           </div>
           <div className="flex w-[60px] h-[60px] items-center justify-center bg-white  rounded-lg">
@@ -146,9 +146,9 @@ function Control() {
             />
           </div>
         </div>
-        <div className="flex justify-between items-center 2xl:w-[370px] w-full bg-[#FFD25B] rounded-lg shadow py-4 px-5">
+        <div className="flex justify-between items-center w-full bg-[#FFD25B] rounded-lg shadow py-4 px-5">
           <div>
-            <p className="text-[16px] text-white font-[500]">รอชำระเงิน</p>
+            <p className="text-[16px] text-white font-[500]">อยู่ระหว่างปรุง</p>
             <p className="text-[35px] text-white font-[700]">01</p>
           </div>
           <div className="flex w-[60px] h-[60px] items-center justify-center bg-white  rounded-lg">

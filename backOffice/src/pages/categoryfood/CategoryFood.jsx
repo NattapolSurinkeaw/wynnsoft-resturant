@@ -155,8 +155,8 @@ function CategoryFood() {
       renderCell: (params) => (
         <div className="p-1 flex justify-center items-center">
           <img
-            src={api_path + params.value}
-            alt=""
+            src={params.value ? api_path + params.value : "/icons/image-off.png"}
+            alt="Thumbnail"
             style={{
               borderRadius: "5px",
               width: "60px",
@@ -399,6 +399,7 @@ function CategoryFood() {
           onClose={() => {
             setHandleCreate(false);
           }}
+          style={{ position: "absolute", zIndex: 1,}}
         >
           <Box
             className="flex flex-col lg:w-[50%] w-[80%] px-8"
@@ -442,6 +443,7 @@ function CategoryFood() {
           onClose={() => {
             setHandleEdit(false);
           }}
+          style={{ position: "absolute", zIndex: 1,}}
         >
           <Box
             className="flex flex-col lg:w-[50%] w-[80%] px-8"

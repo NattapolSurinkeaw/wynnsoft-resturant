@@ -12,7 +12,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import EditOrder from "./components/EditOrder";
 import Receipt_Print from "../../components/Receipt/Receipt_Print ";
 import { getOrderById } from "../../services/order.service";
-
+import { useNavigate } from "react-router-dom";
 
 function DetailAll() {
   dayjs.locale("th");
@@ -29,13 +29,17 @@ function DetailAll() {
   const [open, setOpen] = useState(false);
   const inputProfileImage = useRef(null);
   const [detailOrder, setDetailOrder] = useState(null);
-  
+  const [cash, setCash] = useState("");
+  const [note, setNote] = useState("");
+  const navigate = useNavigate();
+  const [change, setChange] = useState(0);
+
   useEffect(() => {
-    console.log(orderToday.find((item) => item.id === parseInt(id)))
+    console.log(orderToday.find((item) => item.id === parseInt(id)));
     getOrderById(id).then((res) => {
-      setDetailOrder(res.order)
-    })
-  }, [])
+      setDetailOrder(res.order);
+    });
+  }, []);
   // const detailOrder = orderToday.find((item) => item.id === parseInt(id));
   // console.log(detailOrder)
   console.log("image", image);
@@ -101,36 +105,33 @@ function DetailAll() {
 
     return Array.from(map.values()).map((item) => ({
       ...item,
-      status: Array.from(item.statusList).join(", "), // แปลง Set เป็น string
+      status: Array.from(item.statusList).join(", "),
     }));
   }, [detailOrder?.orderList]);
 
-  // console.log("groupedMenuDetails", groupedMenuDetails);
+  const { totalPrice, totalSpecialPrice, totalPriceAll } =
+    detailOrder?.orderList
+      ? detailOrder.orderList.reduce(
+          (acc, orderItem) => {
+            const foodItem = orderItem.food;
+            if (foodItem) {
+              const count = orderItem.amount || 1;
+              const price = orderItem.status === "5" ? 0 : foodItem.price || 0;
+              const specialPrice =
+                orderItem.status === "5" ? 0 : foodItem.special_price || price;
 
-  const { totalPrice, totalSpecialPrice, totalPriceAll } = detailOrder?.orderList
-  ? detailOrder.orderList
-      .filter((orderItem) => orderItem.status === "4" || orderItem.status === "5")
-      .reduce(
-        (acc, orderItem) => {
-          const foodItem = orderItem.food;
-          if (foodItem) {
-            const count = orderItem.amount || 1;
-            const price = orderItem.status === "5" ? 0 : foodItem.price || 0;
-            const specialPrice =
-              orderItem.status === "5" ? 0 : foodItem.special_price || price;
+              acc.totalPrice += price * count;
+              acc.totalPriceAll += specialPrice * count;
 
-            acc.totalPrice += price * count;
-            acc.totalPriceAll += specialPrice * count;
-
-            if (foodItem.special_price > 0 && orderItem.status !== "5") {
-              acc.totalSpecialPrice += specialPrice * count;
+              if (foodItem.special_price > 0 && orderItem.status !== "5") {
+                acc.totalSpecialPrice += specialPrice * count;
+              }
             }
-          }
-          return acc;
-        },
-        { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
-      )
-    : { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }; // ป้องกัน error
+            return acc;
+          },
+          { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
+        )
+      : { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 };
 
   const handleSavePDF = () => {
     setShowPdfContent(true);
@@ -169,17 +170,47 @@ function DetailAll() {
     setOpenModalEdit(true);
   };
 
+  const submitPayment = () => {
+    Swal.fire({
+      title: "ชำระเงินสำเร็จ",
+      icon: "success",
+      position: "center",
+      timer: 1500,
+      showConfirmButton: false,
+      target: "body",
+    }).then(() => {
+      setCash("");
+      navigate("/payment"); // ใช้ navigate แทน Navigator
+    });
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
+    if (!file) return; // ป้องกัน error กรณีไม่มีไฟล์ถูกเลือก
+
     if (
-      file &&
       ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(file.type)
     ) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
         setOpen(true);
+
+        setTimeout(() => {
+          setOpen(false);
+
+          setTimeout(() => {
+            Swal.fire({
+              title: "ชำระเงินสำเร็จ",
+              icon: "success",
+              position: "center",
+              timer: 1500,
+              showConfirmButton: false,
+              target: "body",
+            });
+          }, 200);
+        }, 1500);
       };
       reader.readAsDataURL(file);
     } else {
@@ -444,14 +475,22 @@ function DetailAll() {
           </div>
 
           {activeTab === "QRcode" && <QRcode Tatal={Tatal} />}
-          {activeTab === "Cash" && <Cash Tatal={Tatal} />}
+          {activeTab === "Cash" && (
+            <Cash
+              Tatal={Tatal}
+              cash={cash}
+              setCash={setCash}
+              change={change}
+              setChange={setChange}
+            />
+          )}
         </div>
 
-        <div className="flex gap-4 flex-wrap items-center justify-center">
+        <div className="flex lg:gap-4 gap-3 flex-wrap items-center justify-center">
           {activeTab === "QRcode" && (
             <div>
               <label htmlFor="upload-slip" className="cursor-pointer">
-                <div className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px] w-full group hover:bg-[#FF6A00]">
+                <div className="bg-[#FFBA41] p-1 lg:px-6 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px] w-full group hover:bg-[#FF6A00]">
                   <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
                     <img
                       src="/icons/Group 322.svg"
@@ -512,7 +551,14 @@ function DetailAll() {
             </div>
           )}
           {activeTab === "Cash" && (
-            <div className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px] w-full cursor-pointer group hover:bg-[#FF6A00]">
+            <div
+              onClick={submitPayment}
+              className={`bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px] w-full cursor-pointer group hover:bg-[#FF6A00] ${
+                cash <= 0 || cash < Tatal
+                  ? "pointer-events-none opacity-50"
+                  : ""
+              }`}
+            >
               <figure className="xl:w-[40px] xl:h-[40px] w-[30px] h-[30px]">
                 <img
                   src="/icons/cash-money.svg"
@@ -531,6 +577,7 @@ function DetailAll() {
               </p>
             </div>
           )}
+
           <div
             onClick={handleOpenModal}
             className="bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[150px]  w-full cursor-pointer group hover:bg-[#FF6A00]"
@@ -613,6 +660,8 @@ function DetailAll() {
           <EditOrder
             groupedMenuDetails={groupedMenuDetails}
             setOpenModalEdit={setOpenModalEdit}
+            note={note}
+            setNote={setNote}
           />
         </Box>
       </Modal>
@@ -632,7 +681,7 @@ function DetailAll() {
             />
           </div>
         </div>
-        )} 
+      )}
     </div>
   );
 }

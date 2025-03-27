@@ -5,7 +5,7 @@ import { ControlData } from "../../../components/mockData/ControlData/ControlDat
 function Current() {
   return (
     <>
-      <div className="h-full bg-white rounded-lg py-4 px-5">
+      <div className="h-full bg-white rounded-lg shadow-sm py-4 px-5">
         <div className="flex justify-between items-center">
           <p className="text-[23px] text-[#013D59] font-[700]">รายการตอนนี้</p>
           <Link
@@ -49,7 +49,12 @@ function Current() {
                     {item.titel}
                   </p>
                   <div className="flex flex-col justify-center items-center gap-1">
-                    <button className="bg-[#00537B] hover:bg-[#F5A100] transition duration-300 text-white text-[16px] w-[90px] py-1 rounded-lg shadow-md cursor-pointer">
+                    <button
+                      onClick={() =>
+                        (window.location.href = `/ordersDay/detail/${item.id}`)
+                      }
+                      className="bg-[#00537B] hover:bg-[#F5A100] transition duration-300 text-white text-[16px] w-[90px] py-1 rounded-lg shadow-md cursor-pointer"
+                    >
                       ดูรายการ
                     </button>
                     {statusText && (

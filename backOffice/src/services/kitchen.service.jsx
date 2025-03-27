@@ -17,3 +17,12 @@ export const getAllOutFoods = () => {
     }
   })
 }
+
+export const getUpdateStatusOrderList = (params) => {
+  return axios.post('/api/backoffice/update-statusOrderList', params).then((res) => {
+    return {
+      status: res.data.status,
+
+    }
+  })
+}
