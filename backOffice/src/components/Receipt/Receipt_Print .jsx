@@ -20,7 +20,7 @@ const Receipt_Print  = (elementId) => {
       img.onload = () => {
         console.log("Image loaded");
 
-        const pdfWidth = 80;
+        const pdfWidth = 200;
         const padding = 2; 
         const aspectRatio = img.height / img.width;
         const pdfHeight = pdfWidth * aspectRatio;

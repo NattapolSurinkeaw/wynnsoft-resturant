@@ -38,7 +38,11 @@ function TotalBill() {
 
   return (
     <>
-      <TotalBillModal isTotalBill={isTotalBill} closeModal={closeModal} selectedTableId={selectedTableId }  />
+      <TotalBillModal
+        isTotalBill={isTotalBill}
+        closeModal={closeModal}
+        selectedTableId={selectedTableId}
+      />
       <div className="flex flex-col 2xl:w-full md:w-[500px] w-full mx-auto 2xl:min-h-[631px] min-h-auto">
         <div className="w-full h-full bg-white shadow-1 rounded-lg p-6">
           <p className="text-[18px] font-[500] text-[#313131]">

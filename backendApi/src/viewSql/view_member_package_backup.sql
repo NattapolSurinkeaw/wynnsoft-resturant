@@ -250,3 +250,6 @@ FROM
 GROUP BY
     current.mem_id,
     current.member_gender
+
+
+    
