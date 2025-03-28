@@ -127,6 +127,49 @@ export class TableManageController {
       })
     }
   }
+  OnChangeTable = async(req: any, res: any) => {
+    try {
+      const tableOld = await Table.findOne({where: {id: req.body.old_table}});
+      tableOld.table_token = null;
+      tableOld.qrcode = null;
+      tableOld.status = 1;
+      tableOld.save();
+      
+      console.log(tableOld)
+      
+      const tableNew = await Table.findOne({where: {id: req.body.new_table}});
+      const generate_token = uuidv4();
+      const payload = {
+        table_id: tableNew.id,
+        table_token: generate_token,
+        order_id: req.body.order_id,
+      };
+
+      const JWT_token = jwt.sign(payload, 'nattapolsurinkeaw', { expiresIn: "1h" });
+      tableNew.table_token = generate_token;
+      tableNew.qrcode = JWT_token;
+      tableNew.status = 2;
+      await tableNew.save();
+
+      const order = await Orders.findOne({where: {id: req.body.order_id}});
+      order.table_id = tableNew.id;
+      await order.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "change table success fully",
+      });
+
+    } catch(err){
+      return res.status(500).json({
+          status: false,
+          message: 'error',
+          error: err,
+          description: 'something went wrong.'
+      })
+    }
+  }
   OngetGenerateQrcode = async(req: any, res: any) => {
     try {
       const table = await Table.findOne({where: {id: req.params.id}});

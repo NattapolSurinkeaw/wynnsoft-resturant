@@ -1,6 +1,7 @@
 import React from "react";
-import { PieChart } from "@mui/x-charts/PieChart";
+import { PieChart , pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { useMediaQuery } from "@mui/material";
+
 
 function ChartTopMenu({ Total, chartFilteredOrders, TotalTen }) {
   const isLargeScreen = useMediaQuery("(min-width: 1600px)"); // >= 1024px
@@ -8,12 +9,12 @@ function ChartTopMenu({ Total, chartFilteredOrders, TotalTen }) {
   const chartWidth = isLargeScreen ? 800 : isMediumScreen ? 500 : 300;
   const chartHeight = isLargeScreen ? 600 : isMediumScreen ? 400 : 200;
   const formatNumber = (num) => Number(num).toLocaleString("en-US");
-  
+
   return (
     <div className="flex lg:flex-row flex-col lg:gap-4 gap-8 bg-white p-4 shadow rounded-lg">
       <div className="flex flex-col gap-6 justify-center items-center mx-auto">
         <PieChart
-          className="w-full pl-12 text-white"
+          className="w-full ml-12 "
           width={chartWidth}
           height={chartHeight}
           series={[
@@ -23,16 +24,15 @@ function ChartTopMenu({ Total, chartFilteredOrders, TotalTen }) {
                 label: item.name,
               })),
               arcLabel: (params) => `${params.label}`,
-              arcLabelStyle: {
-                fontSize: 14,
-                fontWeight: "bold",
-                fill: "#fff",
-                textAnchor: "middle",
-                stroke: "black",
-                strokeWidth: 0.5,
-              },
             },
           ]}
+          sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+              fill: 'white',
+              fontSize: 18,
+              width:"100%",
+            },
+          }}
         />
         <div className="flex gap-6 justify-center w-full items-end">
           <p className="text-[#013D59] text-2xl font-[500] leading-none">

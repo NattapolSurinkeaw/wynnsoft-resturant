@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { cate, foodDetail } from "../../components/mockData/foodMenu";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Modal } from "@mui/material";
 import Switch, { switchClasses } from "@mui/joy/Switch";
@@ -162,6 +161,17 @@ function FoodMenu() {
 
     getUpdateBestSellerFood(id, param)
       .then((res) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          text: "เปลี่ยนสถานะสินค้าขายดีสำเร็จ",
+          showConfirmButton: false,
+          timer: 1000,
+          width: "300px",
+          customClass: {
+            icon: "custom-swal-icon",
+          },
+        });
         setRefreshData((prev) => prev + 1);
       })
       .catch((err) => {
@@ -587,7 +597,7 @@ function FoodMenu() {
         onClose={() => {
           setOpenAdd(false);
         }}
-        style={{ position: "absolute", zIndex: 1,}}
+        style={{ position: "absolute", zIndex: 1 }}
       >
         <Box
           className="flex flex-col gap-4 xl:max-w-[60%] max-w-[90%] w-full px-8"
@@ -632,7 +642,7 @@ function FoodMenu() {
         onClose={() => {
           setOpenEdit(false);
         }}
-        style={{ position: "absolute", zIndex: 1,}}
+        style={{ position: "absolute", zIndex: 1 }}
       >
         <Box
           className="flex flex-col gap-4 xl:max-w-[60%] max-w-[90%] w-full px-8"

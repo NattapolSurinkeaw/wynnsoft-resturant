@@ -236,6 +236,7 @@ export class ManageDataController {
       data: foods,
     });
   };
+
   OnCreateFood = async (req: any, res: any) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -317,6 +318,7 @@ export class ManageDataController {
       });
     }
   };
+
   OnUpdateFood = async (req: any, res: any) => {
     console.log(req.body);
     const errors = validationResult(req);
@@ -429,6 +431,7 @@ export class ManageDataController {
       });
     }
   };
+  
   OnUpdateBestSeller = async (req: any, res: any) => {
     const food = await Foods.findOne({
       where: { id: req.params.id },
@@ -468,6 +471,7 @@ export class ManageDataController {
       });
     }
   };
+
   OnCreateLanguage = async (req: any, res: any) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -525,6 +529,7 @@ export class ManageDataController {
       });
     }
   };
+
   OnUpdateLanguage = async (req: any, res: any) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -589,6 +594,7 @@ export class ManageDataController {
       });
     }
   };
+  
   OnDeleteLanguage = async (req: any, res: any) => {
     try {
       const language = await Language.findOne({ where: { id: req.params.id } });

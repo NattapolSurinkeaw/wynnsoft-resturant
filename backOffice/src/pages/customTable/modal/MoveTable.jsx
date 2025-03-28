@@ -1,21 +1,39 @@
 import React, { useState, useEffect } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { Select, MenuItem } from "@mui/material";
-import { getTableOnly } from "../../../services/table_manage.service";
+import { getTableOnly, getChangeTable } from "../../../services/table_manage.service";
 
-function MoveTable({ isMoveTable, closeModal, table }) {
+function MoveTable({ isMoveTable, closeModal, tableData }) {
   const [tables, setTables] = useState("");
   const [currentTable, setCurrentTable] = useState([]);
-  // console.log(tables)
+  console.log("table :",  tableData)
   useEffect(() => {
-    getTableOnly().then((res) => {
+    const fetchData = async() => {
+      const res = await getTableOnly()
       setTables(res.tables);
-    });
+    }
+    
+    fetchData()
   }, []);
-
+  
+  console.log("tables : ", tables)
   useEffect(() => {
-    setCurrentTable(table.id);
-  }, [table]);
+    setCurrentTable(tableData.table.id);
+  }, [tableData]);
+
+  const onSubmit = () => {
+    const params = {
+      old_table: tableData.table.id,
+      new_table: currentTable,
+      order_id: tableData.id
+    }
+    getChangeTable(params).then((res) => {
+      console.log(res);
+      if(res.status) {
+        closeModal()
+      }
+    })
+  }
 
   return (
     isMoveTable && (
@@ -55,7 +73,9 @@ function MoveTable({ isMoveTable, closeModal, table }) {
           </div>
 
           <div className="flex justify-center space-x-5 mt-8">
-            <button className="w-[110px] py-1.5 bg-[#013D59] hover:bg-[#002b3f] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
+            <button 
+            onClick={onSubmit}
+            className="w-[110px] py-1.5 bg-[#013D59] hover:bg-[#002b3f] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
               บันทึก
             </button>
           </div>

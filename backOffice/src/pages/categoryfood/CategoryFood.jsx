@@ -121,6 +121,17 @@ function CategoryFood() {
     getUpdateDisplayCatefood(id, param)
       .then((res) => {
         // console.log("Updated successfully", res);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          text: "เปลี่ยนสถานะหมวดหมู่สำเร็จ",
+          showConfirmButton: false,
+          timer: 1000,
+          width: "300px",
+          customClass: {
+            icon: "custom-swal-icon"
+          }
+        });
         setRefreshData((prev) => prev + 1);
       })
       .catch((err) => {
