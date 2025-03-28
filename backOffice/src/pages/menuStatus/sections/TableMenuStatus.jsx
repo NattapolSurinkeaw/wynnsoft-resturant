@@ -6,7 +6,6 @@ import { api_path } from "../../../store/setting";
 const TableMenuStatus = ({
   selectedStatusMenu1,
   selectedStatusMenu2,
-  selectedEditId,
   handleEditClick,
   orderList,
 }) => {
@@ -125,7 +124,7 @@ const TableMenuStatus = ({
                 <td className="py-3">
                   <div className="w-full flex items-center justify-center">
                     <button
-                      onClick={() => handleEditClick(order.id)}
+                      onClick={() => handleEditClick(order)}
                       className="flex justify-center items-center w-[35px] h-[35px] bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg"
                     >
                       <BorderColorIcon

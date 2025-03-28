@@ -21,6 +21,7 @@ const EditFood = ({
   const [nameFood, setNameFood] = useState(editData.name || ""); //ชื่อสินค้า
   const [text, setText] = useState(editData.details || ""); //รายละเอียด
   const [price, setPrice] = useState(editData.price || ""); //ราคา
+  const [display, setDisplay] = useState(editData.display || false);
   const [specialPrice, setSpecialPrice] = useState(
     editData.special_price || ""
   ); //ราคาพิเศษ
@@ -89,8 +90,8 @@ const EditFood = ({
   }, [selectedStatus]);
 
   useEffect(() => {
-    setSelectedStatus(editData.display);
-  }, [editData.display]);
+    setSelectedStatus(editData.status_food);
+  }, [editData.status_food]);
 
   const handleInputChange = (e) => {
     setNameFood(e.target.value);
@@ -115,7 +116,8 @@ const EditFood = ({
    
     const formData = new FormData();
     formData.append("name", nameFood);
-    formData.append("display", selectedStatus === true ? 1 : 0);
+    formData.append("display", display === true ? 1 : 0);
+    formData.append("status_food", selectedStatus === true ? 1 : 0);
     formData.append("price", price);
     formData.append("special_price", specialPrice);
     formData.append("best_seller", checked === true ? 1 : 0);
@@ -125,19 +127,20 @@ const EditFood = ({
       selectedCategories.sort((a, b) => a - b).join(",")
     );
     formData.append("thumbnail_link", inputProfileImage.current.files[0]);
-    formData.append("status_food", selectedStatus === true ? 1 : 0);
     getUpdateFood(selectedRow.id, formData)
       .then((res) => {
-        SwalUI({
-          status: res.status,
-          description: res.description,
-          title: res.title,
-          customClass: {
-            popup: "swal-popup",
-          },
-        });
-        setOpenEdit(false);
-        setRefreshData((prev) => prev + 1);
+        if(res.status) {
+          SwalUI({
+            status: res.status,
+            description: res.description,
+            title: res.title,
+            customClass: {
+              popup: "swal-popup",
+            },
+          });
+          setOpenEdit(false);
+          setRefreshData((prev) => prev + 1);
+        }
       })
       .catch((err) => {
         SwalUI({
@@ -347,38 +350,73 @@ const EditFood = ({
               บาท
             </span>
           </div>
-          <div className="flex flex-row items-center gap-3">
-            <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
-              สินค้าขายดี
-            </span>
-            <Switch
-              checked={checked}
-              onChange={(event) => setChecked(event.target.checked)} // ตรงนี้เก็บค่าเป็น Boolean
-              sx={(theme) => ({
-                "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
-                "--Switch-thumbSize": "27px",
-                "--Switch-trackWidth": "51px",
-                "--Switch-trackHeight": "31px",
-                "--Switch-trackBackground":
-                  theme.vars.palette.background.level3,
-                [`& .${switchClasses.thumb}`]: {
-                  transition: "width 0.05s, left 0.05s",
-                },
-                "&:hover": {
+          <div className="flex gap-4">
+            <div className="flex flex-row items-center gap-3">
+              <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
+                สินค้าขายดี
+              </span>
+              <Switch
+                checked={checked}
+                onChange={(event) => setChecked(event.target.checked)} // ตรงนี้เก็บค่าเป็น Boolean
+                sx={(theme) => ({
+                  "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
+                  "--Switch-thumbSize": "27px",
+                  "--Switch-trackWidth": "51px",
+                  "--Switch-trackHeight": "31px",
                   "--Switch-trackBackground":
                     theme.vars.palette.background.level3,
-                },
-                "&:active": {
-                  "--Switch-thumbWidth": "32px",
-                },
-                [`&.${switchClasses.checked}`]: {
-                  "--Switch-trackBackground": "rgb(48 209 88)",
-                  "&:hover": {
-                    "--Switch-trackBackground": "rgb(48 209 88)",
+                  [`& .${switchClasses.thumb}`]: {
+                    transition: "width 0.05s, left 0.05s",
                   },
-                },
-              })}
-            />
+                  "&:hover": {
+                    "--Switch-trackBackground":
+                      theme.vars.palette.background.level3,
+                  },
+                  "&:active": {
+                    "--Switch-thumbWidth": "32px",
+                  },
+                  [`&.${switchClasses.checked}`]: {
+                    "--Switch-trackBackground": "rgb(48 209 88)",
+                    "&:hover": {
+                      "--Switch-trackBackground": "rgb(48 209 88)",
+                    },
+                  },
+                })}
+              />
+            </div>
+            <div className="flex flex-row items-center gap-3">
+              <span className="w-[140px] flex-shrink-0 text-right text-[#00537B] text-2xl">
+                การแสดงผล
+              </span>
+              <Switch
+                checked={display}
+                onChange={(event) => setDisplay(event.target.checked)} // ตรงนี้เก็บค่าเป็น Boolean
+                sx={(theme) => ({
+                  "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
+                  "--Switch-thumbSize": "27px",
+                  "--Switch-trackWidth": "51px",
+                  "--Switch-trackHeight": "31px",
+                  "--Switch-trackBackground":
+                    theme.vars.palette.background.level3,
+                  [`& .${switchClasses.thumb}`]: {
+                    transition: "width 0.05s, left 0.05s",
+                  },
+                  "&:hover": {
+                    "--Switch-trackBackground":
+                      theme.vars.palette.background.level3,
+                  },
+                  "&:active": {
+                    "--Switch-thumbWidth": "32px",
+                  },
+                  [`&.${switchClasses.checked}`]: {
+                    "--Switch-trackBackground": "rgb(48 209 88)",
+                    "&:hover": {
+                      "--Switch-trackBackground": "rgb(48 209 88)",
+                    },
+                  },
+                })}
+              />
+            </div>
           </div>
 
           <div className="flex flex-row gap-3">

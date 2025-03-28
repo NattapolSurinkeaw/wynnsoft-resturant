@@ -168,5 +168,41 @@ export class KitchenManageController {
       });
     }
   }
+  OnChangeStatusOrderList = async(req: any, res: any) => {
+    try {
+      const orderList = await OrdersList.findOne({where: {id: req.body.list_id}});
+      if(!orderList) {
+        return res.status(404).json({
+          status: false,
+          message: "order list not found",
+        });
+      }
+      orderList.status = req.body.status;
+      orderList.save();
+
+      const food = await Foods.findOne({where: {id: req.body.food_id}});
+      if(!food) {
+        return res.status(404).json({
+          status: false,
+          message: "food not found",
+        });
+      }
+      food.status_food = false;
+      food.note = req.body.note;
+      food.save();
+      
+      return res.status(200).json({
+        status: true,
+        message: "status updated successfully.",
+      });
+
+    } catch (error: any) {
+      return res.status(500).json({
+        status: false,
+        message: "some thing went wrong",
+        errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
+      });
+    }
+  }
   
 }

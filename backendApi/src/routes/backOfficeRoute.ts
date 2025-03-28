@@ -35,8 +35,9 @@ router.post('/api/backoffice/bookingtable', AuthenticateAdmin, tableManageContro
 router.get('/api/backoffice/new-menufood', AuthenticateAdmin, kitchenManageController.OngetAllNewMenuFood);
 router.post('/api/backoffice/update-statusOrderList', AuthenticateAdmin, kitchenManageController.OnUpdateOrderListStatus);
 router.get('/api/backoffice/outfoodAll', AuthenticateAdmin, kitchenManageController.OngetAllOutFoods);
-router.post('/api/backoffice/status-outfood/:id', AuthenticateAdmin, kitchenManageController.OnChangeStatusOutFood);
-router.post('/api/backoffice/updatenote-outfood/:id', AuthenticateAdmin, kitchenManageController.OnUpdateNoteOutfood);
+router.post('/api/backoffice/status-outfood/:id', AuthenticateAdmin, kitchenManageController.OnChangeStatusOutFood); //ปุ่มแจ้งสินค้าหมด
+router.post('/api/backoffice/updatenote-outfood/:id', AuthenticateAdmin, kitchenManageController.OnUpdateNoteOutfood); //เพิ่มเหตุผลสินค้าหมด
+router.post('/api/backoffice/changestatusOrderlist', AuthenticateAdmin, kitchenManageController.OnChangeStatusOrderList) //แจ้งสินค้าหมด หน้าสถานะ
 
 // หมวดหมู่เมนู
 router.get('/api/backoffice/catefood', AuthenticateAdmin, manageDataController.OngetCategoryFood);

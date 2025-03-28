@@ -26,3 +26,12 @@ export const getUpdateStatusOrderList = (params) => {
     }
   })
 }
+
+export const getChangeStatusOrderList = (params) => {
+  return axios.post('/api/backoffice/changestatusOrderlist', params).then((res) => {
+    return {
+      status: res.data.status,
+      
+    }
+  })
+}

@@ -11,7 +11,8 @@ function MenuStatus() {
   const [showStatusMenu1, setShowStatusMenu1] = useState(false);
   const [showStatusMenu2, setShowStatusMenu2] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const [selectedEditId, setSelectedEditId] = useState(null);
+  // const [selectedEditId, setSelectedEditId] = useState(null);
+  const [selectedEditData, setSelectedEditData] = useState(null);
   const [orderList, setOrderList] = useState([]);
   const statusMenuRef1 = useRef(null);
   const statusMenuRef2 = useRef(null);
@@ -64,9 +65,8 @@ function MenuStatus() {
     }
   }, [selectedStatusMenu1, selectedStatusMenu2]);
 
-  const handleEditClick = (id) => {
-    console.log(id)
-    setSelectedEditId(id);
+  const handleEditClick = (order) => {
+    setSelectedEditData(order);
     setIsOpenEditModal(true);
   };
 
@@ -79,7 +79,7 @@ function MenuStatus() {
       <MenuStatusModal
         isOpenEditModal={isOpenEditModal}
         closeModal={closeModal}
-        selectedEditId={selectedEditId}
+        selectedEditData={selectedEditData}
         handleEditClick={handleEditClick}
       />
       <div className="flex md:flex-row flex-col md:items-center items-start justify-between gap-4 w-full">
@@ -263,7 +263,6 @@ function MenuStatus() {
         selectedStatusMenu2={selectedStatusMenu2}
         isOpenEditModal={isOpenEditModal}
         closeModal={closeModal}
-        selectedEditId={selectedEditId}
         handleEditClick={handleEditClick}
         orderList={orderList}
       />
