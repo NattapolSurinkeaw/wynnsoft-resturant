@@ -99,7 +99,7 @@ function ViewTable({ handleEditClick, selectedTableId, setSelectedTableId, custo
           )}
           <div className="flex justify-around items-center gap-6">
             <p className="text-[20px] text-[#313131] font-[500]">ชื่อ</p>
-            <p className="text-[35px] text-[#313131] font-[700]">
+            <p className="text-[35px] text-[#313131] font-[700] break-all line-clamp-1">
               {tableDetails.title}
             </p>
             <button onClick={handleEditClick}>

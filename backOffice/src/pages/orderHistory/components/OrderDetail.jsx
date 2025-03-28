@@ -174,7 +174,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
                             {/* ราคาที่ลดแล้ว คูณกับ จำนวน */}
                             {formatNumber(
                               (item.special_price || item.price) * item.amount
-                            )}{" "}
+                            )}
                             ฿
                           </p>
                         </div>

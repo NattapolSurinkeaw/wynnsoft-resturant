@@ -23,7 +23,7 @@ function Table({
   customTable,
   setTableDetail,
   setRefresh,
-  handleFoodListClick
+  handleFoodListClick,
 }) {
   const [isReservation, setIsReservation] = useState(false);
   const [isOpenTable, setIsOpenTable] = useState(false);
@@ -149,16 +149,18 @@ function Table({
                 {activeTable === table.id && (
                   <CheckBoxIcon
                     sx={{ fontSize: 25 }}
-                    className="absolute top-1 right-8 text-green-400 "
+                    className="absolute top-1 right-8 text-green-400 z-50 drop-shadow-2xl"
                   />
                 )}
 
                 <img className="w-full h-full " src="/icons/table.png" alt="" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                   {table.status === 1 && (
-                    <div className="text-center">
+                    <div className="text-center flex flex-col gap-y-2">
                       <div className="text-[#013D59] font-[500] text-[18px]">
-                        <span className="text-[20px]">{table.title}</span>
+                        <span className="text-[18px] break-all line-clamp-2">
+                          {table.title}
+                        </span>
                       </div>
                       {!isSettingOpen && !isEditTable && !isTotalBill && (
                         <button onClick={() => setIsOpenTable(true)}>
@@ -171,15 +173,19 @@ function Table({
                     </div>
                   )}
                   {table.status === 2 && (
-                    <div className="text-center text-[#013D59] text-[18px] font-[500]">
-                      <span className="text-[20px]">{table.title} </span>
-                      <br /> บริการ
+                    <div className="text-center text-[#013D59] text-[18px] font-[500] flex flex-col gap-y-2">
+                      <span className="text-[18px] break-all line-clamp-2">
+                        {table.title}{" "}
+                      </span>
+                      <span className="text-[18px]">บริการ </span>
                     </div>
                   )}
                   {table.status === 3 && (
                     <div className="text-center">
-                      <div className="text-[#013D59] font-[500] text-[18px]">
-                        {table.title} <br />
+                      <div className="flex flex-col gap-y-2">
+                        <span className="break-all line-clamp-1 text-[#013D59] font-[500] text-[18px]">
+                          {table.title}
+                        </span>
                         <div className="text-[18px]">
                           {table.bookings[0]?.time_booking?.slice(0, 5) ||
                             "ไม่ระบุ"}{" "}
@@ -198,10 +204,11 @@ function Table({
                   )}
                   {table.status === 4 && (
                     <div className="text-center">
-                      <div className="text-[#013D59] font-[500] text-[18px]">
-                        <span className="text-[20px]">{table.title}</span>
-                        <br />
-                        ปิด
+                      <div className="text-[#013D59] font-[500]  flex flex-col gap-y-2">
+                        <span className="text-[18px] break-all line-clamp-2">
+                          {table.title}
+                        </span>
+                        <span className="text-[18px]"> ปิด</span>
                       </div>
                     </div>
                   )}
