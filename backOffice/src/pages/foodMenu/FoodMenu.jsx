@@ -269,7 +269,7 @@ function FoodMenu() {
       ),
     },
     {
-      field: "display",
+      field: "status_food",
       headerName: "สถานะ",
       headerAlign: "center",
       align: "center",

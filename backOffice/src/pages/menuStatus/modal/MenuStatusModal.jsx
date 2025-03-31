@@ -1,26 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
+import { getChangeStatusOrderList } from "../../../services/kitchen.service";
 import Swal from "sweetalert2";
-import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
+import { api_path } from "../../../store/setting";
 
-function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
+
+function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData }) {
   const [selectedStatusMenu1, setSelectedStatusMenu1] = useState(null);
   const [showStatusMenu1, setShowStatusMenu1] = useState(false);
   const [filteredOrderData, setFilteredOrderData] = useState(null);
-
-  console.log("selectedEditId", selectedEditId);
+  const [noteFood, setNoteFood] = useState("");
 
   const statusMenuRef1 = useRef(null);
 
   useEffect(() => {
-    if (selectedEditId) {
-      const foundData = NewLatestData.find(
-        (item) => item.id === selectedEditId
-      );
-      setFilteredOrderData(foundData || null);
-    }
-  }, [selectedEditId]);
+    setFilteredOrderData(selectedEditData)
+    setSelectedStatusMenu1(selectedEditData?.status)
+  }, [selectedEditData]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -50,7 +47,20 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
   }, [selectedStatusMenu1]);
 
   if (!isOpenEditModal || !filteredOrderData) return null;
-  console.log("modal : ", isOpenEditModal)
+  console.log(filteredOrderData)
+
+  const onSubmit = () => {
+    const params = {
+      list_id: filteredOrderData.id,
+      food_id: filteredOrderData.food_id,
+      status: selectedStatusMenu1,
+      note: noteFood
+    }
+
+    getChangeStatusOrderList(params).then((res) => {
+      console.log(res)
+    })
+  }
 
   return (
     isOpenEditModal && (
@@ -70,8 +80,8 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
             <figure className="max-w-[130px] min-w-[130px] h-[130px] shadow-md">
               <img
                 className="w-full h-full object-cover rounded-lg"
-                src={filteredOrderData.thumbnail_link}
-                alt={filteredOrderData.details}
+                src={api_path + filteredOrderData.food.thumbnail_link}
+                alt={filteredOrderData.food.name}
               />
             </figure>
             <div className="flex flex-col justify-between w-full">
@@ -113,9 +123,10 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
           </div>
 
           <textarea
+            onChange={(e) => setNoteFood(e.target.value)}
             className="w-full min-h-[80px] p-2 mt-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             placeholder="หมายเหตุ..."
-          ></textarea>
+          >{noteFood}</textarea>
 
           <div className="flex justify-between mt-3">
             <p className="text-[16px] font-[600]">เปลี่ยนสถานะ</p>
@@ -129,14 +140,16 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
                 >
                   <p className="text-[#313131] xl:text-[16px] text-[12px] font-[400]">
                     {selectedStatusMenu1 === "1"
-                      ? "กำลังทำ"
+                      ? "รับออเดอร์"
                       : selectedStatusMenu1 === "2"
-                      ? "รอเสริฟ"
+                      ? "กำลังทำ"
                       : selectedStatusMenu1 === "3"
-                      ? "เสริฟเรียบร้อย"
+                      ? "รอเสริฟ"
                       : selectedStatusMenu1 === "4"
-                      ? "ยกเลิก"
+                      ? "เสริฟเรียบร้อย"
                       : selectedStatusMenu1 === "5"
+                      ? "ยกเลิก"
+                      : selectedStatusMenu1 === "6"
                       ? "สินค้าหมด"
                       : "เลือกสถานะ"}
                   </p>
@@ -160,11 +173,12 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
                 {showStatusMenu1 && (
                   <div className="bg-white flex flex-col gap-2 p-2 mt-2 rounded-lg shadow">
                     {[
-                      { id: "1", label: "กำลังทำ" },
-                      { id: "2", label: "รอเสริฟ" },
-                      { id: "3", label: "เสริฟเรียบร้อย" },
-                      { id: "4", label: "ยกเลิก" },
-                      { id: "5", label: "สินค้าหมด" },
+                      { id: "1", label: "รับออเดอร์" },
+                      { id: "2", label: "กำลังทำ" },
+                      { id: "3", label: "รอเสริฟ" },
+                      { id: "4", label: "เสริฟเรียบร้อย" },
+                      { id: "5", label: "ยกเลิก" },
+                      { id: "6", label: "สินค้าหมด" },
                     ].map(({ id, label }) => (
                       <div
                         key={id}
@@ -186,7 +200,9 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
               </div>
             </div>
             <div className="flex flex-col space-y-3">
-              <button className="w-[137px] py-1.5 bg-[#013D59] hover:bg-[#004b6e] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
+              <button 
+              onClick={onSubmit}
+              className="w-[137px] py-1.5 bg-[#013D59] hover:bg-[#004b6e] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
                 บันทึก
               </button>
               <button

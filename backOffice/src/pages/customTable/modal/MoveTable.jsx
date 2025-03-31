@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { Select, MenuItem } from "@mui/material";
 import { getTableOnly, getChangeTable } from "../../../services/table_manage.service";
+import Swal from "sweetalert2";
 
 function MoveTable({ isMoveTable, closeModal, tableData }) {
   const [tables, setTables] = useState("");
   const [currentTable, setCurrentTable] = useState([]);
-  console.log("table :",  tableData)
+  // console.log("table :",  tableData)
   useEffect(() => {
     const fetchData = async() => {
       const res = await getTableOnly()
@@ -16,7 +17,7 @@ function MoveTable({ isMoveTable, closeModal, tableData }) {
     fetchData()
   }, []);
   
-  console.log("tables : ", tables)
+  // console.log("tables : ", tables)
   useEffect(() => {
     setCurrentTable(tableData.table.id);
   }, [tableData]);
@@ -28,9 +29,9 @@ function MoveTable({ isMoveTable, closeModal, tableData }) {
       order_id: tableData.id
     }
     getChangeTable(params).then((res) => {
-      console.log(res);
+      // console.log(res);
       if(res.status) {
-        closeModal()
+        location.reload()
       }
     })
   }

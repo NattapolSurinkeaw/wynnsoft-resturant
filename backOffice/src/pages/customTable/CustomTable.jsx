@@ -113,7 +113,6 @@ function CustomTable() {
           />
         ) : isFoodList ? (
           <FoodList 
-            handleFoodListClick={handleFoodListClick} 
             selectedTableId={selectedTableId} 
             tableDetail={tableDetail}
           />
