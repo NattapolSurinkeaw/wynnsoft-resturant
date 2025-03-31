@@ -1,4 +1,5 @@
 import React from "react";
+import { api_path } from "../../../store/setting";
 
 function EditOrder({ filteredOrderList }) {
   const formatNumber = (num) =>
@@ -19,7 +20,7 @@ function EditOrder({ filteredOrderList }) {
             <div className="flex gap-4 items-center w-[60%]">
               <figure className="w-[75px] h-[75px] rounded-lg">
                 <img
-                  src={item.food.thumbnail_link}
+                  src={api_path + item.food.thumbnail_link}
                   alt={item.food.name}
                   className="w-full h-full rounded-lg"
                 />

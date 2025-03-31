@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { api_path } from "../../../store/setting";
+import Swal from "sweetalert2";
+import { getDeleteOrderList } from "../../../services/kitchen.service";
 
 const TableMenuStatus = ({
   selectedStatusMenu1,
   selectedStatusMenu2,
   handleEditClick,
   orderList,
+  setRefresh
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
@@ -37,6 +40,30 @@ const TableMenuStatus = ({
       setCurrentPage(currentPage + 1);
     }
   };
+
+  const handleDelete = (order) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        getDeleteOrderList(order.id).then((res) => {
+          if(res.status) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your data has been deleted.",
+              icon: "success"
+            }).then(() => setRefresh(prev => !prev))
+          }
+        })
+      }
+    });
+  }
 
   return (
     <>
@@ -136,7 +163,9 @@ const TableMenuStatus = ({
                 </td>
                 <td className="text-center py-3">
                   <div className="w-full flex items-center justify-center">
-                    <button className="flex justify-center items-center w-[35px] h-[35px] bg-[#F44D4D] hover:bg-[#ff1c1c] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg">
+                    <button 
+                    onClick={() => handleDelete(order)}
+                    className="flex justify-center items-center w-[35px] h-[35px] bg-[#F44D4D] hover:bg-[#ff1c1c] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg">
                       <DeleteForeverIcon
                         sx={{ fontSize: 25 }}
                         className="text-white"

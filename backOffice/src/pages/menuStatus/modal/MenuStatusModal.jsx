@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { api_path } from "../../../store/setting";
 
 
-function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData }) {
+function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData, setRefresh }) {
   const [selectedStatusMenu1, setSelectedStatusMenu1] = useState(null);
   const [showStatusMenu1, setShowStatusMenu1] = useState(false);
   const [filteredOrderData, setFilteredOrderData] = useState(null);
@@ -58,7 +58,18 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData }) {
     }
 
     getChangeStatusOrderList(params).then((res) => {
-      console.log(res)
+      if(res.status) {
+        Swal.fire({
+          icon: "success",
+          title: "แจ้งสินค้าหมด",
+          text: "เปลี่ยนสถานะสินค้าหมดเรียบร้อย",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          closeModal()
+          setRefresh(prev => !prev)
+        })
+      }
     })
   }
 
@@ -86,7 +97,7 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData }) {
             </figure>
             <div className="flex flex-col justify-between w-full">
               <p className="text-[#313131] text-[22px] font-[600] line-clamp-2">
-                {filteredOrderData.details}
+                {filteredOrderData.food.name}
               </p>
               <div className="flex justify-between">
                 <div className="flex items-center gap-1">

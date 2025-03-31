@@ -54,7 +54,7 @@ function OrderDetail({ onClickClose, selectedRow }) {
     const map = new Map();
 
     detailData.orderList
-      .filter((item) => item.status === "4" || item.status === "5")
+      // .filter((item) => item.status === "4" || item.status === "5")
       .forEach((item) => {
         const key = item.food.name;
         if (map.has(key)) {
