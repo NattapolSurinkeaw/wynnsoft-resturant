@@ -10,11 +10,37 @@ import { Orders } from "../models/orders";
 import { OrdersList } from "../models/orderList";
 import { Foods } from "../models/food";
 import { SIO } from "../util/Sockets";
+import { Op } from "sequelize";
 
 export class OrderFoodController {
   OngetAllOrderFoods = async (req: any, res: any) => {
     try {
       const order = await Orders.findAll({
+        include: [
+          { model: Table, as: "table" }, // ดึงข้อมูลโต๊ะ
+          {
+            model: OrdersList,
+            as: "orderList",
+            include: [{ model: Foods, as: "food" }],
+          }, // ดึงข้อมูลรายการอาหารในออเดอร์
+        ],
+      });
+
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "get order All success.",
+        data: order,
+      });
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาด:", error);
+    }
+  };
+
+  OngetAllOrderFoodsCurrent = async (req: any, res: any) => {
+    try {
+      const order = await Orders.findAll({
+        where: {status: { [Op.ne]: 5}},
         include: [
           { model: Table, as: "table" }, // ดึงข้อมูลโต๊ะ
           {

@@ -4,7 +4,7 @@ import MoveTable from "../../modal/MoveTable";
 import QrCodeModal from "../../modal/QrCodeModal";
 import { FoodListData } from "../../../../components/mockData/CustomTable/FoodListData";
 import { front_readqr } from "../../../../store/setting";
-import { getOrderAll } from "../../../../services/order.service";
+import { getOrderCurrent } from "../../../../services/order.service";
 import AdditemModal from "../../modal/AdditemModal";
 
 function FoodList({ selectedTableId, tableDetail }) {
@@ -17,7 +17,7 @@ function FoodList({ selectedTableId, tableDetail }) {
 
   useEffect(() => {
     const fetchData = async() => {
-      const res = await getOrderAll()
+      const res = await getOrderCurrent()
       setOrderAll(res.orders);
     }
 

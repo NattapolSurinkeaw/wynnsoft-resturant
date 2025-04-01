@@ -9,6 +9,15 @@ export const getOrderAll = () => {
   })
 }
 
+export const getOrderCurrent = () => {
+  return axios.get('/api/backoffice/orderallCurrent').then((res) => {
+    return {
+      status: res.data.status,
+      orders: res.data.data
+    }
+  })
+}
+
 export const getOrderById = (id) => {
   return axios.get(`/api/backoffice/order/${id}`).then((res) => {
     return {

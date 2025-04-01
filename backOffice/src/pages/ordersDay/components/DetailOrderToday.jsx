@@ -19,16 +19,18 @@ function DetailOrderToday() {
   // console.log(orderToday);
 
   useEffect(() => {
-    getOrderById(id).then((res) => {
+    const fetchData = async() => {
+      const res = await getOrderById(id);
       if (res && res.order) {
         setOrderToday(res.order);
       } else {
         setOrderToday([]); // ป้องกันการเป็น undefined
       }
-    });
+    }
+
+    fetchData();
   }, []);
 
-  const menuOrder = orderToday
   // const menuOrder = orderToday.find((item) => item.id === parseInt(id));
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
@@ -37,18 +39,18 @@ function DetailOrderToday() {
     });
 
   // console.log("Menu Order:", menuOrder.orderList);
-  const formattedDate = dayjs(menuOrder?.createdAt).format("D MMMM YYYY");
+  const formattedDate = dayjs(orderToday?.createdAt).format("D MMMM YYYY");
 
-  const filteredOrderList = menuOrder?.orderList
-  ? menuOrder.orderList.filter((item) => item.status !== "4")
+  const filteredOrderList = orderToday?.orderList
+  ? orderToday.orderList.filter((item) => item.status !== "4")
   : [];
     
   // console.log("filteredOrderList", filteredOrderList);
 
   const groupedMenuDetails = useMemo(() => {
-    if (!menuOrder.orderList) return []; // ถ้าไม่มี orderList ให้คืนค่าเป็น []
+    if (!orderToday.orderList) return []; // ถ้าไม่มี orderList ให้คืนค่าเป็น []
   
-    return menuOrder.orderList
+    return orderToday.orderList
       // .filter((item) => item.status === "4")
       .reduce((acc, item) => {
         const existingItem = acc.find((menu) => menu.name === item.food.name);
@@ -59,12 +61,12 @@ function DetailOrderToday() {
         }
         return acc;
       }, []);
-  }, [menuOrder.orderList]);
+  }, [orderToday.orderList]);
 
   console.log(groupedMenuDetails)
 
   const { totalPrice, totalSpecialPrice, totalPriceAll } = 
-  (menuOrder?.orderList || []) // ถ้า undefined ให้ใช้ []
+  (orderToday?.orderList || []) // ถ้า undefined ให้ใช้ []
   .reduce(
     (acc, orderItem) => {
       const foodItem = orderItem.food;
@@ -110,9 +112,9 @@ function DetailOrderToday() {
               </button>
             </div>
           </div>
-          {(menuOrder.orderList || []).some((item) => item.status !== "4") && (
+          {(orderToday.orderList || []).some((item) => item.status !== "4") && (
             <div className="flex flex-col overflow-auto hide-scrollbar">
-              {menuOrder.orderList
+              {orderToday.orderList
                 .filter((item) => item.status !== "4") // กรองเฉพาะออเดอร์ที่ยังไม่เสิร์ฟ
                 .map((item, index) => (
                   <div
@@ -173,9 +175,9 @@ function DetailOrderToday() {
             </p>
             <p className="text-[#313131] text-lg w-[40%]">จำนวน</p>
           </div>
-          {(menuOrder.orderList || []).some((item) => item.status === "4") && (
+          {(orderToday.orderList || []).some((item) => item.status === "4") && (
             <div className="flex flex-col gap-2 overflow-auto hide-scrollbar">
-              {menuOrder.orderList
+              {orderToday.orderList
                 .filter((item) => item.status === "4") // กรองเฉพาะออเดอร์ที่ยังไม่เสิร์ฟ
                 .map((item, index) => (
                   <div
@@ -237,13 +239,13 @@ function DetailOrderToday() {
           <div className="flex justify-between bg-[#00537B] py-3 px-4 rounded-t-lg">
             <div className="bg-white rounded-lg p-2 w-[90px] h-[90px] flex flex-col justify-center items-center flex-shrink-0 shadow">
               <p className="text-lg text-[#00537B] font-[700] line-clamp-3 break-all">
-                {menuOrder.table?.title}
+                {orderToday.table?.title}
               </p>
             </div>
 
             <div className="flex flex-col justify-between items-end text-right gap-3 h-full">
               <p className="xl:text-3xl text-xl text-white font-[600]">
-                #{menuOrder.order_number}
+                #{orderToday.order_number}
               </p>
               <div className="flex flex-col gap-0.5 h-full">
                 <p className="text-sm text-white font-[600] ">
@@ -373,7 +375,7 @@ function DetailOrderToday() {
             <Link
               to={
                 groupedMenuDetails.length > 0
-                  ? `/payment/detail-all/${menuOrder.id}`
+                  ? `/payment/detail-all/${orderToday.id}`
                   : "#"
               }
               className={`bg-[#F44D4D] hover:bg-[#00537B] transition-all ease-in-out duration-200 cursor-pointer text-white rounded-lg w-full text-center py-1.5 font-bold xl:text-xl text-lg ${

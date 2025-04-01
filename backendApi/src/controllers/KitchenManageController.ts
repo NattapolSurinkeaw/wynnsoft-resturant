@@ -7,6 +7,7 @@ import { Orders } from "../models/orders";
 import { OrdersList } from "../models/orderList";
 import { Table } from "../models/table";
 import { Foods } from "../models/food";
+const jwt = require('jsonwebtoken');
 
 export class KitchenManageController {
   // ดึงข้อมูลอาหารที่ลูกค้ากดสั่งเข้ามา
@@ -237,12 +238,26 @@ export class KitchenManageController {
           }
       });
 
-      const order = await Orders.destroy({where: {id: req.body.order_id}});
+      const order = await Orders.findOne({where: {id: req.body.order_id}});
 
       const table = await Table.findOne({where: {id: req.body.table_id}});
-      // table.qrcode 
+      if(table.qrcode) {
+        const decodedQr = jwt.verify(table.qrcode, 'nattapolsurinkeaw'); 
+        if(decodedQr.order_id == order.id) {
+          table.table_token = null;
+          table.qrcode = null;
+          table.status = 1;
+          await table.save();
+        }
+      }
 
-      console.log(table)
+      await order.destroy();
+
+      return res.status(200).json({
+        status: true,
+        message: "delete order success fully",
+      });
+
     } catch (error: any) {
       return res.status(500).json({
         status: false,

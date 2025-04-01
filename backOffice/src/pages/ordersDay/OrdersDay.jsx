@@ -5,8 +5,7 @@ import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
-// import { orderToday } from "../../components/mockData/orderToDay";
-import { getOrderAll } from "../../services/order.service";
+import { getOrderCurrent } from "../../services/order.service";
 
 function OrdersDay() {
   dayjs.locale("th");
@@ -58,8 +57,7 @@ function OrdersDay() {
   }, [selectedStatusMenu, selectedTable]);
 
   useEffect(() => {
-    console.log(orderToday)
-    getOrderAll().then((res) => {
+    getOrderCurrent().then((res) => {
       setOrderToday(res.orders);
     })
   }, [])

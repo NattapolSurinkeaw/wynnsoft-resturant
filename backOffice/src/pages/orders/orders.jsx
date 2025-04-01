@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
-// import { orderToday } from "../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import { Box, Modal } from "@mui/material";
@@ -52,77 +51,51 @@ function Orders() {
     };
   }, [showDate]);
 
+  console.log(orderToday)
   const getFilteredOrderDetails = (orderToday, selectedDate) => {
     return orderToday
-      // .filter((order) => order.status === "5") // 🔹 กรองออเดอร์ที่มี status === "5"
-      .map((order) => {
-        const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
-        const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
+        .map((order) => {
+            const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
+            const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
 
-        // 🔹 กรอง orderList เฉพาะที่มี status === "4"
-        const filteredOrderList = order.orderList.filter(
-          // (orderItem) => orderItem.status === "4"
-          (orderItem) => orderItem
-        );
+            // ✅ ใช้ Map แทน Object เพื่อการค้นหาที่เร็วขึ้น
+            const mergedOrderList = new Map();
+            let totalPrice = 0;
+            let totalSpecialPrice = 0;
+            let totalPriceAll = 0;
 
-        if (!filteredOrderList.length) return null;
+            for (const orderItem of order.orderList) {
+                const key = `${orderItem.food.id}_${orderItem.food.name}_${orderItem.status}`;
 
-        // 🔹 รวมรายการอาหารที่ซ้ำกัน
-        const {
-          mergedOrderList,
-          totalPrice,
-          totalSpecialPrice,
-          totalPriceAll,
-        } = filteredOrderList.reduce(
-          (acc, orderItem) => {
-            const key = `${orderItem.food.id}_${orderItem.food.name}_${orderItem.status}`;
+                if (!mergedOrderList.has(key)) {
+                    mergedOrderList.set(key, { ...orderItem });
+                } else {
+                    mergedOrderList.get(key).amount += orderItem.amount;
+                }
 
-            if (!acc.mergedOrderList[key]) {
-              acc.mergedOrderList[key] = { ...orderItem };
-            } else {
-              acc.mergedOrderList[key].amount += orderItem.amount;
+                const count = orderItem.amount || 1;
+                const price = orderItem.food.price || 0;
+                const specialPrice = orderItem.food.special_price || price;
+
+                totalPrice += price * count;
+                totalSpecialPrice += orderItem.food.special_price ? specialPrice * count : 0;
+                totalPriceAll += specialPrice * count;
             }
 
-            const count = orderItem.amount || 1;
-            const price = orderItem.food.price || 0;
-            const specialPrice = orderItem.food.special_price || price;
-
-            acc.totalPrice += price * count;
-            acc.totalSpecialPrice += orderItem.food.special_price
-              ? specialPrice * count
-              : 0;
-            acc.totalPriceAll += specialPrice * count;
-
-            return acc;
-          },
-          {
-            mergedOrderList: {},
-            totalPrice: 0,
-            totalSpecialPrice: 0,
-            totalPriceAll: 0,
-          }
-        );
-
-        return {
-          ...order,
-          orderList: Object.values(mergedOrderList), // ใช้ Object.values() เพื่อดึง array กลับมา
-          table: order.table ? order.table.title : "ไม่มีข้อมูลโต๊ะ",
-          table_id: order.table?.id || null,
-          formattedDate,
-          formattedTime,
-          totalPrice,
-          totalSpecialPrice,
-          totalDiscount: totalPrice - totalPriceAll,
-          totalPriceAll,
-        };
-      })
-      .filter((order) => order !== null)
-      .filter((order) => {
-        const dateMatch =
-          !selectedDate ||
-          dayjs(order.createdAt).isSame(dayjs(selectedDate), "day");
-        return dateMatch;
-      });
+            return {
+                ...order,
+                orderList: Array.from(mergedOrderList.values()), // ✅ แปลง Map กลับเป็น Array
+                table: order.table?.title || "ไม่มีข้อมูลโต๊ะ",
+                table_id: order.table?.id || null,
+                formattedDate,
+                formattedTime,
+                totalPrice,
+                totalSpecialPrice,
+                totalDiscount: totalPrice - totalPriceAll,
+                totalPriceAll,
+            };
+        })
+        .filter((order) => !selectedDate || dayjs(order.createdAt).isSame(dayjs(selectedDate), "day"));
   };
 
   const filteredOrders = getFilteredOrderDetails(orderToday, selectedDate);
