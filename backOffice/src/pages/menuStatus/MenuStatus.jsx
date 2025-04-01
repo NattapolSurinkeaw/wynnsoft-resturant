@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import TableMenuStatus from "./sections/TableMenuStatus";
 import MenuStatusModal from "./modal/MenuStatusModal";
-import { NewLatestData } from "../../components/mockData/NewLatest/NewLatestData";
 import { getOrderList } from "../../services/kitchen.service";
 
 function MenuStatus() {
@@ -16,6 +15,7 @@ function MenuStatus() {
   const [orderList, setOrderList] = useState([]);
   const statusMenuRef1 = useRef(null);
   const statusMenuRef2 = useRef(null);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +26,7 @@ function MenuStatus() {
     }
 
     fetchData();
-  }, [])
+  }, [refresh])
 
   const titles = [
     ...new Set(orderList.map((item) => item.order?.table?.title)),
@@ -81,6 +81,7 @@ function MenuStatus() {
         closeModal={closeModal}
         selectedEditData={selectedEditData}
         handleEditClick={handleEditClick}
+        setRefresh={setRefresh}
       />
       <div className="flex md:flex-row flex-col md:items-center items-start justify-between gap-4 w-full">
         <div className="flex items-center gap-2">
@@ -265,6 +266,7 @@ function MenuStatus() {
         closeModal={closeModal}
         handleEditClick={handleEditClick}
         orderList={orderList}
+        setRefresh={setRefresh}
       />
     </>
   );

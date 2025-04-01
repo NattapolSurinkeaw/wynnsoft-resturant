@@ -32,7 +32,6 @@ function Served() {
   };
 
   const getServeOrder = (order) => {
-    console.log(order)
     const params = {
       orderList : 
       [{

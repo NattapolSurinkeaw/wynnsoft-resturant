@@ -35,3 +35,21 @@ export const getChangeStatusOrderList = (params) => {
     }
   })
 }
+
+export const getDeleteOrderList = (id) => {
+  return axios.post(`/api/backoffice/deleteorderlist/${id}`).then((res) => {
+    return {
+      status: res.data.status,
+      message: res.data.message
+    }
+  })
+}
+
+export const getDeleteOrder = (params) => {
+  return axios.post('/api/backoffice/deleteOrder', params).then((res) => {
+    return {
+      status: res.data.status,
+      
+    }
+  })
+}

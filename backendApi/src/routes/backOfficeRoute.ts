@@ -38,6 +38,8 @@ router.get('/api/backoffice/outfoodAll', AuthenticateAdmin, kitchenManageControl
 router.post('/api/backoffice/status-outfood/:id', AuthenticateAdmin, kitchenManageController.OnChangeStatusOutFood); //ปุ่มแจ้งสินค้าหมด
 router.post('/api/backoffice/updatenote-outfood/:id', AuthenticateAdmin, kitchenManageController.OnUpdateNoteOutfood); //เพิ่มเหตุผลสินค้าหมด
 router.post('/api/backoffice/changestatusOrderlist', AuthenticateAdmin, kitchenManageController.OnChangeStatusOrderList) //แจ้งสินค้าหมด หน้าสถานะ
+router.post('/api/backoffice/deleteorderlist/:id', AuthenticateAdmin, kitchenManageController.OnDeleteOrderList);
+router.post('/api/backoffice/deleteOrder', AuthenticateAdmin, kitchenManageController.OnDeleteOrder);
 
 // หมวดหมู่เมนู
 router.get('/api/backoffice/catefood', AuthenticateAdmin, manageDataController.OngetCategoryFood);

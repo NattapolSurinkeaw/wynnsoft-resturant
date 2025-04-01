@@ -204,5 +204,52 @@ export class KitchenManageController {
       });
     }
   }
+  OnDeleteOrderList = async(req: any, res: any) => {
+    try {
+      const orderList = await OrdersList.findOne({where: {id: req.params.id}});
+      if(!orderList) {
+        return res.status(404).json({
+          status: false,
+          message: "not found order list",
+        });
+      }
+
+      await orderList.destroy();
+      return res.status(200).json({
+        status: true,
+        message: "delete order list success fully",
+      });
+
+
+    } catch (error: any) {
+      return res.status(500).json({
+        status: false,
+        message: "some thing went wrong",
+        errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
+      });
+    }
+  }
+  OnDeleteOrder = async(req: any, res: any) => {
+    try {
+      const orderList = await OrdersList.destroy({
+          where: {
+              orders_id: req.body.order_id
+          }
+      });
+
+      const order = await Orders.destroy({where: {id: req.body.order_id}});
+
+      const table = await Table.findOne({where: {id: req.body.table_id}});
+      // table.qrcode 
+
+      console.log(table)
+    } catch (error: any) {
+      return res.status(500).json({
+        status: false,
+        message: "some thing went wrong",
+        errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
+      });
+    }
+  }
   
 }

@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
-import { orderToday } from "../../components/mockData/orderToDay";
+// import { orderToday } from "../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import { Box, Modal } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import OrderDetail from "./components/OrderDetail";
+import { getOrderAll } from "../../services/order.service";
+import Swal from "sweetalert2";
+import { getDeleteOrder } from "../../services/kitchen.service";
 
 function Orders() {
   dayjs.locale("th");
@@ -13,6 +16,7 @@ function Orders() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [openModalDetail, setOpenModalDetail] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
+  const [orderToday, setOrderToday] = useState([]);
 
   const menuDate = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +27,15 @@ function Orders() {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
+
+  useEffect(() => {
+    const fetchData = async() => {
+      const res = await getOrderAll()
+      setOrderToday(res.orders)
+    }
+
+    fetchData()
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -41,14 +54,15 @@ function Orders() {
 
   const getFilteredOrderDetails = (orderToday, selectedDate) => {
     return orderToday
-      .filter((order) => order.status === "5") // 🔹 กรองออเดอร์ที่มี status === "5"
+      // .filter((order) => order.status === "5") // 🔹 กรองออเดอร์ที่มี status === "5"
       .map((order) => {
         const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
         const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
 
         // 🔹 กรอง orderList เฉพาะที่มี status === "4"
         const filteredOrderList = order.orderList.filter(
-          (orderItem) => orderItem.status === "4"
+          // (orderItem) => orderItem.status === "4"
+          (orderItem) => orderItem
         );
 
         if (!filteredOrderList.length) return null;
@@ -141,6 +155,34 @@ function Orders() {
     setSelectedRow({ ...order });
     setOpenModalDetail(true);
   };
+
+  const handleDeleteOrder = (order) => {
+    console.log(order)
+    const params = {
+      order_id: order.id,
+      table_id: order.table_id
+    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        getDeleteOrder(params).then((res) => {
+          console.log(res)
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          });
+        })
+      }
+    });
+  }
 
   return (
     <div className="flex flex-col justify-between h-full gap-4 w-full">
@@ -338,6 +380,7 @@ function Orders() {
                     </button>
 
                     <button
+                      onClick={() => handleDeleteOrder(order)}
                       className={`bg-[#00537B] hover:bg-[#F44D4D] text-center p-1 w-full text-white text-lg font-[500] rounded-lg cursor-pointer transition-all duration-200 ease-in-out`}
                     >
                       ลบ
