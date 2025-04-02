@@ -16,12 +16,12 @@ function FoodList({ selectedTableId, tableDetail }) {
   const [orderAll, setOrderAll] = useState([]);
 
   useEffect(() => {
-    const fetchData = async() => {
-      const res = await getOrderCurrent()
+    const fetchData = async () => {
+      const res = await getOrderCurrent();
       setOrderAll(res.orders);
-    }
+    };
 
-    fetchData()
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -70,16 +70,14 @@ function FoodList({ selectedTableId, tableDetail }) {
           />
 
           {/* เพิ่มรายการอาหาร */}
-          {
-            isAddItem && (
-              <AdditemModal
-                isOpen={isAddItem}
-                closeModal={() => setIsAddItem(false)}
-                itemId={selectedItemId}
-                tableDetail={tableDetail}
-              />
-            )
-          }
+          {isAddItem && (
+            <AdditemModal
+              isOpen={isAddItem}
+              closeModal={() => setIsAddItem(false)}
+              itemId={selectedItemId}
+              tableDetail={tableDetail}
+            />
+          )}
 
           <div className="flex flex-col 2xl:w-full md:w-[500px] w-full mx-auto min-h-[730px]">
             <div className="w-full h-full bg-white shadow-1 rounded-lg">
