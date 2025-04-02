@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import * as jwt from 'jsonwebtoken'
 import { validationResult } from "express-validator";
 import * as Config from '../util/config'
+import { Op } from "sequelize";
 
 // const sharp = require("sharp");
 import { v4 as uuidv4 } from "uuid";
@@ -175,7 +176,13 @@ export class TableManageController {
       const table = await Table.findOne({where: {id: req.params.id}});
       const generate_token = uuidv4();
       
-      let order = await Orders.findOne({where: {table_id: table.id}});
+      let order = await Orders.findOne({
+        where: {
+          table_id: table.id, 
+          status: { [Op.ne]: 5}
+        }
+      });
+
       if(!order) {
         order = await Orders.create({
           order_number: '',
@@ -193,7 +200,7 @@ export class TableManageController {
         order_id: order.id,
       };
 
-      const JWT_token = jwt.sign(payload, 'nattapolsurinkeaw', { expiresIn: "1h" });
+      const JWT_token = jwt.sign(payload, 'nattapolsurinkeaw', { expiresIn: "12h" });
       table.table_token = generate_token;
       table.qrcode = JWT_token;
       table.status = 2;

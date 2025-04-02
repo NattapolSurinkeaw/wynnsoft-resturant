@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-// import { orderToday } from "../../components/mockData/orderToDay";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import { Link } from "react-router-dom";
-import { getOrderAll } from "../../services/order.service";
+import { getOrderCurrent } from "../../services/order.service";
 
 function Payment() {
   dayjs.locale("th");
@@ -22,18 +21,16 @@ function Payment() {
   });
 
   useEffect(() => {
-    getOrderAll().then((res) => {
+    getOrderCurrent().then((res) => {
       // console.log(res)
       setOrderToday(res.orders)
     })
   }, [])
 
-  // console.log(orderToday)
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (tableRef.current && !tableRef.current.contains(event.target)) {
-        setShowStatusMenu(false);
+        // setShowStatusMenu(false);
         setShowTable(false);
       }
     };

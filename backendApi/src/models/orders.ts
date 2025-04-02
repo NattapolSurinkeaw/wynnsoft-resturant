@@ -19,14 +19,23 @@ export const Orders = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    status: {
-      type: DataTypes.STRING(20),
-      allowNull: false,
-    },
     price: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    status: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+    },
+    slip_image: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    pay_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      comment: "1=โอนจ่าย, 2=เงินสด"
+    }
   },
   {
     sequelize,
