@@ -149,7 +149,7 @@ function Table({
                 {activeTable === table.id && (
                   <CheckBoxIcon
                     sx={{ fontSize: 25 }}
-                    className="absolute top-1 right-8 text-green-400 z-50 drop-shadow-2xl"
+                    className="absolute top-1 right-8 text-green-400 z-10 drop-shadow-2xl"
                   />
                 )}
 

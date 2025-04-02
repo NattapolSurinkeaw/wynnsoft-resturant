@@ -41,8 +41,8 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
     fetchData();
   }, []);
 
-  console.log("ข้อมูลโต๊ะ : " , tableDetail)
-  console.log("itemId : " ,selectedFood)
+  console.log("ข้อมูลโต๊ะ : ", tableDetail);
+  console.log("itemId : ", selectedFood);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -82,12 +82,12 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
           id: selectedFood.id,
           count: quantities,
           note: intNote,
-        }
-      ]
-    }
+        },
+      ],
+    };
 
     getAddOrderFood(params).then((res) => {
-      if(res.status) {
+      if (res.status) {
         Swal.fire({
           title: "เพิ่มรายการสำเร็จ!",
           text: "คุณได้เพิ่มเมนูลงในรายการสั่งซื้อแล้ว",
@@ -98,7 +98,7 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
         });
         setIsSecondModalOpen(false);
       }
-    })
+    });
   };
 
   const openSecondModal = (id) => {
@@ -123,7 +123,7 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=" relative bg-[#ffefc6] py-8 xl:px-[4rem] px-[1rem] rounded-lg shadow-lg 2xl:w-[80%] w-full h-[90%] "
+            className=" relative bg-[#ffefc6] py-8 xl:px-[4rem] px-[1rem] rounded-lg shadow-lg 2xl:w-[80%] w-full h-[90%] overflow-hidden overflow-y-auto"
           >
             {/* <button
             onClick={closeModal}
@@ -232,7 +232,7 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
               </div>
             </div>
             {/* ส่วนล่าง */}
-            <div className="grid 2xl:grid-cols-5 sm:grid-cols-3 grid-cols-2 2xl:gap-5 gap-2 w-full sm:h-auto h-[660px] mt-6 max-sm:px-1 overflow-y-auto">
+            <div className="grid 2xl:grid-cols-5 sm:grid-cols-3 grid-cols-2 2xl:gap-5 gap-3 w-full h-auto mt-6 max-sm:px-1 overflow-y-auto">
               {filteredFood.map((food) => (
                 <div
                   key={food.id}
@@ -377,7 +377,9 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
               onChange={(e) => setIntNote(e.target.value)}
               className="border border-gray-300 rounded-md p-2 w-full h-[90px] mt-1"
               placeholder="หมายเหตุ..."
-            >{intNote}</textarea>
+            >
+              {intNote}
+            </textarea>
             <div className="flex items-center justify-center gap-4 w-full mt-6">
               <button
                 onClick={closeSecondModal}

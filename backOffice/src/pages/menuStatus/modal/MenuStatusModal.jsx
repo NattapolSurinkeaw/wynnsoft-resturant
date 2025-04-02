@@ -5,8 +5,12 @@ import { getChangeStatusOrderList } from "../../../services/kitchen.service";
 import Swal from "sweetalert2";
 import { api_path } from "../../../store/setting";
 
-
-function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData, setRefresh }) {
+function MenuStatusModal({
+  isOpenEditModal,
+  closeModal,
+  selectedEditData,
+  setRefresh,
+}) {
   const [selectedStatusMenu1, setSelectedStatusMenu1] = useState(null);
   const [showStatusMenu1, setShowStatusMenu1] = useState(false);
   const [filteredOrderData, setFilteredOrderData] = useState(null);
@@ -15,8 +19,8 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData, setRef
   const statusMenuRef1 = useRef(null);
 
   useEffect(() => {
-    setFilteredOrderData(selectedEditData)
-    setSelectedStatusMenu1(selectedEditData?.status)
+    setFilteredOrderData(selectedEditData);
+    setSelectedStatusMenu1(selectedEditData?.status);
   }, [selectedEditData]);
 
   useEffect(() => {
@@ -47,18 +51,18 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData, setRef
   }, [selectedStatusMenu1]);
 
   if (!isOpenEditModal || !filteredOrderData) return null;
-  console.log(filteredOrderData)
+  console.log(filteredOrderData);
 
   const onSubmit = () => {
     const params = {
       list_id: filteredOrderData.id,
       food_id: filteredOrderData.food_id,
       status: selectedStatusMenu1,
-      note: noteFood
-    }
+      note: noteFood,
+    };
 
     getChangeStatusOrderList(params).then((res) => {
-      if(res.status) {
+      if (res.status) {
         Swal.fire({
           icon: "success",
           title: "แจ้งสินค้าหมด",
@@ -66,17 +70,23 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData, setRef
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          closeModal()
-          setRefresh(prev => !prev)
-        })
+          closeModal();
+          setRefresh((prev) => !prev);
+        });
       }
-    })
-  }
+    });
+  };
 
   return (
     isOpenEditModal && (
-      <div onClick={closeModal} className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20">
-        <div onClick={(e) => e.stopPropagation()} className="relative bg-white p-4 rounded-lg shadow-lg w-[480px]">
+      <div
+        onClick={closeModal}
+        className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-20"
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="relative bg-white p-4 rounded-lg shadow-lg w-[480px]"
+        >
           <button
             onClick={closeModal}
             className="absolute -top-8 -right-8 cursor-pointer"
@@ -137,7 +147,9 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData, setRef
             onChange={(e) => setNoteFood(e.target.value)}
             className="w-full min-h-[80px] p-2 mt-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             placeholder="หมายเหตุ..."
-          >{noteFood}</textarea>
+          >
+            {noteFood}
+          </textarea>
 
           <div className="flex justify-between mt-3">
             <p className="text-[16px] font-[600]">เปลี่ยนสถานะ</p>
@@ -166,7 +178,7 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData, setRef
                   </p>
 
                   <figure
-                    className={`lg:w-[25px] w-[20px] lg:h-[25px] h-[20px] transition-all duration-300 ${
+                    className={`lg:w-[25px] w-[20px] h-[25px] transition-all duration-300 ${
                       !showStatusMenu1 ? "" : "rotate-180"
                     }`}
                   >
@@ -211,9 +223,10 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditData, setRef
               </div>
             </div>
             <div className="flex flex-col space-y-3">
-              <button 
-              onClick={onSubmit}
-              className="w-[137px] py-1.5 bg-[#013D59] hover:bg-[#004b6e] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
+              <button
+                onClick={onSubmit}
+                className="w-[137px] py-1.5 bg-[#013D59] hover:bg-[#004b6e] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
+              >
                 บันทึก
               </button>
               <button

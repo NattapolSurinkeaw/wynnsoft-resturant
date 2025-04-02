@@ -295,57 +295,53 @@ function Profile({ webinfo, setRefresh }) {
             <div className="flex w-1/2 items-center">
               <p className="min-w-[70px] text-[#313131] font-[400]">เวลาเปิด</p>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["TimePicker"]}>
-                  <TimePicker
-                    value={timeOpen ? dayjs(timeOpen, "HH:mm") : null}
-                    onChange={(newTime) => {
-                      if (newTime) {
-                        setTimeOpen(newTime.format("HH:mm"));
-                      }
-                    }}
-                    viewRenderers={{
-                      hours: renderTimeViewClock,
-                      minutes: renderTimeViewClock,
-                      seconds: renderTimeViewClock,
-                    }}
-                    slotProps={{
-                      textField: {
-                        sx: {
-                          height: "40px",
-                          "& input": { padding: 1, fontSize: 14 },
-                        },
+                <TimePicker
+                  value={timeOpen ? dayjs(timeOpen, "HH:mm") : null}
+                  onChange={(newTime) => {
+                    if (newTime) {
+                      setTimeOpen(newTime.format("HH:mm"));
+                    }
+                  }}
+                  viewRenderers={{
+                    hours: renderTimeViewClock,
+                    minutes: renderTimeViewClock,
+                    seconds: renderTimeViewClock,
+                  }}
+                  slotProps={{
+                    textField: {
+                      sx: {
+                        height: "40px",
+                        "& input": { padding: 1, fontSize: 14 },
                       },
-                    }}
-                  />
-                </DemoContainer>
+                    },
+                  }}
+                />
               </LocalizationProvider>
             </div>
             <div className="flex w-1/2 items-center">
               <p className="min-w-[70px] text-[#313131] font-[400]">เวลาปิด</p>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["TimePicker"]}>
-                  <TimePicker
-                    value={timeClose ? dayjs(timeClose, "HH:mm") : null}
-                    onChange={(newTime) => {
-                      if (newTime) {
-                        setTimeClose(newTime.format("HH:mm"));
-                      }
-                    }}
-                    viewRenderers={{
-                      hours: renderTimeViewClock,
-                      minutes: renderTimeViewClock,
-                      seconds: renderTimeViewClock,
-                    }}
-                    slotProps={{
-                      textField: {
-                        sx: {
-                          height: "40px",
-                          "& input": { padding: 1, fontSize: 14 },
-                        },
+                <TimePicker
+                  value={timeClose ? dayjs(timeClose, "HH:mm") : null}
+                  onChange={(newTime) => {
+                    if (newTime) {
+                      setTimeClose(newTime.format("HH:mm"));
+                    }
+                  }}
+                  viewRenderers={{
+                    hours: renderTimeViewClock,
+                    minutes: renderTimeViewClock,
+                    seconds: renderTimeViewClock,
+                  }}
+                  slotProps={{
+                    textField: {
+                      sx: {
+                        height: "40px",
+                        "& input": { padding: 1, fontSize: 14 },
                       },
-                    }}
-                  />
-                </DemoContainer>
+                    },
+                  }}
+                />
               </LocalizationProvider>
             </div>
           </div>

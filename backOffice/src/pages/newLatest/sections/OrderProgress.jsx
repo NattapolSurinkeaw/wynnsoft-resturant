@@ -59,10 +59,10 @@ function OrderProgress({orderListAll}) {
                 </figure>
             )}
             <div className="flex 2xl:w-1/2 2xl:flex-col flex-row items-end justify-center 2xl:gap-3 gap-2">
-              <p className="bg-[#FFBA41] p-1 2xl:w-[60px] h-[60px] sm:w-1/3 w-1/2 rounded-lg line-clamp-2 items-center flex justify-center break-all sm:flex-shrink-0 text-white text-sm font-[600]">
+              <p className="bg-[#FFBA41] p-1 2xl:w-[60px] xl:h-[60px] h-[50px] sm:w-1/3 w-1/2 rounded-lg line-clamp-2 items-center flex justify-center break-all sm:flex-shrink-0 text-white text-sm font-[600]">
                 {order.order.table.title.replace("โต๊ะ ", "")}
               </p>
-              <div className="flex flex-col justify-center items-center sm:flex-shrink-0 2xl:w-full sm:w-1/3 w-1/2 2xl:h-1/2 h-[60px] rounded-lg bg-[#EEEEEE] border border-[#D9D9D9] 2xl:leading-6 leading-5">
+              <div className="flex flex-col justify-center items-center sm:flex-shrink-0 2xl:w-full sm:w-1/3 w-1/2 2xl:h-1/2 xl:h-[60px] h-[50px] rounded-lg bg-[#EEEEEE] border border-[#D9D9D9] 2xl:leading-6 leading-5">
                 {order && (
                   <p className="text-[#00537B] 2xl:text-[25px] text-[20px] font-[600]">
                     {order.amount}

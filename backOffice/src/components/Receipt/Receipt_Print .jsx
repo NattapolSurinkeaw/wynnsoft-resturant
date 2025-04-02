@@ -2,48 +2,39 @@ import React from "react";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 
-
-const Receipt_Print  = (elementId) => {
-
+const Receipt_Print = (elementId) => {
   const dom = document.getElementById(elementId);
   if (!dom) {
     console.error("Element not found:", elementId);
     return;
   }
 
-  toPng(dom, { pixelRatio: 3 })
+  toPng(dom, { quality: 1, scale: 2 })
     .then((dataUrl) => {
-      console.log("Image data URL generated");
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.src = dataUrl;
       img.onload = () => {
-        console.log("Image loaded");
-
-        const pdfWidth = 200;
-        const padding = 2; 
-        const aspectRatio = img.height / img.width;
-        const pdfHeight = pdfWidth * aspectRatio;
-
         const pdf = new jsPDF({
           orientation: "portrait",
           unit: "mm",
-          format: [pdfWidth, pdfHeight + 2 * padding],
+          format: "a4",
         });
 
-        const imgProps = pdf.getImageProperties(img);
-        const imageType = imgProps.fileType;
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const aspectRatio = img.height / img.width;
+        const pdfHeight = pdfWidth * aspectRatio;
+
         pdf.addImage(
           dataUrl,
-          imageType,
-          padding,
-          padding,
-          pdfWidth - 2 * padding,
+          "PNG",
+          5, // ขอบซ้าย
+          5, // ขอบบน
+          pdfWidth - 1,
           pdfHeight
         );
 
-        console.log("Printing PDF...");
-        pdf.autoPrint(); 
+        pdf.autoPrint();
         window.open(pdf.output("bloburl"), "_blank");
       };
     })
@@ -52,5 +43,4 @@ const Receipt_Print  = (elementId) => {
     });
 };
 
-
-export default Receipt_Print ;
+export default Receipt_Print;
