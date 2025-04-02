@@ -23,7 +23,7 @@ const Receipt_Print_A4  = (elementId) => {
         const pdf = new jsPDF({
           orientation: "portrait",
           unit: "mm",
-          format: "a4", //"a4" ✅ ใช้ค่าตัวเลข
+          format: "a4", 
         });
 
         pdf.addImage(dataUrl, "PNG", 5, 5, 200, 0);
