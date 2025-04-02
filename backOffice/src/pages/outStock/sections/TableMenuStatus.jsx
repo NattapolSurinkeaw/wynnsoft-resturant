@@ -84,7 +84,7 @@ const TableMenuStatus = ({
                 <td className="py-3 w-[60px] pr-4">
                   <div className="w-full flex items-center justify-center">
                     <button
-                      // onClick={() => handleEditClick(order.id)}
+                      onClick={() => handleEditClick(order.id)}
                       className="flex justify-center items-center w-[80px] h-[35px] text-white font-[500] bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg"
                     >
                       เพิ่มเหตุ

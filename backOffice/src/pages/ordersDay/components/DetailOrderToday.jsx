@@ -16,17 +16,17 @@ function DetailOrderToday() {
   const [serviceCharge, setServiceCharge] = useState(5);
   const [openModal, setOpenModal] = useState(false);
   const [orderToday, setOrderToday] = useState([]);
-  // console.log(orderToday);
+  console.log("orderToday", orderToday);
 
   useEffect(() => {
-    const fetchData = async() => {
+    const fetchData = async () => {
       const res = await getOrderById(id);
       if (res && res.order) {
         setOrderToday(res.order);
       } else {
         setOrderToday([]); // ป้องกันการเป็น undefined
       }
-    }
+    };
 
     fetchData();
   }, []);
@@ -42,50 +42,58 @@ function DetailOrderToday() {
   const formattedDate = dayjs(orderToday?.createdAt).format("D MMMM YYYY");
 
   const filteredOrderList = orderToday?.orderList
-  ? orderToday.orderList.filter((item) => item.status !== "4")
-  : [];
-    
+    ? orderToday.orderList.filter((item) => item.status !== "4")
+    : [];
+
   // console.log("filteredOrderList", filteredOrderList);
 
   const groupedMenuDetails = useMemo(() => {
     if (!orderToday.orderList) return []; // ถ้าไม่มี orderList ให้คืนค่าเป็น []
-  
-    return orderToday.orderList
-      // .filter((item) => item.status === "4")
-      .reduce((acc, item) => {
-        const existingItem = acc.find((menu) => menu.name === item.food.name);
-        if (existingItem) {
-          existingItem.amount += item.amount;
-        } else {
-          acc.push({ ...item.food, amount: item.amount });
-        }
-        return acc;
-      }, []);
+
+    return orderToday.orderList.reduce((acc, item) => {
+      // หาเมนูที่มีชื่อเหมือนกันในอาเรย์ acc
+      const existingItem = acc.find((menu) => menu.name === item.food.name);
+
+      if (existingItem) {
+        // ถ้ามีเมนูอยู่แล้ว, ให้เพิ่ม amount
+        existingItem.amount += item.amount;
+      } else {
+        // ถ้ายังไม่มีเมนูใน acc ให้เพิ่มเมนูใหม่ พร้อมกับ status และ amount
+        acc.push({
+          ...item.food,
+          amount: item.amount,
+          status: item.status, // เพิ่ม status จาก orderToday
+        });
+      }
+
+      return acc;
+    }, []);
   }, [orderToday.orderList]);
 
-  console.log(groupedMenuDetails)
+  console.log("groupedMenuDetails", groupedMenuDetails);
 
-  const { totalPrice, totalSpecialPrice, totalPriceAll } = 
-  (orderToday?.orderList || []) // ถ้า undefined ให้ใช้ []
-  .reduce(
-    (acc, orderItem) => {
-      const foodItem = orderItem.food;
-      if (foodItem) {
-        const count = orderItem.amount || 1;
-        const price = foodItem.price || 0;
-        const specialPrice = foodItem.special_price || price;
+  const { totalPrice, totalSpecialPrice, totalPriceAll } = (
+    orderToday?.orderList || []
+  ) // ถ้า undefined ให้ใช้ []
+    .reduce(
+      (acc, orderItem) => {
+        const foodItem = orderItem.food;
+        if (foodItem) {
+          const count = orderItem.amount || 1;
+          const price = foodItem.price || 0;
+          const specialPrice = foodItem.special_price || price;
 
-        acc.totalPrice += price * count;
-        acc.totalPriceAll += specialPrice * count;
+          acc.totalPrice += price * count;
+          acc.totalPriceAll += specialPrice * count;
 
-        if (foodItem.special_price > 0) {
-          acc.totalSpecialPrice += specialPrice * count;
+          if (foodItem.special_price > 0) {
+            acc.totalSpecialPrice += specialPrice * count;
+          }
         }
-      }
-      return acc;
-    },
-    { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
-  );
+        return acc;
+      },
+      { totalPrice: 0, totalSpecialPrice: 0, totalPriceAll: 0 }
+    );
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -264,10 +272,13 @@ function DetailOrderToday() {
               <p className="w-[50%] lg:text-base text-sm text-[#013D59] font-[500]">
                 รายการ
               </p>
-              <p className="w-[20%] lg:text-base text-sm text-[#013D59] font-[500] text-center">
+              <p className="w-[120px] lg:text-base text-sm text-[#013D59] font-[500]">
+                สถานะ
+              </p>
+              <p className="w-[10%] lg:text-base text-sm text-[#013D59] font-[500] text-center">
                 จำนวน
               </p>
-              <p className="w-[30%] lg:text-base text-sm text-[#013D59] font-[500] text-right ">
+              <p className="w-[20%] lg:text-base text-sm text-[#013D59] font-[500] text-right ">
                 ราคา
               </p>
             </div>
@@ -285,11 +296,48 @@ function DetailOrderToday() {
                         {item.name}
                       </p>
 
-                      <p className="lg:text-base text-sm font-[500] text-center w-[20%]">
+                      <p
+                        className={`lg:text-[14px] text-sm font-[500] line-clamp-1 w-[120px] ${
+                          item.status === "1"
+                            ? "text-blue-500"
+                            : item.status === "2"
+                            ? "text-[#FF6A00]"
+                            : item.status === "3"
+                            ? "text-[#F44D4D]"
+                            : item.status === "4"
+                            ? "text-green-500"
+                            : item.status === "5"
+                            ? "text-red-500"
+                            : item.status === "6"
+                            ? "text-gray-500"
+                            : ""
+                        }`}
+                      >
+                        {(() => {
+                          switch (item.status) {
+                            case "1":
+                              return "รับออเดอร์";
+                            case "2":
+                              return "กำลังทำ";
+                            case "3":
+                              return "รอเสริฟ";
+                            case "4":
+                              return "เสริฟเรียบร้อย";
+                            case "5":
+                              return "ยกเลิก";
+                            case "6":
+                              return "สินค้าหมด";
+                            default:
+                              return "ไม่ทราบสถานะ";
+                          }
+                        })()}
+                      </p>
+
+                      <p className="lg:text-base text-sm font-[500] text-center w-[10%]">
                         {item.amount}
                       </p>
 
-                      <div className="w-[30%] flex flex-col justify-end text-right">
+                      <div className="w-[20%] flex flex-col justify-end text-right">
                         {item.special_price > 0 && (
                           <p className="text-[12px] font-[300] line-through">
                             {formatNumber(item.price * item.amount)}
@@ -298,8 +346,9 @@ function DetailOrderToday() {
 
                         <p className="lg:text-base text-sm font-[500]">
                           {/* ราคาที่ลดแล้ว คูณกับ จำนวน */}
-                          {formatNumber((item.special_price || item.price) *
-                            item.amount)}{" "}
+                          {formatNumber(
+                            (item.special_price || item.price) * item.amount
+                          )}{" "}
                           ฿
                         </p>
                       </div>

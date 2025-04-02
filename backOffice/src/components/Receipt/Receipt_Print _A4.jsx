@@ -2,9 +2,7 @@ import React from "react";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 
-
-const Receipt_Print_A4  = (elementId) => {
-
+const Receipt_Print_A4 = (elementId) => {
   const dom = document.getElementById(elementId);
   if (!dom) {
     console.error("Element not found:", elementId);
@@ -23,12 +21,12 @@ const Receipt_Print_A4  = (elementId) => {
         const pdf = new jsPDF({
           orientation: "portrait",
           unit: "mm",
-          format: "a4", 
+          format: "a4",
         });
 
         pdf.addImage(dataUrl, "PNG", 5, 5, 200, 0);
         console.log("Printing PDF...");
-        pdf.autoPrint(); 
+        pdf.autoPrint();
         window.open(pdf.output("bloburl"), "_blank");
       };
     })
@@ -37,5 +35,4 @@ const Receipt_Print_A4  = (elementId) => {
     });
 };
 
-
-export default Receipt_Print_A4 ;
+export default Receipt_Print_A4;
