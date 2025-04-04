@@ -186,7 +186,7 @@ function DetailOrderToday() {
           {(orderToday.orderList || []).some((item) => item.status === "4") && (
             <div className="flex flex-col gap-2 overflow-auto hide-scrollbar">
               {orderToday.orderList
-                .filter((item) => item.status === "4") // กรองเฉพาะออเดอร์ที่ยังไม่เสิร์ฟ
+                .filter((item) => item.status === "4") 
                 .map((item, index) => (
                   <div
                     key={`${item.id}-${index}`}
