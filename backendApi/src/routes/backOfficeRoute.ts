@@ -21,6 +21,7 @@ const orderFoodController = new OrderFoodController();
 router.get('/api/backoffice/orderall', AuthenticateAdmin, orderFoodController.OngetAllOrderFoods);
 router.get('/api/backoffice/orderallCurrent', AuthenticateAdmin, orderFoodController.OngetAllOrderFoodsCurrent);
 router.get('/api/backoffice/order/:id', AuthenticateAdmin, orderFoodController.OngetOrderFoodById);
+router.post('/api/backoffice/checkbillOrder', AuthenticateAdmin, upload.single("slip_image"), orderFoodController.OnCheckBillOrder);
 // จัดการโต๊ะ
 router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController.OngetAllTable);
 router.get('/api/backoffice/onlyTable', AuthenticateAdmin, tableManageController.OngetOnlyTable);
@@ -39,6 +40,7 @@ router.get('/api/backoffice/outfoodAll', AuthenticateAdmin, kitchenManageControl
 router.post('/api/backoffice/status-outfood/:id', AuthenticateAdmin, kitchenManageController.OnChangeStatusOutFood); //ปุ่มแจ้งสินค้าหมด
 router.post('/api/backoffice/updatenote-outfood/:id', AuthenticateAdmin, kitchenManageController.OnUpdateNoteOutfood); //เพิ่มเหตุผลสินค้าหมด
 router.post('/api/backoffice/changestatusOrderlist', AuthenticateAdmin, kitchenManageController.OnChangeStatusOrderList) //แจ้งสินค้าหมด หน้าสถานะ
+router.get('/api/backoffice/canceloutfood/:id', AuthenticateAdmin, kitchenManageController.OnCancelOutFood);
 router.post('/api/backoffice/deleteorderlist/:id', AuthenticateAdmin, kitchenManageController.OnDeleteOrderList);
 router.post('/api/backoffice/deleteOrder', AuthenticateAdmin, kitchenManageController.OnDeleteOrder);
 
@@ -56,6 +58,7 @@ router.post('/api/backoffice/catefood/:id', AuthenticateAdmin, upload.single("im
 ], manageDataController.OnUpdateCategoryFood);
 router.delete('/api/backoffice/catefood/:id', AuthenticateAdmin, manageDataController.OnDeleteCategoryFood);
 router.put('/api/backoffice/catefood-status/:id', AuthenticateAdmin, manageDataController.OnUpdateDisplay);
+router.get('/api/backoffice/getOrderHistory', AuthenticateAdmin, manageDataController.OngetOrderHistory);
 
 // เมนูอาหาร
 router.get('/api/backoffice/foods', AuthenticateAdmin, manageDataController.OnGetfoodAll);

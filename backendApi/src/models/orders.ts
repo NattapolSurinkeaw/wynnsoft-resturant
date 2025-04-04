@@ -24,8 +24,9 @@ export const Orders = sequelize.define(
       allowNull: false,
     },
     status: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.INTEGER,
       allowNull: false,
+      comment: "1=ครบแล้ว, 2=รออาหาร, 3=พร้อมเสิร์ฟ, 4=เรียกพนักงาน, 5=จ่ายแล้ว"
     },
     slip_image: {
       type: DataTypes.STRING(255),

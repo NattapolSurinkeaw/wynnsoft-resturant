@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { orderToday } from "../../components/mockData/orderToDay";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import Cash from "./components/Cash";
@@ -13,6 +12,7 @@ import EditOrder from "./components/EditOrder";
 import Receipt_Print from "../../components/Receipt/Receipt_Print ";
 import { getOrderById } from "../../services/order.service";
 import { useNavigate } from "react-router-dom";
+import { getCheckBillOrder } from "../../services/manageData.services";
 
 function DetailAll() {
   dayjs.locale("th");
@@ -35,21 +35,16 @@ function DetailAll() {
   const [change, setChange] = useState(0);
 
   useEffect(() => {
-    console.log(orderToday.find((item) => item.id === parseInt(id)));
-    getOrderById(id).then((res) => {
+    const fetchData = async() => {
+      const res = await getOrderById(id)
       setDetailOrder(res.order);
-    });
+    }
+
+    fetchData()
   }, []);
   // const detailOrder = orderToday.find((item) => item.id === parseInt(id));
   // console.log(detailOrder)
-  console.log("image", image);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-
-    const tab = params.get("tab") || "QRcode";
-    setActiveTab(tab);
-  }, [location.search]);
+  // console.log("image", image);
 
   useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
@@ -170,60 +165,50 @@ function DetailAll() {
     setOpenModalEdit(true);
   };
 
-  const submitPayment = () => {
-    Swal.fire({
-      title: "ชำระเงินสำเร็จ",
-      icon: "success",
-      position: "center",
-      timer: 1500,
-      showConfirmButton: false,
-      target: "body",
-    }).then(() => {
-      setCash("");
-      navigate("/payment"); // ใช้ navigate แทน Navigator
-    });
-  };
+  const submitPayment = (e, type) => {
+    let file = null;
+    const formData = new FormData();
+    formData.append("order_id",detailOrder.id);
+    formData.append("table_id",detailOrder.table.id);
+    formData.append("pay_by",(activeTab == 'QRcode')? 1 : 2);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    if(type == 'qrcode') {
+      file = e.target.files[0];
+      formData.append("slip_image",file);
+      if (!file) return; // ป้องกัน error กรณีไม่มีไฟล์ถูกเลือก
 
-    if (!file) return; // ป้องกัน error กรณีไม่มีไฟล์ถูกเลือก
-
-    if (
-      ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(file.type)
-    ) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-        setOpen(true);
-
-        setTimeout(() => {
-          setOpen(false);
-
-          setTimeout(() => {
-            Swal.fire({
-              title: "ชำระเงินสำเร็จ",
-              icon: "success",
-              position: "center",
-              timer: 1500,
-              showConfirmButton: false,
-              target: "body",
-            });
-          }, 200);
-        }, 1500);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      Swal.fire({
-        title: "กรุณาอัปโหลดเฉพาะไฟล์รูปภาพ",
-        icon: "warning",
-        position: "center",
-        timer: 1500,
-        showConfirmButton: false,
-        target: "body",
-      });
-      e.target.value = "";
+      if (
+        ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(file.type)
+      ) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImage(reader.result);
+          setOpen(true)
+         
+          // Swal.fire({
+          //   title: "ชำระเงินสำเร็จ",
+          //   icon: "success",
+          //   position: "center",
+          //   timer: 1500,
+          //   showConfirmButton: false,
+          //   target: "body",
+          // })
+        }
+        reader.readAsDataURL(file);
+      }
     }
+    
+    getCheckBillOrder(formData).then((res) => {
+      if(res.status) {
+        Swal.fire({
+          icon: "success",
+          title: "ชำระเงิน",
+          text: "แจ้งชำระเงินค่าอารหารเรียบร้อย",
+          timer: 1500,
+          showConfirmButton: false,
+        })
+      }
+    })
   };
 
   const totalDiscount = totalPrice - totalPriceAll; // ส่วนลดรวม
@@ -410,7 +395,7 @@ function DetailAll() {
         <div className="w-full h-full bg-white p-4 rounded-lg flex flex-col gap-6">
           <div className="flex  lg:gap-4 gap-2 justify-between items-center">
             <Link
-              to={`/payment/detail-all/${detailOrder?.id}?tab=QRcode`}
+              onClick={() => setActiveTab("QRcode")}
               className={`group flex lg:flex-row flex-col justify-center items-center lg:gap-4 gap-2 lg:max-w-[50%] w-full rounded-2xl border border-[#D9D9D9] lg:p-3 py-3 cursor-pointer transition-all duration-200 ease-in-out hover:bg-[#013D59] ${
                 activeTab === "QRcode"
                   ? "bg-[#013D59] text-white"
@@ -442,7 +427,7 @@ function DetailAll() {
             </Link>
 
             <Link
-              to={`/payment/detail-all/${detailOrder?.id}?tab=Cash`}
+              onClick={() => setActiveTab("Cash")}
               className={`group flex lg:flex-row flex-col justify-center items-center lg:gap-4 gap-2 lg:max-w-[50%] w-full rounded-2xl border border-[#D9D9D9] lg:p-3 py-3 cursor-pointer transition-all duration-200 ease-in-out hover:bg-[#013D59] ${
                 activeTab === "Cash"
                   ? "bg-[#013D59] text-white"
@@ -511,7 +496,7 @@ function DetailAll() {
                 className="hidden"
                 ref={inputProfileImage}
                 accept="image/*"
-                onChange={handleImageChange}
+                onChange={(e) => submitPayment(e, 'qrcode')}
               />
 
               <Modal open={open} onClose={() => setOpen(false)}>
@@ -552,7 +537,7 @@ function DetailAll() {
           )}
           {activeTab === "Cash" && (
             <div
-              onClick={submitPayment}
+              onClick={(e) => submitPayment(e, 'cash')}
               className={`bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px] w-full cursor-pointer group hover:bg-[#FF6A00] ${
                 cash <= 0 || cash < Tatal
                   ? "pointer-events-none opacity-50"

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
-import { getAllOutFoods } from "../../../services/kitchen.service";
+import { getAllOutFoods, getCancelOutFood } from "../../../services/kitchen.service";
 import { api_path } from "../../../store/setting";
+import Swal from "sweetalert2";
 
 const TableMenuStatus = ({
   selectedStatusMenu1,
@@ -47,6 +48,33 @@ const TableMenuStatus = ({
     }
   };
 
+  const onCancelFood = (id) => {
+    Swal.fire({
+      title: "ยกเลิกแจ้งสินค้าหมด",
+      text: "ยืนยันการยกเลิกแจ้งสินค้าหมด",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ยืนยัน"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        getCancelOutFood(id).then((res) => {
+          if(res.status) {
+            Swal.fire({
+              icon: "success",
+              title: "แจ้งสินค้าหมด",
+              text: "ยกเลิกสินค้าหมดเรียบร้อย",
+              timer: 1500,
+              showConfirmButton: false,
+            })
+          }
+    
+        })
+      }
+    })
+  }
+
   return (
     <>
       <div className="overflow-x-auto mt-6 ">
@@ -84,7 +112,7 @@ const TableMenuStatus = ({
                 <td className="py-3 w-[60px] pr-4">
                   <div className="w-full flex items-center justify-center">
                     <button
-                      onClick={() => handleEditClick(order.id)}
+                      onClick={() => handleEditClick(order)}
                       className="flex justify-center items-center w-[80px] h-[35px] text-white font-[500] bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg"
                     >
                       เพิ่มเหตุ
@@ -93,7 +121,9 @@ const TableMenuStatus = ({
                 </td>
                 <td className="py-3 w-[60px] pr-6">
                   <div className="w-full flex items-center justify-center">
-                    <button className="flex justify-center items-center w-[80px] h-[35px] text-white font-[500] bg-[#F44D4D] hover:bg-[#ff1c1c] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg">
+                    <button 
+                    onClick={() => onCancelFood(order.id)}
+                    className="flex justify-center items-center w-[80px] h-[35px] text-white font-[500] bg-[#F44D4D] hover:bg-[#ff1c1c] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg">
                       ยกเลิก
                     </button>
                   </div>

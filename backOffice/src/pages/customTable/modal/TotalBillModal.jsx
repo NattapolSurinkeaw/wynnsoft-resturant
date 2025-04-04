@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { FoodListData } from "../../../components/mockData/CustomTable/FoodListData";
 
-function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
+function TotalBillModal({ isTotalBill, closeModal, selectedTableId, orderData }) {
+  const tax = 7;
+  const serviceCharge = 9;
   if (!isTotalBill || !selectedTableId) return null;
 
   const selectedTable = FoodListData.find(
     (table) => table.id === selectedTableId
   );
+
+  console.log(orderData)
 
   return (
     isTotalBill && (
@@ -23,12 +27,12 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
             />
           </button>
 
-          {selectedTable && (
+          {orderData && (
             <div className="flex items-center justify-between w-full rounded-t-lg bg-[#013D59] px-6 py-3">
               <div className="flex items-center gap-2">
                 <span className="text-[23px] font-[600] text-white">โต๊ะ</span>
                 <span className="text-[23px] font-[600] text-white">
-                  {selectedTable.name_table}
+                  {orderData.table.title}
                 </span>
               </div>
               <div className="flex items-center">
@@ -36,7 +40,7 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
                   เลขออเดอร์ :
                 </p>
                 <p className="ml-2 text-[18px] font-[600] text-white">
-                  {selectedTable.order_number}
+                  {orderData.order_number}
                 </p>
               </div>
             </div>
@@ -55,26 +59,29 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
           </div>
 
           <div className="w-full h-[420px] py-3 overflow-y-auto">
-            {selectedTable && selectedTable.order_items.length > 0 ? (
-              selectedTable.order_items.map((item) => (
+            {orderData && orderData.orderList.length > 0 ? (
+              orderData.orderList.map((item) => (
                 <div
                   key={item.id}
                   className="flex items-start justify-between px-6 mt-2"
                 >
+                  {console.log(item)}
                   <p className="min-w-[240px] text-[18px] font-[500] text-[#313131]">
-                    {item.name} <br />
+                    {item.food.name} <br />
                     <span className="text-[14px] font-[300]">
-                      {item.details}
+                      {item.food.details}
                     </span>
                   </p>
                   <p className="min-w-[15px] text-[16px] font-[400] text-[#313131]">
-                    {item.quantity}
+                    {item.amount}
                   </p>
                   <div className="min-w-[110px] flex flex-col items-end">
-                    <p className="text-[14px] font-[500] text-[#313131] line-through">
-                      {item.oldPrice}
-                    </p>
-                    <span className="text-[16px] font-[400]">{item.price}</span>
+                    { item.food.special_price && (
+                      <p className="text-[14px] font-[500] text-[#313131] line-through">
+                        {item.food.price}
+                      </p>
+                    )}
+                    <span className="text-[16px] font-[400]">{item.food.special_price}</span>
                   </div>
                 </div>
               ))

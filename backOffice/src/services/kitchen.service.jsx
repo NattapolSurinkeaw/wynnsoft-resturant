@@ -18,6 +18,25 @@ export const getAllOutFoods = () => {
   })
 }
 
+export const getUpdateNoteOutFood = (id, params) => {
+  return axios.post(`/api/backoffice/updatenote-outfood/${id}`, params).then((res) => {
+    return {
+      status: res.data.status,
+      food: res.data.food,
+      message: res.data.message
+    }
+  })
+}
+
+export const getCancelOutFood = (id) => {
+  return axios.get(`/api/backoffice/canceloutfood/${id}`).then((res) => {
+    return {
+      status: res.data.status,
+      message: res.data.message
+    }
+  })
+}
+
 export const getUpdateStatusOrderList = (params) => {
   return axios.post('/api/backoffice/update-statusOrderList', params).then((res) => {
     return {

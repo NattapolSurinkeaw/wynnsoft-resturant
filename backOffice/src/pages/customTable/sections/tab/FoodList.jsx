@@ -2,27 +2,22 @@ import React, { useState, useEffect } from "react";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import MoveTable from "../../modal/MoveTable";
 import QrCodeModal from "../../modal/QrCodeModal";
-import { FoodListData } from "../../../../components/mockData/CustomTable/FoodListData";
+// import { FoodListData } from "../../../../components/mockData/CustomTable/FoodListData";
 import { front_readqr } from "../../../../store/setting";
 import { getOrderCurrent } from "../../../../services/order.service";
 import AdditemModal from "../../modal/AdditemModal";
 
-function FoodList({ selectedTableId, tableDetail }) {
+function FoodList({ selectedTableId, tableDetail, orderAll }) {
   const [isMoveTable, setIsMoveTable] = useState(false);
   const [isAddItem, setIsAddItem] = useState(false);
   const [currentFoodData, setCurrentFoodData] = useState(null);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
-  const [orderAll, setOrderAll] = useState([]);
+  // const [orderAll, setOrderAll] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async() => {
-      const res = await getOrderCurrent()
-      setOrderAll(res.orders);
-    }
-
-    fetchData()
-  }, []);
+  // useEffect(() => {
+  //   setOrderAll(orderDataAll);
+  // }, [orderDataAll]);
 
   useEffect(() => {
     const filteredData = orderAll.find(

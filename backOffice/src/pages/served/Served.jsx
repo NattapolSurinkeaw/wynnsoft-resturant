@@ -6,6 +6,7 @@ import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import { getOrderList } from "../../services/kitchen.service";
 import { api_path } from "../../store/setting";
 import { getUpdateStatusOrderList } from "../../services/kitchen.service";
+import Swal from "sweetalert2";
 
 function Served() {
   const [orderToday, setOrderToday] = useState([]);
@@ -41,6 +42,15 @@ function Served() {
     }
     getUpdateStatusOrderList(params).then((res) => {
       console.log(res);
+      if(res.status) {
+        Swal.fire({
+          icon: "success",
+          title: "เสิร์ฟออร์เดอร์",
+          text: "เสิร์ฟออร์เดอร์เรียบร้อย",
+          timer: 1500,
+          showConfirmButton: false,
+        })
+      }
     })
   }
 

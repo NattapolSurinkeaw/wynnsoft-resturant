@@ -19,7 +19,10 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import OrderDetail from "./components/OrderDetail";
 import CancelIcon from "@mui/icons-material/Cancel";
 import * as XLSX from "xlsx";
-import { orderToday } from "../../components/mockData/orderToDay";
+import { api_path } from "../../store/setting";
+import { getHistoryOrder } from "../../services/manageData.services";
+import { getDeleteOrder } from "../../services/kitchen.service";
+import Swal from "sweetalert2";
 
 function OrderHistory() {
   dayjs.locale("th");
@@ -32,6 +35,7 @@ function OrderHistory() {
   const [selectedStatus, setSelectedStatus] = useState(null); //สถานะ
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
+  const [orderToday, setOrderToday] = useState([]);
   const menuStatus = useRef(null);
 
   useEffect(() => {
@@ -54,7 +58,7 @@ function OrderHistory() {
   };
 
   const handleOpenModalImg = (imageUrl) => {
-    setSelectedImage(imageUrl);
+    setSelectedImage( api_path + imageUrl);
 
     setOpenModalImg(true);
   };
@@ -70,13 +74,22 @@ function OrderHistory() {
       maximumFractionDigits: 2,
     });
 
+  useEffect(() => {
+    const fetchData = async() => {
+      const res = await getHistoryOrder()
+      setOrderToday(res.order)
+    }
+
+    fetchData()
+  }, [])
+
   const getFilteredOrderDetails = (
     orderToday,
     selectedStatus,
-    selectedMonthly
+    // selectedMonthly
   ) => {
     return orderToday
-      .filter((order) => order.status === "5")
+      .filter((order) => order.status === 5)
       .map((order) => {
         const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
         const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
@@ -182,6 +195,35 @@ function OrderHistory() {
     0
   );
 
+  const handleDelete = (param) => {
+    console.log(param);
+    const params = {
+      order_id: param.id,
+      table_id: param.table_id
+    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        getDeleteOrder(params).then((res) => {
+          console.log(res)
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          });
+        })
+      }
+    });
+
+  }
+
   const columns = [
     {
       field: "count",
@@ -227,7 +269,7 @@ function OrderHistory() {
       minWidth: 150,
     },
     {
-      field: "payment",
+      field: "pay_by",
       headerName: "ช่องทางชำระ",
       headerAlign: "center",
       align: "left",
@@ -237,9 +279,9 @@ function OrderHistory() {
       renderCell: (params) => (
         <div className="flex justify-start items-center h-full">
           <p className="text-[#313131] xl:text-lg text-base font-[400] text-left">
-            {params.value === "1"
+            {params.value === 1
               ? "ชำระผ่าน QR"
-              : params.value === "2"
+              : params.value === 2
               ? "ชำระเงินสด"
               : "-"}
           </p>
@@ -286,7 +328,7 @@ function OrderHistory() {
       ),
     },
     {
-      field: "images",
+      field: "slip_image",
       headerName: "สลิปโอน",
       headerAlign: "center",
       align: "center",
@@ -345,6 +387,7 @@ function OrderHistory() {
       renderCell: (params) => (
         <div className="h-full flex justify-center items-center">
           <button
+            onClick={() => handleDelete(params.row)}
             className="cursor-pointer p-1 bg-[#F44D4D] hover:bg-[#00537B] w-[40px] h-[40px] m-auto rounded-lg transition-all duration-200 ease-in-out"
             title="ลบ"
           >

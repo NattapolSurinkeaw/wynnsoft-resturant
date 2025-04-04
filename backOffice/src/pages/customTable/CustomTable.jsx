@@ -11,6 +11,7 @@ import Stack from "@mui/material/Stack";
 // import { CustomTable as CustomTableData } from "../../components/mockData/CustomTable/CustomTable";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { getTableall } from "../../services/table_manage.service";
+import { getOrderCurrent } from "../../services/order.service";
 
 function CustomTable() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -23,14 +24,27 @@ function CustomTable() {
   const rowsPerPage = 24;
   const [customTable, setCustomTable] = useState([]);
   const [tableDetail, setTableDetail] = useState([]);
+  const [orderAll, setOrderAll] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
 
   useEffect(() => {
-    getTableall().then((res) => {
+    const fetchData = async() => {
+      const res = await getTableall();
       setCustomTable(res.tables);
-    })
+    }
+    
+    fetchData()
   }, [refresh])
+
+  useEffect(() => {
+    const fetchData = async() => {
+      const res = await getOrderCurrent()
+      setOrderAll(res.orders);
+    }
+
+    fetchData()
+  }, [])
 
   useEffect(() => {
     if (!isSettingOpen) {
@@ -115,9 +129,13 @@ function CustomTable() {
           <FoodList 
             selectedTableId={selectedTableId} 
             tableDetail={tableDetail}
+            orderAll={orderAll}
           />
         ) : isTotalBill ? (
-          <TotalBill />
+          <TotalBill 
+            // customTable={customTable}
+            orderAll={orderAll}
+          />
         ) : (
           <ViewTable
             handleEditClick={handleEditClick}

@@ -144,3 +144,22 @@ export const getUpdateFood = (id, formData) => {
       };
     });
 };
+
+export const getCheckBillOrder = (formData) => {
+  return axios.post('/api/backoffice/checkbillOrder', formData).then((res) => {
+    return {
+      status: res.data.status,
+
+    }
+  })
+}
+
+export const getHistoryOrder = () => {
+  return axios.get('/api/backoffice/getOrderHistory').then((res) => {
+    return {
+      status: res.data.status,
+      order: res.data.data,
+      description: res.data.description,
+    }
+  })
+}
