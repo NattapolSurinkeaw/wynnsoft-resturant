@@ -40,7 +40,7 @@ export class OrderFoodController {
   OngetAllOrderFoodsCurrent = async (req: any, res: any) => {
     try {
       const order = await Orders.findAll({
-        where: {status: { [Op.ne]: 5}},
+        where: { status: { [Op.ne]: 5 } },
         include: [
           { model: Table, as: "table" }, // ดึงข้อมูลโต๊ะ
           {
@@ -61,7 +61,7 @@ export class OrderFoodController {
       console.error("เกิดข้อผิดพลาด:", error);
     }
   };
-  
+
   OngetOrderFoodById = async (req: any, res: any) => {
     try {
       const order = await Orders.findOne({
@@ -181,6 +181,7 @@ export class OrderFoodController {
             amount: item.count,
             status: 1,
             note: item.note,
+            price: item.price,
           }));
 
           console.log(paramFoods);
@@ -192,7 +193,7 @@ export class OrderFoodController {
               (sum: any, item: any) => sum + item.price * item.amount,
               0
             );
-          await order.update({ price: newTotalPrice , status: 2});
+          await order.update({ price: newTotalPrice, status: 2 });
 
           // ✅ แจ้งเตือน React Backoffice ผ่าน Socket.IO
           io.emit("newOrder", {

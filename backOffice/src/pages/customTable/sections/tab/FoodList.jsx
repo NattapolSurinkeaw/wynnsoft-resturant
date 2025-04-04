@@ -15,9 +15,14 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
   const [selectedItemId, setSelectedItemId] = useState(null);
   // const [orderAll, setOrderAll] = useState([]);
 
-  // useEffect(() => {
-  //   setOrderAll(orderDataAll);
-  // }, [orderDataAll]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getOrderCurrent();
+      setOrderAll(res.orders);
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const filteredData = orderAll.find(
@@ -65,16 +70,14 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
           />
 
           {/* เพิ่มรายการอาหาร */}
-          {
-            isAddItem && (
-              <AdditemModal
-                isOpen={isAddItem}
-                closeModal={() => setIsAddItem(false)}
-                itemId={selectedItemId}
-                tableDetail={tableDetail}
-              />
-            )
-          }
+          {isAddItem && (
+            <AdditemModal
+              isOpen={isAddItem}
+              closeModal={() => setIsAddItem(false)}
+              itemId={selectedItemId}
+              tableDetail={tableDetail}
+            />
+          )}
 
           <div className="flex flex-col 2xl:w-full md:w-[500px] w-full mx-auto min-h-[730px]">
             <div className="w-full h-full bg-white shadow-1 rounded-lg">
