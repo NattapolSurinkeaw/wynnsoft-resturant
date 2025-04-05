@@ -7,6 +7,7 @@ import { Orders } from "../models/orders";
 import { OrdersList } from "../models/orderList";
 import { Table } from "../models/table";
 import { Foods } from "../models/food";
+import { SIO } from "../util/Sockets";
 const jwt = require('jsonwebtoken');
 
 export class KitchenManageController {
@@ -51,9 +52,10 @@ export class KitchenManageController {
   //เปลี่ยนสถานะอาหาร
   OnUpdateOrderListStatus = async(req: any, res: any) => {
     try {
+      const io = SIO.getIO(); // ใช้งาน Socket.IO
       const { orderList, orderId }: { orderList: { id: number; status: number }[]; orderId: number } = req.body;
 
-      console.log(orderList)
+      // console.log(orderList)
       await Promise.all(
         orderList.map(({ id, status }: { id: number; status: number }) => 
           OrdersList.update(
@@ -64,6 +66,10 @@ export class KitchenManageController {
       );
       
       // console.log(orderId)
+      // ✅ แจ้งเตือน React Backoffice ผ่าน Socket.IO
+      io.emit("newOrder", {
+        orderList: orderList
+      });
 
       return res.status(200).json({
         status: true,

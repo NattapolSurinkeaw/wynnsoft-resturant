@@ -13,16 +13,8 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
   const [currentFoodData, setCurrentFoodData] = useState(null);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
-  // const [orderAll, setOrderAll] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await getOrderCurrent();
-      setOrderAll(res.orders);
-    };
-
-    fetchData();
-  }, []);
+  const tax = 7;
+  const serviceCharge = 5;
 
   useEffect(() => {
     const filteredData = orderAll.find(
@@ -45,14 +37,34 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
     setIsAddItem(false);
   };
 
-  const total_price = currentFoodData?.orderList.reduce(
-    (sum, item) => sum + (item.food.price || 0),
-    0
-  );
-  const total_special_price = currentFoodData?.orderList.reduce(
-    (sum, item) => sum + (item.food.special_price || 0),
-    0
-  );
+  const { total_price, total_special_price, total_rawPrice } =
+    currentFoodData?.orderList.reduce(
+      (acc, item) => {
+        const price = item.food.price || 0;
+        const specialPrice = item.food.special_price || 0;
+        const rawPrice = item.food.special_price != null
+          ? item.food.special_price
+          : price;
+
+        acc.total_price += price;
+        acc.total_special_price += specialPrice;
+        acc.total_rawPrice += rawPrice;
+
+        return acc;
+      },
+      {
+        total_price: 0,
+        total_special_price: 0,
+        total_rawPrice: 0,
+      }
+    ) || {
+      total_price: 0,
+      total_special_price: 0,
+      total_rawPrice: 0,
+    }
+
+    const priceService = total_rawPrice * (serviceCharge / 100);
+    const priceTax = (total_rawPrice + priceService) * (tax / 100);
 
   return (
     <>
@@ -159,24 +171,24 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
               <div className="flex items-start justify-between px-6 ">
                 <p className="text-[18px] font-[500] text-[#313131]">ราคา</p>
                 <p className="text-[16px] font-[500] text-[#313131]">
-                  {total_special_price}
+                  {total_rawPrice}
                 </p>
               </div>
               <div className="flex items-start justify-between px-6 ">
                 <p className="text-[18px] font-[500] text-[#313131]">ส่วนลด</p>
                 <p className="text-[16px] font-[500] text-[#313131]">
-                  {total_price - total_special_price}
+                  -{total_price - total_special_price}
                 </p>
               </div>
               <div className="flex items-start justify-between px-6 ">
-                <p className="text-[18px] font-[500] text-[#313131]">ภาษี 7%</p>
-                <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+                <p className="text-[18px] font-[500] text-[#313131]">ภาษี {tax}%</p>
+                <p className="text-[16px] font-[500] text-[#313131]">{priceTax}</p>
               </div>
               <div className="flex items-start justify-between px-6 ">
                 <p className="text-[18px] font-[500] text-[#313131]">
-                  Service charge 5%
+                  Service charge {serviceCharge}%
                 </p>
-                <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+                <p className="text-[16px] font-[500] text-[#313131]">{priceService}</p>
               </div>
 
               <div className="border border-[#CACACA] border-dashed mx-6 my-3"></div>
@@ -186,7 +198,7 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
                   ยอดทั้งหมด
                 </p>
                 <p className="text-[23px] font-[700] text-[#313131]">
-                  $ 00,000.00
+                  $ {total_rawPrice + priceService + priceTax}
                 </p>
               </div>
             </div>

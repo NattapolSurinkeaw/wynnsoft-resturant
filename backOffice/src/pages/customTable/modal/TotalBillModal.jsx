@@ -1,17 +1,39 @@
 import React, { useState } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import { FoodListData } from "../../../components/mockData/CustomTable/FoodListData";
 
-function TotalBillModal({ isTotalBill, closeModal, selectedTableId, orderData }) {
+function TotalBillModal({ isTotalBill, closeModal, orderData }) {
   const tax = 7;
-  const serviceCharge = 9;
-  if (!isTotalBill || !selectedTableId) return null;
+  const serviceCharge = 5;
+  if (!isTotalBill) return null;
 
-  const selectedTable = FoodListData.find(
-    (table) => table.id === selectedTableId
-  );
+  const { total_price, total_special_price, total_rawPrice } =
+    orderData?.orderList.reduce(
+      (acc, item) => {
+        const price = item.food.price || 0;
+        const specialPrice = item.food.special_price || 0;
+        const rawPrice = item.food.special_price != null
+          ? item.food.special_price
+          : price;
 
-  console.log(orderData)
+        acc.total_price += price;
+        acc.total_special_price += specialPrice;
+        acc.total_rawPrice += rawPrice;
+
+        return acc;
+      },
+      {
+        total_price: 0,
+        total_special_price: 0,
+        total_rawPrice: 0,
+      }
+    ) || {
+      total_price: 0,
+      total_special_price: 0,
+      total_rawPrice: 0,
+    }
+
+    const priceService = total_rawPrice * (serviceCharge / 100);
+    const priceTax = (total_rawPrice + priceService) * (tax / 100);
 
   return (
     isTotalBill && (
@@ -95,28 +117,28 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId, orderData })
 
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">ราคา</p>
-            <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+            <p className="text-[16px] font-[500] text-[#313131]">{total_rawPrice}</p>
           </div>
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">ส่วนลด</p>
-            <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+            <p className="text-[16px] font-[500] text-[#313131]">-{total_price - total_special_price}</p>
           </div>
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">ภาษี {tax}%</p>
-            <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+            <p className="text-[16px] font-[500] text-[#313131]">{priceTax}</p>
           </div>
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">
               Service charge {serviceCharge}%
             </p>
-            <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+            <p className="text-[16px] font-[500] text-[#313131]">{priceService}</p>
           </div>
 
           <div className="border border-[#CACACA] border-dashed mx-6 my-3"></div>
 
           <div className="flex items-start justify-between px-6 pb-5">
             <p className="text-[23px] font-[700] text-[#313131]">ยอดทั้งหมด</p>
-            <p className="text-[23px] font-[700] text-[#313131]">$ 00,000.00</p>
+            <p className="text-[23px] font-[700] text-[#313131]">$ {total_special_price + priceTax + priceService}</p>
           </div>
         </div>
       </div>

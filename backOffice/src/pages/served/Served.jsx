@@ -7,11 +7,16 @@ import { getOrderList } from "../../services/kitchen.service";
 import { api_path } from "../../store/setting";
 import { getUpdateStatusOrderList } from "../../services/kitchen.service";
 import Swal from "sweetalert2";
+import { io } from "socket.io-client";
+import { socketPath } from "../../store/setting";
+
+const socket = io(socketPath);
 
 function Served() {
   const [orderToday, setOrderToday] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   dayjs.locale("th");
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchData = async() => {
@@ -20,6 +25,20 @@ function Served() {
     }
 
     fetchData()
+  }, [refresh])
+
+  useEffect(() => {
+    const handleStatus = (data) => {
+      console.log("Event update status", data); // จะได้ { orderList: ... }
+      setRefresh(prev => !prev)
+    };
+  
+    socket.on("newOrder", handleStatus); // ฟัง event
+  
+    return () => {
+      socket.off("newOrder", handleStatus); // ปิดเฉพาะ event handler ที่ถูกสร้างไว้
+    };
+    
   }, [])
 
   useEffect(() => {

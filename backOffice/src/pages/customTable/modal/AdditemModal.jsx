@@ -75,6 +75,7 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
   };
 
   const handleAddItem = () => {
+    console.log(selectedFood)
     const params = {
       token: tableDetail.qrcode,
       food: [
@@ -82,6 +83,7 @@ function AdditemModal({ isOpen, closeModal, itemId, tableDetail }) {
           id: selectedFood.id,
           count: quantities,
           note: intNote,
+          price: selectedFood.special_price || selectedFood.price
         },
       ],
     };

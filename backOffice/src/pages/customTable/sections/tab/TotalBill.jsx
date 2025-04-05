@@ -31,14 +31,14 @@ function TotalBill({orderAll}) {
     );
   };
 
-  const tables = [
-    { id: 1, name: "โต๊ะ 01", total: 520 },
-    { id: 2, name: "โต๊ะ 02", total: 750 },
-    { id: 3, name: "โต๊ะ 03", total: 390 },
-    { id: 4, name: "โต๊ะ 04", total: 690 },
-    { id: 5, name: "โต๊ะ 05", total: 490 },
-    { id: 6, name: "โต๊ะ 06", total: 500 },
-  ];
+  // const tables = [
+  //   { id: 1, name: "โต๊ะ 01", total: 520 },
+  //   { id: 2, name: "โต๊ะ 02", total: 750 },
+  //   { id: 3, name: "โต๊ะ 03", total: 390 },
+  //   { id: 4, name: "โต๊ะ 04", total: 690 },
+  //   { id: 5, name: "โต๊ะ 05", total: 490 },
+  //   { id: 6, name: "โต๊ะ 06", total: 500 },
+  // ];
 
   return (
     <>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import NewOrderModal from "../modal/NewOrderModal";
-// import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
-// import { orderToday } from "../../../components/mockData/orderToDay";
 import { api_path } from "../../../store/setting";
+import { io } from "socket.io-client";
+import { socketPath } from "../../../store/setting";
 
-function NewOrder({ orderListAll }) {
+const socket = io(socketPath);
+
+function NewOrder({ orderListAll, setOrderListAll }) {
   const [isOpenNewOrderModal, setIsOpenNewOrderModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
@@ -16,7 +18,22 @@ function NewOrder({ orderListAll }) {
     setIsOpenNewOrderModal(true);
   };
 
-  console.log(filteredOrders);
+  useEffect(() => {
+
+    // สร้าง handler แยกออกมา
+    const handleNewOrder = (data) => {
+      console.log("date event", data);
+      console.log(filteredOrders)
+    };
+
+    socket.on("statusOrder", handleNewOrder); // ฟัง event
+
+    return () => {
+      socket.off("statusOrder", handleNewOrder); // ปิดเฉพาะ event handler ที่ถูกสร้างไว้
+    };
+  }, []);
+
+  // console.log(filteredOrders);
   return (
     <>
       {isOpenNewOrderModal && (
