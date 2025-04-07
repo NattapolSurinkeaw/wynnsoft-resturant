@@ -1,13 +1,39 @@
 import React, { useState } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import { FoodListData } from "../../../components/mockData/CustomTable/FoodListData";
 
-function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
-  if (!isTotalBill || !selectedTableId) return null;
+function TotalBillModal({ isTotalBill, closeModal, orderData }) {
+  const tax = 7;
+  const serviceCharge = 5;
+  if (!isTotalBill) return null;
 
-  const selectedTable = FoodListData.find(
-    (table) => table.id === selectedTableId
-  );
+  const { total_price, total_special_price, total_rawPrice } =
+    orderData?.orderList.reduce(
+      (acc, item) => {
+        const price = item.food.price || 0;
+        const specialPrice = item.food.special_price || 0;
+        const rawPrice = item.food.special_price != null
+          ? item.food.special_price
+          : price;
+
+        acc.total_price += price;
+        acc.total_special_price += specialPrice;
+        acc.total_rawPrice += rawPrice;
+
+        return acc;
+      },
+      {
+        total_price: 0,
+        total_special_price: 0,
+        total_rawPrice: 0,
+      }
+    ) || {
+      total_price: 0,
+      total_special_price: 0,
+      total_rawPrice: 0,
+    }
+
+    const priceService = total_rawPrice * (serviceCharge / 100);
+    const priceTax = (total_rawPrice + priceService) * (tax / 100);
 
   return (
     isTotalBill && (
@@ -23,12 +49,12 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
             />
           </button>
 
-          {selectedTable && (
+          {orderData && (
             <div className="flex items-center justify-between w-full rounded-t-lg bg-[#013D59] px-6 py-3">
               <div className="flex items-center gap-2">
                 <span className="text-[23px] font-[600] text-white">โต๊ะ</span>
                 <span className="text-[23px] font-[600] text-white">
-                  {selectedTable.name_table}
+                  {orderData.table.title}
                 </span>
               </div>
               <div className="flex items-center">
@@ -36,7 +62,7 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
                   เลขออเดอร์ :
                 </p>
                 <p className="ml-2 text-[18px] font-[600] text-white">
-                  {selectedTable.order_number}
+                  {orderData.order_number}
                 </p>
               </div>
             </div>
@@ -55,26 +81,29 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
           </div>
 
           <div className="w-full h-[420px] py-3 overflow-y-auto">
-            {selectedTable && selectedTable.order_items.length > 0 ? (
-              selectedTable.order_items.map((item) => (
+            {orderData && orderData.orderList.length > 0 ? (
+              orderData.orderList.map((item) => (
                 <div
                   key={item.id}
                   className="flex items-start justify-between px-6 mt-2"
                 >
+                  {console.log(item)}
                   <p className="min-w-[240px] text-[18px] font-[500] text-[#313131]">
-                    {item.name} <br />
+                    {item.food.name} <br />
                     <span className="text-[14px] font-[300]">
-                      {item.details}
+                      {item.food.details}
                     </span>
                   </p>
                   <p className="min-w-[15px] text-[16px] font-[400] text-[#313131]">
-                    {item.quantity}
+                    {item.amount}
                   </p>
                   <div className="min-w-[110px] flex flex-col items-end">
-                    <p className="text-[14px] font-[500] text-[#313131] line-through">
-                      {item.oldPrice}
-                    </p>
-                    <span className="text-[16px] font-[400]">{item.price}</span>
+                    { item.food.special_price && (
+                      <p className="text-[14px] font-[500] text-[#313131] line-through">
+                        {item.food.price}
+                      </p>
+                    )}
+                    <span className="text-[16px] font-[400]">{item.food.special_price}</span>
                   </div>
                 </div>
               ))
@@ -88,28 +117,28 @@ function TotalBillModal({ isTotalBill, closeModal, selectedTableId }) {
 
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">ราคา</p>
-            <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+            <p className="text-[16px] font-[500] text-[#313131]">{total_rawPrice}</p>
           </div>
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">ส่วนลด</p>
-            <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+            <p className="text-[16px] font-[500] text-[#313131]">-{total_price - total_special_price}</p>
           </div>
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">ภาษี {tax}%</p>
-            <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+            <p className="text-[16px] font-[500] text-[#313131]">{priceTax}</p>
           </div>
           <div className="flex items-start justify-between px-6 ">
             <p className="text-[18px] font-[500] text-[#313131]">
               Service charge {serviceCharge}%
             </p>
-            <p className="text-[16px] font-[500] text-[#313131]">000.00</p>
+            <p className="text-[16px] font-[500] text-[#313131]">{priceService}</p>
           </div>
 
           <div className="border border-[#CACACA] border-dashed mx-6 my-3"></div>
 
           <div className="flex items-start justify-between px-6 pb-5">
             <p className="text-[23px] font-[700] text-[#313131]">ยอดทั้งหมด</p>
-            <p className="text-[23px] font-[700] text-[#313131]">$ 00,000.00</p>
+            <p className="text-[23px] font-[700] text-[#313131]">$ {total_special_price + priceTax + priceService}</p>
           </div>
         </div>
       </div>

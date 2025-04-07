@@ -24,7 +24,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
   const fillterOrderData = orderData;
   // const fillterOrderData = orderToday.find((table) => table.id === orderData);
 
-  console.log("fillterOrderData", fillterOrderData);
+  // console.log("fillterOrderData", fillterOrderData);
 
   useEffect(() => {
     setSlcOrderCook(orderData);

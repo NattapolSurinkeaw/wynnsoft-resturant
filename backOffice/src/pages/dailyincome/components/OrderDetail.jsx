@@ -111,7 +111,7 @@ function OrderDetail({ selectedRow }) {
                       </p>
 
                       <p className="lg:text-base text-sm font-[500] text-center w-[20%]">
-                        {item.count}
+                        {item.amount}
                       </p>
 
                       <div className="w-[30%] flex flex-col justify-end text-right flex-1">

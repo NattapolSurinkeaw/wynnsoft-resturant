@@ -1,63 +1,37 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import Swal from "sweetalert2";
-import { getAllOutFoods } from "../../../services/kitchen.service";
 import { api_path } from "../../../store/setting";
+import { getUpdateNoteOutFood } from "../../../services/kitchen.service";
 
 function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
-  const [selectedStatusMenu1, setSelectedStatusMenu1] = useState(null);
-  const [showStatusMenu1, setShowStatusMenu1] = useState(false);
-  const [filteredOrderData, setFilteredOrderData] = useState(null);
-  const [outFoods, setOutFoods] = useState([]);
-
-  console.log("selectedEditId", selectedEditId);
-  console.log("isOpenEditModal", isOpenEditModal);
-  console.log("outFoods", outFoods);
-
-  const statusMenuRef1 = useRef(null);
+  const [noteFood, setNoteFood] = useState("");
 
   useEffect(() => {
-    getAllOutFoods().then((res) => {
-      setOutFoods(res.outFoods);
-    });
-  }, []);
+    setNoteFood(selectedEditId.note);
+  }, [selectedEditId])
 
-  useEffect(() => {
-    if (selectedEditId) {
-      const foundData = outFoods.find((item) => item.id === selectedEditId);
-      setFilteredOrderData(foundData || null);
+  const onSubmit = () => {
+   const params = {
+    note: noteFood
+   }
+
+   getUpdateNoteOutFood(selectedEditId.id, params).then((res) => {
+    console.log()
+    if(res.status) {
+      Swal.fire({
+        icon: "success",
+        title: "แจ้งสินค้าหมด",
+        text: "เพิ่มหมายเหตุสินค้าหมดเรียบร้อย",
+        timer: 1500,
+        showConfirmButton: false,
+      }).then(() => {
+        closeModal()
+      })
     }
-  }, [selectedEditId]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        statusMenuRef1.current &&
-        !statusMenuRef1.current.contains(event.target)
-      ) {
-        setShowStatusMenu1(false);
-      }
-    };
-
-    if (showStatusMenu1) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showStatusMenu1]);
-
-  useEffect(() => {
-    if (selectedStatusMenu1 === null) {
-      setShowStatusMenu1(false);
-    }
-  }, [selectedStatusMenu1]);
-
-  if (!isOpenEditModal || !filteredOrderData) return null;
+   })
+  }
 
   return (
     isOpenEditModal && (
@@ -88,23 +62,24 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
               เพิ่มหมายเหตุ
             </p>
           </div>
-
           <div className="flex space-x-4 mt-6 mb-2">
             <img
-              src={api_path + filteredOrderData.thumbnail_link}
-              alt={filteredOrderData.name}
+              src={api_path + selectedEditId.thumbnail_link}
+              alt={selectedEditId.name}
               className="w-22 h-22 object-cover rounded-md shadow-md"
             />
-            <p className="text-xl font-[600px]">{filteredOrderData.name}</p>
+            <p className="text-xl font-[600px]">{selectedEditId.name}</p>
           </div>
           <textarea
+            value={noteFood}
+            onChange={(e) => setNoteFood(e.target.value)}
             className="w-full min-h-[80px] p-2 mt-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             placeholder="หมายเหตุ..."
           >
-            {filteredOrderData.note}
           </textarea>
           <div className="flex justify-center space-x-3 mt-6">
             <button
+              onClick={onSubmit}
               className="w-[137px] py-1.5 bg-[#013D59] hover:bg-[#004b6e] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1"
             >
               บันทึก

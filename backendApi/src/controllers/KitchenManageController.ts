@@ -7,6 +7,7 @@ import { Orders } from "../models/orders";
 import { OrdersList } from "../models/orderList";
 import { Table } from "../models/table";
 import { Foods } from "../models/food";
+import { SIO } from "../util/Sockets";
 const jwt = require('jsonwebtoken');
 
 export class KitchenManageController {
@@ -51,9 +52,10 @@ export class KitchenManageController {
   //เปลี่ยนสถานะอาหาร
   OnUpdateOrderListStatus = async(req: any, res: any) => {
     try {
+      const io = SIO.getIO(); // ใช้งาน Socket.IO
       const { orderList, orderId }: { orderList: { id: number; status: number }[]; orderId: number } = req.body;
 
-      console.log(orderList)
+      // console.log(orderList)
       await Promise.all(
         orderList.map(({ id, status }: { id: number; status: number }) => 
           OrdersList.update(
@@ -64,6 +66,10 @@ export class KitchenManageController {
       );
       
       // console.log(orderId)
+      // ✅ แจ้งเตือน React Backoffice ผ่าน Socket.IO
+      io.emit("newOrder", {
+        orderList: orderList
+      });
 
       return res.status(200).json({
         status: true,
@@ -169,6 +175,26 @@ export class KitchenManageController {
       });
     }
   }
+  OnCancelOutFood = async(req: any, res: any) => {
+    try {
+      const food = await Foods.findOne({ where: {id: req.params.id }});
+      food.status_food = true;
+      food.note = null;
+      food.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "Food status updated successfully.",
+      });
+    } catch (error: any) {
+      console.error("Error updating food status:", error);
+      return res.status(500).json({
+        status: false,
+        message: "Internal server error",
+        errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
+      });
+    }
+  }
   OnChangeStatusOrderList = async(req: any, res: any) => {
     try {
       const orderList = await OrdersList.findOne({where: {id: req.body.list_id}});
@@ -232,7 +258,7 @@ export class KitchenManageController {
   }
   OnDeleteOrder = async(req: any, res: any) => {
     try {
-      const orderList = await OrdersList.destroy({
+      await OrdersList.destroy({
           where: {
               orders_id: req.body.order_id
           }
@@ -240,14 +266,16 @@ export class KitchenManageController {
 
       const order = await Orders.findOne({where: {id: req.body.order_id}});
 
-      const table = await Table.findOne({where: {id: req.body.table_id}});
-      if(table.qrcode) {
-        const decodedQr = jwt.verify(table.qrcode, 'nattapolsurinkeaw'); 
-        if(decodedQr.order_id == order.id) {
-          table.table_token = null;
-          table.qrcode = null;
-          table.status = 1;
-          await table.save();
+      if(req.body.table_id) {
+        const table = await Table.findOne({where: {id: req.body.table_id}});
+        if(table.qrcode) {
+          const decodedQr = jwt.verify(table.qrcode, 'nattapolsurinkeaw'); 
+          if(decodedQr.order_id == order.id) {
+            table.table_token = null;
+            table.qrcode = null;
+            table.status = 1;
+            await table.save();
+          }
         }
       }
 

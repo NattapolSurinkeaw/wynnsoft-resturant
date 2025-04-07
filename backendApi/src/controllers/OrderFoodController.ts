@@ -91,9 +91,70 @@ export class OrderFoodController {
         data: order,
       });
     } catch (error) {
-      console.error("เกิดข้อผิดพลาด:", error);
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        error: error,
+        description: "something went wrong.",
+      });
     }
-  };
+  }
+  OnCheckBillOrder = async(req: any, res: any) => {
+    try {
+      const order = await Orders.findOne({ where: {id: req.body.order_id }});
+      order.pay_by = req.body.pay_by;
+      order.status = 5;
+
+      let image = null;
+
+      if (req.file) {
+        let upload = "/uploads" + req.file.destination.split("uploads").pop();
+        let dest = req.file.destination;
+        var ext = path.extname(req.file.originalname);
+        let originalname = path.basename(req.file.originalname, ext);
+
+        for (let i = 1; fs.existsSync(dest + originalname + ext); i++) {
+          originalname = originalname.split("(")[0];
+          originalname += "(" + i + ")";
+        }
+
+        order.slip_image = await sharp(req.file.path)
+          .withMetadata()
+          .jpeg({ quality: 95 })
+          .toFile(path.resolve(req.file.destination, originalname + ext))
+          .then(() => {
+            fs.unlink(req.file.path, (err) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+            return upload + originalname + ext;
+          });
+      }
+      await order.save();
+
+      const table = await Table.findOne({where: {id: req.body.table_id}});
+      table.table_token = null;
+      table.qrcode = null;
+      table.status = 1;
+      await table.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "check bill",
+        description: "check bill order is success",
+      });
+
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        error: error,
+        description: "something went wrong.",
+      });
+    }
+  }
+
 
   // สั่งอาหาร
   OnAddOrderFood = async (req: any, res: any) => {
@@ -123,7 +184,7 @@ export class OrderFoodController {
             price: item.price,
           }));
 
-          // console.log(orderItems);
+          console.log(paramFoods);
           await OrdersList.bulkCreate(orderItems);
 
           const newTotalPrice =

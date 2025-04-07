@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NewOrder from "./sections/NewOrder";
 import OrderProgress from "./sections/OrderProgress";
 import SendOrder from "./sections/SendOrder";
@@ -11,6 +11,7 @@ const socket = io(socketPath);
 function NewLatest() {
   const [activeTab, setActiveTab] = useState("newOrder");
   const [orderListAll, setOrderListAll] = useState([]);
+  const [dataEvent, setDataEvent] = useState([]);
 
   const fetchData = async() => {
     const res = await getOrderList()
@@ -32,6 +33,12 @@ function NewLatest() {
       socket.off("newOrder", handleNewOrder); // ปิดเฉพาะ event handler ที่ถูกสร้างไว้
     };
   }, []);
+
+  const orderListRef = useRef(orderListAll);
+
+  useEffect(() => {
+    orderListRef.current = orderListAll;
+  }, [orderListAll]);
 
   return (
     <div>
@@ -69,7 +76,7 @@ function NewLatest() {
       </div>
 
       <div className="mt-4 ">
-        {activeTab === "newOrder" && <NewOrder orderListAll={orderListAll} />}
+        {activeTab === "newOrder" && <NewOrder orderListAll={orderListAll} setOrderListAll={setOrderListAll} />}
         {activeTab === "orderProgress" && <OrderProgress orderListAll={orderListAll} />}
         {activeTab === "sendOrder" && <SendOrder orderListAll={orderListAll} />}
       </div>

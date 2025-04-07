@@ -6,6 +6,10 @@ import { CategoryFood } from "../models/categoryFood";
 import { Foods } from "../models/food";
 import { Language } from "../models/language";
 import { title } from "process";
+import {Orders} from "../models/orders";
+import {OrdersList} from "../models/orderList";
+import { Table } from "../models/table";
+
 
 export class ManageDataController {
   // start หมวดหมู่เมนู
@@ -226,6 +230,32 @@ export class ManageDataController {
     });
   };
   // end หมวดหมู่เมนู
+
+  // ประวัติการสั่งอาหาร 
+  OngetOrderHistory = async(req: any, res: any) => {
+    try {
+      const order = await Orders.findAll({
+        where: {status: 5},
+        include: [
+          { model: Table, as: "table" }, // ดึงข้อมูลโต๊ะ
+          {
+            model: OrdersList,
+            as: "orderList",
+            include: [{ model: Foods, as: "food" }],
+          }, // ดึงข้อมูลรายการอาหารในออเดอร์
+        ],
+      });
+
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "get order All success.",
+        data: order,
+      });
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาด:", error);
+    }
+  }
 
   // start เมนูอาหาร
   OnGetfoodAll = async (req: any, res: any) => {

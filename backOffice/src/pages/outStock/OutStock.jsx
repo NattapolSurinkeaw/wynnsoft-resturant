@@ -52,8 +52,8 @@ function OutStock() {
     }
   }, [selectedStatusMenu1, selectedStatusMenu2]);
 
-  const handleEditClick = (id) => {
-    setSelectedEditId(id);
+  const handleEditClick = (order) => {
+    setSelectedEditId(order);
     setIsOpenEditModal(true);
   };
 
@@ -63,12 +63,16 @@ function OutStock() {
 
   return (
     <>
-      <MenuStatusModal
-        isOpenEditModal={isOpenEditModal}
-        closeModal={closeModal}
-        selectedEditId={selectedEditId}
-        handleEditClick={handleEditClick}
-      />
+      {
+        isOpenEditModal && (
+          <MenuStatusModal
+            isOpenEditModal={isOpenEditModal}
+            closeModal={closeModal}
+            selectedEditId={selectedEditId}
+            handleEditClick={handleEditClick}
+          />
+        )
+      }
       <div className="flex md:flex-row flex-col md:items-center items-start justify-between gap-4 w-full">
         <div className="flex items-center gap-2">
           <NoFoodOutlinedIcon
