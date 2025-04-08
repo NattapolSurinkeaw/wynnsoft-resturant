@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ControlData } from "../../../components/mockData/ControlData/ControlData";
 
-function Current() {
+function Current({orderData}) {
   return (
     <>
       <div className="h-full bg-white rounded-lg shadow-sm py-4 px-5">
@@ -17,20 +16,28 @@ function Current() {
         </div>
 
         <div className="overflow-y-auto px-2 mt-4">
-          {ControlData.slice(0, 7).map((item) => {
+          {orderData.slice(0, 7).map((item) => {
             let statusText = "";
             let statusColor = "";
-
-            switch (item.status) {
-              case 2:
+            
+            switch (item.orderList[0]?.status) {
+              case "1":
+                statusText = "รับออร์เดอร์";
+                statusColor = "#F5A100";
+                break;
+              case "2":
                 statusText = "อยู่ระหว่างปรุง";
                 statusColor = "#F5A100";
                 break;
-              case 3:
+              case "3":
                 statusText = "พร้อมเสริฟ";
                 statusColor = "#FF6A00";
                 break;
-              case 6:
+              case "4":
+                statusText = "เสริฟแล้ว";
+                statusColor = "#FF6A00";
+                break;
+              case "6":
                 statusText = "รายการครบ";
                 statusColor = "#10D024";
                 break;
@@ -38,15 +45,15 @@ function Current() {
                 statusText = "";
                 statusColor = "";
             }
-
+  
             return (
               <div key={item.id}>
                 <div className="flex justify-between">
-                  <div className="flex justify-center items-center w-[60px] h-[60px] text-white text-[28px] font-[600] bg-[#FFBA41] rounded-lg">
-                    {item.name_table}
+                  <div className="flex justify-center items-center w-[60px] h-[60px] text-white text-[16px] font-[600] bg-[#FFBA41] rounded-lg">
+                    {item.table.title}
                   </div>
                   <p className="w-[280px] text-[18px] text-[#013D59] font-[600]">
-                    {item.titel}
+                    {item.orderList[0]?.food.name}
                   </p>
                   <div className="flex flex-col justify-center items-center gap-1">
                     <button
