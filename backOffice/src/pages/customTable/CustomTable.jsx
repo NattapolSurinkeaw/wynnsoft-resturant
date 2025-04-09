@@ -44,7 +44,7 @@ function CustomTable() {
     }
 
     fetchData()
-  }, [])
+  }, [refresh])
 
   useEffect(() => {
     if (!isSettingOpen) {
@@ -70,6 +70,7 @@ function CustomTable() {
   };
 
   const handleFoodListClick = () => {
+    console.log("เข้าเงื่อนไข")
     setIsFoodList(true);
     setIsAddTable(false);
     setIsEditTable(false);
@@ -87,7 +88,7 @@ function CustomTable() {
     setCurrentPage(value);
   };
 
-  // console.log(customTable)
+  console.log(isAddTable)
   // console.log(selectedTableId)
   return (
     <div>

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import MoveTable from "../../modal/MoveTable";
 import QrCodeModal from "../../modal/QrCodeModal";
-// import { FoodListData } from "../../../../components/mockData/CustomTable/FoodListData";
 import { front_readqr } from "../../../../store/setting";
-import { getOrderCurrent } from "../../../../services/order.service";
+// import { getOrderCurrent } from "../../../../services/order.service";
 import AdditemModal from "../../modal/AdditemModal";
+import { Link } from "react-router-dom";
 
 function FoodList({ selectedTableId, tableDetail, orderAll }) {
   const [isMoveTable, setIsMoveTable] = useState(false);
@@ -15,7 +15,9 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const tax = 7;
   const serviceCharge = 5;
-
+  
+  console.log(orderAll)
+  console.log(selectedTableId)
   useEffect(() => {
     const filteredData = orderAll.find(
       (item) => item.table_id === selectedTableId
@@ -215,9 +217,9 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
               >
                 เพิ่มรายการ
               </button>
-              <button className="mt-4 flex items-center justify-center gap-1 xl:w-[145px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#076591] to-[#013D59] hover:from-[#0579af] hover:to-[#045b83] hover:shadow-xl hover:scale-105">
+              <Link to={`/payment/detail-all/${currentFoodData.id}`} className="mt-4 flex items-center justify-center gap-1 xl:w-[145px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#076591] to-[#013D59] hover:from-[#0579af] hover:to-[#045b83] hover:shadow-xl hover:scale-105">
                 ชำระเงิน
-              </button>
+              </Link>
             </div>
           </div>
         </>

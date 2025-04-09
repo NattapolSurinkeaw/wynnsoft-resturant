@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ControlData } from "../../../components/mockData/ControlData/ControlData";
 
-function Payment() {
+function Payment({orderData}) {
   return (
     <>
       <div className="h-full bg-white rounded-lg shadow-sm py-4 px-5">
@@ -17,11 +16,11 @@ function Payment() {
         </div>
 
         <div className=" overflow-y-auto px-2 mt-4">
-          {ControlData.slice(0, 7).map((item) => (
+          {orderData.slice(0, 7).map((item) => (
             <div key={item.id}>
               <div className="flex justify-between ">
-                <div className="flex justify-center items-center w-[60px] h-[60px] text-white text-[28px] font-[600] bg-[#FFBA41] rounded-lg">
-                  {item.name_table}
+                <div className="flex justify-center items-center w-[60px] h-[60px] text-white text-[16px] font-[600] bg-[#FFBA41] rounded-lg">
+                  {item.table.title}
                 </div>
                 <div className="w-[270px]">
                   <p className=" text-[18px] text-[#013D59] font-[600]">

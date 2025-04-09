@@ -7,6 +7,7 @@ import { WebSettingController } from '../controllers/WebSettingController'
 import { TableManageController } from '../controllers/TableManageController'
 import { KitchenManageController } from '../controllers/KitchenManageController'
 import { OrderFoodController } from '../controllers/OrderFoodController'
+import { ManageReportController } from '../controllers/ManageReportController'
 
 const upload = multerUpload.uploadImage()
 const uploadFileManual = multerUpload.uploadFileManual();
@@ -16,6 +17,7 @@ const websettingController = new WebSettingController();
 const tableManageController = new TableManageController();
 const kitchenManageController = new KitchenManageController();
 const orderFoodController = new OrderFoodController();
+const manageReportController = new ManageReportController();
 
 // จัดการออเดอร์
 router.get('/api/backoffice/orderall', AuthenticateAdmin, orderFoodController.OngetAllOrderFoods);
@@ -104,6 +106,8 @@ router.post('/api/backoffice/updateUser', AuthenticateAdmin, websettingControlle
 router.delete('/api/backoffice/deleteUser/:code', AuthenticateAdmin, websettingController.OnDeleteUser);
 // router.get('/api/backoffice/users', AuthenticateAdmin, websettingController.OnsettingUser);
 
+// รายงาน
+router.get('/api/backoffice/getBestSell', AuthenticateAdmin, manageReportController.getBestSellingFoods)
 
 
 export const backOfficeRoute = router

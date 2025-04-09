@@ -6,9 +6,10 @@ function OpenTable({ isOpenTable, closeModal, selectedTableId, setRefresh, handl
 
   const getOpenTable = () => {
     getGenerateQr(selectedTableId).then((res) => {
+      console.log(res)
       closeModal()
-      setRefresh(prev => !prev)
       handleFoodListClick()
+      setRefresh(prev => !prev)
     })
   }
 

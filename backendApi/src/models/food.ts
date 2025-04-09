@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize"
 import { sequelize } from "../util/database"
+import OrdersList from "./orderList";
 
 export const Foods = sequelize.define('Foods',
 {
@@ -37,7 +38,7 @@ export const Foods = sequelize.define('Foods',
       allowNull: true
     },
     thumbnail_link: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     status_food: {
@@ -56,5 +57,8 @@ export const Foods = sequelize.define('Foods',
 }, {
     sequelize,
     tableName: 'foods',
-    timestamp: true,
+    timestamps: true,
 })
+
+Foods.hasMany(require('./orderList').OrdersList, { foreignKey: 'food_id', as: 'orderList' });
+

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumberedOutlined";
-import { orderToday } from "../../components/mockData/orderToDay";
+// import { orderToday } from "../../components/mockData/orderToDay";
 import DetailTopMenu from "./components/DetailTopMenu";
 import ChartTopMenu from "./components/ChartTopMenu";
 import { Link, useLocation } from "react-router-dom";
@@ -9,120 +9,133 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import FeedIcon from "@mui/icons-material/Feed";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
+import { getTopmenu } from "../../services/report.service";
 
 function TopMenu() {
   dayjs.locale("th");
   const [activeTab, setActiveTab] = useState("ChartTopMenu");
-  const location = useLocation();
+  const [topMenu, setTopmenu] = useState("");
+  // const location = useLocation();
 
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const tab = params.get("tab") || "ChartTopMenu";
-    setActiveTab(tab);
-  }, [location.search]);
+    const fetchData = async() => {
+      const res = await getTopmenu();
+      setTopmenu(res.data)
+    }
 
-  const chartFilteredOrderDetails = (orderToday) => {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth(); // เดือนปัจจุบัน (0-11)
-    const currentYear = currentDate.getFullYear(); // ปีปัจจุบัน
+    fetchData()
+  }, [])
 
-    console.log("🗓️ Current Month:", currentMonth + 1, "Year:", currentYear);
+  
 
-    const chartFilteredOrders = orderToday.filter((order) => {
-      if (!order.createdAt) {
-        console.warn("⚠️ Missing order date:", order);
-        return false;
-      }
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const tab = params.get("tab") || "ChartTopMenu";
+  //   setActiveTab(tab);
+  // }, [location.search]);
 
-      const orderDate = new Date(order.createdAt);
+  // const chartFilteredOrderDetails = (orderToday) => {
+  //   const currentDate = new Date();
+  //   const currentMonth = currentDate.getMonth(); // เดือนปัจจุบัน (0-11)
+  //   const currentYear = currentDate.getFullYear(); // ปีปัจจุบัน
 
-      if (isNaN(orderDate)) {
-        console.warn("⚠️ Invalid date format:", order.createdAt);
-        return false;
-      }
+  //   console.log("🗓️ Current Month:", currentMonth + 1, "Year:", currentYear);
 
-      return (
-        order.status === "5" &&
-        orderDate.getUTCMonth() === currentMonth &&
-        orderDate.getUTCFullYear() === currentYear
-      );
-    });
+  //   const chartFilteredOrders = orderToday.filter((order) => {
+  //     if (!order.createdAt) {
+  //       console.warn("⚠️ Missing order date:", order);
+  //       return false;
+  //     }
 
-    const mergedOrderList = chartFilteredOrders.reduce((acc, order) => {
-      order.orderList
-        .filter((orderItem) => orderItem.status === "4")
-        .forEach((orderItem) => {
-          const key = `${orderItem.food.id}_${orderItem.food.name}`;
+  //     const orderDate = new Date(order.createdAt);
 
-          if (!acc[key]) {
-            acc[key] = {
-              id: orderItem.food.id,
-              name: orderItem.food.name,
-              amount: orderItem.amount,
-            };
-          } else {
-            acc[key].amount += orderItem.amount;
-          }
-        });
+  //     if (isNaN(orderDate)) {
+  //       console.warn("⚠️ Invalid date format:", order.createdAt);
+  //       return false;
+  //     }
 
-      return acc;
-    }, {});
+  //     return (
+  //       order.status === "5" &&
+  //       orderDate.getUTCMonth() === currentMonth &&
+  //       orderDate.getUTCFullYear() === currentYear
+  //     );
+  //   });
 
-    return Object.values(mergedOrderList);
-  };
+  //   const mergedOrderList = chartFilteredOrders.reduce((acc, order) => {
+  //     order.orderList
+  //       .filter((orderItem) => orderItem.status === "4")
+  //       .forEach((orderItem) => {
+  //         const key = `${orderItem.food.id}_${orderItem.food.name}`;
 
-  const chartFilteredOrders = chartFilteredOrderDetails(orderToday)
-    .sort((a, b) => b.amount - a.amount) // เรียงจากมากไปน้อยตาม amount
-    .map((item, index) => ({
-      ...item,
-      count: index + 1, // เพิ่มลำดับที่เริ่มจาก 1
-    }));
+  //         if (!acc[key]) {
+  //           acc[key] = {
+  //             id: orderItem.food.id,
+  //             name: orderItem.food.name,
+  //             amount: orderItem.amount,
+  //           };
+  //         } else {
+  //           acc[key].amount += orderItem.amount;
+  //         }
+  //       });
 
-  const Total = chartFilteredOrders.reduce(
-    (sum, order) => sum + order.amount,
-    0
-  );
-  const TotalTen = chartFilteredOrders
-    .slice(0, 10)
-    .reduce((sum, order) => sum + order.amount, 0);
+  //     return acc;
+  //   }, {});
 
-  const exportToExcel = () => {
-    const date = new Date();
-    const today = date.toLocaleDateString("en-GB", {
-      month: "numeric",
-      year: "numeric",
-    });
+  //   return Object.values(mergedOrderList);
+  // };
 
-    const excelData = [
-      ["ลำดับ", "เมนูอาหาร", "จำนวนขาย"],
-      ...chartFilteredOrders.map((item) => [
-        item.count,
-        item.name,
-        item.amount,
-      ]),
-      [],
-      [],
-      ["ยอดรวมทั้งหมด (฿)", "", Total, "", "", "", "", "", ""],
-    ];
+  // const chartFilteredOrders = chartFilteredOrderDetails(orderToday)
+  //   .sort((a, b) => b.amount - a.amount) // เรียงจากมากไปน้อยตาม amount
+  //   .map((item, index) => ({
+  //     ...item,
+  //     count: index + 1, // เพิ่มลำดับที่เริ่มจาก 1
+  //   }));
 
-    const ws = XLSX.utils.aoa_to_sheet(excelData);
+  // const Total = chartFilteredOrders.reduce(
+  //   (sum, order) => sum + order.amount,
+  //   0
+  // );
+  // const TotalTen = chartFilteredOrders
+  //   .slice(0, 10)
+  //   .reduce((sum, order) => sum + order.amount, 0);
 
-    ws["!merges"] = [
-      {
-        s: { r: excelData.length - 2, c: 0 },
-        e: { r: excelData.length - 2, c: 1 },
-      },
-      {
-        s: { r: excelData.length - 1, c: 0 },
-        e: { r: excelData.length - 1, c: 1 },
-      },
-    ];
+  // const exportToExcel = () => {
+  //   const date = new Date();
+  //   const today = date.toLocaleDateString("en-GB", {
+  //     month: "numeric",
+  //     year: "numeric",
+  //   });
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    XLSX.writeFile(wb, `Report_TopMenu_${today}.xlsx`);
-  };
+  //   const excelData = [
+  //     ["ลำดับ", "เมนูอาหาร", "จำนวนขาย"],
+  //     ...chartFilteredOrders.map((item) => [
+  //       item.count,
+  //       item.name,
+  //       item.amount,
+  //     ]),
+  //     [],
+  //     [],
+  //     ["ยอดรวมทั้งหมด (฿)", "", Total, "", "", "", "", "", ""],
+  //   ];
+
+  //   const ws = XLSX.utils.aoa_to_sheet(excelData);
+
+  //   ws["!merges"] = [
+  //     {
+  //       s: { r: excelData.length - 2, c: 0 },
+  //       e: { r: excelData.length - 2, c: 1 },
+  //     },
+  //     {
+  //       s: { r: excelData.length - 1, c: 0 },
+  //       e: { r: excelData.length - 1, c: 1 },
+  //     },
+  //   ];
+
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Orders");
+  //   XLSX.writeFile(wb, `Report_TopMenu_${today}.xlsx`);
+  // };
 
   return (
     <div className="flex flex-col gap-4">
@@ -146,7 +159,7 @@ function TopMenu() {
             </Link>
 
             <button
-              onClick={exportToExcel}
+              // onClick={exportToExcel}
               className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
               <FileUploadOutlinedIcon sx={{ color: "#fff", fontSize: 30 }} />
@@ -160,9 +173,7 @@ function TopMenu() {
 
       {activeTab === "ChartTopMenu" && (
         <ChartTopMenu
-          chartFilteredOrders={chartFilteredOrders}
-          Total={Total}
-          TotalTen={TotalTen}
+          topMenu={topMenu}
         />
       )}
       {activeTab === "DetailTopMenu" && <DetailTopMenu />}
