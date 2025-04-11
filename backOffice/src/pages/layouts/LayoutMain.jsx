@@ -31,7 +31,7 @@ function LayoutMain() {
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
         />
-        <div className="flex flex-col w-full overflow-auto">
+        <div className="flex flex-col w-full ">
           <Navbar
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
