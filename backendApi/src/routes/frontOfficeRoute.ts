@@ -19,5 +19,6 @@ router.get(
   "/api/frontoffice/status-food-orders",
   frontendController.OngetStatusFoodOrders
 );
+router.get("/api/frontoffice/webinfo", frontendController.OngetWebInfoData);
 
 export const frontOfficeRoute = router;

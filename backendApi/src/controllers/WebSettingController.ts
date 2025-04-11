@@ -56,7 +56,7 @@ export class WebSettingController {
         // ประมวลผลภาพด้วย sharp
         const imagePath = await sharp(file.path)
             .withMetadata()
-            .jpeg({ quality: 95 })
+            .png({ quality: 95 })
             .toFile(outputPath)
             .then(() => {
                 fs.unlink(file.path, (err) => {
