@@ -16,8 +16,8 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
   const tax = 7;
   const serviceCharge = 5;
   
-  console.log(orderAll)
-  console.log(selectedTableId)
+  // console.log(orderAll)
+  // console.log(selectedTableId)
   useEffect(() => {
     const filteredData = orderAll.find(
       (item) => item.table_id === selectedTableId
@@ -89,7 +89,7 @@ function FoodList({ selectedTableId, tableDetail, orderAll }) {
               isOpen={isAddItem}
               closeModal={() => setIsAddItem(false)}
               itemId={selectedItemId}
-              tableDetail={tableDetail}
+              tableDetail={currentFoodData.table}
             />
           )}
 

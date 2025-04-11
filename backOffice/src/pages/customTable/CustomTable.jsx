@@ -31,15 +31,17 @@ function CustomTable() {
   useEffect(() => {
     const fetchData = async() => {
       const res = await getTableall();
+      console.log(res)
       setCustomTable(res.tables);
     }
     
     fetchData()
   }, [refresh])
-
+  
   useEffect(() => {
     const fetchData = async() => {
       const res = await getOrderCurrent()
+      console.log(res)
       setOrderAll(res.orders);
     }
 
@@ -88,7 +90,7 @@ function CustomTable() {
     setCurrentPage(value);
   };
 
-  console.log(isAddTable)
+  // console.log(isAddTable)
   // console.log(selectedTableId)
   return (
     <div>

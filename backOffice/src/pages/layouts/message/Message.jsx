@@ -11,9 +11,14 @@ import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import TuneOutlinedIcon from "@mui/icons-material/TuneOutlined";
 import LyricsOutlinedIcon from "@mui/icons-material/LyricsOutlined";
-import { MessageOrderData } from "../../../components/mockData/MessageData/MessageData";
+// import { MessageOrderData } from "../../../components/mockData/MessageData/MessageData";
 import { MessageCallData } from "../../../components/mockData/MessageData/MessageData";
 import { Box } from "@mui/material";
+import { getOrderCurrent } from "../../../services/order.service";
+import { io } from "socket.io-client";
+import { socketPath } from "../../../store/setting";
+
+const socket = io(socketPath);
 
 function Message({
   isImageVisible,
@@ -29,19 +34,42 @@ function Message({
   const [activeTab, setActiveTab] = useState("order");
   const [loadingId, setLoadingId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [orderList, setOrderList] = useState([]);
 
   useEffect(() => {
     setIsOpen(false);
   }, [isImageVisible]);
 
-  const countPendingOrders = MessageOrderData.filter(
-    (order) => order.status === "2"
-  ).length;
+  const totalInnerOrderCount = orderList.reduce((total, order) => {
+    return total + (order.orderList?.length || 0);
+  }, 0);
+  
 
   const countPendingCall = MessageCallData.length;
 
-  console.log("countPendingOrders", countPendingOrders);
-  console.log("countPendingCall", countPendingCall);
+  // console.log("countPendingOrders", countPendingOrders);
+  // console.log("countPendingCall", countPendingCall);
+  useEffect(() => {
+    const fetchData = async() => {
+      const res = await getOrderCurrent();
+      setOrderList(res.orders);
+    }
+
+    fetchData()
+
+    const handleNewOrder = () => {
+      console.log("New Order Event Received");
+      fetchData(); // โหลดข้อมูลใหม่เมื่อมี order ใหม่
+    };
+
+    socket.on("newOrder", handleNewOrder); // ฟัง event
+
+    return () => {
+      socket.off("newOrder", handleNewOrder); // ปิดเฉพาะ event handler ที่ถูกสร้างไว้
+    };
+  }, [])
+  
+  // console.log(orderList)
   
 
   const handleAccept = (id) => {
@@ -185,7 +213,7 @@ function Message({
                     </p>
                   </div>
                   <p className="text-[16px] font-[600] text-[#F92727]">
-                    {countPendingOrders}
+                    {totalInnerOrderCount}
                   </p>
                 </button>
                 <button
@@ -213,22 +241,17 @@ function Message({
 
               {activeTab === "order" && (
                 <div className="mt-2 overflow-y-auto max-h-[293px] px-2">
-                  {MessageOrderData.filter(
-                    (order) => order.status === "1" || order.status === "2"
-                  )
-                    .sort((a, b) => {
-                      if (a.status === "2" && b.status !== "2") return -1;
-                      if (a.status !== "2" && b.status === "2") return 1;
-
-                      return new Date(b.createdAt) - new Date(a.createdAt);
-                    })
+                  {orderList
                     .map((order) => (
                       <div
                         key={order.id}
                         className="flex w-full justify-between border-b border-gray-400/50 py-2.5"
                       >
+                        {
+                          console.log(order)
+                        }
                         <p className="text-[14px] font-[600] text-[#F5A100]">
-                          โต๊ะ {order.Order.Table.title}
+                          โต๊ะ {order.table.title}
                         </p>
                         <p className="text-[14px] font-[400] text-[#013D59]">
                           {new Date(order.createdAt).toLocaleTimeString(
@@ -249,10 +272,14 @@ function Message({
                           }`}
                         >
                           {(() => {
-                            switch (order.status) {
+                            switch (order.orderList[(order.orderList.length) - 1].status) {
                               case "1":
                                 return "เพิ่มออเดอร์";
                               case "2":
+                                return "กำลังปรุง";
+                              case "3":
+                                return "รอส่งออเดอร์";
+                              case "4":
                                 return "ส่งออเดอร์";
                               default:
                                 return "ไม่ทราบสถานะ";
@@ -260,7 +287,7 @@ function Message({
                           })()}
                         </p>
                         <div className="text-[14px] font-[600] text-[#F5A100]">
-                          {order.food_items}
+                          {order?.orderList?.length || 0}
                           <span className="text-[14px] font-[600] text-[#013D59] ml-2">
                             รายการ
                           </span>

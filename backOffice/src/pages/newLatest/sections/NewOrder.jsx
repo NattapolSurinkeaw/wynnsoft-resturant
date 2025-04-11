@@ -33,7 +33,7 @@ function NewOrder({ orderListAll, setOrderListAll }) {
     };
   }, []);
 
-  console.log(filteredOrders);
+  // console.log(filteredOrders);
   return (
     <>
       {isOpenNewOrderModal && (

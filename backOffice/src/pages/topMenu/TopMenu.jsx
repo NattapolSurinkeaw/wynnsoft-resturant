@@ -148,15 +148,15 @@ function TopMenu() {
             <p className="text-[#00537B] text-2xl font-[600]">เมนูติดอันดับ</p>
           </div>
           <div className="flex gap-3 justify-end">
-            <Link
-              to={`/topMenu?tab=DetailTopMenu`}
+            <button
+              onClick={() => setActiveTab('DetailTopMenu')}
               className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
               <FeedIcon sx={{ color: "#fff", fontSize: 30 }} />
               <p className="text-white 2xl:text-lg text-base font-[400]">
                 รายระเอียด
               </p>
-            </Link>
+            </button>
 
             <button
               // onClick={exportToExcel}
@@ -176,7 +176,11 @@ function TopMenu() {
           topMenu={topMenu}
         />
       )}
-      {activeTab === "DetailTopMenu" && <DetailTopMenu />}
+      {activeTab === "DetailTopMenu" && (
+        <DetailTopMenu 
+          setActiveTab={setActiveTab}
+        />
+        )}
     </div>
   );
 }

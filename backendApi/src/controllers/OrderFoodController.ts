@@ -62,6 +62,37 @@ export class OrderFoodController {
     }
   };
 
+  OngetOrderListForTopMenu = async(req: any, res: any) => {
+    try {
+      const startOfMonth = moment().startOf("month").toDate();  // 2025-04-01T00:00:00
+      const endOfMonth = moment().endOf("month").toDate();      // 2025-04-30T23:59:59
+
+      const orderList = await OrdersList.findAll({
+        where: {
+          createdAt: {
+            [Op.between]: [startOfMonth, endOfMonth],
+          },
+        },
+        include: [
+          {
+            model: Foods,
+            as: "food",
+            attributes: ["name", "thumbnail_link"],
+          },
+        ],
+      });
+
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "get orde list All success.",
+        orderList: orderList,
+      });
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาด:", error);
+    }
+  }
+
   OngetOrderFoodById = async (req: any, res: any) => {
     try {
       const order = await Orders.findOne({

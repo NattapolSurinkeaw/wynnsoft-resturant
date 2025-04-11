@@ -146,12 +146,17 @@ function Orders() {
     }).then((result) => {
       if (result.isConfirmed) {
         getDeleteOrder(params).then((res) => {
-          console.log(res)
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success"
-          });
+          if(res.status) {
+            console.log(res)
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success"
+            })
+            const filter = orderToday.filter((item) => item.id !== order.id)
+            setOrderToday(filter)
+          }
+          
         })
       }
     });

@@ -8,7 +8,8 @@ const menuItems = [
   "ข้าวต้มปลาทรงเครื่อง",
 ];
 
-function ProductOutStock() {
+function ProductOutStock({outFoods}) {
+  console.log(outFoods);
   return (
     <div className="bg-white rounded-lg shadow-sm py-4 px-5 ">
       <div className="flex justify-between items-center">
@@ -21,9 +22,9 @@ function ProductOutStock() {
         </Link>
       </div>
       <div className="mt-2">
-        {menuItems.map((item, index) => (
+        {outFoods.map((item, index) => (
           <div key={index}>
-            <p className="text-[16px] text-[#00537B] font-[400]">{item}</p>
+            <p className="text-[16px] text-[#00537B] font-[400]">{item.name}</p>
             <div className="border-b border-gray-200 mt-3 mb-3"></div>
           </div>
         ))}

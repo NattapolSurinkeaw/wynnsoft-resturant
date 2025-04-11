@@ -3,78 +3,78 @@ import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumber
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import { DataGrid } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { orderToday } from "../../../components/mockData/orderToDay";
 import { Link } from "react-router-dom";
 import ReplyIcon from "@mui/icons-material/Reply";
 import * as XLSX from "xlsx";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import { getPureDataTopmenu } from "../../../services/report.service";
 
-function DetailTopMenu({}) {
+function DetailTopMenu({setActiveTab}) {
   dayjs.locale("th");
   const [showDate, setShowDate] = useState(false);
-  const menuDate = useRef(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [orderList, setOrderList] = useState([]);
+  const [foods, setFoods] = useState([]);
+  const menuDate = useRef(null);
+
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuDate.current && !menuDate.current.contains(event.target)) {
-        setShowDate(false);
-      }
-    };
-    if (showDate) {
-      document.addEventListener("mousedown", handleClickOutside);
+    const fetchData = async() => {
+      const res = await getPureDataTopmenu();
+      setOrderList(res.orderList);
+      setFoods(res.foods);
     }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showDate]);
+    fetchData()
+  }, [])
 
-  const getFilteredOrderDetails = (orderToday, selectedDate) => {
-    const filteredOrders = orderToday.filter((order) => {
-      if (!selectedDate) return order.status === "5";
-      return (
-        order.status === "5" &&
-        dayjs(order.createdAt).format("MMMM YYYY") === selectedDate
-      );
-    });
+  const filteredOrders = orderList.filter(item => {
+    const date = new Date(item.createdAt);
+    const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    return (selectedDate)? yearMonth === selectedDate : item;
+  });
 
-    const mergedOrderList = filteredOrders.reduce((acc, order) => {
-      order.orderList
-        .filter((orderItem) => orderItem.status === "4")
-        .forEach((orderItem) => {
-          const key = `${orderItem.food.id}_${orderItem.food.name}`;
-
-          if (!acc[key]) {
-            acc[key] = {
-              id: orderItem.food.id,
-              name: orderItem.food.name,
-              amount: orderItem.amount,
-            };
-          } else {
-            acc[key].amount += orderItem.amount;
-          }
-        });
-
-      return acc;
-    }, {});
-
-    return Object.values(mergedOrderList);
+  const getFoodNameById = (id) => {
+    const food = foods.find(item => item.id === id);
+    return food ? food.name : "ไม่พบเมนูนี้";
   };
 
-  const filteredOrders = getFilteredOrderDetails(orderToday, selectedDate).map(
-    (item, index) => ({
-      ...item,
-      count: index + 1,
+  const summedByFoodId = filteredOrders.reduce((acc, item) => {
+    if (acc[item.food_id]) {
+      acc[item.food_id] += item.amount;
+    } else {
+      acc[item.food_id] = item.amount;
+    }
+    return acc;
+  }, {});
+  
+  // ถ้าต้องการเป็น array
+  const resultArray = Object.entries(summedByFoodId).map(([food_id, totalAmount], index) => ({
+    id: index + 1, // ใช้ index โดยตรงและบวก 1 เพื่อให้เริ่มจาก 1
+    name: getFoodNameById(parseInt(food_id)),
+    totalAmount,
+  }));
+
+  const filterMonth = Array.from(new Set(
+    orderList.map(item => {
+      const date = new Date(item.createdAt);
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
     })
-  );
+  ));
+
+  // console.log(resultArray)
+  // console.log(filterMonth)
+  // console.log(selectedDate)
+  
+  console.log(getFoodNameById(1))
 
   const Total = filteredOrders.reduce((sum, order) => sum + order.amount, 0);
-  console.log("filteredOrders", filteredOrders);
+  // console.log("filteredOrders", filteredOrders);
 
   const columns = [
     {
-      field: "count",
+      field: 'id',
       headerName: "ลำดับ",
       headerAlign: "center",
       align: "center",
@@ -90,7 +90,7 @@ function DetailTopMenu({}) {
       maxWidth: 1200,
     },
     {
-      field: "amount",
+      field: "totalAmount",
       headerName: "จำนวนขาย",
       headerAlign: "center",
       align: "right",
@@ -155,7 +155,7 @@ function DetailTopMenu({}) {
                   onClick={() => setShowDate(!showDate)}
                 >
                   <p className="text-[#313131] xl:text-lg text-base font-[400]">
-                    {selectedDate ? selectedDate : "เลือกเดือน"}
+                    {selectedDate ? dayjs(selectedDate).format("MMMM YYYY") : "เลือกเดือน"}
                   </p>
 
                   <figure
@@ -190,38 +190,21 @@ function DetailTopMenu({}) {
                     ทั้งหมด
                   </div>
                   <div className="border-t border-[#e6e6e6] rounded-full w-[250px] max-w-full"></div>
-                  {orderToday
-                    .filter((m) => m.status === "5")
-                    .filter(
-                      (value, index, self) =>
-                        index ===
-                        self.findIndex(
-                          (t) =>
-                            dayjs(t.createdAt).format("MMMM YYYY") ===
-                            dayjs(value.createdAt).format("MMMM YYYY")
-                        )
-                    )
-                    .sort(
-                      (a, b) =>
-                        dayjs(a.createdAt).month() - dayjs(b.createdAt).month()
-                    )
-                    .map((date) => (
+                  {filterMonth.map((date) => (
                       <div
-                        key={date.createdAt}
+                        key={date}
                         className={`py-2 px-4 cursor-pointer hover:bg-[#00537B] hover:text-white text-black rounded-lg ${
                           selectedDate ===
-                          dayjs(date.createdAt).format("MMMM YYYY")
+                          dayjs(date).format("MMMM YYYY")
                             ? "bg-[#F5A100] text-white"
                             : ""
                         }`}
                         onClick={() => {
-                          setSelectedDate(
-                            dayjs(date.createdAt).format("MMMM YYYY")
-                          );
+                          setSelectedDate(date);
                           setShowDate(false);
                         }}
                       >
-                        {dayjs(date.createdAt).format("MMMM YYYY")}
+                        {dayjs(date).format("MMMM YYYY")}
                       </div>
                     ))}
                 </div>
@@ -229,15 +212,15 @@ function DetailTopMenu({}) {
             </div>
           </div>
 
-          <Link
-            to="/topMenu"
+          <button
+            onClick={() => setActiveTab('ChartTopMenu')}
             className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[250px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
           >
             <ReplyIcon sx={{ color: "#fff", fontSize: 30 }} />
             <p className="text-white 2xl:text-lg text-base font-[400]">
               ย้อนกลับ
             </p>
-          </Link>
+          </button>
           
           <button
             onClick={exportToExcel}
@@ -253,7 +236,7 @@ function DetailTopMenu({}) {
       <Box className="w-full h-full relative">
         <DataGrid
           className="bg-white"
-          rows={filteredOrders}
+          rows={resultArray}
           rowHeight={70}
           columns={columns}
           initialState={{

@@ -27,7 +27,7 @@ const Table = sequelize.define(
       Comment: "'1'=ว่าง,'2'=บริการ,'3'=จอง"
     },
     call_staff: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: false,
       default: 0
     },

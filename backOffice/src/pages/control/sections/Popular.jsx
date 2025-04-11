@@ -1,9 +1,10 @@
 import React from "react";
 import ProductOutStock from "./ProductOutStock";
 import { Link } from "react-router-dom";
-import { ControlData } from "../../../components/mockData/ControlData/ControlData";
+import { api_path } from "../../../store/setting";
 
-function Popular() {
+
+function Popular({sortedSummary, outFoods}) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-sm ">
@@ -20,7 +21,7 @@ function Popular() {
           </div>
 
           <div className="overflow-hidden">
-            {ControlData.slice(0, 4).map((item, index) => (
+            {sortedSummary.slice(0, 4).map((item, index) => (
               <div key={index}>
                 <div className="flex mt-1">
                   <div className="flex items-center w-[180px]">
@@ -30,18 +31,18 @@ function Popular() {
                     <figure className="w-[50px] h-[50px] ml-12 rounded-lg shadow-sm">
                       <img
                         className="w-full h-full object-cover rounded-lg"
-                        src={item.image}
+                        src={ api_path + item.image}
                         alt={item.name}
                       />
                     </figure>
                   </div>
                   <div>
                     <p className="text-[16px] text-[#00537B] font-[400] line-clamp-1">
-                      {item.titel}
+                      {item.name}
                     </p>
                     <p className="text-[16px] text-[#00537B] font-[400]">
                       จำนวน :{" "}
-                      <span className="text-[#F5A100]">{item.food_menu}</span>
+                      <span className="text-[#F5A100]">{item.amount}</span>
                     </p>
                   </div>
                 </div>
@@ -59,7 +60,7 @@ function Popular() {
         </Link>
       </div>
 
-      <ProductOutStock />
+      <ProductOutStock outFoods={outFoods} />
     </div>
   );
 }

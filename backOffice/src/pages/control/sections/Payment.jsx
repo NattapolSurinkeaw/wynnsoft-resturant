@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Payment({orderData}) {
+  console.log(orderData)
   return (
     <>
       <div className="h-full bg-white rounded-lg shadow-sm py-4 px-5">
@@ -27,7 +28,7 @@ function Payment({orderData}) {
                     #{item.order_number}
                   </p>
                   <p className="text-[18px] text-[#013D59] font-[400]">
-                    5 รายการ
+                    {item?.overList?.length || 0} รายการ
                   </p>
                 </div>
                 <div className="flex flex-col justify-center items-center gap-1">
