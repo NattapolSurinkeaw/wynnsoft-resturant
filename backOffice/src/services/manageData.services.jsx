@@ -148,8 +148,25 @@ export const getUpdateFood = (id, formData) => {
 export const getCheckBillOrder = (formData) => {
   return axios.post('/api/backoffice/checkbillOrder', formData).then((res) => {
     return {
-      status: res.data.status,
+      status: res.data.status
+    }
+  })
+}
 
+export const getCallStaff = () => {
+  return axios.get('/api/backoffice/getCallStaff').then((res) => {
+    return {
+      status: res.data.status,
+      messageCall: res.data.messageCall
+    }
+  })
+}
+
+export const getAcceptCall = (params) => {
+  return axios.post('/api/backoffice/getAcceptCall', params).then((res) => {
+    return {
+      status: res.data.status,
+      
     }
   })
 }

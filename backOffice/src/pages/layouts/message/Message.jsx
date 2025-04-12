@@ -11,10 +11,9 @@ import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import TuneOutlinedIcon from "@mui/icons-material/TuneOutlined";
 import LyricsOutlinedIcon from "@mui/icons-material/LyricsOutlined";
-// import { MessageOrderData } from "../../../components/mockData/MessageData/MessageData";
-import { MessageCallData } from "../../../components/mockData/MessageData/MessageData";
 import { Box } from "@mui/material";
 import { getOrderCurrent } from "../../../services/order.service";
+import { getCallStaff, getAcceptCall } from "../../../services/manageData.services";
 import { io } from "socket.io-client";
 import { socketPath } from "../../../store/setting";
 
@@ -35,6 +34,8 @@ function Message({
   const [loadingId, setLoadingId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [orderList, setOrderList] = useState([]);
+  const [callStaff, setCallStaff] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     setIsOpen(false);
@@ -44,8 +45,6 @@ function Message({
     return total + (order.orderList?.length || 0);
   }, 0);
   
-
-  const countPendingCall = MessageCallData.length;
 
   // console.log("countPendingOrders", countPendingOrders);
   // console.log("countPendingCall", countPendingCall);
@@ -68,16 +67,29 @@ function Message({
       socket.off("newOrder", handleNewOrder); // ปิดเฉพาะ event handler ที่ถูกสร้างไว้
     };
   }, [])
-  
-  // console.log(orderList)
-  
 
-  const handleAccept = (id) => {
-    setLoadingId(id);
-    setTimeout(() => {
-      console.log(`รับออเดอร์ที่ ID: ${id}`);
-      setLoadingId(null);
-    }, 1000);
+
+  useEffect(() => {
+    const fetchData = async() => {
+      const res = await getCallStaff();
+      setCallStaff(res.messageCall)
+    }
+    fetchData()
+  }, [refresh])
+
+  const handleAccept = (table) => {
+    console.log(table)
+    setLoadingId(table.id);
+    const params = {
+      table_id: table.id,
+      table_type: (table.id == 1) ? 'kitchen': 'table'
+    }
+    getAcceptCall(params).then((res) => {
+      if(res.status) {
+        setLoadingId(null);
+        setRefresh(prev => !prev)
+      }
+    })
   };
 
   const toggleSlide = () => {
@@ -234,7 +246,7 @@ function Message({
                     </p>
                   </div>
                   <p className="text-[16px] font-[600] text-[#F92727]">
-                    {countPendingCall}
+                    {callStaff.length}
                   </p>
                 </button>
               </div>
@@ -299,8 +311,8 @@ function Message({
 
               {activeTab === "call" && (
                 <div className="mt-2 overflow-y-auto max-h-[293px] px-2">
-                  {MessageCallData.sort(
-                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                  {callStaff.sort(
+                    (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
                   ).map((order) => (
                     <div
                       key={order.id}
@@ -313,21 +325,19 @@ function Message({
                             : "text-[#F92727]"
                         }`}
                       >
-                        {order.status_call
-                          ? `โต๊ะ ${order.name_table}`
-                          : "ห้องครัว"}
+                        {order.title}
                       </p>
                       <p className="text-[14px] font-[400] text-[#013D59]">
-                        {new Date(order.createdAt).toLocaleTimeString("th-TH", {
+                        {new Date(order.updatedAt).toLocaleTimeString("th-TH", {
                           hour: "2-digit",
                           minute: "2-digit",
                         })}
                       </p>
                       <p className="text-[14px] font-[600] text-[#F92727]">
-                        เรียกพนักงาน
+                        {(order.call_staff == 1) ? 'เรียกพนักงาน' : 'ชำระเงิน' }
                       </p>
                       <button
-                        onClick={() => handleAccept(order.id)}
+                        onClick={() => handleAccept(order)}
                         className={`w-[35px] h-[25px] rounded-md shadow-sm cursor-pointer text-[14px] font-[600] hover:bg-[#00537B] text-[#013D59] hover:text-white flex items-center justify-center ${
                           loadingId === order.id
                             ? "bg-[#00537B]"
