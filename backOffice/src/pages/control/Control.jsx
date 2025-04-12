@@ -11,15 +11,23 @@ import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined
 import Current from "./sections/Current";
 import Payment from "./sections/Payment";
 import Popular from "./sections/Popular";
-import { getOrderCurrent } from "../../services/order.service";
+import { getOrderCurrent, getOrderListTopmenu } from "../../services/order.service";
+import { getAllOutFoods } from "../../services/kitchen.service";
 import { io } from "socket.io-client";
 import { socketPath } from "../../store/setting";
 
 const socket = io(socketPath);
 function Control() {
   const [orderData, setOrderData] = useState([]);
+  const [orderList, setOrderList] = useState([]);
+  const [outFoods, setOutFoods] = useState([]);
 
   useEffect(() => {
+    const fetchData = async() => {
+      const res = await getOrderCurrent();
+      setOrderData(res.orders)
+    }
+
     fetchData()
 
     // สร้าง handler แยกออกมา
@@ -35,10 +43,18 @@ function Control() {
     };
   }, [])
 
-  const fetchData = async() => {
-    const res = await getOrderCurrent();
-    setOrderData(res.orders)
-  }
+  useEffect(() => {
+    const fetchData = async() => {
+      const res = await getOrderListTopmenu();
+      setOrderList(res.orderList);
+
+      const resFood = await getAllOutFoods();
+      setOutFoods(resFood.outFoods);
+    }
+
+    fetchData()
+  }, [])
+  
 
   const allOrderList = orderData.flatMap(order => order.orderList);
   const statusCount = allOrderList.reduce((acc, item) => {
@@ -46,6 +62,29 @@ function Control() {
     acc[status] = (acc[status] || 0) + 1;
     return acc;
   }, {});
+
+  const summary = orderList.reduce((acc, order) => {
+    const name = order.food?.name;
+    const image = order.food?.thumbnail_link;
+  
+    if (!acc[name]) {
+      acc[name] = {
+        name,
+        image,
+        amount: order.amount,
+      };
+    } else {
+      acc[name].amount += order.amount;
+    }
+  
+    return acc;
+  }, {});
+  
+  // แปลง object เป็น array ถ้าจะเอาไปใช้ใน UI
+  const summaryArray = Object.values(summary);
+  const sortedSummary = summaryArray.sort((a, b) => b.amount - a.amount);
+  // console.log(sortedSummary)
+  
 
   return (
     <div className="flex flex-col gap-4">
@@ -147,7 +186,10 @@ function Control() {
       <div className="grid 2xl:grid-cols-3 grid-cols-1 w-full 2xl:gap-6 gap-3">
         <Current orderData={orderData} />
         <Payment orderData={orderData} />
-        <Popular />
+        <Popular 
+          sortedSummary={sortedSummary}
+          outFoods={outFoods}
+        />
       </div>
     </div>
   );

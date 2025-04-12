@@ -8,3 +8,13 @@ export const getTopmenu = () => {
     }
   })
 }
+
+export const getPureDataTopmenu = () => {
+  return axios.get('/api/backoffice/puredataTopmenu').then((res) => {
+    return {
+      status: res.data.status,
+      orderList: res.data.orderList,
+      foods: res.data.foods
+    }
+  })
+}

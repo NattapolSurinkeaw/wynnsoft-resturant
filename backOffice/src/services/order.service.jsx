@@ -18,6 +18,15 @@ export const getOrderCurrent = () => {
   })
 }
 
+export const getOrderListTopmenu = () => {
+  return axios.get('/api/backoffice/getOrderlistTopmenu').then((res) => {
+    return {
+      status: res.data.status,
+      orderList: res.data.orderList
+    }
+  })
+}
+
 export const getOrderById = (id) => {
   return axios.get(`/api/backoffice/order/${id}`).then((res) => {
     return {

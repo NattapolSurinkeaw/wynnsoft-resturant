@@ -47,5 +47,27 @@ export class ManageReportController {
         error
       });
     }
-  };
+  }
+
+  getPuredataTopmenu = async(req: any, res: any) => {
+    try {
+      const orderList = await OrdersList.findAll({where: {status: 4}});
+      const foods = await Foods.findAll();
+
+      return res.status(200).json({
+        status: true,
+        message: "update status food success",
+        orderList: orderList,
+        foods: foods
+      });
+
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        status: false,
+        message: "Something went wrong",
+        error
+      });
+    }
+  }
 }

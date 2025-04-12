@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
 import { getAllOutFoods, getCancelOutFood } from "../../../services/kitchen.service";
 import { api_path } from "../../../store/setting";
 import Swal from "sweetalert2";
@@ -17,9 +16,12 @@ const TableMenuStatus = ({
   const rowsPerPage = 10;
 
   useEffect(() => {
-    getAllOutFoods().then((res) => {
+    const fetchData = async() => {
+      const res = await getAllOutFoods();
       setOutFoods(res.outFoods);
-    })
+    }
+
+    fetchData()
   }, [])
 
   const filteredData = outFoods.filter(
@@ -69,7 +71,9 @@ const TableMenuStatus = ({
               showConfirmButton: false,
             })
           }
-    
+
+          const filter = currentData.filter((data) => data.id !== id);
+          setOutFoods(filter)
         })
       }
     })

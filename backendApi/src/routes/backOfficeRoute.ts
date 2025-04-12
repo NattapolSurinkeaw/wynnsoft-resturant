@@ -22,8 +22,11 @@ const manageReportController = new ManageReportController();
 // จัดการออเดอร์
 router.get('/api/backoffice/orderall', AuthenticateAdmin, orderFoodController.OngetAllOrderFoods);
 router.get('/api/backoffice/orderallCurrent', AuthenticateAdmin, orderFoodController.OngetAllOrderFoodsCurrent);
+router.get('/api/backoffice/getOrderlistTopmenu', AuthenticateAdmin, orderFoodController.OngetOrderListForTopMenu);
 router.get('/api/backoffice/order/:id', AuthenticateAdmin, orderFoodController.OngetOrderFoodById);
 router.post('/api/backoffice/checkbillOrder', AuthenticateAdmin, upload.single("slip_image"), orderFoodController.OnCheckBillOrder);
+
+
 // จัดการโต๊ะ
 router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController.OngetAllTable);
 router.get('/api/backoffice/onlyTable', AuthenticateAdmin, tableManageController.OngetOnlyTable);
@@ -108,6 +111,7 @@ router.delete('/api/backoffice/deleteUser/:code', AuthenticateAdmin, websettingC
 
 // รายงาน
 router.get('/api/backoffice/getBestSell', AuthenticateAdmin, manageReportController.getBestSellingFoods)
+router.get('/api/backoffice/puredataTopmenu', AuthenticateAdmin, manageReportController.getPuredataTopmenu)
 
 
 export const backOfficeRoute = router

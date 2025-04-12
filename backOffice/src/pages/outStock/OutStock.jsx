@@ -3,7 +3,6 @@ import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlin
 import TableMenuStatus from "./sections/TableMenuStatus";
 import MenuStatusModal from "./modal/MenuStatusModal";
 import NoFoodOutlinedIcon from "@mui/icons-material/NoFoodOutlined";
-import { NewLatestData } from "../../components/mockData/NewLatest/NewLatestData";
 
 function OutStock() {
   const [selectedStatusMenu1, setSelectedStatusMenu1] = useState(null);
@@ -14,10 +13,6 @@ function OutStock() {
   const [selectedEditId, setSelectedEditId] = useState(null);
   const statusMenuRef1 = useRef(null);
   const statusMenuRef2 = useRef(null);
-
-  const titles = [
-    ...new Set(NewLatestData.map((item) => item.Order.Table.title)),
-  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {

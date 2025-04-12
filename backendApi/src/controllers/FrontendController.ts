@@ -44,13 +44,32 @@ export class FrontendController {
           { model: Table, as: "table" },
         ],
       });
-      const taxAndService = await WebInfo.findAll({
-        where: { info_type: 4 },
-      });
       return res.status(200).json({
         status: true,
         message: "get data foods",
         orderAll: orderAll,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error,
+        description: "something went wrong.",
+      });
+    }
+  };
+
+  OngetWebInfoData = async (req: any, res: any) => {
+    try {
+      const webInfoAll: (typeof WebInfo)[] = await WebInfo.findAll();
+      const generalWebInfo = webInfoAll.filter((item) => item.info_type == "1");
+      const contactWebInfo = webInfoAll.filter((item) => item.info_type == "2");
+      const taxAndService = webInfoAll.filter((item) => item.info_type == "4");
+
+      return res.status(200).json({
+        status: true,
+        message: "get data Web Info",
+        generalWebInfo: generalWebInfo,
+        contactWebInfo: contactWebInfo,
         taxAndService: taxAndService,
       });
     } catch (error) {
