@@ -11,6 +11,7 @@ import { OrdersList } from "../models/orderList";
 import { Foods } from "../models/food";
 import { SIO } from "../util/Sockets";
 import { Op } from "sequelize";
+import { WebInfo } from "../models/webInfo";
 
 export class OrderFoodController {
   OngetAllOrderFoods = async (req: any, res: any) => {
@@ -169,6 +170,83 @@ export class OrderFoodController {
       table.qrcode = null;
       table.status = 1;
       await table.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "check bill",
+        description: "check bill order is success",
+      });
+
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        error: error,
+        description: "something went wrong.",
+      });
+    }
+  }
+
+  onGetCallStaff = async(req: any, res: any) => {
+    try {
+      const table = await Table.findAll({
+        where: {
+          call_staff: {
+            [Op.ne]: 0  // ไม่เท่ากับ 0
+          }
+        }
+      });
+
+      const kitchenCall = await WebInfo.findOne({where: {info_param: 'kitchen_call', info_value: 1}});
+      // if()
+      console.log(kitchenCall)
+      if (kitchenCall) {
+        const extraTable = {
+          id: 1,
+          table_token: null,
+          qrcode: null,
+          title: kitchenCall.info_title,
+          status: null,
+          call_staff: parseInt(kitchenCall.info_value), // แปลงเป็นตัวเลข
+          priority: null,
+          display: true,
+          createdAt: kitchenCall.createdAt,
+          updatedAt: kitchenCall.updatedAt
+        };
+      
+        table.push(extraTable);
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "check bill",
+        description: "check bill order is success",
+        messageCall: table
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        error: error,
+        description: "something went wrong.",
+      });
+    }
+  }
+
+  onGetAcceptCall = async(req: any, res: any) => {
+    try {
+      console.log(req.body)
+      if(req.body.table_type == 'table') {
+        const table = await Table.findOne({where: {id: req.body.table_id}});
+        table.call_staff = false;
+        await table.save();
+      } else {
+        const webinfo = await WebInfo.findOne({where: {info_param: 'kitchen_call'}});
+        webinfo.info_value = 0;
+        await webinfo.save();
+      }
+
+
 
       return res.status(200).json({
         status: true,
