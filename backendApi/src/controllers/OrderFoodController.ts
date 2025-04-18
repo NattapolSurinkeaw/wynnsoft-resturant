@@ -198,8 +198,7 @@ export class OrderFoodController {
       });
 
       const kitchenCall = await WebInfo.findOne({where: {info_param: 'kitchen_call', info_value: 1}});
-      // if()
-      console.log(kitchenCall)
+     
       if (kitchenCall) {
         const extraTable = {
           id: 1,
@@ -222,6 +221,33 @@ export class OrderFoodController {
         message: "check bill",
         description: "check bill order is success",
         messageCall: table
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        error: error,
+        description: "something went wrong.",
+      });
+    }
+  }
+
+  onCallStaff = async(req: any, res: any) => {
+    console.log(req.params.type);
+    try {
+      const type = req.params.type;
+      if(type == 1) {
+
+      } else {
+        const webinfo = await WebInfo.findOne({where: {info_param: 'kitchen_call'}});
+        webinfo.info_value = 1;
+        await webinfo.save();
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "call staff",
+        description: "call staff",
       });
     } catch (error) {
       return res.status(500).json({

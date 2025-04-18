@@ -8,22 +8,26 @@ import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import TableToDay from "./components/TableToDay";
 import ChartToDay from "./components/ChartToDay";
-import { orderToday } from "../../components/mockData/orderToDay";
+// import { orderToday } from "../../components/mockData/orderToDay";
+import { getHistoryOrder } from "../../services/manageData.services";
 import * as XLSX from "xlsx";
 
 function Dailyincome() {
   dayjs.locale("th");
   const [activeTab, setActiveTab] = useState("TableToDay");
-  const location = useLocation();
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null); //ช่องทางชำระ
   const menuStatus = useRef(null);
+  const [orderToday, setOrderToday] = useState([]);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const tab = params.get("tab") || "TableToDay";
-    setActiveTab(tab);
-  }, [location.search]);
+    const fetchData = async() => {
+      const res = await getHistoryOrder()
+      setOrderToday(res.order)
+    }
+
+    fetchData()
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -46,7 +50,7 @@ function Dailyincome() {
 
   const getFilteredOrderDetails = (orderToday, selectedStatus) => {
     return orderToday
-      .filter((order) => order.status === "5")
+      // .filter((order) => order.status === "5")
       .filter((order) => dayjs(order.createdAt).isSame(dayjs(), "day")) // ✅ กรองเฉพาะวันที่ปัจจุบัน
       .map((order) => {
         const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
@@ -222,9 +226,9 @@ function Dailyincome() {
                 onClick={() => setShowStatusMenu(!showStatusMenu)}
               >
                 <p className="text-[#313131] xl:text-lg text-base font-[400]">
-                  {selectedStatus === "1"
+                  {selectedStatus === 1
                     ? "ชำระผ่าน QR"
-                    : selectedStatus === "2"
+                    : selectedStatus === 2
                     ? "ชำระเงินสด"
                     : "เลือกการชำระ"}
                 </p>
@@ -300,27 +304,27 @@ function Dailyincome() {
           </button>
 
           {activeTab === "TableToDay" && (
-            <Link
-              to={`/dailyincome?tab=ChartToDay`}
+            <div
+              onClick={() => setActiveTab("ChartToDay")}
               className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[200px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
               <TrendingUpIcon sx={{ color: "#fff", fontSize: 30 }} />
               <p className="text-white 2xl:text-lg text-base font-[400]">
                 แสดงกราฟ
               </p>
-            </Link>
+            </div>
           )}
 
           {activeTab === "ChartToDay" && (
-            <Link
-              to={`/dailyincome?tab=TableToDay`}
+            <div
+              onClick={() => setActiveTab("TableToDay")}
               className="max-lg:order-2 bg-[#00537B] cursor-pointer 2xl:max-w-[200px] lg:max-w-[160px] max-w-[200px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
               <ReplyIcon sx={{ color: "#fff", fontSize: 30 }} />
               <p className="text-white 2xl:text-lg text-base font-[400]">
                 ย้อนกลับ
               </p>
-            </Link>
+            </div>
           )}
         </div>
       </div>

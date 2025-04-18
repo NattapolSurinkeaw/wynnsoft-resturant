@@ -89,7 +89,7 @@ const TableMenuStatus = ({
               >
                 <td className="flex items-center justify-center py-3">
                   <div className="flex items-center justify-center text-[20px] font-[600] w-[55px] h-[55px] text-white bg-[#FFBA31] rounded-lg">
-                    {order.order.table.title}
+                    {order.order.table?.title}
                   </div>
                 </td>
                 <td className="py-3">

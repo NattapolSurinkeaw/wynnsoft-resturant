@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import axios from 'axios'
 import './App.css'
+import { Provider } from 'react-redux'
+import { store } from './store/store.jsx'
 
 axios.interceptors.request.use((request) => {
   request.headers.Authorization = `Bearer ${localStorage.getItem("accessToken")}`;
@@ -14,7 +16,9 @@ axios.interceptors.request.use((request) => {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </StrictMode>,
 )

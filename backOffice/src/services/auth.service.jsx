@@ -23,7 +23,8 @@ export const getLogin = (formData) => {
       message: res.data.message, 
       description: res.data.description,
       access_token: res.data.access_token,
-      refresh_token: res.data.refresh_token
+      refresh_token: res.data.refresh_token,
+      // data: res.data
     }
   })
 }

@@ -119,7 +119,7 @@ export class KitchenManageController {
       await food.save(); // ✅ ใช้ await
   
       // 🔹 ค้นหา OrdersList ตาม food_id
-      const orderList = await OrdersList.findOne({ where: { food_id: req.params.id } });
+      const orderList = await OrdersList.findOne({ where: { food_id: req.params.id, status: 1 } });
       if (!orderList) {
         return res.status(404).json({
           status: false,
@@ -128,7 +128,7 @@ export class KitchenManageController {
       }
   
       // 🔹 อัปเดตสถานะของ OrdersList
-      orderList.status = "5";
+      orderList.status = "6";
       await orderList.save(); // ✅ ใช้ await
   
       // 🔹 ส่ง Response สำเร็จ

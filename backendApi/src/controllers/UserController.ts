@@ -172,10 +172,13 @@ export class UserController {
                 user_id: finding.id,
                 section: 'admin',
                 usercode: finding.users_code,
-                username: req.body.username,
+                username: finding.username,
+                display_name: finding.display_name,
                 psermission: finding.permission,
+                email: finding.email,
                 at: new Date().getTime()
             }, `${Config.secretKey}`, { expiresIn: '30d' })
+
             /* generate refresh_token when register and no expire */
             // const refresh_token = jwt.sign({
             //     username: finding.username,
@@ -185,6 +188,7 @@ export class UserController {
             //     token: access_token
             // }, `${Config.secretKey}`)
             /** update access_token and refresh_token */
+
             finding.access_token = access_token
             finding.save()
             // const ip = req.ip.split(':')[3]
@@ -203,6 +207,7 @@ export class UserController {
                 section: 'admin',
                 active: true,
             })
+
             return res.status(201).json({
                 status: true,
                 message: 'ok',

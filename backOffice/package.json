@@ -19,6 +19,7 @@
     "@mui/x-charts": "^7.28.0",
     "@mui/x-data-grid": "^7.27.2",
     "@mui/x-date-pickers": "^7.27.3",
+    "@reduxjs/toolkit": "^2.7.0",
     "@tailwindcss/vite": "^4.0.9",
     "axios": "^1.8.1",
     "date-fns": "^4.1.0",
