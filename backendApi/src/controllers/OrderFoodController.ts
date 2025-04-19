@@ -1,6 +1,6 @@
 import moment from "moment";
 import { validationResult } from "express-validator";
-import fs from "fs";
+import fs, { stat } from "fs";
 const sharp = require("sharp");
 import path from "path";
 import { ViewService } from "../services/View.service";
@@ -290,9 +290,30 @@ export class OrderFoodController {
     }
   }
 
+  onGetCountOrder = async(req: any, res: any) => {
+    try {
+      const orderWaitCount = await OrdersList.count({
+        where: { status: 3 }
+      });
+      
+      return res.status(200).json({
+        status: true,
+        message: "get count order",
+        description: "get count order success",
+        orderWait: orderWaitCount
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        error: error,
+        description: "something went wrong.",
+      });
+    }
+  }
 
   // สั่งอาหาร
-  OnAddOrderFood = async (req: any, res: any) => {
+  OnAddOrderFood = async(req: any, res: any) => {
     try {
       const decodedJWT = jwt.decode(req.body.token);
       const paramFoods = req.body.food;

@@ -20,8 +20,6 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
   const [isHovered, setIsHovered] = useState(false);
   const userData = useSelector((state) => state.user);
 
-  console.log(userData);
-
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(() => {
     return JSON.parse(localStorage.getItem("notificationsEnabled")) ?? true;
   });

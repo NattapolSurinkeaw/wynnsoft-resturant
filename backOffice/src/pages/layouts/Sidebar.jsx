@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GridViewIcon from "@mui/icons-material/GridView";
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
@@ -16,9 +16,48 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import ChecklistOutlinedIcon from "@mui/icons-material/ChecklistOutlined";
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
+import { useSelector } from 'react-redux';
+import { setOrder, setPayment, setWaitServe } from "../../store/orderSlice";
+import { io } from "socket.io-client";
+import { socketPath } from "../../store/setting";
+import { useDispatch } from 'react-redux';
+import { getCountOrder } from "../../services/order.service";
+
+const socket = io(socketPath);
 
 function Sidebar({ isSidebarOpen }) {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const { order, payment, waitServe } = useSelector((state) => state.orderStatus);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const res = await getCountOrder(); 
+      dispatch(setWaitServe(res.orderWait));
+      console.log("Fetched order count:", res);
+    } catch (err) {
+      console.error("Error fetching order count:", err);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetchData(); // ดึงข้อมูลครั้งแรกเมื่อ mount
+  }, [fetchData]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleStatus = (data) => {
+      console.log("Event update status:", data);
+      fetchData();
+    };
+
+    socket.on("newOrder", handleStatus);
+
+    return () => {
+      socket.off("newOrder", handleStatus);
+    };
+  }, [socket, fetchData]);
 
   return (
     <div
@@ -111,7 +150,7 @@ function Sidebar({ isSidebarOpen }) {
                 : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
             }`}
           >
-            10
+            {order}
           </div>
         </Link>
         <Link
@@ -149,7 +188,7 @@ function Sidebar({ isSidebarOpen }) {
                 : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
             }`}
           >
-            10
+            {payment}
           </div>
         </Link>
         <Link
@@ -187,7 +226,7 @@ function Sidebar({ isSidebarOpen }) {
                 : "text-[#00537B] bg-white group-hover:text-white group-hover:bg-[#00537B]"
             }`}
           >
-            10
+            {waitServe}
           </div>
         </Link>
         <Link
