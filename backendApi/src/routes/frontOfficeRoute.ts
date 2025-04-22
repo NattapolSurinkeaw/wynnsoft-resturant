@@ -20,5 +20,6 @@ router.get(
   frontendController.OngetStatusFoodOrders
 );
 router.get("/api/frontoffice/webinfo", frontendController.OngetWebInfoData);
+router.patch("/api/frontoffice/call-staff", frontendController.OnCallStaff);
 
 export const frontOfficeRoute = router;
