@@ -284,7 +284,7 @@ function Message({
                           }`}
                         >
                           {(() => {
-                            switch (order.orderList[(order.orderList.length) - 1].status) {
+                            switch (order.orderList[(order.orderList.length) - 1]?.status) {
                               case "1":
                                 return "เพิ่มออเดอร์";
                               case "2":

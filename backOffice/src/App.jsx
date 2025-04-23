@@ -54,7 +54,7 @@ function App() {
             <Route path="/dailyincome" element={<Dailyincome />} />
             <Route path="/monthlyincome" element={<Monthlyincome />} />
             <Route path="/topMenu" element={<TopMenu />} />
-            <Route path="/testpage" element={<TestPage />} />
+            {/* <Route path="/testpage" element={<TestPage />} /> */}
 
             <Route path="/catefood" element={<CategoryFood />} />
             <Route path="/settings" element={<Settings />} />

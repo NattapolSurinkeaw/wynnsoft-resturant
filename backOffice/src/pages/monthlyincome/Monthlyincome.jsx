@@ -6,7 +6,7 @@ import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
-import { orderToday } from "../../components/mockData/orderToDay";
+// import { orderToday } from "../../components/mockData/orderToDay";
 import * as XLSX from "xlsx";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -14,11 +14,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TableToMonthly from "./components/TableToMonthly";
 import ChartToMonthly from "./components/ChartToMonthly";
+import { getHistoryOrder } from "../../services/manageData.services";
 
 function Monthlyincome() {
   dayjs.locale("th");
   const [activeTab, setActiveTab] = useState("TableToMonthly");
-  const location = useLocation();
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null); //ช่องทางชำระ
   const menuStatus = useRef(null);
@@ -26,12 +26,16 @@ function Monthlyincome() {
   const [dateEnd, setDateEnd] = useState(null);
   const [showMonthly, setShowMonthly] = useState(false);
   const [selectedMonthly, setSelectedMonthly] = useState(null);
-
+  const [orderToday, setOrderToday] = useState([]);
+  
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const tab = params.get("tab") || "TableToMonthly";
-    setActiveTab(tab);
-  }, [location.search]);
+    const fetchData = async() => {
+      const res = await getHistoryOrder()
+      setOrderToday(res.order)
+    }
+
+    fetchData()
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -58,7 +62,7 @@ function Monthlyincome() {
     selectedMonthly
   ) => {
     return orderToday
-      .filter((order) => order.status === "5")
+      // .filter((order) => order.status === "4")
       .map((order) => {
         const formattedDate = dayjs(order.createdAt).format("D MMMM YYYY");
         const formattedTime = dayjs(order.createdAt).format("HH:mm น.");
@@ -427,15 +431,15 @@ function Monthlyincome() {
               </p>
             </button>
 
-            <Link
-              to={`/monthlyincome?tab=ChartToMonthly`}
+            <div
+              onClick={() => setActiveTab('ChartToMonthly')}
               className="max-lg:order-2 bg-[#00537B] cursor-pointer xl:max-w-[150px] lg:max-w-[140px] w-full flex flex-shrink-0 justify-center items-center gap-1 p-1 px-4 rounded-lg shadow hover:bg-[#F5A100] transition-all duration-200 ease-in-out"
             >
               <TrendingUpIcon sx={{ color: "#fff", fontSize: 30 }} />
               <p className="text-white 3xl:text-lg text-base font-[400]">
                 แสดงกราฟ
               </p>
-            </Link>
+            </div>
           </div>
         </div>
       )}
@@ -456,6 +460,7 @@ function Monthlyincome() {
           showMonthly={showMonthly}
           selectedMonthly={selectedMonthly}
           setSelectedMonthly={setSelectedMonthly}
+          setActiveTab={setActiveTab}
         />
       )}
     </div>

@@ -3,9 +3,8 @@ import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
 import dayjs from "dayjs";
 import "dayjs/locale/th"; // ใช้ภาษาไทย
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-import { getOrderList } from "../../services/kitchen.service";
+import { getOrderList, getUpdateStatusOrderList } from "../../services/kitchen.service";
 import { api_path } from "../../store/setting";
-import { getUpdateStatusOrderList } from "../../services/kitchen.service";
 import Swal from "sweetalert2";
 import { io } from "socket.io-client";
 import { socketPath } from "../../store/setting";

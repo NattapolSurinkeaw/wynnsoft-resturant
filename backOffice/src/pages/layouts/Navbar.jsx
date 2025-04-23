@@ -11,12 +11,14 @@ import MessageAlert from "./message/MessageAlert";
 import alertSound from "../../../public/sound/order3.mp3";
 import { MessageOrderData } from "../../components/mockData/MessageData/MessageData";
 import { MessageCallData } from "../../components/mockData/MessageData/MessageData";
+import { useSelector } from "react-redux";
 
 function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
   const [hasNotification, setHasNotification] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [modalMessageAlert, setModalMessageAlert] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const userData = useSelector((state) => state.user);
 
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(() => {
     return JSON.parse(localStorage.getItem("notificationsEnabled")) ?? true;
@@ -156,7 +158,7 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
           >
             <div className="flex w-[110px] h-[35px] gap-2 items-center rounded-full p-1 bg-[#00537B] shadow-1 cursor-pointer">
               <AccountCircleIcon sx={{ fontSize: 29 }} className="text-white" />
-              <p className="text-[14px] text-white ml-2">ADMIN</p>
+              <p className="text-[14px] text-white ml-2 uppercase">{userData.role}</p>
             </div>
 
             <div
@@ -179,10 +181,10 @@ function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
                 </div>
                 <div>
                   <p className="text-green-500 text-[12px] font-[600]">
-                    Superadmin
+                    {userData.display_name}
                   </p>
                   <p className="text-gray-400 text-[11px] font-[400]">
-                    ta@gmail.com
+                  {userData.email}
                   </p>
                 </div>
               </div>

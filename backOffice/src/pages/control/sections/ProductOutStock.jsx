@@ -9,7 +9,7 @@ const menuItems = [
 ];
 
 function ProductOutStock({outFoods}) {
-  console.log(outFoods);
+  // console.log(outFoods);
   return (
     <div className="bg-white rounded-lg shadow-sm py-4 px-5 ">
       <div className="flex justify-between items-center">

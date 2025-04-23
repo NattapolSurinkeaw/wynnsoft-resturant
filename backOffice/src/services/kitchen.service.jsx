@@ -46,6 +46,22 @@ export const getUpdateStatusOrderList = (params) => {
   })
 }
 
+export const getCallStaff = (type) => {
+  return axios.post(`/api/backoffice/onCallStaff/${type}`).then((res) => {
+    return {
+      status: res.data.status
+    }
+  })
+}
+
+export const getReportOutFood = (id) => {
+  return axios.post(`/api/backoffice/status-outfood/${id}`).then((res) => {
+    return {
+      status: res.data.status
+    }
+  })
+}
+
 export const getChangeStatusOrderList = (params) => {
   return axios.post('/api/backoffice/changestatusOrderlist', params).then((res) => {
     return {

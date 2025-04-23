@@ -4,11 +4,15 @@ import { getLogin } from "../../services/auth.service";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import Swal from "sweetalert2";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../store/userSlice";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const submitLogin = async () => {
     if (!email.trim() || !password.trim()) {
@@ -30,7 +34,18 @@ function LoginPage() {
         localStorage.setItem("isLogin", true);
         localStorage.setItem("accessToken", res.access_token);
         localStorage.setItem("refreshToken", res.refresh_token);
-  
+        const dataDecode = jwtDecode(res.access_token);
+
+        const userInfo = {
+          username: dataDecode.username,
+          display_name: dataDecode.display_name,
+          token: res.access_token,
+          role: dataDecode.section,
+          email: dataDecode.email,
+        };
+
+        await dispatch(setUserData(userInfo));
+
         Swal.fire({
           icon: "success",
           title: "ล็อกอินสำเร็จ!",

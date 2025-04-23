@@ -8,6 +8,7 @@ import Orders from "../models/orders";
 import OrdersList from "../models/orderList";
 import { Table } from "../models/table";
 import { WebInfo } from "../models/webInfo";
+import * as jwt from "jsonwebtoken";
 
 export class FrontendController {
   OngetCategoryAndFood = async (req: any, res: any) => {
@@ -72,6 +73,37 @@ export class FrontendController {
         contactWebInfo: contactWebInfo,
         taxAndService: taxAndService,
       });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error,
+        description: "something went wrong.",
+      });
+    }
+  };
+
+  OnCallStaff = async (req: any, res: any) => {
+    try {
+      const decodedJWT = jwt.decode(req.body.token);
+      console.log(typeof decodedJWT);
+      console.log(req.body.call_staff);
+      if (decodedJWT && typeof decodedJWT === "object") {
+        const table = await Table.findOne({
+          where: { id: decodedJWT.table_id },
+        });
+        await table.update({ call_staff: req.body.call_staff });
+        return res.status(200).json({
+          status: true,
+          message: "ok",
+          description: "call staff success.",
+        });
+      } else {
+        return res.status(400).json({
+          status: false,
+          message: "error",
+          description: "data incorrect",
+        });
+      }
     } catch (error) {
       return res.status(500).json({
         status: false,

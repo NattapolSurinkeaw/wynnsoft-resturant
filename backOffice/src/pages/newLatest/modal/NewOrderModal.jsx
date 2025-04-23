@@ -6,11 +6,9 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import html2canvas from "html2canvas";
 import Swal from "sweetalert2";
 import { jsPDF } from "jspdf";
-// import { NewLatestData } from "../../../components/mockData/NewLatest/NewLatestData";
-// import { orderToday } from "../../../components/mockData/orderToDay";
 import Receipt_Print from "../../../components/Receipt/Receipt_Print ";
 import { api_path } from "../../../store/setting";
-import { getUpdateStatusOrderList } from "../../../services/kitchen.service";
+import { getUpdateStatusOrderList, getCallStaff, getReportOutFood } from "../../../services/kitchen.service";
 
 Receipt_Print;
 
@@ -36,6 +34,34 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
     setActiveTab(1);
     closeModal();
   };
+
+  const callstaff = () => {
+    getCallStaff(2).then((res) => {
+      if(res.status) {
+        Swal.fire({
+          icon: "success",
+          title: "เรียกพนักงาน",
+          text: "ส่งข้อความเรียกพนักงานเรียบร้อย",
+          timer: 1500,
+          showConfirmButton: false,
+        })
+      }
+    })
+  }
+
+  const reportOutFood = (fillterOrderData) => {
+    getReportOutFood(fillterOrderData.food_id).then((res) => {
+      if(res.status) {
+        Swal.fire({
+          icon: "success",
+          title: "แจ้งสินค้าหมด",
+          text: "แจ้งสินค้าหมดและยกเลิกออเดอร์เรียบร้อย",
+          timer: 1500,
+          showConfirmButton: false,
+        })
+      }
+    })
+  }
 
   const handleTow = async () => {
     setActiveTab(3);
@@ -150,10 +176,14 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
             </div>
 
             <div className="flex justify-between space-x-3 mt-7">
-              <button className="w-[137px] py-1.5 bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
+              <button 
+              onClick={() => callstaff()}
+              className="w-[137px] py-1.5 bg-[#F5A100] hover:bg-[#ffa600] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
                 แจ้งพนักงาน
               </button>
-              <button className="w-[137px] py-1.5 bg-[#F44D4D] hover:bg-[#ff0000] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
+              <button 
+              onClick={() => reportOutFood(fillterOrderData)}
+              className="w-[137px] py-1.5 bg-[#F44D4D] hover:bg-[#ff0000] hover:scale-105 transition duration-300 text-white rounded-lg cursor-pointer shadow-1">
                 สินค้าหมด
               </button>
               <button

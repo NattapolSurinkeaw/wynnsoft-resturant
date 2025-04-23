@@ -35,3 +35,13 @@ export const getOrderById = (id) => {
     }
   })
 }
+
+
+export const getCountOrder = () => {
+  return axios.get('/api/backoffice/getCountOrder').then((res) => {
+    return {
+      status: res.data.status,
+      orderWait: res.data.orderWait
+    }
+  })
+}

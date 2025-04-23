@@ -26,7 +26,10 @@ router.get('/api/backoffice/getOrderlistTopmenu', AuthenticateAdmin, orderFoodCo
 router.get('/api/backoffice/order/:id', AuthenticateAdmin, orderFoodController.OngetOrderFoodById);
 router.post('/api/backoffice/checkbillOrder', AuthenticateAdmin, upload.single("slip_image"), orderFoodController.OnCheckBillOrder);
 router.get('/api/backoffice/getCallStaff', AuthenticateAdmin, orderFoodController.onGetCallStaff);
-router.post('/api/backoffice/getAcceptCall', AuthenticateAdmin, orderFoodController.onGetAcceptCall)
+router.post('/api/backoffice/onCallStaff/:type', AuthenticateAdmin, orderFoodController.onCallStaff);
+router.post('/api/backoffice/getAcceptCall', AuthenticateAdmin, orderFoodController.onGetAcceptCall);
+
+router.get('/api/backoffice/getCountOrder', AuthenticateAdmin, orderFoodController.onGetCountOrder);
 
 // จัดการโต๊ะ
 router.get('/api/backoffice/alltables', AuthenticateAdmin, tableManageController.OngetAllTable);
