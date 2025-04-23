@@ -259,9 +259,6 @@ function Message({
                         key={order.id}
                         className="flex w-full justify-between border-b border-gray-400/50 py-2.5"
                       >
-                        {
-                          console.log(order)
-                        }
                         <p className="text-[14px] font-[600] text-[#F5A100]">
                           โต๊ะ {order.table.title}
                         </p>

@@ -37,6 +37,15 @@ export const getBookingTable = (params) => {
   })
 }
 
+export const getAddBillPayment = (params) => {
+  return axios.post('/api/backoffice/getAddBill', params).then((res) => {
+    return {
+      status: res.data.status,
+      
+    }
+  })
+}
+
 export const getEditTable = (id, params) => {
   return axios.post(`/api/backoffice/edittable/${id}`, params).then((res) => {
     return {
