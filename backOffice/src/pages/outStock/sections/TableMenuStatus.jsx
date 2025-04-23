@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { getAllOutFoods, getCancelOutFood } from "../../../services/kitchen.service";
+import {
+  getAllOutFoods,
+  getCancelOutFood,
+} from "../../../services/kitchen.service";
 import { api_path } from "../../../store/setting";
 import Swal from "sweetalert2";
 
@@ -10,19 +13,21 @@ const TableMenuStatus = ({
   selectedStatusMenu2,
   selectedEditId,
   handleEditClick,
+  refreshData,
 }) => {
   const [outFoods, setOutFoods] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
   useEffect(() => {
-    const fetchData = async() => {
+    const fetchData = async () => {
       const res = await getAllOutFoods();
+      console.log("Fetched outFoods:", res.outFoods);
       setOutFoods(res.outFoods);
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, [refreshData]);
 
   const filteredData = outFoods.filter(
     (item) =>
@@ -58,26 +63,26 @@ const TableMenuStatus = ({
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "ยืนยัน"
+      confirmButtonText: "ยืนยัน",
     }).then((result) => {
       if (result.isConfirmed) {
         getCancelOutFood(id).then((res) => {
-          if(res.status) {
+          if (res.status) {
             Swal.fire({
               icon: "success",
               title: "แจ้งสินค้าหมด",
               text: "ยกเลิกสินค้าหมดเรียบร้อย",
               timer: 1500,
               showConfirmButton: false,
-            })
+            });
           }
 
           const filter = currentData.filter((data) => data.id !== id);
-          setOutFoods(filter)
-        })
+          setOutFoods(filter);
+        });
       }
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -125,9 +130,10 @@ const TableMenuStatus = ({
                 </td>
                 <td className="py-3 w-[60px] pr-6">
                   <div className="w-full flex items-center justify-center">
-                    <button 
-                    onClick={() => onCancelFood(order.id)}
-                    className="flex justify-center items-center w-[80px] h-[35px] text-white font-[500] bg-[#F44D4D] hover:bg-[#ff1c1c] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg">
+                    <button
+                      onClick={() => onCancelFood(order.id)}
+                      className="flex justify-center items-center w-[80px] h-[35px] text-white font-[500] bg-[#F44D4D] hover:bg-[#ff1c1c] hover:scale-105 duration-200 transition shadow-sm cursor-pointer rounded-lg"
+                    >
                       ยกเลิก
                     </button>
                   </div>
