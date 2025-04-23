@@ -5,33 +5,39 @@ import Swal from "sweetalert2";
 import { api_path } from "../../../store/setting";
 import { getUpdateNoteOutFood } from "../../../services/kitchen.service";
 
-function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
+function MenuStatusModal({
+  isOpenEditModal,
+  closeModal,
+  selectedEditId,
+  setRefreshData,
+}) {
   const [noteFood, setNoteFood] = useState("");
 
   useEffect(() => {
     setNoteFood(selectedEditId.note);
-  }, [selectedEditId])
+  }, [selectedEditId]);
 
   const onSubmit = () => {
-   const params = {
-    note: noteFood
-   }
+    const params = {
+      note: noteFood,
+    };
 
-   getUpdateNoteOutFood(selectedEditId.id, params).then((res) => {
-    console.log()
-    if(res.status) {
-      Swal.fire({
-        icon: "success",
-        title: "แจ้งสินค้าหมด",
-        text: "เพิ่มหมายเหตุสินค้าหมดเรียบร้อย",
-        timer: 1500,
-        showConfirmButton: false,
-      }).then(() => {
-        closeModal()
-      })
-    }
-   })
-  }
+    getUpdateNoteOutFood(selectedEditId.id, params).then((res) => {
+      console.log();
+      if (res.status) {
+        Swal.fire({
+          icon: "success",
+          title: "แจ้งสินค้าหมด",
+          text: "เพิ่มหมายเหตุสินค้าหมดเรียบร้อย",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          closeModal();
+          setRefreshData((prev) => prev + 1);
+        });
+      }
+    });
+  };
 
   return (
     isOpenEditModal && (
@@ -75,8 +81,7 @@ function MenuStatusModal({ isOpenEditModal, closeModal, selectedEditId }) {
             onChange={(e) => setNoteFood(e.target.value)}
             className="w-full min-h-[80px] p-2 mt-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             placeholder="หมายเหตุ..."
-          >
-          </textarea>
+          ></textarea>
           <div className="flex justify-center space-x-3 mt-6">
             <button
               onClick={onSubmit}
