@@ -53,10 +53,7 @@ export class KitchenManageController {
   OnUpdateOrderListStatus = async (req: any, res: any) => {
     try {
       const io = SIO.getIO(); // ใช้งาน Socket.IO
-      const {
-        orderList,
-        orderId,
-      }: { orderList: { id: number; status: number }[]; orderId: number } =
+      const { orderList,orderId }: { orderList: { id: number; status: number }[]; orderId: number } =
         req.body;
 
       console.log(orderList);

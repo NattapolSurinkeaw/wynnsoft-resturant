@@ -1,5 +1,6 @@
 import React from "react";
 import { api_path } from "../../../store/setting";
+import { getUpdateStatusOrderList } from "../../../services/kitchen.service";
 
 function EditOrder({ filteredOrderList }) {
   const formatNumber = (num) =>
@@ -7,6 +8,21 @@ function EditOrder({ filteredOrderList }) {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
+
+  const handleCancelMenu = (item) => {
+    console.log(item)
+    const params = {
+      orderList: [
+        {
+          id: item.id,
+          status: 5,
+        },
+      ],
+    };
+    getUpdateStatusOrderList(params).then((res) => {
+      console.log(res)
+    })
+  }
   return (
     <div className="flex flex-col gap-2 h-[600px] overflow-auto hide-scrollbar">
       {filteredOrderList.map((item, index) => (
@@ -56,7 +72,9 @@ function EditOrder({ filteredOrderList }) {
             </div>
 
             <div className="flex flex-row justify-end gap-4 w-[20%] xl:pl-6">
-              <button className="bg-[#F44D4D] hover:bg-[#FFBA41] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-full text-center py-1.5 font-bold text-base">
+              <button className="bg-[#F44D4D] hover:bg-[#FFBA41] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-full text-center py-1.5 font-bold text-base"
+                onClick={() => handleCancelMenu(item)}
+              >
                 ยกเลิก
               </button>
             </div>

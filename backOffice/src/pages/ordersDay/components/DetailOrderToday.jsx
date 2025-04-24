@@ -35,15 +35,15 @@ function DetailOrderToday() {
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
 
   // console.log("Menu Order:", menuOrder.orderList);
   const formattedDate = dayjs(orderToday?.createdAt).format("D MMMM YYYY");
 
-  const filteredOrderList = orderToday?.orderList
-    ? orderToday.orderList.filter((item) => item.status !== "4")
-    : [];
+  const filteredOrderList = (orderToday.orderList || []).filter(
+    (item) => item.status !== "4" && item.status !== "5"
+  );
 
   // console.log("filteredOrderList", filteredOrderList);
 
@@ -62,7 +62,7 @@ function DetailOrderToday() {
         acc.push({
           ...item.food,
           amount: item.amount,
-          status: item.status, // เพิ่ม status จาก orderToday
+          status: item.status // เพิ่ม status จาก orderToday
         });
       }
 
@@ -116,62 +116,60 @@ function DetailOrderToday() {
             <p className="text-[#313131] text-lg text-center  w-[20%]">จำนวน</p>
             <div className="w-[30%] flex justify-end" onClick={handleOpenModal}>
               <button className="bg-[#013D59] hover:bg-[#FFBA41] xl:text-xl text-lg rounded-lg text-white max-w-[100px] w-full py-1 cursor-pointer ">
-                เเก้ไข
+                แก้ไข
               </button>
             </div>
           </div>
-          {(orderToday.orderList || []).some((item) => item.status !== "4") && (
+          {filteredOrderList.length > 0 && (
             <div className="flex flex-col overflow-auto hide-scrollbar">
-              {orderToday.orderList
-                .filter((item) => item.status !== "4") // กรองเฉพาะออเดอร์ที่ยังไม่เสิร์ฟ
-                .map((item, index) => (
-                  <div
-                    key={`${item.id}-${index}`}
-                    className={`flex flex-col items-center px-4 py-2 ${
-                      index % 2 === 0 ? "bg-[#EBFBFF]" : "bg-white"
-                    }`}
-                  >
-                    <div className="flex flex-row justify-between w-full items-center gap-3">
-                      <div className="flex gap-4 w-full items-center">
-                        <figure className="2xl:w-[75px] 2xl:h-[75px] w-[70px] h-[60px] rounded-lg">
-                          <img
-                            src={api_path + item.food.thumbnail_link}
-                            alt={item.food.name}
-                            className="w-full h-full rounded-lg object-cover"
-                          />
-                        </figure>
-                        <div className="flex flex-col justify-between gap-3 w-full">
-                          <p className="lg:text-2xl text-lg text-[#313131] font-[500] line-clamp-2">
-                            {item.food.name}
-                          </p>
-                          <p className="text-base font-[300] w-full line-clamp-2">
-                            {item.food.details}
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="lg:text-2xl text-lg text-[#313131] font-[500] text-center items-center w-[20%]">
-                        {item.amount}
-                      </p>
-
-                      <div className="w-[30%] flex flex-col justify-end text-right">
-                        {item.food.special_price > 0 && (
-                          <p className="text-base font-[300] line-through">
-                            {formatNumber(item.food.price * item.amount)}
-                          </p>
-                        )}
-
-                        <p className="lg:text-2xl text-lg text-[#313131] font-[600]">
-                          {formatNumber(
-                            (item.food.special_price || item.food.price) *
-                              item.amount
-                          )}{" "}
-                          ฿
+              {filteredOrderList.map((item, index) => (
+                <div
+                  key={`${item.id}-${index}`}
+                  className={`flex flex-col items-center px-4 py-2 ${
+                    index % 2 === 0 ? "bg-[#EBFBFF]" : "bg-white"
+                  }`}
+                >
+                  <div className="flex flex-row justify-between w-full items-center gap-3">
+                    <div className="flex gap-4 w-full items-center">
+                      <figure className="2xl:w-[75px] 2xl:h-[75px] w-[70px] h-[60px] rounded-lg">
+                        <img
+                          src={api_path + item.food.thumbnail_link}
+                          alt={item.food.name}
+                          className="w-full h-full rounded-lg object-cover"
+                        />
+                      </figure>
+                      <div className="flex flex-col justify-between gap-3 w-full">
+                        <p className="lg:text-2xl text-lg text-[#313131] font-[500] line-clamp-2">
+                          {item.food.name}
+                        </p>
+                        <p className="text-base font-[300] w-full line-clamp-2">
+                          {item.food.details}
                         </p>
                       </div>
                     </div>
+
+                    <p className="lg:text-2xl text-lg text-[#313131] font-[500] text-center items-center w-[20%]">
+                      {item.amount}
+                    </p>
+
+                    <div className="w-[30%] flex flex-col justify-end text-right">
+                      {item.food.special_price > 0 && (
+                        <p className="text-base font-[300] line-through">
+                          {formatNumber(item.food.price * item.amount)}
+                        </p>
+                      )}
+
+                      <p className="lg:text-2xl text-lg text-[#313131] font-[600]">
+                        {formatNumber(
+                          (item.food.special_price || item.food.price) *
+                            item.amount
+                        )}{" "}
+                        ฿
+                      </p>
+                    </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -186,7 +184,7 @@ function DetailOrderToday() {
           {(orderToday.orderList || []).some((item) => item.status === "4") && (
             <div className="flex flex-col gap-2 overflow-auto hide-scrollbar">
               {orderToday.orderList
-                .filter((item) => item.status === "4") 
+                .filter((item) => item.status === "4")
                 .map((item, index) => (
                   <div
                     key={`${item.id}-${index}`}
@@ -455,7 +453,7 @@ function DetailOrderToday() {
             bgcolor: "white",
             borderRadius: "10px",
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-            backgroundColor: "#FFf",
+            backgroundColor: "#FFf"
             // p: 2,
           }}
         >

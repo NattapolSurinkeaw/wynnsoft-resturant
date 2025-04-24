@@ -5,12 +5,14 @@ import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Checkbox from "@mui/material/Checkbox";
 import { getAddBillPayment } from "../../../../services/table_manage.service";
+import { useNavigate } from "react-router-dom";
 
 function TotalBill({orderAll}) {
   const [isTotalBill, setIsTotalBill] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedTableId, setSelectedTableId] = useState(null);
   const [orderData, setOrderData] = useState([]);
+  let navigate = useNavigate();
 
   const handleTotalBillOnClick = (order) => {
     setSelectedTableId(order.id);
@@ -39,6 +41,9 @@ function TotalBill({orderAll}) {
     }
     getAddBillPayment(param).then((res) => {
       console.log(res)
+      if(res.status) {
+        navigate(`/payment/detail-all/${selectedRows[0]}`);
+      }
     })
   }
 
