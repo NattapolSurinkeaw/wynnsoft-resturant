@@ -11,7 +11,10 @@ import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined
 import Current from "./sections/Current";
 import Payment from "./sections/Payment";
 import Popular from "./sections/Popular";
-import { getOrderCurrent, getOrderListTopmenu } from "../../services/order.service";
+import {
+  getOrderCurrent,
+  getOrderListTopmenu,
+} from "../../services/order.service";
 import { getAllOutFoods } from "../../services/kitchen.service";
 import { io } from "socket.io-client";
 import { socketPath } from "../../store/setting";
@@ -21,14 +24,24 @@ function Control() {
   const [orderData, setOrderData] = useState([]);
   const [orderList, setOrderList] = useState([]);
   const [outFoods, setOutFoods] = useState([]);
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1800);
 
   useEffect(() => {
-    const fetchData = async() => {
-      const res = await getOrderCurrent();
-      setOrderData(res.orders)
-    }
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth > 1800);
+    };
 
-    fetchData()
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getOrderCurrent();
+      setOrderData(res.orders);
+    };
+
+    fetchData();
 
     // สร้าง handler แยกออกมา
     const handleNewOrder = () => {
@@ -41,22 +54,21 @@ function Control() {
     return () => {
       socket.off("newOrder", handleNewOrder); // ปิดเฉพาะ event handler ที่ถูกสร้างไว้
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const fetchData = async() => {
+    const fetchData = async () => {
       const res = await getOrderListTopmenu();
       setOrderList(res.orderList);
 
       const resFood = await getAllOutFoods();
       setOutFoods(resFood.outFoods);
-    }
+    };
 
-    fetchData()
-  }, [])
-  
+    fetchData();
+  }, []);
 
-  const allOrderList = orderData.flatMap(order => order.orderList);
+  const allOrderList = orderData.flatMap((order) => order.orderList);
   const statusCount = allOrderList.reduce((acc, item) => {
     const status = item.status;
     acc[status] = (acc[status] || 0) + 1;
@@ -66,7 +78,7 @@ function Control() {
   const summary = orderList.reduce((acc, order) => {
     const name = order.food?.name;
     const image = order.food?.thumbnail_link;
-  
+
     if (!acc[name]) {
       acc[name] = {
         name,
@@ -76,15 +88,14 @@ function Control() {
     } else {
       acc[name].amount += order.amount;
     }
-  
+
     return acc;
   }, {});
-  
+
   // แปลง object เป็น array ถ้าจะเอาไปใช้ใน UI
   const summaryArray = Object.values(summary);
   const sortedSummary = summaryArray.sort((a, b) => b.amount - a.amount);
   // console.log(sortedSummary)
-  
 
   return (
     <div className="flex flex-col gap-4">
@@ -105,38 +116,46 @@ function Control() {
         </Link>
       </div>
       {/* hide-scrollbar */}
-      <div className="flex 2xl:gap-6 gap-3 w-full overflow-x-auto pb-3">
-        {orderData.map(
-          (table) => (
-            <div
-              key={table.id}
-              className="min-w-[381px] bg-white rounded-lg shadow py-4 px-5"
-            >
-              <div className="flex w-full justify-between items-center">
-                <div className="flex gap-1 items-center">
-                  <FastfoodOutlinedIcon
-                    sx={{ fontSize: 30 }}
-                    className="text-[#00537B]"
-                  />
-                  <p className="text-[26px] text-[#013D59] font-[600]">
-                    : โต๊ะ {table.table.title}
-                  </p>
-                </div>
-                <p className="text-[16px] text-[#8F8F8F] font-[500]">
-                  {table.orderList.length} รายการ
+
+      <div
+        className={`${
+          isLargeScreen
+            ? "flex w-[1596px]"
+            : "grid lg:grid-cols-2 grid-cols-1 w-full"
+        } 2xl:gap-6 gap-3 overflow-x-auto overflow-hidden pb-3`}
+      >
+        {orderData.map((table) => (
+          <div
+            key={table.id}
+            className="min-w-[381px] bg-white rounded-lg shadow py-4 px-5"
+          >
+            <div className="flex w-full justify-between items-center">
+              <div className="flex gap-1 items-center">
+                <FastfoodOutlinedIcon
+                  sx={{ fontSize: 30 }}
+                  className="text-[#00537B]"
+                />
+                <p className="xl:text-[24px] text-[18px] text-[#013D59] font-[600]">
+                  : โต๊ะ {table.table.title}
                 </p>
               </div>
-
-              <OrderStatus status={table.status} />
+              <p className="text-[16px] text-[#8F8F8F] font-[500]">
+                {table.orderList.length} รายการ
+              </p>
             </div>
-          )
-        )}
+
+            <OrderStatus status={table.status} />
+          </div>
+        ))}
       </div>
+
       <div className="grid 2xl:grid-cols-4 grid-cols-2 2xl:gap-6 gap-3 w-full ">
         <div className="flex justify-between items-center w-full bg-[#00537B] rounded-lg shadow py-4 px-5">
           <div>
             <p className="text-[16px] text-white font-[500]">รายการสั่งใหม่</p>
-            <p className="text-[35px] text-white font-[700]">{statusCount[1] || 0}</p>
+            <p className="text-[35px] text-white font-[700]">
+              {statusCount[1] || 0}
+            </p>
           </div>
           <div className="flex w-[60px] h-[60px] items-center justify-center bg-white  rounded-lg">
             <NotificationsActiveOutlinedIcon
@@ -160,7 +179,9 @@ function Control() {
         <div className="flex justify-between items-center w-full bg-[#FF6A00] rounded-lg shadow py-4 px-5">
           <div>
             <p className="text-[16px] text-white font-[500]">พร้อมเสริฟ</p>
-            <p className="text-[35px] text-white font-[700]">{statusCount[3] || 0}</p>
+            <p className="text-[35px] text-white font-[700]">
+              {statusCount[3] || 0}
+            </p>
           </div>
           <div className="flex w-[60px] h-[60px] items-center justify-center bg-white  rounded-lg">
             <BookmarkAddedOutlinedIcon
@@ -172,7 +193,9 @@ function Control() {
         <div className="flex justify-between items-center w-full bg-[#FFD25B] rounded-lg shadow py-4 px-5">
           <div>
             <p className="text-[16px] text-white font-[500]">อยู่ระหว่างปรุง</p>
-            <p className="text-[35px] text-white font-[700]">{statusCount[2] || 0}</p>
+            <p className="text-[35px] text-white font-[700]">
+              {statusCount[2] || 0}
+            </p>
           </div>
           <div className="flex w-[60px] h-[60px] items-center justify-center bg-white  rounded-lg">
             <AccessTimeOutlinedIcon
@@ -186,17 +209,13 @@ function Control() {
       <div className="grid 2xl:grid-cols-3 grid-cols-1 w-full 2xl:gap-6 gap-3">
         <Current orderData={orderData} />
         <Payment orderData={orderData} />
-        <Popular 
-          sortedSummary={sortedSummary}
-          outFoods={outFoods}
-        />
+        <Popular sortedSummary={sortedSummary} outFoods={outFoods} />
       </div>
     </div>
   );
 }
 
 export default Control;
-
 
 const OrderStatus = ({ status }) => {
   switch (status) {

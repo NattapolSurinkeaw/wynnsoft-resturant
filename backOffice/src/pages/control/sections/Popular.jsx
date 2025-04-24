@@ -3,8 +3,7 @@ import ProductOutStock from "./ProductOutStock";
 import { Link } from "react-router-dom";
 import { api_path } from "../../../store/setting";
 
-
-function Popular({sortedSummary, outFoods}) {
+function Popular({ sortedSummary, outFoods }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-sm ">
@@ -31,7 +30,7 @@ function Popular({sortedSummary, outFoods}) {
                     <figure className="w-[50px] h-[50px] ml-12 rounded-lg shadow-sm">
                       <img
                         className="w-full h-full object-cover rounded-lg"
-                        src={ api_path + item.image}
+                        src={api_path + item.image}
                         alt={item.name}
                       />
                     </figure>

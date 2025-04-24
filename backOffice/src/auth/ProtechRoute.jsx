@@ -12,7 +12,7 @@ const RefreshToken = async (refresh_token) => {
     method: "POST",
     url: `/api/admin/getToken`,
     headers: { "Content-Type": "application/json" },
-    data: { token: refresh_token }
+    data: { token: refresh_token },
   }).then(
     (res) => {
       return res.data.token;
@@ -29,38 +29,46 @@ const ProtectRoute = () => {
   const refresh_token = localStorage.getItem("refreshToken");
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
-  const acc = jwtDecode(access_token);
-  console.log("access : " + access_token)
-  console.log("refresh : " + refresh_token)
-  const userInfo = {
-    username: acc.username,
-    display_name: acc.display_name,
-    token: access_token,
-    role: acc.section,
-    email: acc.email,
-  };
-  dispatch(setUserData(userInfo));
-  
+
   useEffect(() => {
+    if (!access_token || typeof access_token !== "string") {
+      localStorage.clear();
+      return;
+    }
+
+    let acc;
+    try {
+      acc = jwtDecode(access_token);
+    } catch (error) {
+      console.error("JWT decode failed:", error.message);
+      localStorage.clear();
+      return;
+    }
+
+    const userInfo = {
+      username: acc.username,
+      display_name: acc.display_name,
+      token: access_token,
+      role: acc.section,
+      email: acc.email,
+    };
+    dispatch(setUserData(userInfo));
+
     if (access_token && isLogin) {
       if (!isFetching) {
         const checkAccess = setInterval(async () => {
-          if (access_token && refresh_token) {
-            // const acc = jwtDecode(access_token);
+          const now = Math.floor(Date.now() / 1000);
+          const expiredTime = acc.exp - now;
 
-            const expiredTime = acc.exp - moment(Math.floor(Date.now() / 1000));
-            if (expiredTime < 1790 && !isFetching) {
-              clearInterval(checkAccess);
-              await RefreshToken( refresh_token).then((token) => {
-                if (token) {
-                  setIsFetching(true);
-                } else {
-                  localStorage.clear();
-                }
-              })
+          if (expiredTime < 1790 && refresh_token) {
+            clearInterval(checkAccess);
+            const newToken = await RefreshToken(refresh_token);
+            if (newToken) {
+              localStorage.setItem("accessToken", newToken);
+              setIsFetching(true);
+            } else {
+              localStorage.clear();
             }
-          } else {
-            localStorage.clear();
           }
         }, 10000);
       }
@@ -70,8 +78,9 @@ const ProtectRoute = () => {
     } else {
       localStorage.clear();
     }
-  }, [isFetching, isLogin])
-  return isLogin ? <Outlet to="/" /> : <Navigate to="/login" />;
-}
+  }, [isFetching, isLogin]);
+
+  return isLogin ? <Outlet /> : <Navigate to="/login" />;
+};
 
 export default ProtectRoute;
