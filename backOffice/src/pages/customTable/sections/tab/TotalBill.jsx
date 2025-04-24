@@ -4,11 +4,9 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Checkbox from "@mui/material/Checkbox";
-// import { FoodListData } from "../../../../components/mockData/CustomTable/FoodListData";
+import { getAddBillPayment } from "../../../../services/table_manage.service";
 
 function TotalBill({orderAll}) {
-  // console.log(orderAll)
-  // console.log(FoodListData)
   const [isTotalBill, setIsTotalBill] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedTableId, setSelectedTableId] = useState(null);
@@ -31,14 +29,18 @@ function TotalBill({orderAll}) {
     );
   };
 
-  // const tables = [
-  //   { id: 1, name: "โต๊ะ 01", total: 520 },
-  //   { id: 2, name: "โต๊ะ 02", total: 750 },
-  //   { id: 3, name: "โต๊ะ 03", total: 390 },
-  //   { id: 4, name: "โต๊ะ 04", total: 690 },
-  //   { id: 5, name: "โต๊ะ 05", total: 490 },
-  //   { id: 6, name: "โต๊ะ 06", total: 500 },
-  // ];
+  const handleAddBill = () => {
+    if(selectedRows.length < 2) {
+      return false;
+    }
+    console.log(selectedRows) 
+    const param = {
+      bill_id : selectedRows
+    }
+    getAddBillPayment(param).then((res) => {
+      console.log(res)
+    })
+  }
 
   return (
     <>
@@ -88,7 +90,9 @@ function TotalBill({orderAll}) {
         </div>
 
         <div className="flex items-center justify-center gap-4">
-          <button className="mt-4 flex items-center justify-center gap-2 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#FFD468] to-[#FFC107] hover:from-[#F5A100] hover:to-[#FF8C00] hover:shadow-xl hover:scale-105">
+          <button className="mt-4 flex items-center justify-center gap-2 xl:w-[130px] w-[120px] shadow-md py-1.5 rounded-lg cursor-pointer text-white text-[16px] font-medium duration-300 transition-all bg-gradient-to-r from-[#FFD468] to-[#FFC107] hover:from-[#F5A100] hover:to-[#FF8C00] hover:shadow-xl hover:scale-105"
+          onClick={handleAddBill}
+          >
             <AddToPhotosIcon sx={{ fontSize: 23 }} className="text-white" />
             รวมบิล
           </button>

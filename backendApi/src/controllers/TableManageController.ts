@@ -276,6 +276,24 @@ export class TableManageController {
         description: 'something went wrong.'
       })
     }
-};
+  };
+
+  OnAddBillPayment = async(req: any, res: any) => {
+    try {
+      const param = req.body.bill_id
+      const orderAll = await Orders.findAll({where: {id: param}});
+      const mainTable = orderAll[0].table_id;
+      // เปลี่ยน order_id ของ order_list
+      // ลบข้อมูล table ที่ไม่ใช่ main
+      console.log(orderAll)
+    } catch(error){
+      return res.status(500).json({
+        status: false,
+        message: 'error',
+        error: error,
+        description: 'something went wrong.'
+      })
+    }
+  }
 
 }

@@ -8,7 +8,7 @@ import { OrdersList } from "../models/orderList";
 import { Table } from "../models/table";
 import { Foods } from "../models/food";
 import { SIO } from "../util/Sockets";
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 export class KitchenManageController {
   // ดึงข้อมูลอาหารที่ลูกค้ากดสั่งเข้ามา
@@ -35,7 +35,7 @@ export class KitchenManageController {
           },
         ],
       });
-  
+
       return res.status(200).json({
         status: true,
         message: "get data foods",
@@ -48,34 +48,58 @@ export class KitchenManageController {
         errorsMessage: error,
       });
     }
-  }
+  };
   //เปลี่ยนสถานะอาหาร
-  OnUpdateOrderListStatus = async(req: any, res: any) => {
+  OnUpdateOrderListStatus = async (req: any, res: any) => {
     try {
       const io = SIO.getIO(); // ใช้งาน Socket.IO
-      const { orderList, orderId }: { orderList: { id: number; status: number }[]; orderId: number } = req.body;
+      const {
+        orderList,
+        orderId,
+      }: { orderList: { id: number; status: number }[]; orderId: number } =
+        req.body;
 
-      // console.log(orderList)
+      console.log(orderList);
       await Promise.all(
-        orderList.map(({ id, status }: { id: number; status: number }) => 
-          OrdersList.update(
-            { status }, 
-            { where: { id } }
-          )
+        orderList.map(({ id, status }: { id: number; status: number }) =>
+          OrdersList.update({ status }, { where: { id } })
         )
       );
-      
-      // console.log(orderId)
+
+      const orderListUpdate = await OrdersList.findAll({
+        where: {
+          orders_id: orderId,
+        },
+        include: [
+          {
+            model: Orders,
+            as: "order", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
+            attributes: ["order_number"],
+            include: [
+              {
+                model: Table,
+                as: "table", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
+                attributes: ["title"],
+              },
+            ],
+          },
+          {
+            model: Foods,
+            as: "food", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
+            attributes: ["name", "price", "special_price", "thumbnail_link"],
+          },
+        ],
+      });
+
       // ✅ แจ้งเตือน React Backoffice ผ่าน Socket.IO
       io.emit("newOrder", {
-        orderList: orderList
+        orderListUpdate: orderListUpdate,
       });
 
       return res.status(200).json({
         status: true,
         message: "update status food success",
       });
-      
     } catch (error) {
       return res.status(500).json({
         status: false,
@@ -83,12 +107,12 @@ export class KitchenManageController {
         errorsMessage: error,
       });
     }
-  }
+  };
 
   // สินค้าหมด
-  OngetAllOutFoods = async(req: any, res: any) => {
+  OngetAllOutFoods = async (req: any, res: any) => {
     try {
-      const outfood = await Foods.findAll({where: {status_food: false}});
+      const outfood = await Foods.findAll({ where: { status_food: false } });
 
       return res.status(200).json({
         status: true,
@@ -102,8 +126,8 @@ export class KitchenManageController {
         errorsMessage: error,
       });
     }
-  }
-  OnChangeStatusOutFood = async(req: any, res: any) => {
+  };
+  OnChangeStatusOutFood = async (req: any, res: any) => {
     try {
       // 🔹 ค้นหา Food ตาม id
       const food = await Foods.findOne({ where: { id: req.params.id } });
@@ -113,24 +137,26 @@ export class KitchenManageController {
           message: "Food product not found.",
         });
       }
-  
+
       // 🔹 อัปเดตสถานะของ Food
       food.status_food = false;
       await food.save(); // ✅ ใช้ await
-  
+
       // 🔹 ค้นหา OrdersList ตาม food_id
-      const orderList = await OrdersList.findOne({ where: { food_id: req.params.id, status: 1 } });
+      const orderList = await OrdersList.findOne({
+        where: { food_id: req.params.id, status: 1 },
+      });
       if (!orderList) {
         return res.status(404).json({
           status: false,
           message: "Order list for this food not found.",
         });
       }
-  
+
       // 🔹 อัปเดตสถานะของ OrdersList
       orderList.status = "6";
       await orderList.save(); // ✅ ใช้ await
-  
+
       // 🔹 ส่ง Response สำเร็จ
       return res.status(200).json({
         status: true,
@@ -138,7 +164,6 @@ export class KitchenManageController {
         updatedFood: food,
         updatedOrderList: orderList,
       });
-  
     } catch (error: any) {
       console.error("Error updating food status:", error);
       return res.status(500).json({
@@ -147,10 +172,10 @@ export class KitchenManageController {
         errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
       });
     }
-  }
-  OnUpdateNoteOutfood = async(req: any, res: any) => {
+  };
+  OnUpdateNoteOutfood = async (req: any, res: any) => {
     try {
-      const food = await Foods.findOne({where: {id: req.params.id}});
+      const food = await Foods.findOne({ where: { id: req.params.id } });
       if (!food) {
         return res.status(404).json({
           status: false,
@@ -163,9 +188,8 @@ export class KitchenManageController {
       return res.status(200).json({
         status: true,
         message: "Food status updated successfully.",
-        food: food
+        food: food,
       });
-
     } catch (error: any) {
       console.error("Error updating food status:", error);
       return res.status(500).json({
@@ -174,10 +198,10 @@ export class KitchenManageController {
         errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
       });
     }
-  }
-  OnCancelOutFood = async(req: any, res: any) => {
+  };
+  OnCancelOutFood = async (req: any, res: any) => {
     try {
-      const food = await Foods.findOne({ where: {id: req.params.id }});
+      const food = await Foods.findOne({ where: { id: req.params.id } });
       food.status_food = true;
       food.note = null;
       food.save();
@@ -194,11 +218,13 @@ export class KitchenManageController {
         errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
       });
     }
-  }
-  OnChangeStatusOrderList = async(req: any, res: any) => {
+  };
+  OnChangeStatusOrderList = async (req: any, res: any) => {
     try {
-      const orderList = await OrdersList.findOne({where: {id: req.body.list_id}});
-      if(!orderList) {
+      const orderList = await OrdersList.findOne({
+        where: { id: req.body.list_id },
+      });
+      if (!orderList) {
         return res.status(404).json({
           status: false,
           message: "order list not found",
@@ -207,8 +233,8 @@ export class KitchenManageController {
       orderList.status = req.body.status;
       orderList.save();
 
-      const food = await Foods.findOne({where: {id: req.body.food_id}});
-      if(!food) {
+      const food = await Foods.findOne({ where: { id: req.body.food_id } });
+      if (!food) {
         return res.status(404).json({
           status: false,
           message: "food not found",
@@ -217,12 +243,11 @@ export class KitchenManageController {
       food.status_food = false;
       food.note = req.body.note;
       food.save();
-      
+
       return res.status(200).json({
         status: true,
         message: "status updated successfully.",
       });
-
     } catch (error: any) {
       return res.status(500).json({
         status: false,
@@ -230,11 +255,13 @@ export class KitchenManageController {
         errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
       });
     }
-  }
-  OnDeleteOrderList = async(req: any, res: any) => {
+  };
+  OnDeleteOrderList = async (req: any, res: any) => {
     try {
-      const orderList = await OrdersList.findOne({where: {id: req.params.id}});
-      if(!orderList) {
+      const orderList = await OrdersList.findOne({
+        where: { id: req.params.id },
+      });
+      if (!orderList) {
         return res.status(404).json({
           status: false,
           message: "not found order list",
@@ -246,8 +273,6 @@ export class KitchenManageController {
         status: true,
         message: "delete order list success fully",
       });
-
-
     } catch (error: any) {
       return res.status(500).json({
         status: false,
@@ -255,22 +280,22 @@ export class KitchenManageController {
         errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
       });
     }
-  }
-  OnDeleteOrder = async(req: any, res: any) => {
+  };
+  OnDeleteOrder = async (req: any, res: any) => {
     try {
       await OrdersList.destroy({
-          where: {
-              orders_id: req.body.order_id
-          }
+        where: {
+          orders_id: req.body.order_id,
+        },
       });
 
-      const order = await Orders.findOne({where: {id: req.body.order_id}});
+      const order = await Orders.findOne({ where: { id: req.body.order_id } });
 
-      if(req.body.table_id) {
-        const table = await Table.findOne({where: {id: req.body.table_id}});
-        if(table.qrcode) {
-          const decodedQr = jwt.verify(table.qrcode, 'nattapolsurinkeaw'); 
-          if(decodedQr.order_id == order.id) {
+      if (req.body.table_id) {
+        const table = await Table.findOne({ where: { id: req.body.table_id } });
+        if (table.qrcode) {
+          const decodedQr = jwt.verify(table.qrcode, "nattapolsurinkeaw");
+          if (decodedQr.order_id == order.id) {
             table.table_token = null;
             table.qrcode = null;
             table.status = 1;
@@ -285,7 +310,6 @@ export class KitchenManageController {
         status: true,
         message: "delete order success fully",
       });
-
     } catch (error: any) {
       return res.status(500).json({
         status: false,
@@ -293,6 +317,5 @@ export class KitchenManageController {
         errorsMessage: error.message, // ✅ ใช้ error.message เพื่อให้เข้าใจง่ายขึ้น
       });
     }
-  }
-  
+  };
 }

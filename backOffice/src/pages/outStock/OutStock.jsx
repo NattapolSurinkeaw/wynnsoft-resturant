@@ -13,6 +13,9 @@ function OutStock() {
   const [selectedEditId, setSelectedEditId] = useState(null);
   const statusMenuRef1 = useRef(null);
   const statusMenuRef2 = useRef(null);
+  const [refreshData, setRefreshData] = useState(0);
+
+  console.log("refreshData", refreshData);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -58,16 +61,15 @@ function OutStock() {
 
   return (
     <>
-      {
-        isOpenEditModal && (
-          <MenuStatusModal
-            isOpenEditModal={isOpenEditModal}
-            closeModal={closeModal}
-            selectedEditId={selectedEditId}
-            handleEditClick={handleEditClick}
-          />
-        )
-      }
+      {isOpenEditModal && (
+        <MenuStatusModal
+          isOpenEditModal={isOpenEditModal}
+          closeModal={closeModal}
+          selectedEditId={selectedEditId}
+          handleEditClick={handleEditClick}
+          setRefreshData={setRefreshData}
+        />
+      )}
       <div className="flex md:flex-row flex-col md:items-center items-start justify-between gap-4 w-full">
         <div className="flex items-center gap-2">
           <NoFoodOutlinedIcon
@@ -85,6 +87,7 @@ function OutStock() {
         closeModal={closeModal}
         selectedEditId={selectedEditId}
         handleEditClick={handleEditClick}
+        refreshData={refreshData}
       />
     </>
   );

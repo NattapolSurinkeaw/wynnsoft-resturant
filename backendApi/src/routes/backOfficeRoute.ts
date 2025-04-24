@@ -41,6 +41,8 @@ router.get('/api/backoffice/generate-qrcode/:id', AuthenticateAdmin, tableManage
 router.get('/api/backoffice/verifyqr/:token', tableManageController.OnverifyQrCode);
 // จองโต๊ะ
 router.post('/api/backoffice/bookingtable', AuthenticateAdmin, tableManageController.OnCreateBookingTable);
+// รวมบิล
+router.post('/api/backoffice/getAddBill', AuthenticateAdmin, tableManageController.OnAddBillPayment)
 
 // ห้องครัว
 router.get('/api/backoffice/new-menufood', AuthenticateAdmin, kitchenManageController.OngetAllNewMenuFood);
