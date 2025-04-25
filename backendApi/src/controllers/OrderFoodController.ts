@@ -295,12 +295,31 @@ export class OrderFoodController {
       const orderWaitCount = await OrdersList.count({
         where: { status: 3 }
       });
+
+      const orderAll = await Orders.findAll({
+        attributes: ["id", "order_number", "table_id", "price"],
+        where: {
+          status: {
+            [Op.ne]: 5  // ไม่เท่ากับ 5
+          }
+        },
+        include: [
+          {
+            model: OrdersList,
+            as: "orderList",
+          }
+        ],
+      });
+
+      const countOrderPay = orderAll.filter((order: any) => order.orderList && order.orderList.length > 0).length;
       
       return res.status(200).json({
         status: true,
         message: "get count order",
         description: "get count order success",
-        orderWait: orderWaitCount
+        orderWait: orderWaitCount,
+        orderDay: orderAll.length,
+        orderPay: countOrderPay
       });
     } catch (error) {
       return res.status(500).json({

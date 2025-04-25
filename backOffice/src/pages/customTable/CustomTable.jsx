@@ -8,7 +8,6 @@ import Table from "./sections/Table";
 import TotalBill from "./sections/tab/TotalBill";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-// import { CustomTable as CustomTableData } from "../../components/mockData/CustomTable/CustomTable";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { getTableall } from "../../services/table_manage.service";
 import { getOrderCurrent } from "../../services/order.service";
@@ -31,8 +30,11 @@ function CustomTable() {
   useEffect(() => {
     const fetchData = async() => {
       const res = await getTableall();
-      console.log(res)
+      // console.log(res)
       setCustomTable(res.tables);
+
+      const table = res.tables.filter((table) => table.id == selectedTableId)
+      setTableDetail(table[0])
     }
     
     fetchData()
@@ -41,8 +43,8 @@ function CustomTable() {
   useEffect(() => {
     const fetchData = async() => {
       const res = await getOrderCurrent()
-      console.log(res)
       setOrderAll(res.orders);
+      // console.log(res)
     }
 
     fetchData()
@@ -91,7 +93,7 @@ function CustomTable() {
   };
 
   // console.log(isAddTable)
-  // console.log(selectedTableId)
+  // console.log(tableDetail)
   return (
     <div>
       <Header

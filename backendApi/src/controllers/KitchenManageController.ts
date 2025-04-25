@@ -63,34 +63,9 @@ export class KitchenManageController {
         )
       );
 
-      const orderListUpdate = await OrdersList.findAll({
-        where: {
-          orders_id: orderId,
-        },
-        include: [
-          {
-            model: Orders,
-            as: "order", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
-            attributes: ["order_number"],
-            include: [
-              {
-                model: Table,
-                as: "table", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
-                attributes: ["title"],
-              },
-            ],
-          },
-          {
-            model: Foods,
-            as: "food", // ✅ ต้องกำหนด "as" ให้ตรงกับ association
-            attributes: ["name", "price", "special_price", "thumbnail_link"],
-          },
-        ],
-      });
-
       // ✅ แจ้งเตือน React Backoffice ผ่าน Socket.IO
       io.emit("newOrder", {
-        orderListUpdate: orderListUpdate,
+        "status": true,
       });
 
       return res.status(200).json({

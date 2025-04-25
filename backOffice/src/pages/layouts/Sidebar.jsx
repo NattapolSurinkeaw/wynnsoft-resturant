@@ -34,6 +34,8 @@ function Sidebar({ isSidebarOpen }) {
     try {
       const res = await getCountOrder(); 
       dispatch(setWaitServe(res.orderWait));
+      dispatch(setOrder(res.orderDay));
+      dispatch(setPayment(res.orderPay));
       console.log("Fetched order count:", res);
     } catch (err) {
       console.error("Error fetching order count:", err);
