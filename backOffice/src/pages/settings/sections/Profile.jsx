@@ -57,6 +57,8 @@ function Profile({ webinfo, setRefresh }) {
     setPreview2(api_path + filterWebinfo(2)?.info_link);
     setTimeOpen(filterWebinfo(5)?.info_value);
     setTimeClose(filterWebinfo(6)?.info_value);
+    setSelectedDays(filterWebinfo(3)?.info_value)
+    setSelectedDays2(filterWebinfo(4)?.info_value)
   }, [webinfo]);
 
   const handleImageChange = (e, setImage, setPreview) => {
@@ -85,15 +87,20 @@ function Profile({ webinfo, setRefresh }) {
       "ศุกร์",
       "เสาร์",
     ];
-    const today = new Date().getDay();
 
+    const today = new Date().getDay();
     return days[today];
   };
+  // console.log(getToday()); //เช็ควันนี้วันอะไร
 
   const onSubmit = () => {
+    console.log(selectedDays)
+    console.log(selectedDays2)
     const formData = new FormData();
     formData.append("web_logo", image1);
     formData.append("web_bg", image2);
+    formData.append("date_open", selectedDays);
+    formData.append("date_close", selectedDays2);
     formData.append("time_open", timeOpen);
     formData.append("time_close", timeClose);
 
@@ -109,7 +116,6 @@ function Profile({ webinfo, setRefresh }) {
       }
     });
   };
-  console.log(getToday());
 
   return (
     <>

@@ -5,13 +5,14 @@ import bcrypt from "bcrypt";
 import * as jwt from 'jsonwebtoken'
 import { validationResult } from "express-validator";
 import * as Config from '../util/config'
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 
 // const sharp = require("sharp");
 import { v4 as uuidv4 } from "uuid";
 import { Table } from "../models/table";
 import { Orders } from "../models/orders";
 import { BookingTable } from "../models/bookingTable";
+import OrdersList from "../models/orderList";
 
 export class TableManageController {
 
@@ -281,11 +282,52 @@ export class TableManageController {
   OnAddBillPayment = async(req: any, res: any) => {
     try {
       const param = req.body.bill_id
-      const orderAll = await Orders.findAll({where: {id: param}});
-      const mainTable = orderAll[0].table_id;
+      const orders = await Orders.findAll({where: {id: param}});
+      console.log(orders);
+      if (orders.length < 2) {
+        return { status: 400, message: "ต้องมี order อย่างน้อย 2 รายการในการรวมบิล" };
+      }
+
+      // ดึง table_id ของ order แรก
+      // const mainTableId = orders[0].table_id;
+  
+      // อัปเดต order อื่น ๆ ให้มี table_id เดียวกับ order แรก
+      const otherOrderIds = orders.slice(1).map((order: { id: number }) => order.id); // order 88, 89 เป็นต้น
+      const otherTableIds = orders.slice(1).map((order: { table_id: number }) => order.table_id); // order 88, 89 เป็นต้น
+      console.log(orders[0].id)
+
       // เปลี่ยน order_id ของ order_list
+      await OrdersList.update(
+        { orders_id: orders[0].id },
+        {
+          where: {
+            orders_id: otherOrderIds
+          }
+        }
+      );
+      
+      await Table.update(
+        { table_token: null, qrcode: null, status: 1 },
+        {
+          where: {
+            id: otherTableIds
+          }
+        }
+      );
+      
+      await Orders.destroy({
+        where: {
+          id: otherOrderIds
+        }
+      });
+
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "get data success",
+      });
+
       // ลบข้อมูล table ที่ไม่ใช่ main
-      console.log(orderAll)
     } catch(error){
       return res.status(500).json({
         status: false,

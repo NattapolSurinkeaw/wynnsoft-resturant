@@ -36,7 +36,7 @@ export class WebSettingController {
   // โปรไฟล์ร้านค้า
   OnUpdateProfileShop = async(req: any, res: any) => {
     try {
-      const { time_open, time_close } = req.body;
+      const { time_open, time_close, date_open, date_close } = req.body;
 
       const processImage = async (file: any) => {
         if (!file) return null;
@@ -86,7 +86,9 @@ export class WebSettingController {
 
       await Promise.all([
         WebInfo.update({ info_value: time_open }, { where: { info_param: 'time_open' } }),
-        WebInfo.update({ info_value: time_close }, { where: { info_param: 'time_close' } })
+        WebInfo.update({ info_value: time_close }, { where: { info_param: 'time_close' } }),
+        WebInfo.update({ info_value: date_open }, { where: { info_param: 'date_open' } }),
+        WebInfo.update({ info_value: date_close }, { where: { info_param: 'date_close' } })
       ]);
 
       return res.status(200).json({
