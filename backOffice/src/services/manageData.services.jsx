@@ -117,7 +117,7 @@ export const getCreateFood = (formData) => {
       };
     })
     .catch((err) => {
-      console.log(err)
+      console.log(err);
       throw {
         status: err.response.data.status,
         description: err.response.data.description,
@@ -146,37 +146,45 @@ export const getUpdateFood = (id, formData) => {
 };
 
 export const getCheckBillOrder = (formData) => {
-  return axios.post('/api/backoffice/checkbillOrder', formData).then((res) => {
+  return axios.post("/api/backoffice/checkbillOrder", formData).then((res) => {
     return {
-      status: res.data.status
-    }
-  })
-}
+      status: res.data.status,
+    };
+  });
+};
 
 export const getCallStaff = () => {
-  return axios.get('/api/backoffice/getCallStaff').then((res) => {
+  return axios.get("/api/backoffice/getCallStaff").then((res) => {
     return {
       status: res.data.status,
-      messageCall: res.data.messageCall
-    }
-  })
-}
+      messageCall: res.data.messageCall,
+    };
+  });
+};
 
 export const getAcceptCall = (params) => {
-  return axios.post('/api/backoffice/getAcceptCall', params).then((res) => {
+  return axios.post("/api/backoffice/getAcceptCall", params).then((res) => {
     return {
       status: res.data.status,
-      
-    }
-  })
-}
+    };
+  });
+};
 
 export const getHistoryOrder = () => {
-  return axios.get('/api/backoffice/getOrderHistory').then((res) => {
+  return axios.get("/api/backoffice/getOrderHistory").then((res) => {
     return {
       status: res.data.status,
       order: res.data.data,
       description: res.data.description,
-    }
-  })
-}
+    };
+  });
+};
+
+export const getEditOrder = (params) => {
+  return axios.post("/api/backoffice/getEditOrder", params).then((res) => {
+    return {
+      status: res.data.status,
+      description: res.data.description,
+    };
+  });
+};

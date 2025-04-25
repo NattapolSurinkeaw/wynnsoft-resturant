@@ -13,6 +13,7 @@ import Receipt_Print from "../../components/Receipt/Receipt_Print ";
 import { getOrderById } from "../../services/order.service";
 import { useNavigate } from "react-router-dom";
 import { getCheckBillOrder } from "../../services/manageData.services";
+import { api_path } from "../../store/setting";
 
 function DetailAll() {
   dayjs.locale("th");
@@ -33,17 +34,20 @@ function DetailAll() {
   const [note, setNote] = useState("");
   const navigate = useNavigate();
   const [change, setChange] = useState(0);
+  const [orderId, setOrderId] = useState(0);
 
   useEffect(() => {
-    const fetchData = async() => {
-      const res = await getOrderById(id)
+    const fetchData = async () => {
+      const res = await getOrderById(id);
       setDetailOrder(res.order);
-    }
+      setOrderId(res.order.id)
+    };
 
-    fetchData()
+    fetchData();
   }, []);
   // const detailOrder = orderToday.find((item) => item.id === parseInt(id));
-  // console.log(detailOrder)
+  console.log(detailOrder);
+  console.log(orderId)
   // console.log("image", image);
 
   useEffect(() => {
@@ -83,13 +87,17 @@ function DetailAll() {
       // .filter((item) => item.status === "4" || item.status === "5")
       .forEach((item) => {
         const key = item.food.name;
+        console.log("key", key);
         if (map.has(key)) {
           const existingItem = map.get(key);
           existingItem.amount += item.amount;
           existingItem.statusList.add(item.status); // เก็บค่า status เป็น Set
+          existingItem.id.push(item.id);
         } else {
           map.set(key, {
             ...item.food,
+            id: item.id,
+            food_id: item.food.id,
             amount: item.amount,
             price: item.status === "5" ? 0 : item.food.price, // ราคา 0 ถ้าเป็น status 5
             special_price: item.status === "5" ? 0 : item.food.special_price,
@@ -103,6 +111,8 @@ function DetailAll() {
       status: Array.from(item.statusList).join(", "),
     }));
   }, [detailOrder?.orderList]);
+
+  console.log("groupedMenuDetails", groupedMenuDetails);
 
   const { totalPrice, totalSpecialPrice, totalPriceAll } =
     detailOrder?.orderList
@@ -168,23 +178,25 @@ function DetailAll() {
   const submitPayment = (e, type) => {
     let file = null;
     const formData = new FormData();
-    formData.append("order_id",detailOrder.id);
-    formData.append("table_id",detailOrder.table.id);
-    formData.append("pay_by",(activeTab == 'QRcode')? 1 : 2);
+    formData.append("order_id", detailOrder.id);
+    formData.append("table_id", detailOrder.table.id);
+    formData.append("pay_by", activeTab == "QRcode" ? 1 : 2);
 
-    if(type == 'qrcode') {
+    if (type == "qrcode") {
       file = e.target.files[0];
-      formData.append("slip_image",file);
+      formData.append("slip_image", file);
       if (!file) return; // ป้องกัน error กรณีไม่มีไฟล์ถูกเลือก
 
       if (
-        ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(file.type)
+        ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+          file.type
+        )
       ) {
         const reader = new FileReader();
         reader.onloadend = () => {
           setImage(reader.result);
-          setOpen(true)
-         
+          setOpen(true);
+
           // Swal.fire({
           //   title: "ชำระเงินสำเร็จ",
           //   icon: "success",
@@ -193,22 +205,22 @@ function DetailAll() {
           //   showConfirmButton: false,
           //   target: "body",
           // })
-        }
+        };
         reader.readAsDataURL(file);
       }
     }
-    
+
     getCheckBillOrder(formData).then((res) => {
-      if(res.status) {
+      if (res.status) {
         Swal.fire({
           icon: "success",
           title: "ชำระเงิน",
           text: "แจ้งชำระเงินค่าอารหารเรียบร้อย",
           timer: 1500,
           showConfirmButton: false,
-        })
+        });
       }
-    })
+    });
   };
 
   const totalDiscount = totalPrice - totalPriceAll; // ส่วนลดรวม
@@ -496,7 +508,7 @@ function DetailAll() {
                 className="hidden"
                 ref={inputProfileImage}
                 accept="image/*"
-                onChange={(e) => submitPayment(e, 'qrcode')}
+                onChange={(e) => submitPayment(e, "qrcode")}
               />
 
               <Modal open={open} onClose={() => setOpen(false)}>
@@ -537,7 +549,7 @@ function DetailAll() {
           )}
           {activeTab === "Cash" && (
             <div
-              onClick={(e) => submitPayment(e, 'cash')}
+              onClick={(e) => submitPayment(e, "cash")}
               className={`bg-[#FFBA41] p-1 px-2 rounded-lg flex gap-4 items-center justify-center 2xl:max-w-[220px] lg:max-w-[180px] max-w-[130px] w-full cursor-pointer group hover:bg-[#FF6A00] ${
                 cash <= 0 || cash < Tatal
                   ? "pointer-events-none opacity-50"
@@ -611,6 +623,7 @@ function DetailAll() {
         onClose={() => {
           setOpenModalEdit(false);
         }}
+        disableEnforceFocus={true}
       >
         <Box
           className="flex flex-col gap-4 2xl:max-w-[50%] lg:max-w-[80%] max-w-[95%] w-full py-4 outline-none"
@@ -647,6 +660,8 @@ function DetailAll() {
             setOpenModalEdit={setOpenModalEdit}
             note={note}
             setNote={setNote}
+            api_path={api_path}
+            orderId={orderId}
           />
         </Box>
       </Modal>

@@ -63,10 +63,10 @@ export class OrderFoodController {
     }
   };
 
-  OngetOrderListForTopMenu = async(req: any, res: any) => {
+  OngetOrderListForTopMenu = async (req: any, res: any) => {
     try {
-      const startOfMonth = moment().startOf("month").toDate();  // 2025-04-01T00:00:00
-      const endOfMonth = moment().endOf("month").toDate();      // 2025-04-30T23:59:59
+      const startOfMonth = moment().startOf("month").toDate(); // 2025-04-01T00:00:00
+      const endOfMonth = moment().endOf("month").toDate(); // 2025-04-30T23:59:59
 
       const orderList = await OrdersList.findAll({
         where: {
@@ -92,7 +92,7 @@ export class OrderFoodController {
     } catch (error) {
       console.error("เกิดข้อผิดพลาด:", error);
     }
-  }
+  };
 
   OngetOrderFoodById = async (req: any, res: any) => {
     try {
@@ -130,10 +130,10 @@ export class OrderFoodController {
         description: "something went wrong.",
       });
     }
-  }
-  OnCheckBillOrder = async(req: any, res: any) => {
+  };
+  OnCheckBillOrder = async (req: any, res: any) => {
     try {
-      const order = await Orders.findOne({ where: {id: req.body.order_id }});
+      const order = await Orders.findOne({ where: { id: req.body.order_id } });
       order.pay_by = req.body.pay_by;
       order.status = 5;
 
@@ -165,7 +165,7 @@ export class OrderFoodController {
       }
       await order.save();
 
-      const table = await Table.findOne({where: {id: req.body.table_id}});
+      const table = await Table.findOne({ where: { id: req.body.table_id } });
       table.table_token = null;
       table.qrcode = null;
       table.status = 1;
@@ -176,7 +176,6 @@ export class OrderFoodController {
         message: "check bill",
         description: "check bill order is success",
       });
-
     } catch (error) {
       return res.status(500).json({
         status: false,
@@ -185,20 +184,22 @@ export class OrderFoodController {
         description: "something went wrong.",
       });
     }
-  }
+  };
 
-  onGetCallStaff = async(req: any, res: any) => {
+  onGetCallStaff = async (req: any, res: any) => {
     try {
       const table = await Table.findAll({
         where: {
           call_staff: {
-            [Op.ne]: 0  // ไม่เท่ากับ 0
-          }
-        }
+            [Op.ne]: 0, // ไม่เท่ากับ 0
+          },
+        },
       });
 
-      const kitchenCall = await WebInfo.findOne({where: {info_param: 'kitchen_call', info_value: 1}});
-     
+      const kitchenCall = await WebInfo.findOne({
+        where: { info_param: "kitchen_call", info_value: 1 },
+      });
+
       if (kitchenCall) {
         const extraTable = {
           id: 1,
@@ -210,9 +211,9 @@ export class OrderFoodController {
           priority: null,
           display: true,
           createdAt: kitchenCall.createdAt,
-          updatedAt: kitchenCall.updatedAt
+          updatedAt: kitchenCall.updatedAt,
         };
-      
+
         table.push(extraTable);
       }
 
@@ -220,7 +221,7 @@ export class OrderFoodController {
         status: true,
         message: "check bill",
         description: "check bill order is success",
-        messageCall: table
+        messageCall: table,
       });
     } catch (error) {
       return res.status(500).json({
@@ -230,16 +231,17 @@ export class OrderFoodController {
         description: "something went wrong.",
       });
     }
-  }
+  };
 
-  onCallStaff = async(req: any, res: any) => {
+  onCallStaff = async (req: any, res: any) => {
     console.log(req.params.type);
     try {
       const type = req.params.type;
-      if(type == 1) {
-
+      if (type == 1) {
       } else {
-        const webinfo = await WebInfo.findOne({where: {info_param: 'kitchen_call'}});
+        const webinfo = await WebInfo.findOne({
+          where: { info_param: "kitchen_call" },
+        });
         webinfo.info_value = 1;
         await webinfo.save();
       }
@@ -257,29 +259,28 @@ export class OrderFoodController {
         description: "something went wrong.",
       });
     }
-  }
+  };
 
-  onGetAcceptCall = async(req: any, res: any) => {
+  onGetAcceptCall = async (req: any, res: any) => {
     try {
-      console.log(req.body)
-      if(req.body.table_type == 'table') {
-        const table = await Table.findOne({where: {id: req.body.table_id}});
+      console.log(req.body);
+      if (req.body.table_type == "table") {
+        const table = await Table.findOne({ where: { id: req.body.table_id } });
         table.call_staff = false;
         await table.save();
       } else {
-        const webinfo = await WebInfo.findOne({where: {info_param: 'kitchen_call'}});
+        const webinfo = await WebInfo.findOne({
+          where: { info_param: "kitchen_call" },
+        });
         webinfo.info_value = 0;
         await webinfo.save();
       }
-
-
 
       return res.status(200).json({
         status: true,
         message: "check bill",
         description: "check bill order is success",
       });
-
     } catch (error) {
       return res.status(500).json({
         status: false,
@@ -288,19 +289,19 @@ export class OrderFoodController {
         description: "something went wrong.",
       });
     }
-  }
+  };
 
-  onGetCountOrder = async(req: any, res: any) => {
+  onGetCountOrder = async (req: any, res: any) => {
     try {
       const orderWaitCount = await OrdersList.count({
-        where: { status: 3 }
+        where: { status: 3 },
       });
-      
+
       return res.status(200).json({
         status: true,
         message: "get count order",
         description: "get count order success",
-        orderWait: orderWaitCount
+        orderWait: orderWaitCount,
       });
     } catch (error) {
       return res.status(500).json({
@@ -310,10 +311,10 @@ export class OrderFoodController {
         description: "something went wrong.",
       });
     }
-  }
+  };
 
   // สั่งอาหาร
-  OnAddOrderFood = async(req: any, res: any) => {
+  OnAddOrderFood = async (req: any, res: any) => {
     try {
       const decodedJWT = jwt.decode(req.body.token);
       const paramFoods = req.body.food;
@@ -371,6 +372,54 @@ export class OrderFoodController {
           });
         }
       }
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: "error",
+        error: error,
+        description: "something went wrong.",
+      });
+    }
+  };
+
+  OngetEditOrder = async (req: any, res: any) => {
+    console.log("req.body", req.body);
+    try {
+      const { orders_id, foodList } = req.body;
+
+      // ลบรายการที่ไม่มีใน foodList
+      const keepIds = foodList.map((item: any) => item.id);
+      await OrdersList.destroy({
+        where: {
+          orders_id: orders_id,
+          id: {
+            [Op.notIn]: keepIds,
+          },
+        },
+      });
+
+      // อัปเดตหรือเก็บรายการที่เหลือ
+      await Promise.all(
+        foodList.map((item: any) =>
+          OrdersList.update(
+            {
+              amount: item.amount,
+            },
+            {
+              where: {
+                id: item.id,
+                orders_id: orders_id,
+              },
+            }
+          )
+        )
+      );
+
+      return res.status(200).json({
+        status: true,
+        message: "ok",
+        description: "edit order data success.",
+      });
     } catch (error) {
       return res.status(500).json({
         status: false,
