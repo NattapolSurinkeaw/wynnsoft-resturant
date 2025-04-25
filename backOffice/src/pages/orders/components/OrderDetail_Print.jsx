@@ -25,7 +25,7 @@ function OrderDetail_Print({
           <div className="bg-white rounded-lg p-0.5 w-[80px] h-[80px] flex gap-1 justify-center items-center flex-shrink-0 border shadow">
           <img
             className="w-full h-auto"
-            src="/icons/โลโก้-Soju-Day-Final-1.png"
+            src="/icons/logo-Soju-Day-Final-1.png"
             alt=""
           />
           </div>

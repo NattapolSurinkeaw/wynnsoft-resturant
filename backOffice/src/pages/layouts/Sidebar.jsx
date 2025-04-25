@@ -74,7 +74,7 @@ function Sidebar({ isSidebarOpen }) {
         <Link to="/">
           <img
             className="w-[180px] h-auto"
-            src="/icons/โลโก้-Soju-Day-Final-1.png"
+            src="/icons/logo-Soju-Day-Final-1.png"
             alt=""
           />
         </Link>

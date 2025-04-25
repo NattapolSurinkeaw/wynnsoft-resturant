@@ -347,7 +347,7 @@ function NewOrderModal({ isOpenNewOrderModal, closeModal, orderData }) {
 
             <img
               className="w-auto h-[50px]"
-              src="/icons/โลโก้-Soju-Day-Final-1.png"
+              src="/icons/logo-Soju-Day-Final-1.png"
               alt=""
             />
             <p className="text-black text-[35px] font-[700] text-center">

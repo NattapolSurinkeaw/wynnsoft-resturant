@@ -25,7 +25,7 @@ function OrderDetail_Print_A4({
           <div className="bg-white rounded-lg p-0.5 w-[100px] h-[100px] flex gap-2 justify-center items-center flex-shrink-0 border shadow">
           <img
             className="w-full h-auto"
-            src="/icons/โลโก้-Soju-Day-Final-1.png"
+            src="/icons/logo-Soju-Day-Final-1.png"
             alt=""
           />
           </div>
