@@ -28,6 +28,7 @@ router.post('/api/backoffice/checkbillOrder', AuthenticateAdmin, upload.single("
 router.get('/api/backoffice/getCallStaff', AuthenticateAdmin, orderFoodController.onGetCallStaff);
 router.post('/api/backoffice/onCallStaff/:type', AuthenticateAdmin, orderFoodController.onCallStaff);
 router.post('/api/backoffice/getAcceptCall', AuthenticateAdmin, orderFoodController.onGetAcceptCall);
+router.post('/api/backoffice/getEditOrder', AuthenticateAdmin, orderFoodController.OngetEditOrder);
 
 router.get('/api/backoffice/getCountOrder', AuthenticateAdmin, orderFoodController.onGetCountOrder);
 

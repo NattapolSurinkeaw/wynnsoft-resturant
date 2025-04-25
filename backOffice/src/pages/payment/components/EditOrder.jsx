@@ -1,11 +1,25 @@
 import React, { useState } from "react";
+import Swal from "sweetalert2";
+import "./EditOrder.css";
+import { getEditOrder } from "../../../services/manageData.services";
 
-function EditOrder({ groupedMenuDetails, setOpenModalEdit, note ,setNote }) {
-  const [count, setCount] = useState(() =>
-    Object.fromEntries(groupedMenuDetails.map((item) => [item.id, item.amount]))
+function EditOrder({
+  groupedMenuDetails,
+  setOpenModalEdit,
+  note,
+  setNote,
+  api_path,
+  orderId,
+}) {
+  const [foodList, setFoodList] = useState(
+    groupedMenuDetails.map((item) => ({
+      ...item,
+      amount: item.amount,
+    }))
   );
 
   console.log("groupedMenuDetails", groupedMenuDetails);
+  console.log("foodList", foodList);
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
@@ -14,16 +28,99 @@ function EditOrder({ groupedMenuDetails, setOpenModalEdit, note ,setNote }) {
     });
 
   const handleIncrement = (id) => {
-    setCount((prev) => ({ ...prev, [id]: prev[id] + 1 }));
+    setFoodList((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, amount: item.amount + 1 } : item
+      )
+    );
   };
 
   const handleDecrement = (id) => {
-    setCount((prev) => ({ ...prev, [id]: Math.max(0, prev[id] - 1) }));
+    setFoodList((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, amount: Math.max(1, item.amount - 1) }
+          : item
+      )
+    );
   };
+
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      customClass: {
+        container: "swal2-container", // เพิ่มคลาสที่กำหนด z-index ให้สูง
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setFoodList((prevList) => prevList.filter((f) => f.id !== item.id));
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your data has been deleted.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+          customClass: {
+            container: "swal2-container", // เพิ่มคลาสที่กำหนด z-index ให้สูง
+          },
+        });
+      }
+    });
+  };
+
+  const handleSave = () => {
+    console.log("foodList in params", foodList);
+    console.log("note in params", note);
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, update it!",
+      customClass: {
+        container: "swal2-container", // เพิ่มคลาสที่กำหนด z-index ให้สูง
+      },
+    }).then((res) => {
+      if (res.isConfirmed) {
+        const params = {
+          foodList: foodList,
+          note: note,
+          orders_id: orderId,
+        };
+
+        getEditOrder(params).then((res) => {
+          if (res.status) {
+            Swal.fire({
+              title: "Update Data",
+              text: "Your data has been Update.",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+              customClass: {
+                container: "swal2-container", // เพิ่มคลาสที่กำหนด z-index ให้สูง
+              },
+            }).then(() => {
+              setOpenModalEdit(false);
+            });
+          }
+        });
+      }
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4 ">
       <div className="flex flex-col gap-2 h-[500px] max-h-full overflow-auto hide-scrollbar w-full">
-        {groupedMenuDetails.map((item, index) => (
+        {foodList.map((item, index) => (
           <div
             key={`${item.id}-${index}`}
             className={`flex flex-col items-center px-4 py-2 ${
@@ -34,7 +131,7 @@ function EditOrder({ groupedMenuDetails, setOpenModalEdit, note ,setNote }) {
               <div className="flex gap-4 items-center w-[60%]">
                 <figure className="w-[75px] h-[75px] rounded-lg">
                   <img
-                    src={item.thumbnail_link}
+                    src={api_path + item.thumbnail_link}
                     alt={item.name}
                     className="w-full h-full rounded-lg"
                   />
@@ -64,10 +161,12 @@ function EditOrder({ groupedMenuDetails, setOpenModalEdit, note ,setNote }) {
                     />
                   </figure>
 
-                  <p className={`lg:text-2xl text-lg text-[#313131] font-[500] text-center items-center w-full ${
-                        item.status === "5" ? "line-through text-gray-500" : ""
-                      }`}>
-                    {count[item.id]}
+                  <p
+                    className={`lg:text-2xl text-lg text-[#313131] font-[500] text-center items-center w-full ${
+                      item.status === "5" ? "line-through text-gray-500" : ""
+                    }`}
+                  >
+                    {item.amount}
                   </p>
 
                   <figure
@@ -93,7 +192,7 @@ function EditOrder({ groupedMenuDetails, setOpenModalEdit, note ,setNote }) {
 
                   <p className="lg:text-2xl text-lg text-[#313131] font-[600]">
                     {formatNumber(
-                      (item.special_price || item.price) * count[item.id]
+                      (item.special_price || item.price) * item.amount
                     )}
                     ฿
                   </p>
@@ -101,7 +200,10 @@ function EditOrder({ groupedMenuDetails, setOpenModalEdit, note ,setNote }) {
               </div>
 
               <div className="flex flex-row justify-end gap-4 w-[20%] xl:pl-6">
-                <button className="bg-[#F44D4D] hover:bg-[#FFBA41] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-full text-center py-1.5 font-bold text-base">
+                <button
+                  onClick={() => handleDelete(item)}
+                  className="bg-[#F44D4D] hover:bg-[#FFBA41] transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-full text-center py-1.5 font-bold text-base"
+                >
                   ลบ
                 </button>
               </div>
@@ -122,9 +224,12 @@ function EditOrder({ groupedMenuDetails, setOpenModalEdit, note ,setNote }) {
           placeholder="หมายเหตุ..."
         />
       </div>
-      
+
       <div className="flex flex-row justify-center gap-4">
-        <button className="bg-[#FFBA41] hover:bg-[#00537B]  transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl">
+        <button
+          onClick={handleSave}
+          className="bg-[#FFBA41] hover:bg-[#00537B]  transition-all ease-in-out duration-200  cursor-pointer text-white rounded-lg w-[220px] text-center py-1.5 font-bold text-xl"
+        >
           บันทึก
         </button>
         <button
